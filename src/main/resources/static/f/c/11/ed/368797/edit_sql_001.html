@@ -1,0 +1,55 @@
+<div class="w3-border">
+	<div class="w3-hover-shadow" data-ng-click="ctrl.initObjectForm(e)">
+		<i data-ng-class="{'w3-text-green':ctrl.edTiming}" class="fas fa-edit"></i>
+		edit: {{e.r2value}} <span 
+		class="w3-border"
+		data-ng-repeat="d in [ctrl.edTiming]"
+			data-ng-include="'/f/c/11/wiki/view_sql_ua_001/'+e.reference2+'/times.html'">
+		</span>
+	</div>
+	<div class="w3-row">
+		<div class="w3-third w3-border-right">
+			<div>
+				<i class="w3-btn fas fa-asterisk w3-right"
+					data-ng-click="ctrl.edTiming.clickClean()"></i> <input
+					style="width: 65%" class="w3-border">
+			</div>
+			<div data-ng-repeat="e in [ctrl.eMap[371808]]">
+				<div data-ng-if="ctrl.views_template_list.indexOf(e.reference2)>=0"
+					data-ng-include="'/f/c/11/wiki/view_sql_ua_001/'+e.reference2+'/v.html'"></div>
+			</div>
+		</div>
+		<div class="w3-third">
+			<div class="w3-hover-shadow"
+				data-ng-class="{'w3-light-gray':ctrl.edTiming.type=='frequency'}"
+				data-ng-click="ctrl.edTiming.clickType('frequency')">
+				<span class="w3-tiny am-b"> Частота </span>
+				<div>
+					<input class="w3-border" data-ng-model="ctrl.edTiming.frequency_23"
+						data-ng-change="ctrl.edTiming.frequencyChange()"
+						style="width: 40px;" type="number"> раз. в
+				</div>
+			</div>
+			<div class="w3-hover-shadow"
+				data-ng-class="{'w3-light-gray':ctrl.edTiming.type=='period'}"
+				data-ng-click="ctrl.edTiming.clickType('period')">
+				<span class="w3-tiny am-b"> Період </span>
+				<div>
+					кожні <input class="w3-border"
+						data-ng-change="ctrl.edTiming.periodChange()"
+						data-ng-model="ctrl.edTiming.period_23" style="width: 40px;"
+						type="number">
+				</div>
+			</div>
+		</div>
+		<div class="w3-third">
+			<div class="w3-tiny am-b">Одиниці часу</div>
+			<div data-ng-repeat="e in [ctrl.eMap[371813]]">
+				<div
+					data-ng-if="ctrl.views_template_list.indexOf(ctrl.eMap[e.reference2].reference)>=0"
+					data-ng-include="'/f/c/11/wiki/view_sql_ua_001/'+ctrl.eMap[e.reference2].reference+'/v.html'"></div>
+			</div>
+		</div>
+
+	</div>
+</div>

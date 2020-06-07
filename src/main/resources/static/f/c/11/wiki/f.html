@@ -1,0 +1,15 @@
+<div data-ng-repeat="file in [ctrl.eMap[ctrl.doc2doc_ids[1]]]"
+	data-ng-init="el=file">
+		<div class="w3-tiny w3-right">
+			WYSIWYG <span data-ng-repeat="ddEl in [file]"
+				data-ng-include="'/f/c/11/mc_window_icon.html'"></span>
+		</div>
+	<div class="w3-light-gray">
+		<i class="fab fa-wikipedia-w"></i>
+	</div>
+	<div class="w3-small1">
+		<h1 class="w3-border-bottom">{{file.value_1_22}}</h1>
+		<div data-ng-if="el.children"
+			data-ng-include="'/f/c/11/wiki/children.html'"></div>
+	</div>
+</div>

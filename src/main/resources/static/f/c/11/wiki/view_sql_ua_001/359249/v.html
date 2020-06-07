@@ -1,0 +1,9 @@
+<div>
+	<div data-ng-click="ctrl.edTiming.clickTimeUnit(d)"
+		data-ng-repeat="d in ctrl.eMap[ctrl.eMap[e.reference2].doc_id].children">
+		<div class="w3-hover-shadow"
+			data-ng-class="{'w3-light-gray':ctrl.edTiming.periodunit==d.value_1_22}">
+			{{d.i18n}} <span class="w3-tiny">({{d.value_1_22}} ) </span>
+		</div>
+	</div>
+</div>

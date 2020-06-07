@@ -1,0 +1,20 @@
+<div>
+	<div class="w3-hover-shadow"
+		data-ng-repeat="d in ctrl.eMap[ctrl.eMap[e.reference2].reference2].readList">
+		<span
+			data-ng-include="'/f/c/11/wiki/view_sql_ua_001/'+e.reference2+'/times.html'">
+		</span>
+	</div>
+	<div data-ng-repeat="d0 in e.children"
+		data-ng-if="371327==d0.reference">
+		<!-- SQL inner -->
+		<div data-ng-repeat="d in ctrl.eMap[d0.reference2].readList"
+		data-ng-class="{'w3-light-gray':ctrl.edTiming.timing_id==d.doc_id}"
+			data-ng-click="ctrl.edTiming.clickSaved(d)"
+			class="w3-hover-shadow">
+			<span
+				data-ng-include="'/f/c/11/wiki/view_sql_ua_001/'+e.reference2+'/times.html'">
+			</span>
+		</div>
+	</div>
+</div>

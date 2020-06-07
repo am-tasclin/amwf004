@@ -1,0 +1,46 @@
+<div data-ng-repeat="e in el.children" data-ng-switch="e.reference">
+	<div data-ng-if="371799==e.reference">
+		edit: {{e.r2value}} {{e.reference2}}
+		<div data-ng-if="ctrl.views_template_list.indexOf(e.reference2)>=0"
+			data-ng-include="'/f/c/11/ed/'+e.reference2+'/edit_sql_001.html'"></div>
+	</div>
+	<div data-ng-if="371705==e.reference">
+		<!-- view_sql_ua_001 == 371705 -->
+		a1
+		{{e.doc_id}}
+		<div data-ng-if="ctrl.views_template_list.indexOf(e.reference2)>=0"
+			data-ng-include="'/f/c/11/wiki/view_sql_ua_001/'+e.reference2+'/v.html'"></div>
+		<div data-ng-if="ctrl.views_template_list.indexOf(ctrl.eMap[e.reference2].reference)>=0"
+			data-ng-include="'/f/c/11/wiki/view_sql_ua_001/'+ctrl.eMap[e.reference2].reference+'/v.html'"></div>
+	</div>
+	<div
+		data-ng-if="371327==e.reference && 371705!=ctrl.eMap[e.parent].reference">
+		<div class="w3-responsive"
+			data-ng-repeat="tab in [ctrl.eMap[e.reference2].readList]"
+			data-ng-include="'/f/c/11/sql_exe/tab.html'"></div>
+	</div>
+	<p data-ng-switch-when="371359"
+		data-ng-bind-html="ctrl.markdownInLine(e.value_1_22)"></p>
+	<div data-ng-if="$first && e.parent==file.doc_id"
+		data-ng-include="'/f/c/11/wiki/Contents.html'"></div>
+	<h2 id="_{{e.doc_id}}" class="w3-border-bottom"
+		data-ng-switch-when="371364">
+		<span class="w3-tooltip"> {{e.value_1_22}} <span
+			data-ng-if="!e.value_1_22"> {{e.r2value}} </span> <span
+			class="w3-text"> <a href="#_{{e.doc_id}}"> <i
+					class="fas fa-link fa-flip-horizontal fa-xs w3-opacity"></i>
+			</a>
+		</span>
+		</span>
+	</h2>
+	<h3 data-ng-switch-when="371363" class="am-b">{{e.value_1_22}}</h3>
+	<ol data-ng-switch-when="371367">
+		<li data-ng-repeat="li in e.children"
+			data-ng-bind-html="ctrl.markdownInLine(li.value_1_22)"></li>
+		<!-- 
+			<div data-ng-bind-html="ctrl.markdownInLine(li.value_1_22)"></div>
+		 -->
+	</ol>
+	<div data-ng-if="e.children && 371367!=e.reference" data-ng-init="el=e"
+		data-ng-include="'/f/c/11/wiki/children.html'"></div>
+</div>
