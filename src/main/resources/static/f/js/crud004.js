@@ -670,10 +670,14 @@ var initDataModel = function(){
 		writeSql(so)
 	}
 
-	ctrl.content_menu.typeElement = function(type, el){
-		ctrl.content_menu.subSepMenuName = type+'_'+el.doc_id
+	ctrl.content_menu.typeElementOnOff = function(type, el){
+		var subSepMenuName = type+'_'+el.doc_id
+		if(subSepMenuName == ctrl.content_menu.subSepMenuName){
+			delete ctrl.content_menu.subSepMenuName
+		}else{
+			ctrl.content_menu.subSepMenuName = subSepMenuName 
+		}
 	}
-
 	ctrl.content_menu.typeElement = function(type, el){
 		ctrl.content_menu.subSepMenuName = type+'_'+el.doc_id
 	}
