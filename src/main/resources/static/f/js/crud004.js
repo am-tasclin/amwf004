@@ -678,11 +678,16 @@ var initDataModel = function(){
 			ctrl.content_menu.subSepMenuName = subSepMenuName 
 		}
 	}
+
 	ctrl.content_menu.typeElement = function(type, el){
 		ctrl.content_menu.subSepMenuName = type+'_'+el.doc_id
 	}
 
 	ctrl.select_tree_item = function(d){
+		console.log(d.doc_id)
+		if(ctrl.content_menu.subSepMenuName && ctrl.content_menu.subSepMenuName.includes('pin_name')){
+			ctrl.content_menu.typeElement('pin_name',d)
+		}
 		if(false&&d.doc_id==ctrl.doc2doc_ids[1]){
 			alert('Дані вже відкртиті в правій панелі.')
 			return
