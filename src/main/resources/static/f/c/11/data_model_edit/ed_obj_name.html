@@ -12,7 +12,9 @@
 		data-ng-focus="ctrl.field_name_focus(el)"
 		data-ng-model="d.value_1_edit" class="w3-border">
 	</span> <span data-ng-switch-default> <textarea
-			style="min-width: 400px;" data-ng-focus="ctrl.field_name_focus(el)"
-			data-ng-model="d.value_1_edit" class="w3-border am-width-100pr">
-	</span>
+	rows="{{ctrl.content_menu.subSepMenuName.includes('pin_name')?6:2}}"
+			style="min-width: 400px; "
+			data-ng-focus="ctrl.field_name_focus(el)"
+			data-ng-model="d.value_1_edit" class="w3-border am-width-100pr"></textarea>
+	</span> 
 </div>
