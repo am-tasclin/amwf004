@@ -24,11 +24,19 @@
 			<div class="w3-right" data-ng-include="'/f/btn-to-login.html'"></div>
 			<span data-ng-repeat="cnf in [{show_title:'no'}]"
 				data-ng-include="'/f/home-link.html'" class="w3-small0 am-b"></span>
-			<a href="http://algoritmed.com/j2c003/img-20200611/"
+				<span class="w3-small">
+			{{ctrl.project.value_1_22}} </span><a
+				href="http://algoritmed.com/j2c003/img-20200611/"
 				class="w3-right w3-tiny"> j2c003-img </a>
 		</div>
+		<div class="w3-small w3-light-gray">
+			<i class="fas fa-ellipsis-v"></i> <i
+				class="fas fa-file w3-btn w3-padding-small"></i> <i
+				class="fas fa-folder-open w3-btn w3-padding-small"></i> <i
+				class="fas fa-save w3-btn w3-padding-small"></i>
+		</div>
 		<div data-ng-include="'c_task.html'" class="w3-border-bottom"
-			style="height: 84vh"></div>
+			style="height: 84vh;"></div>
 		<div class="w3-light-gray w3-small">
 			&nbsp; &nbsp; <span class="w3-border-left"
 				data-ng-class="{'w3-border-right':$last,

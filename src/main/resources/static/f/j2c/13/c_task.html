@@ -1,24 +1,33 @@
 <div class="w3-row">
-	<div class="w3-quarter w3-border-right">
-		<div data-ng-repeat="c_task in [ctrl.eMap[371831]]" class="w3-small">
-			{{c_task.value_1_22}}
-			<div class="w3-container">
-				<div class="w3-hover-shadow"
-					data-ng-repeat="c_task1 in c_task.children">
-					<span data-ng-repeat="e in [c_task1]"
-						data-ng-include="'c_context_menu.html'"></span><span
-						class="w3-hover-shadow"
-						data-ng-click="ctrl.conf_menu_click(c_task1)">
-						{{c_task1.value_1_22}} </span>
-					<div class="w3-border-left w3-container ng-scope"
-						data-ng-if="c_task1.open_children">
-						<div class="w3-hover-shadow"
-							data-ng-repeat="c_task2 in c_task1.children">
-							<span data-ng-repeat="e in [c_task2]"
-								data-ng-include="'c_context_menu.html'"></span> <span
-								class="w3-hover-shadow"
-								data-ng-click="ctrl.conf_menu_click(c_task2)">
-								{{c_task2.value_1_22}} </span>
+	<div class="w3-quarter w3-border-right"
+		style="height: 83vh; overflow: auto;">
+		<div data-ng-repeat="c_task_id in [ctrl.eMap[371831].doc_id]"
+			class="w3-small">
+			{{ctrl.eMap[c_task_id].value_1_22}}
+			<div data-ng-include="'/f/j2c/13/c2j_item.html'"></div>
+		</div>
+		<div data-ng-if="false">
+			<div data-ng-repeat="c_task in [ctrl.eMap[371831]]" class="w3-small">
+				{{c_task.value_1_22}}
+				<hr>
+				<div class="w3-container">
+					<div class="w3-hover-shadow"
+						data-ng-repeat="c_task1 in c_task.children">
+						<span data-ng-repeat="c in [{e:c_task1,p:c_task}]"
+							data-ng-include="'c_context_menu.html'"></span><span
+							class="w3-hover-shadow"
+							data-ng-click="ctrl.conf_menu_click(c_task1)">
+							{{c_task1.value_1_22}} </span>
+						<div class="w3-border-left w3-container"
+							data-ng-if="c_task1.open_children">
+							<div class="w3-hover-shadow"
+								data-ng-repeat="c_task2 in c_task1.children">
+								<span data-ng-repeat="c in [{e:c_task2,p:c_task1}]"
+									data-ng-include="'c_context_menu.html'"></span> <span
+									class="w3-hover-shadow"
+									data-ng-click="ctrl.conf_menu_click(c_task2)">
+									{{c_task2.value_1_22}} </span>
+							</div>
 						</div>
 					</div>
 				</div>

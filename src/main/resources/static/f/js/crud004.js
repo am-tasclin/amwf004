@@ -39,8 +39,7 @@ var initDataModel = function(){
 						angular.forEach(response2.data.list, function(v){
 							var parentEl = ctrl.eMap[v.parent]
 							set_ref_to_col(v,parentEl)
-							if(!parentEl.children) parentEl.children = []
-							parentEl.children.push(v)
+							children_push(parentEl, v)
 							add_eMap(v)
 						})
 					})
@@ -263,8 +262,7 @@ var initDataModel = function(){
 					so1.dataAfterSave = function(response) {
 						var cell = response.data.list1[0]
 						ctrl.eMap[cell.doc_id] = cell
-						if(!row.children)	row.children = []
-						row.children.push(cell)
+						children_push(row, cell)
 						if(!row.ref_to_col) row.ref_to_col = {}
 						row.ref_to_col[col.doc_id] = cell.doc_id
 						if(table_model.children.length-1 == k){
@@ -342,8 +340,7 @@ var initDataModel = function(){
 				console.log(response.data)
 				var newEl = response.data.list1[0]
 				ctrl.eMap[newEl.doc_id] = newEl
-				if(!row.children)	row.children = []
-				row.children.push(newEl)
+				children_push(row, newEl)
 				if(!row.ref_to_col) row.ref_to_col = {}
 				row.ref_to_col[col.doc_id] = newEl.doc_id
 			}
@@ -817,6 +814,7 @@ function read_element_descendant(doc_id, fn){
 			read_element_descendant(doc_id, fn)
 		})
 	}else{
+		console.log(o.doc_id)
 		read_element_children(o.doc_id, {forEachOne:function(v, response){
 			if(v.cnt_child>0){
 				read_element_descendant(v.doc_id, fn)
@@ -831,7 +829,13 @@ function read_element_children(doc_id, fn){
 		if(o.cnt_child>0 && (!o.children || o.children.length < o.cnt_child)){
 			var sql = sql_app.SELECT_children_with_i18n(doc_id)
 			var fn0 = function(response){
+				var oldChildren = o.children
 				o.children = response.data.list
+				if(oldChildren){
+					angular.forEach(oldChildren, function(v){
+						o.children.push(v)
+					})
+				}
 				angular.forEach(o.children, function(v, k){
 					set_ref_to_col(v,o)
 					if(!ctrl.eMap[v.doc_id]){
@@ -1068,14 +1072,17 @@ var initEditTiming = function(){
 }
 
 var initEditObjectForm = function(){
-
 	ctrl.initObjectForm = function(e){
 		console.log(e, e.reference2)
 		if(368797==e.reference2 && !ctrl.edTiming){
 			initEditTiming()
 		}
 	}
+}
 
+var children_push = function(p,c){
+	if(!p.children)	p.children = []
+	p.children.push(c)
 }
 
 var initWiki = function(){
