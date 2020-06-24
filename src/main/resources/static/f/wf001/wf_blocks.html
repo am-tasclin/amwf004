@@ -1,0 +1,38 @@
+<div>
+	<div>&nbsp;</div>
+	<div>
+		<div class="w3-right">
+			<i class="far fa-circle fa-lg"></i>
+		</div>
+		<div class="w3-center">
+			<span class="w3-tiny">[{{ctrl.project.doc_id}}]</span>
+			{{ctrl.project.value_1_22}}
+		</div>
+			&nbsp;
+	</div>
+	<div data-ng-repeat="bp in [ctrl.project.children[0]]">
+		<div data-ng-repeat="b in bp.children" class="w3-border ">
+			<div class="w3-right">
+				<i class="far fa-square fa-lg"></i>
+			</div>
+			<div class="w3-left w3-tiny">
+				{{$index>0?bp.children[$index-1].doc_id:ctrl.project.doc_id}} <i
+					class="fas fa-arrow-right"></i>
+			</div>
+			<div class="w3-center">
+				<span class="w3-tiny">[{{b.doc_id}}]</span>
+				{{b.children[0].value_1_22}}
+			</div>
+			&nbsp;
+			<div class="w3-right w3-tiny ">
+				<i class="fas fa-arrow-right"></i> <span data-ng-if="!$last">
+					{{bp.children[$index+1].doc_id}} </span>
+			</div>
+		</div>
+	</div>
+	<div>
+		<div class="w3-right">
+			<i class="fas fa-circle fa-lg"></i>
+		</div>
+	</div>
+</div>

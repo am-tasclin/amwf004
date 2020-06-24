@@ -238,6 +238,7 @@ var initDataModel = function(){
 
 	ctrl.rowInsert = function(table_model){
 		if(!table_model.table_data_id){
+			console.log(table_model)
 			angular.forEach(ctrl.eMap, function(v, k){
 				if(369358==v.reference && v.reference2==table_model.doc_id){
 					table_model.table_data_id = v.doc_id
@@ -814,7 +815,6 @@ function read_element_descendant(doc_id, fn){
 			read_element_descendant(doc_id, fn)
 		})
 	}else{
-		console.log(o.doc_id)
 		read_element_children(o.doc_id, {forEachOne:function(v, response){
 			if(v.cnt_child>0){
 				read_element_descendant(v.doc_id, fn)
