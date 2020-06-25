@@ -807,19 +807,19 @@ var set_ref_to_col = function(d,p) {
 	if(d.reference)		p.ref_to_col[d.reference] = d.doc_id
 }
 
-function read_element_descendant(doc_id, fn){
+function read_element_descendant(doc_id, fn, forEachChildFn){
 	var o = ctrl.eMap[doc_id]
 	if(!o){
 		read_element(doc_id, function(response){
 			if(fn)		fn(response)
-			read_element_descendant(doc_id, fn)
+			read_element_descendant(doc_id, fn, forEachChildFn)
 		})
 	}else{
 		read_element_children(o.doc_id, {forEachOne:function(v, response){
 			if(v.cnt_child>0){
-				read_element_descendant(v.doc_id, fn)
+				read_element_descendant(v.doc_id, fn, forEachChildFn)
 			}
-		}, fn:fn})
+		}, forEachChildFn:forEachChildFn, fn:fn})
 	}
 }
 
@@ -844,8 +844,9 @@ function read_element_children(doc_id, fn){
 						o.children[k] = ctrl.eMap[v.doc_id]
 					}
 					if(fn && typeof fn === 'object' && fn.forEachOne)	fn.forEachOne(v,response)
-					if(fn && fn.fn  && fn.fn.forEachOne)	fn.fn.forEachOne(v,response)
-					if(exe_fn.add_eMap) exe_fn.add_eMap(v)
+					if(fn && fn.fn  && fn.fn.forEachOne)				fn.fn.forEachOne(v,response)
+					if(fn && fn.forEachChildFn)			fn.forEachChildFn(v,response)
+					if(exe_fn.add_eMap)									exe_fn.add_eMap(v)
 				})
 				if(fn && typeof fn === 'function')		fn(response)
 			}

@@ -1,7 +1,6 @@
 var initJ2C = function(){
 	console.log('read -> ',371831)
 
-	
 	read_element_descendant(371831, function(){
 		if(ctrl.request.parameters.p){
 			read_element(ctrl.request.parameters.p, function(){
