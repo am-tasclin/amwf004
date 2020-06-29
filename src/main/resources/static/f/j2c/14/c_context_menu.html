@@ -1,0 +1,20 @@
+<span class="w3-dropdown-hover w3-hover-shadow w3-white"> [ <span
+	data-ng-switch="c.e.reference2"> <span data-ng-switch-default
+		data-ng-switch="c.e.parent"> <i data-ng-switch-when="371831"
+			class="far fa-folder-open"></i> <i data-ng-switch-default
+			class="fas fa-bars"></i>
+	</span> <i data-ng-switch-when="371833" class="fas fa-spell-check"></i> <i
+		data-ng-switch-when="371834" class="fas fa-file-invoice "></i>
+</span> ]
+	<div class="w3-dropdown-content w3-card-4 w3-leftbar w3-border">
+		<div>&nbsp;</div>
+		<div data-ng-if="c.e.parent!=c.p.doc_id">Меню? :) Яке меню?
+			{{c.e.doc_id}}</div>
+		<div data-ng-if="c.e.parent==c.p.doc_id">
+			<div class="w3-btn">
+				<i class="far fa-file"></i> Новий {{c.e.value_1_22}}
+			</div>
+			<div>&nbsp;</div>
+		</div>
+	</div>
+</span>
