@@ -1,0 +1,11 @@
+<div>
+	<div data-ng-repeat="ad in b.children"
+		data-ng-if="ad.instantiatesCanonical">
+		<div data-ng-repeat="t_id in ad.instantiatesCanonical"
+			data-ng-init="tEl = ctrl.eMap[t_id]">
+			<span class="w3-tiny"> {{tEl.doc_id}} </span><span
+				data-ng-repeat="td in tEl.children"
+				data-ng-if="371941 == td.reference"> {{td.value_1_22}} </span>
+		</div>
+	</div>
+</div>
