@@ -34,12 +34,11 @@
 			</div>
 		</div>
 	</div>
-	<div class="w3-threequarter w3-container">
-		<div data-ng-switch="ctrl.click_id">
-			<div data-ng-switch-when="371858" ><div ng-include="'templates/Construct.html'"></div> </div>
-			<div data-ng-switch-when="371857"><div ng-include="'templates/ConstructSettings.html'"></div></div>
-			<div data-ng-switch-when=""></div>
-
+	<div class="w3-threequarter w3-display-container" style="height: 83vh; overflow: auto;">
+		<div data-ng-include="'templates/switchTemplates.html'" ></div>
+		<div  data-ng-if="ctrl.isShow"
+			  data-ng-include="'templates/NewElement.html'"
+			  style="height: 83vh; ">
 		</div>
 	</div>
 </div>

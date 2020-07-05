@@ -3,22 +3,24 @@ app.controller('AppCtrl', function($scope, $http, $timeout) {
 	initApp($scope, $http, $timeout)
 	ctrl.page_title = 'j2c:'
 	initJ2C()
-	ctrl.click_id=371858;
-
-	ctrl.getDocId=function (docId) {
-		ctrl.click_id=docId;
-		console.log('is worked');
-	}
+	ctrl.templateView='';
+	ctrl.isShow=false;
 })
 
 app.directive('workSpace',function () {
 	return{
 		replace:true,
 		restrict:'AE',
-		scope:{docId:'=docId'},
-		templateUrl:'templates/switchTemplates.html',
-		link:function (scope,element,attributes) {
-			console.log(scope.docId);
+		link:function (scope,element,attr) {
+			element.on('click',function () {
+				if(attr.workSpace>=371832&&attr.workSpace<=371847){
+					ctrl.templateView='Construct';
+				}else{
+					ctrl.templateView='ConstructSettings';
+				}
+				console.log(ctrl.templateView);
+			})
+
 		}
 	}
 })

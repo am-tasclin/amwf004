@@ -22,13 +22,13 @@ var initJ2C = function(){
 	ctrl.conf_menu_click = function(e) {
 		e.open_children = !e.open_children
 		if(e.cnt_child && !e.children ){
-			console.log(ctrl.click_id);
-			ctrl.click_id=371857;
+			console.log(e);
 			read_element_children(e.doc_id, function(){
 					
 				})
 		}
 	}
+
 
 	ctrl.mu = {}
 	ctrl.mu_mOpenKey = 'mdn'
