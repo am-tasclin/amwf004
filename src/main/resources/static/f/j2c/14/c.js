@@ -15,6 +15,7 @@ app.directive('workSpace',function () {
 			element.on('click',function () {
 				if(attr.workSpace>=371832&&attr.workSpace<=371847){
 					ctrl.templateView='Construct';
+					console.log(ctrl.templateView);
 				}else{
 					ctrl.templateView='ConstructSettings';
 				}
