@@ -2,8 +2,7 @@
 	<div data-ng-repeat="ad in b.children"
 		data-ng-if="ad.instantiatesCanonical">
 		<div data-ng-repeat="t_id in ad.instantiatesCanonical"
-		class="w3-btn w3-ripple"
-		data-ng-click="ctrl.wfRun.clickTask(tEl)"
+			class="w3-btn w3-ripple" data-ng-click="ctrl.wfRun.clickTask(tEl)"
 			data-ng-init="tEl = ctrl.eMap[t_id]">
 			<span class="w3-tiny"> {{tEl.doc_id}} </span><span
 				data-ng-repeat="td in tEl.children"

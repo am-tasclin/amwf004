@@ -15,7 +15,7 @@
 	<div data-ng-repeat="bp in [ctrl.project.children[0]]">
 		<div data-ng-repeat-start="b in bp.children"
 			class="w3-border w3-hover-shadow"
-			data-ng-click="b.open_item=!b.open_item">
+			data-ng-click="b.open_item=!b.open_item;ctrl.wfRun.clickActivityDefinition(b)">
 			<div class="w3-right">
 				<i class="far fa-square fa-lg"></i>
 			</div>
