@@ -13,6 +13,8 @@ app.directive('workSpace',function () {
 		restrict:'AE',
 		link:function (scope,element,attr) {
 			element.on('click',function () {
+				console.log(attr, attr.workSpace)
+				ctrl.templateEditId = attr.workSpace;
 				if(attr.workSpace>=371833&&attr.workSpace<=371847){
 					ctrl.templateView='Construct';
 					console.log(ctrl.templateView);
