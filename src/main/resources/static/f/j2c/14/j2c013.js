@@ -19,6 +19,23 @@ var initJ2C = function(){
 		}
 	})
 
+	ctrl.creatNewProp = function(e) {
+		var so = {
+			dataAfterSave:function(response){
+				console.log(response)
+				var e = ctrl.eMap[ctrl.templateEditId]
+				var newE = response.data.list2[0]
+		console.log(e.children, newE)
+		e.children.push(newE) 
+			}
+		}
+		so.sql = "INSERT INTO doc (doc_id, parent) VALUES (:nextDbId1, "+ctrl.templateEditId+" ); "
+		so.sql += "INSERT INTO string (string_id, value) VALUES (:nextDbId1, 'новий'); "
+		so.sql +=	sql_app.SELECT_obj_with_i18n(':nextDbId1')
+		console.log(ctrl.templateEditId, so.sql)
+		writeSql(so)
+	}
+		
 	ctrl.conf_menu_click = function(e) {
 		e.open_children = !e.open_children
 		if(e.cnt_child && !e.children ){

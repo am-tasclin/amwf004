@@ -50,21 +50,34 @@
         </div>
         <div class="w3-col m6 16 w3-padding-small w3-border w3-border-dark-gray">
             <label >Реквізити</label>
-            <div class="w3-row ">
-                <div class="w3-col m10 110 w3-padding-small ">
-                    <div class="w3-container w3-white " style="min-height: 170px"></div>
-                </div>
-                <div class="w3-col m2 12 w3-padding-small">
-                    <div class="w3-row"><a class="w3-btn w3-dark-gray" href=""><i class="fas fa-long-arrow-alt-up"></i></a></div>
-                    <div class="w3-row"><a class="w3-btn w3-dark-gray" href=""><i class="fas fa-long-arrow-alt-down"></i></a></div>
-                </div>
-            </div>
-            <div class="w3-row w3-margin-top">
-                <button class="w3-btn w3-dark-gray w3-col m4 14 w3-padding-small w3-margin-bottom" data-ng-click="ctrl.isShow=true" >Новий</button>
-                <a class="w3-btn w3-dark-gray w3-col m4 14 w3-padding-small w3-margin-bottom" href="">Змінити</a>
-                <a class="w3-btn w3-dark-gray w3-col m4 14 w3-padding-small w3-margin-bottom" href="">Видалити</a>
-            </div>
-        </div>
+			<div class="w3-row ">
+				<div class="w3-col m10 110 w3-padding-small ">
+					<div class=" w3-white " style="min-height: 170px"
+						data-ng-include="'/f/j2c/14/templates/ConstructSettingsProps.html'">
+					</div>
+				</div>
+				<div class="w3-col m2 12 w3-padding-small">
+					<div class="w3-row">
+						<a class="w3-btn w3-dark-gray" href=""><i
+							class="fas fa-long-arrow-alt-up"></i></a>
+					</div>
+					<div class="w3-row">
+						<a class="w3-btn w3-dark-gray" href=""><i
+							class="fas fa-long-arrow-alt-down"></i></a>
+					</div>
+				</div>
+			</div>
+			<div class="w3-row w3-margin-top">
+				<button
+					class="w3-btn w3-dark-gray w3-col m4 14 w3-padding-small w3-margin-bottom"
+					data-ng-click="ctrl.creatNewProp();ctrl.isShow=true">Новий</button>
+				<a
+					class="w3-btn w3-dark-gray w3-col m4 14 w3-padding-small w3-margin-bottom"
+					href="">Змінити</a> <a
+					class="w3-btn w3-dark-gray w3-col m4 14 w3-padding-small w3-margin-bottom"
+					href="">Видалити</a>
+			</div>
+		</div>
     </div>
     <div class="w3-row w3-padding-small">
         <div class="w3-col m6 16">

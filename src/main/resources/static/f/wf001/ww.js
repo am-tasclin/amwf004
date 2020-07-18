@@ -11,7 +11,8 @@ var createInsertFromElement = function(e){
 	e.sql_insert = 'INSERT INTO doc (:vars) VALUES (:vals);'
 	var vars='doc_id', vals=':nextDbId1'
 	angular.forEach(e.children, function(e3){
-		console.log(e3.doc_id, e3.reference)
+		var r2vEl = ctrl.eMap[e3.reference2]
+		console.log(e3.doc_id, e3.reference, r2vEl)
 		vals += ', '+ e3.reference2
 		vars += ', '
 		if(e3.reference == 371969){//parent
@@ -19,19 +20,31 @@ var createInsertFromElement = function(e){
 		}else
 		if(e3.reference == 371970){//reference
 			vars +='reference'
-			console.log(e3.reference2)
+			console.log(e3.reference2, r2vEl.doctype
+			, ctrl.doctype_content_table_name[r2vEl.doctype]
+			)
+			if(r2vEl){
+				e.sql_insert += '\n'
+				e.sql_insert += 'INSERT INTO :valueType (:valueType_id, value) VALUES (:nextDbId1, :contentVal);'
+				var valueType = ctrl.doctype_content_table_name[r2vEl.doctype]
+				e.sql_insert = e.sql_insert.replace(':valueType', valueType)
+				e.sql_insert = e.sql_insert.replace(':valueType', valueType)
+				if(25 == r2vEl.doctype){
+					var contentVal = new Date().toISOString().replace('T', ' ').split('.')[0]
+				}
+				e.sql_insert = e.sql_insert.replace(':contentVal', "'"+contentVal+"'")
+			}
 		}
 	})
 	e.sql_insert = e.sql_insert.replace(':vars', vars)
 	e.sql_insert = e.sql_insert.replace(':vals', vals)
-	console.log(e.sql_insert)
 	console.log(vars, vals)
+	console.log(e.sql_insert)
 }
 
 var findNodesWithRef = function(e, refIds, fn){
 	var fN = []
 	angular.forEach(e.children, function(e1){
-		console.log(refIds, e1.doc_id, e1.reference, refIds.indexOf(e1.reference))
 		if(
 			refIds.indexOf(e1.reference) >= 0
 			|| refIds.indexOf(e1.reference2) >= 0
@@ -59,13 +72,10 @@ var initWF_run001 = function(){
 	ctrl.wfRun.clickActivityDefinition = function(adEl) {
 		console.log(adEl)
 		var tasks = findActivityDefinitionTasks(adEl)
-		console.log(tasks)
 		angular.forEach(tasks, function(id){
 			findNodesWithRef(ctrl.eMap[id], [371935]/*output*/, function(e){
-				console.log(e.doc_id)
 				findNodesWithRef(e, [371968]/*Element*/, function(e1){
-					console.log(e1.doc_id)
-					angular.forEach(e1.children, function(e2){/*Element@attributes*/
+					angular.forEach(e1.children, function(e2){ /*Element@attributes*/
 						console.log(e2.doc_id, e2.reference, e2.reference2, ctrl.eMap[e2.reference2])
 						if(!ctrl.eMap[e2.reference2]){
 							read_element(e2.reference2, function(){
