@@ -13,10 +13,12 @@ app.directive('workSpace',function () {
 		restrict:'AE',
 		link:function (scope,element,attr) {
 			element.on('click',function () {
-				if(attr.workSpace>=371832&&attr.workSpace<=371847){
+				if(attr.workSpace>=371833&&attr.workSpace<=371847){
 					ctrl.templateView='Construct';
 					console.log(ctrl.templateView);
-				}else{
+				}else if(attr.workSpace==371832){
+					ctrl.templateView='General';
+				}else {
 					ctrl.templateView='ConstructSettings';
 				}
 				console.log(ctrl.templateView);
