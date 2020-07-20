@@ -2,11 +2,26 @@
 	<div data-ng-repeat="ad in b.children"
 		data-ng-if="ad.instantiatesCanonical">
 		<div data-ng-repeat="t_id in ad.instantiatesCanonical"
-			class="w3-btn w3-ripple" data-ng-click="ctrl.wfRun.clickTask(tEl)"
+			data-ng-click="ctrl.wfRun.clickTask(tEl)"
 			data-ng-init="tEl = ctrl.eMap[t_id]">
-			<span class="w3-tiny"> {{tEl.doc_id}} </span><span
-				data-ng-repeat="td in tEl.children"
-				data-ng-if="371941 == td.reference"> {{td.value_1_22}} </span>
+			<div>
+				<div class="w3-btn w3-ripple">
+					<span class="w3-tiny"> {{tEl.doc_id}} </span><span
+						data-ng-repeat="td in tEl.children"
+						data-ng-if="371941 == td.reference"> {{td.value_1_22}} </span>
+				</div>
+			</div>
+			<div data-ng-repeat="eO in ctrl.eMap[t_id].children"
+				data-ng-if="371935==eO.reference">
+				<div data-ng-repeat="eE in eO.children"
+					data-ng-if=" 371968 == eE.reference">
+					a1 {{eE.doc_id}}
+					<div data-ng-repeat="eEa in eE.children"
+						data-ng-if="371970==eEa.reference">{{eEa.doc_id}}
+						{{ctrl.eMap[eEa.reference2].doc_id}}
+						{{ctrl.eMap[eEa.reference2].doctype}}</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

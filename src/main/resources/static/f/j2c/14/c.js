@@ -8,7 +8,7 @@ app.controller('AppCtrl', function($scope, $http, $timeout) {
 })
 
 app.directive('workSpace',function () {
-	return{
+	return {
 		replace:true,
 		restrict:'AE',
 		link:function (scope,element,attr) {
@@ -25,7 +25,6 @@ app.directive('workSpace',function () {
 				}
 				console.log(ctrl.templateView);
 			})
-
 		}
 	}
 })

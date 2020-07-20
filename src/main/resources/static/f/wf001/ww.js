@@ -87,7 +87,7 @@ var initWF_run001 = function(){
 			})
 		})
 	}
-		
+
 	ctrl.wfRun.clickTask = function(tEl) {
 		angular.forEach(tEl.children, function(e){
 			if(e.reference == 371935){//output
