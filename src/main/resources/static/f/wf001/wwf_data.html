@@ -1,0 +1,24 @@
+<div>
+    <table>
+        <thead class="w3-grey">
+            <tr class="w3-small">
+                <th data-ng-repeat="c in ctrl.readTable.cols">
+                    {{c.c_name}}
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-ng-repeat="r in ctrl.readTable.dataList">
+                <td data-ng-repeat="c in ctrl.readTable.cols" data-ng-switch="c.c_type">
+                    <div data-ng-switch-when="25">
+                        {{r['v_'+c.c_type+'_'+c.c_id] | date:'mediumDate'}}
+                        {{r['v_'+c.c_type+'_'+c.c_id] | date:'mediumTime'}}
+                    </div>
+                    <div data-ng-switch-default>
+                        {{r['v_'+c.c_type+'_'+c.c_id]}}
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
