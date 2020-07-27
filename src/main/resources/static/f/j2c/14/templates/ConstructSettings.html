@@ -1,27 +1,39 @@
 <div class="w3-container w3-gray" style="overflow-y: scroll">
-    <div  class="w3-row w3-padding-small">
+    <div class="w3-row w3-padding-small">
         <div class="w3-col m6 16 w3-padding-small">
-            <div class="w3-row w3-padding-small"><label class="w3-col m5 15">Ідентифікатор</label> <input type="text" class="w3-col m7 17"></div>
-            <div class="w3-row w3-padding-small"><label class="w3-col m5 15">Коментар</label> <input type="text" class="w3-col m7 17"></div>
+            <div class="w3-row w3-padding-small"><label class="w3-col m5 15">Ідентифікатор</label> <input type="text"
+                    class="w3-col m7 17" value="{{ctrl.selectedItemObject1.value_1_22}}"></div>
+            <div class="w3-row w3-padding-small"><label class="w3-col m5 15">Коментар</label> <input type="text"
+                    class="w3-col m7 17"></div>
 
-            <div class="w3-row w3-padding-small"><label class="w3-col m5 15">Кількість рівнів</label> <input type="number" class="w3-col m2 12"> </div>
-            <div class="w3-row w3-padding-small"><label class="w3-col m5 15">Довжина коду</label> <input type="number" class="w3-col m2 12"></div>
-            <div class="w3-row w3-padding-small"><label class="w3-col m5 15">Довжина найменування</label> <input type="number" class="w3-col m2 12"></div>
+            <div class="w3-row w3-padding-small"><label class="w3-col m5 15">Кількість рівнів</label> <input
+                    type="number" class="w3-col m2 12"> </div>
+            <div class="w3-row w3-padding-small"><label class="w3-col m5 15">Довжина коду</label> <input type="number"
+                    class="w3-col m2 12"></div>
+            <div class="w3-row w3-padding-small"><label class="w3-col m5 15">Довжина найменування</label> <input
+                    type="number" class="w3-col m2 12"></div>
         </div>
         <div class="w3-col m6 16 w3-padding-small">
             <div class="w3-row w3-padding-small"><label class="w3-col m5 15">Підпорядкований</label><select>
-                <option>(Не підпорядковано)</option>
-            </select></div>
-            <div class="w3-row w3-padding-small "> <label class="w3-col m5 15">Синонім</label> <input type="text"class="w3-col m7 17" ></div>
-            <div class="w3-row w3-padding-small w3-border-bottom w3-border-dark-gray"><label class="w3-col m5 15">Дозволяти групи зверху</label> <input type="checkbox"  checked></div>
-            <div class="w3-row w3-padding-small w3-border-bottom w3-border-dark-gray"><label class="w3-col m5 15">Автоматична нумерація</label> <input type="checkbox"  checked></div>
-            <div class="w3-row w3-padding-small w3-border-bottom w3-border-dark-gray"><label class="w3-col m5 15">Контроль унікальності</label> <input type="checkbox"  checked></div>
+                    <option>(Не підпорядковано)</option>
+                    <option data-ng-repeat="item in ctrl.eMap[371831].children">
+                        {{item.value_1_22}}
+                    </option>
+                </select></div>
+            <div class="w3-row w3-padding-small "> <label class="w3-col m5 15">Синонім</label> <input type="text"
+                    class="w3-col m7 17"></div>
+            <div class="w3-row w3-padding-small w3-border-bottom w3-border-dark-gray"><label
+                    class="w3-col m5 15">Дозволяти групи зверху</label> <input type="checkbox" checked></div>
+            <div class="w3-row w3-padding-small w3-border-bottom w3-border-dark-gray"><label
+                    class="w3-col m5 15">Автоматична нумерація</label> <input type="checkbox" checked></div>
+            <div class="w3-row w3-padding-small w3-border-bottom w3-border-dark-gray"><label
+                    class="w3-col m5 15">Контроль унікальності</label> <input type="checkbox" checked></div>
         </div>
     </div>
     <div class="w3-row w3-padding-small">
         <div class="w3-col m6 16 w3-padding-small">
             <div class="w3-row w3-border w3-border-dark-gray">
-                <label class="w3-padding-small" >Серії кодів</label>
+                <label class="w3-padding-small">Серії кодів</label>
                 <div class="w3-row w3-padding-small">
                     <input type="radio" name="codList" checked>У всьому довіднику
                 </div>
@@ -30,7 +42,7 @@
                 </div>
             </div>
             <div class="w3-row w3-border w3-border-dark-gray">
-                <label class="w3-padding-small" >Тип коду</label>
+                <label class="w3-padding-small">Тип коду</label>
                 <div class="w3-row w3-padding-small">
                     <input type="radio" name="codType" checked>Числовий
                 </div>
@@ -39,7 +51,7 @@
                 </div>
             </div>
             <div class="w3-row w3-border w3-border-dark-gray">
-                <label class="w3-padding-small" >Основне представлення</label>
+                <label class="w3-padding-small">Основне представлення</label>
                 <div class="w3-row w3-padding-small">
                     <input type="radio" name="mainView" checked>У вигляді коду
                 </div>
@@ -49,40 +61,38 @@
             </div>
         </div>
         <div class="w3-col m6 16 w3-padding-small w3-border w3-border-dark-gray">
-            <label >Реквізити</label>
-			<div class="w3-row ">
-				<div class="w3-col m10 110 w3-padding-small ">
-					<div class=" w3-white " style="min-height: 170px"
-						data-ng-include="'/f/j2c/14/templates/ConstructSettingsProps.html'">
-					</div>
-				</div>
-				<div class="w3-col m2 12 w3-padding-small">
-					<div class="w3-row">
-						<a class="w3-btn w3-dark-gray" href=""><i
-							class="fas fa-long-arrow-alt-up"></i></a>
-					</div>
-					<div class="w3-row">
-						<a class="w3-btn w3-dark-gray" href=""><i
-							class="fas fa-long-arrow-alt-down"></i></a>
-					</div>
-				</div>
-			</div>
-			<div class="w3-row w3-margin-top">
-				<button
-					class="w3-btn w3-dark-gray w3-col m4 14 w3-padding-small w3-margin-bottom"
-					data-ng-click="ctrl.creatNewProp();ctrl.isShow=true">Новий</button>
-				<a
-					class="w3-btn w3-dark-gray w3-col m4 14 w3-padding-small w3-margin-bottom"
-					href="">Змінити</a> <a
-					class="w3-btn w3-dark-gray w3-col m4 14 w3-padding-small w3-margin-bottom"
-					href="">Видалити</a>
-			</div>
-		</div>
+            <label>Реквізити</label>
+            <div class="w3-row ">
+                <div class="w3-col m10 110 w3-padding-small ">
+                    <div class=" w3-white " style="min-height: 170px"
+                        data-ng-include="'/f/j2c/14/templates/ConstructSettingsProps.html'">
+                    </div>
+                </div>
+                <div class="w3-col m2 12 w3-padding-small">
+                    <div class="w3-row">
+                        <a class="w3-btn w3-dark-gray" href=""><i class="fas fa-long-arrow-alt-up"></i></a>
+                    </div>
+                    <div class="w3-row">
+                        <a class="w3-btn w3-dark-gray" href=""><i class="fas fa-long-arrow-alt-down"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="w3-row w3-margin-top">
+                <button class="w3-btn w3-dark-gray w3-col m4 14 w3-padding-small w3-margin-bottom"
+                    data-ng-click="ctrl.creatNewProp();ctrl.isShow=true">
+                    Новий</button>
+                <button class="w3-btn w3-dark-gray w3-col m4 14 w3-padding-small w3-margin-bottom"
+                    data-ng-click="ctrl.isShow=true">
+                    Змінити</button>
+                <button class="w3-btn w3-dark-gray w3-col m4 14 w3-padding-small w3-margin-bottom">
+                    Видалити</button>
+            </div>
+        </div>
     </div>
     <div class="w3-row w3-padding-small">
         <div class="w3-col m6 16">
             <div class="w3-row">
-                <input type="checkbox" >Одна форма для елемента і групи
+                <input type="checkbox">Одна форма для елемента і групи
             </div>
         </div>
         <div class="w3-col m6 16">

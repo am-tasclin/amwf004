@@ -1,32 +1,33 @@
 <div class="w3-container ">
-<div class="w3-row">
-</div>
+    <div class="w3-row">
+    </div>
     <div class="w3-row">Конструцтор </div>
     <div class="w3-row">
         <div class="w3-col m9 19">
             <div class="w3-bar">
-                <button class="w3-bar-item w3-button" ng-click="ctrl.openContext('general')">Загальні </button>
+                <button class="w3-bar-item w3-button" data-ng-click="ctrl.openContext('general')">Загальні </button>
             </div>
-
             <div id="general" class="w3-container content">
-               <div> <label class="w3-col m5 15">Ідентифікатор</label> <input type="text" class="w3-col m7 17"></div>
-                <div> <label class="w3-col m5 15">Синонім</label> <input type="text"class="w3-col m7 17" ></div>
-                    <div> <label class="w3-col m5 15">Коментар</label> <input type="text" class="w3-col m7 17"></div>
-                        <div> <label class="w3-col m5 15">Тип значення</label>
-                            <select class="w3-col m7 17"  >
-                                <option><<>></option>
-                                <option><<>></option>
-                                <option><<>></option>
-                        </select>
-                        </div>
+                <div> <label class="w3-col m5 15">Ідентифікатор</label> <input type="text" class="w3-col m7 17"
+                        value="{{ctrl.selectedItemObject2.value_1_22}}"></div>
+                <div> <label class="w3-col m5 15">Синонім</label> <input type="text" class="w3-col m7 17"></div>
+                <div> <label class="w3-col m5 15">Коментар</label> <input type="text" class="w3-col m7 17"></div>
+                <div> <label class="w3-col m5 15">Тип значення</label>
+                    <select class="w3-col m7 17">
+                        <option
+                            data-ng-repeat="childrenOfParentParent in ctrl.eMap[ctrl.eMap[ctrl.selectedItemObject2.parent].parent].children">
+                            {{childrenOfParentParent.value_1_22}}
+                        </option>
+                    </select>
+                </div>
             </div>
             <div id="additional" class="w3-container content" style="display:none"></div>
-            <div id="rights" class="w3-container content"style="display:none"></div>
-            <div id="migrations" class="w3-container content"style="display:none"></div>
+            <div id="rights" class="w3-container content" style="display:none"></div>
+            <div id="migrations" class="w3-container content" style="display:none"></div>
         </div>
         <div class="w3-col m3 13">
             <button type="submit" ng-click="ctrl.save_data()">OK</button>
-            <button type="reset" >Відмінити</button>
+            <button type="reset" data-ng-click="ctrl.isShow=false">Відмінити</button>
 
         </div>
     </div>
