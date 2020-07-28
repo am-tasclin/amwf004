@@ -7,21 +7,19 @@
 		<div class="w3-center">
 			<span class="w3-tiny">[{{ctrl.project.doc_id}}]</span>
 			<span class="am-b w3-small">
-			{{ctrl.project.value_1_22}}
+				{{ctrl.project.value_1_22}}
 			</span>
 		</div>
-			&nbsp;
+		&nbsp;
 	</div>
 	<div data-ng-repeat="bp in [ctrl.project.children[0]]">
-		<div data-ng-repeat-start="b in bp.children"
-			class="w3-border w3-hover-shadow"
+		<div data-ng-repeat-start="b in bp.children" class="w3-border w3-hover-shadow"
 			data-ng-click="b.open_item=!b.open_item;ctrl.wfRun.clickActivityDefinition(b)">
 			<div class="w3-right">
 				<i class="far fa-square fa-lg"></i>
 			</div>
 			<div class="w3-left w3-tiny">
-				{{$index>0?bp.children[$index-1].doc_id:ctrl.project.doc_id}} <i
-					class="fas fa-arrow-right"></i>
+				{{$index>0?bp.children[$index-1].doc_id:ctrl.project.doc_id}} <i class="fas fa-arrow-right"></i>
 			</div>
 			<div class="w3-center">
 				<span class="w3-tiny">[{{b.doc_id}}]</span>
@@ -33,8 +31,8 @@
 					{{bp.children[$index+1].doc_id}} </span>
 			</div>
 		</div>
-		<div data-ng-repeat-end class="w3-card-4 w3-leftbar w3-container"
-			data-ng-include="'wwf_task.html'" data-ng-if="b.open_item"></div>
+		<div data-ng-repeat-end class="w3-card-4 w3-leftbar w3-container" data-ng-include="'wwf_task.html'"
+			data-ng-if="b.open_item"></div>
 	</div>
 	<div>
 		<div class="w3-right">
