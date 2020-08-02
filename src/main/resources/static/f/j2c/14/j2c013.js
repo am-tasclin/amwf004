@@ -25,8 +25,10 @@ var initJ2C = function () {
 				console.log(response)
 				var e = ctrl.eMap[ctrl.templateEditId]
 				var newE = response.data.list2[0]
-				console.log(e.children, newE)
-				e.children.push(newE)
+				ctrl.selectItemId=newE.doc_id;
+				ctrl.selectedItemObject2=newE;
+		console.log(e.children, newE)
+		e.children.push(newE) 
 			}
 		}
 		so.sql = "INSERT INTO doc (doc_id, parent) VALUES (:nextDbId1, " + ctrl.templateEditId + " ); "

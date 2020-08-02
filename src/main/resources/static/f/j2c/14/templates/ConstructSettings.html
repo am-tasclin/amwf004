@@ -2,7 +2,7 @@
     <div class="w3-row w3-padding-small">
         <div class="w3-col m6 16 w3-padding-small">
             <div class="w3-row w3-padding-small"><label class="w3-col m5 15">Ідентифікатор</label> <input type="text"
-                    class="w3-col m7 17"></div>
+                    class="w3-col m7 17" value="{{ctrl.selectedItemObject1.value_1_22}}"></div>
             <div class="w3-row w3-padding-small"><label class="w3-col m5 15">Коментар</label> <input type="text"
                     class="w3-col m7 17"></div>
 
@@ -16,6 +16,9 @@
         <div class="w3-col m6 16 w3-padding-small">
             <div class="w3-row w3-padding-small"><label class="w3-col m5 15">Підпорядкований</label><select>
                     <option>(Не підпорядковано)</option>
+                    <option data-ng-repeat="item in ctrl.eMap[371831].children">
+                        {{item.value_1_22}}
+                    </option>
                 </select></div>
             <div class="w3-row w3-padding-small "> <label class="w3-col m5 15">Синонім</label> <input type="text"
                     class="w3-col m7 17"></div>
@@ -76,9 +79,13 @@
             </div>
             <div class="w3-row w3-margin-top">
                 <button class="w3-btn w3-dark-gray w3-col m4 14 w3-padding-small w3-margin-bottom"
-                    data-ng-click="ctrl.creatNewProp();ctrl.isShow=true">Новий</button>
-                <a class="w3-btn w3-dark-gray w3-col m4 14 w3-padding-small w3-margin-bottom" href="">Змінити</a> <a
-                    class="w3-btn w3-dark-gray w3-col m4 14 w3-padding-small w3-margin-bottom" href="">Видалити</a>
+                    data-ng-click="ctrl.creatNewProp();ctrl.isShow=true">
+                    Новий</button>
+                <button class="w3-btn w3-dark-gray w3-col m4 14 w3-padding-small w3-margin-bottom"
+                    data-ng-click="ctrl.isShow=true">
+                    Змінити</button>
+                <button class="w3-btn w3-dark-gray w3-col m4 14 w3-padding-small w3-margin-bottom">
+                    Видалити</button>
             </div>
         </div>
     </div>
