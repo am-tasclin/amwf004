@@ -18,7 +18,8 @@ var readDataAsTable = function (dataId) {
 			o.sql = "SELECT * FROM doc d \n"
 			if (o.reference) {
 				if (25 == o.rtype) {
-					o.sql += "LEFT JOIN (SELECT value v_" + o.rtype + "_" + o.reference + ", timestamp_id FROM timestamp ) t on timestamp_id=d.doc_id \n"
+					o.sql += "LEFT JOIN (SELECT value v_" + o.rtype + "_" + o.reference 
+					+ ", timestamp_id FROM timestamp ) t ON timestamp_id=d.doc_id \n"
 				}
 			}
 			o.sql += "WHERE parent = " + dataId
@@ -26,7 +27,7 @@ var readDataAsTable = function (dataId) {
 			// console.log(ctrl.readTable, this.params, o.sql)
 			read2.sql1({fn:function(response){
 				o.dataList = response.data.list
-				console.log(ctrl.readTable)
+				console.log(ctrl.readTable, ctrl.readTable.sql)
 			},params:{
 				sql:o.sql
 			}})

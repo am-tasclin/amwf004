@@ -28,10 +28,11 @@ var initDataModel = function(){
 		}else{
 			table_model.open_view = !table_model.open_view
 		}
-		console.log(table_model.doc_id, !table_model.children)
 		var sql0 = sql_app.obj_with_i18n() + " WHERE d1.doc_id IN ( SELECT d2.doc_id FROM doc d1, doc d2 where d2.parent=d1.doc_id and  d1.reference = "+ table_model.doc_id+")"
 		var sql = "  SELECT d1.parent FROM doc d1 where d1.reference = " + table_model.doc_id
+		console.log(table_model.doc_id, !table_model.children, sql0)
 		read_dataObject2fn(sql, function(response){
+			console.log(response.data.list[0])
 			if(response.data.list[0]){
 				var parent_id = response.data.list[0].parent
 				read_element_children(parent_id, function(response){
@@ -44,6 +45,9 @@ var initDataModel = function(){
 						})
 					})
 				})
+			}else{
+				console.log(123)
+
 			}
 		}, 1)
 		var init_reference = function(v){ if(v.reference){
