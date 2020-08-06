@@ -43,8 +43,6 @@ public class Db1Rest extends DbCommon{
 		return data;
 	}
 
-	
-
 	@GetMapping("/r/url_sql_read_db1")
 	public @ResponseBody Map<String, Object> url_sql_read_db1(
 			@RequestParam(value = "sql", required = true) String sql

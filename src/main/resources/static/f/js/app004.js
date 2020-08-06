@@ -14,6 +14,15 @@ var initApp = function($scope, $http, $timeout){
 	ctrl.openUrl = function(url){
 		window.location.href = url;
 	}
+	readPrincipal($http)
+}
+
+function readPrincipal($http){
+	$http.get('/r/principal').then(function(response){
+		ctrl.principal = response.data.principal
+		ctrl.principal.user_id = response.data.list0[0].user_id
+		// console.log(ctrl.principal, ctrl.principal.name)
+	})	
 }
 
 function build_request($scope){
