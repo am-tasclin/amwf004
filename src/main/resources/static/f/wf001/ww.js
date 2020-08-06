@@ -114,8 +114,10 @@ var findNodesWithRef = function (e, refIds, fn) {
 
 var findActivityDefinitionTasks = function (adEl) {
 	var fN = []
-	var adNodes = findNodesWithRef(adEl, [369917])//ActivityDefinition
+	var adNodes = findNodesWithRef(adEl, [371999])//ActivityDefinition.name
+	console.log(adNodes, adEl.doc_id)
 	angular.forEach(adNodes, function (e1) {
+		console.log(e1)
 		angular.forEach(e1.instantiatesCanonical, function (e2) {
 			fN.push(e2)
 		})
@@ -136,12 +138,16 @@ var initWF_run001 = function () {
 	}
 
 	ctrl.wfRun.clickActivityDefinition = function (adEl) {
-		console.log(adEl)
 		var tasks = findActivityDefinitionTasks(adEl)
+		console.log(adEl, tasks)
 		angular.forEach(tasks, function (id) {
+			console.log(id)
 			findNodesWithRef(ctrl.eMap[id], [371935]/*output*/, function (eOut) {
+				console.log(eOut.doc_id)
 				findNodesWithRef(eOut, [371968]/*Element*/, function (el) {
+					console.log(el.doc_id)
 					angular.forEach(el.children, function (elAtt) { /*Element@attributes*/
+						console.log(elAtt.doc_id)
 						// console.log(elAtt.doc_id, elAtt.reference, elAtt.reference2, ctrl.eMap[elAtt.reference2])
 						if (!ctrl.eMap[elAtt.reference2]) {
 							read_element(elAtt.reference2, function () {

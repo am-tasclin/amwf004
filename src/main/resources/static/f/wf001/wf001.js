@@ -8,7 +8,8 @@ var initWF001 = function(){
 			ctrl.project = ctrl.eMap[ctrl.request.parameters.p]
 			console.log('read -> ',ctrl.project.doc_id)
 		}, function(ad,response){
-			if(369917==ad.reference2){//ActivityDefinition
+			console.log(ad.doc_id, ad.reference2)
+			if(368817==ad.reference2){//ActivityDefinition (   definitionCanonical:369920 .369917)
 				readSql({ref2: ad.doc_id, //Task.instantiatesCanonical(ActivityDefinition)
 				sql:'SELECT parent FROM doc where reference2=:ref2 and reference=371927',
 				afterRead:function(response){
