@@ -14,10 +14,10 @@
 					<div class="w3-hover-shadow"
 						data-ng-repeat="c_task1 in c_task.children">
 						<span data-ng-repeat="c in [{e:c_task1,p:c_task}]"
-							data-ng-include="'c_context_menu.html'"></span><span
-							class="w3-hover-shadow"
+							data-ng-include="'c_context_menu.html'"></span>
+							<span class="w3-hover-shadow"
 							data-ng-click="ctrl.conf_menu_click(c_task1)">
-							{{c_task1.value_1_22}} </span>
+							{{c_task1.value_1_22}}</span>
 						<div class="w3-border-left w3-container"
 							data-ng-if="c_task1.open_children">
 							<div class="w3-hover-shadow"
