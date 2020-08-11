@@ -9,6 +9,12 @@ app.controller('AppCtrl', function ($scope, $http, $timeout) {
 	ctrl.selectedItemObject1;
 	ctrl.selectedItemInConstructSettings;
 	ctrl.newElementObject;
+	ctrl.cancel=function(){
+		ctrl.templateView = '';
+	}
+	ctrl.nextViewOfNewElement=function(){
+		ctrl.templateView = '';
+	}
 	ctrl.save_data = function(){
 		var so = {
 			dataAfterSave: function (response) {
@@ -32,7 +38,7 @@ app.controller('AppCtrl', function ($scope, $http, $timeout) {
 	}
 })
 
-app.directive('workConstruct', function () {
+app.directive('workSpace', function () {
 	return {
 		replace: true,
 		restrict: 'AE',
@@ -42,14 +48,14 @@ app.directive('workConstruct', function () {
 				if(ctrl.templateEditId)
 				 var previousSelectedElement = angular.element(document.getElementById(ctrl.templateEditId)).removeClass('w3-blue');
 				element.addClass('w3-blue');
-				ctrl.templateEditId = attr.workConstruct;
-				if(ctrl.templateEditId<=371832||ctrl.templateEditId>=371847)
+				ctrl.templateEditId = attr.workSpace;
+				if(ctrl.templateEditId<371832||ctrl.templateEditId>371847)
 				{ctrl.selectedItemObject1 = ctrl.eMap[ctrl.templateEditId];
 					if(!ctrl.selectedItemObject1.open_children){
 					ctrl.templateView = 'ConstructSettings';}else{
-						ctrl.templateView = ''
+						ctrl.templateView = '';
 					}
-				}
+				} 
 			})
 		}
 	}
@@ -77,10 +83,13 @@ app.directive('selectItem', function () {
 })
 app.directive('newElement',function(){
 	return{
+		replace: true,
 		restrict: 'A',
 		link: function(scope, element, attr){
 				element.on('click',function(){
-						
+					console.log(element);
+						ctrl.templateView = 'Construct';
+						ctrl.newElementObject={};
 				})
 		}
 	}
