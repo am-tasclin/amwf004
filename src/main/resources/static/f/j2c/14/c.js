@@ -45,7 +45,11 @@ app.directive('workConstruct', function () {
 				ctrl.templateEditId = attr.workConstruct;
 				if(ctrl.templateEditId<=371832||ctrl.templateEditId>=371847)
 				{ctrl.selectedItemObject1 = ctrl.eMap[ctrl.templateEditId];
-					ctrl.templateView = 'ConstructSettings';}
+					if(!ctrl.selectedItemObject1.open_children){
+					ctrl.templateView = 'ConstructSettings';}else{
+						ctrl.templateView = ''
+					}
+				}
 			})
 		}
 	}

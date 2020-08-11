@@ -12,7 +12,8 @@ var initJ2C = function () {
 						//						read_element_descendant(v.doc_id)
 						var p = ctrl.eMap[v.reference2]
 						console.log(v.doc_id, v.reference2)
-						children_push(p, v)
+						if(p){
+						children_push(p, v)}
 					})
 				})
 			})
