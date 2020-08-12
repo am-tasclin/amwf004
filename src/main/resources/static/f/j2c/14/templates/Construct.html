@@ -2,7 +2,7 @@
     <div class="w3-row w3-padding-16">Конструцтор </div>
     <div class="w3-row w3-padding-16">
         <div class="w3-col m9 19">
-        <div> <label class="w3-col m5 15">Ідентифікатор</label> <input type="text" class="w3-col m7 17" value="{{ctrl.newElementObject.value_1_22}}" ></div>
+        <div> <label class="w3-col m5 15">Ідентифікатор</label> <input type="text" class="w3-col m7 17" data-ng-model="ctrl.newElementObject.name" ></div>
         <div> <label class="w3-col m5 15">Синонім</label> <input type="text"class="w3-col m7 17" ></div>
         <div> <label class="w3-col m5 15">Коментар</label> <input type="text" class="w3-col m7 17"></div>
         </div>
@@ -19,10 +19,10 @@
     </div>
     <div class="w3-row w3-padding-16">
         <div class="w3-col m9 19">
-            <div class="w3-btn w3-gray w3-disabled" >< Назад </div>
-            <div class="w3-btn w3-gray" >Далі ></div>
+            <div class="w3-btn w3-gray  w3-disabled" >< Назад </div>
+            <div class="w3-btn w3-gray" data-ng-click="ctrl.nextViewOfNewElement()" >Далі ></div>
             <div class="w3-btn w3-gray w3-disabled" >Готово</div>
-            <div class="w3-btn w3-gray" >Відміна</div>
+            <div class="w3-btn w3-gray" data-ng-click="ctrl.cancel()">Відміна</div>
             <div class="w3-btn w3-gray" >Допомога</div>
         </div>
     </div>

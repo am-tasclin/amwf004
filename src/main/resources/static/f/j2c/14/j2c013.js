@@ -12,7 +12,8 @@ var initJ2C = function () {
 						//						read_element_descendant(v.doc_id)
 						var p = ctrl.eMap[v.reference2]
 						console.log(v.doc_id, v.reference2)
-						children_push(p, v)
+						if(p){
+						children_push(p, v)}
 					})
 				})
 			})
@@ -26,7 +27,7 @@ var initJ2C = function () {
 				var e = ctrl.eMap[ctrl.templateEditId]
 				var newE = response.data.list2[0]
 				ctrl.selectItemId=newE.doc_id;
-				ctrl.selectedItemObject2=newE;
+				ctrl.selectedItemInConstructSettings=newE;
 		console.log(e.children, newE)
 		e.children.push(newE) 
 			}
@@ -41,7 +42,7 @@ var initJ2C = function () {
 	ctrl.conf_menu_click = function (e) {
 		e.open_children = !e.open_children
 		if (e.cnt_child && !e.children) {
-			console.log(e);
+			// console.log(e);
 			read_element_children(e.doc_id, function () {
 
 			})

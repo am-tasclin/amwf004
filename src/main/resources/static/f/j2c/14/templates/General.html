@@ -9,15 +9,16 @@
             </div>
             <div id="general" class="w3-container content">
                 <div> <label class="w3-col m5 15">Ідентифікатор</label> <input type="text" class="w3-col m7 17"
-                        data-ng-model="ctrl.selectedItemObject2.value_1_22">
+                        data-ng-model="ctrl.selectedItemInConstructSettings.value_1_22">
                     </div>
                 <div> <label class="w3-col m5 15">Синонім</label> <input type="text" class="w3-col m7 17"></div>
                 <div> <label class="w3-col m5 15">Коментар</label> <input type="text" class="w3-col m7 17"></div>
                 <div> <label class="w3-col m5 15">Тип значення</label>
                     <select class="w3-col m7 17">
                         <option
-                            data-ng-repeat="childrenOfParentParent in ctrl.eMap[ctrl.eMap[ctrl.selectedItemObject2.parent].parent].children">
-                            {{childrenOfParentParent.value_1_22}}
+                        data-ng-if="childrenOfParentParent.reference2 == 371833"   
+                        data-ng-repeat="childrenOfParentParent in ctrl.eMap[ctrl.eMap[ctrl.selectedItemInConstructSettings.parent].parent].children">
+                            {{childrenOfParentParent.value_1_22}}+ {{childrenOfParentParent.doc_id}}
                         </option>
                     </select>
                 </div>

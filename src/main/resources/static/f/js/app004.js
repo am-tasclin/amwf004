@@ -19,8 +19,10 @@ var initApp = function($scope, $http, $timeout){
 
 function readPrincipal($http){
 	$http.get('/r/principal').then(function(response){
-		ctrl.principal = response.data.principal
-		ctrl.principal.user_id = response.data.list0[0].user_id
+		if(response.data.principal){
+		ctrl.principal = response.data.principal}
+		if(response.data.list0){
+		ctrl.principal.user_id = response.data.list0[0].user_id}
 		// console.log(ctrl.principal, ctrl.principal.name)
 	})	
 }
