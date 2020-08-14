@@ -10,8 +10,113 @@ app.controller('AppCtrl', function ($scope, $http, $timeout) {
 	
 })
 
+
+//***PlanDefinition***
+var createPlanDefinition = function (name)
+{
+    var result = new Object();
+    result.name = name;
+    //result.doc_id=
+    //result.name_id=
+    result.action = [];
+
+//TODO UPDATE DB
+
+    return result;
+}
+
+var updatePlanDefinitionName = function (planDefinitionElement, newName)
+{
+planDefinitionElement.name = newName;
+//TODO UPDATE DB
+}
+
+var deletePlanDefinition = function (planDefinitionElement)
+{
+    angular.forEach(planDefinitionElement.action, function (activity) {
+            deleteActivityDefinition(activity);
+		});
+
+    //TODO UPDATE DB
+}
+//******************
+
+
+//***ActivityDefinition***
+var createActivityDefinition = function (planDefinitionElement, name)
+{
+    var result = new Object();
+    result.name = name;
+    //result.doc_id=
+    //result.name_id=
+    result.Task = [];
+
+    planDefinitionElement.action.push(result);
+
+//TODO UPDATE DB
+
+    return result;
+}
+
+var deleteActivityDefinition = function (activityDefinitionElement)
+{
+    angular.forEach(activityDefinitionElement.Task, function (task) {
+        deleteTask(task);
+		})
+    //TODO UPDATE DB
+}
+
+var updateActivityDefinitionName = function (activityDefinitionElement, newName)
+{
+activityDefinitionElement.name = newName;
+//TODO UPDATE DB
+}
+//******************
+
+
+//***Task***
+var createTask = function (activityDefinitionElement, name)
+{
+    var result = new Object();
+    result.name = name;
+    //result.doc_id=
+    //result.name_id=
+
+    //TODO manage input and output
+    activityDefinitionElement.Task.push(result);
+
+//TODO UPDATE DB
+
+    return result;
+}
+var updateTaskName = function (taskElement, newName)
+{
+taskElement.name = newName;
+//TODO UPDATE DB
+}
+var deleteTask = function (taskElement)
+{
+       delete taskElement;
+    //TODO UPDATE DB
+}
+//******************
+
+
+var findActivityDefinitionTasks = function (activityDefinitionElement) {
+	var fN = []
+	var activityDefinitionNodes = findNodesWithRef(activityDefinitionElement, [371999])//ActivityDefinition.name
+	console.log(activityDefinitionNodes, activityDefinitionElement.doc_id)
+	angular.forEach(activityDefinitionNodes, function (e1) {
+		console.log(e1)
+		angular.forEach(e1.instantiatesCanonical, function (e2) {
+			fN.push(e2)
+		})
+	})
+	return fN
+}
+
 var readDataAsTable = function (dataId) {
-	console.log(dataId)
+	console.log("readDataAsTable: ", dataId)
 	read2.sql1({
 		fn: function (response) {
 			var o = response.data.list[0]
@@ -52,7 +157,7 @@ var readDataAsTable = function (dataId) {
 }
 
 var createInsertFromElement = function (e) {
-	console.log(e.doc_id)
+	console.log("createInsertFromElement: ",e.doc_id)
 	e.sql_insert = 'INSERT INTO doc (:vars) VALUES (:vals);'
 	var vars = 'doc_id', vals = ':nextDbId1'
 	angular.forEach(e.children, function (e3) {
@@ -98,9 +203,9 @@ var createInsertFromElement = function (e) {
 	})
 }
 
-var findNodesWithRef = function (e, refIds, fn) {
+var findNodesWithRef = function (element, refIds, fn) {
 	var fN = []
-	angular.forEach(e.children, function (e1) {
+	angular.forEach(element.children, function (e1) {
 		if (
 			refIds.indexOf(e1.reference) >= 0
 			|| refIds.indexOf(e1.reference2) >= 0
@@ -108,19 +213,6 @@ var findNodesWithRef = function (e, refIds, fn) {
 			fN.push(e1)
 			if (fn) fn(e1)
 		}
-	})
-	return fN
-}
-
-var findActivityDefinitionTasks = function (adEl) {
-	var fN = []
-	var adNodes = findNodesWithRef(adEl, [371999])//ActivityDefinition.name
-	console.log(adNodes, adEl.doc_id)
-	angular.forEach(adNodes, function (e1) {
-		console.log(e1)
-		angular.forEach(e1.instantiatesCanonical, function (e2) {
-			fN.push(e2)
-		})
 	})
 	return fN
 }
@@ -137,9 +229,9 @@ var initWF_run001 = function () {
 		return rE
 	}
 
-	ctrl.wfRun.clickActivityDefinition = function (adEl) {
-		var tasks = findActivityDefinitionTasks(adEl)
-		console.log(adEl, tasks)
+	ctrl.wfRun.clickActivityDefinition = function (activityDefinitionElement) {
+		var tasks = findActivityDefinitionTasks(activityDefinitionElement)
+		console.log(activityDefinitionElement, tasks)
 		angular.forEach(tasks, function (id) {
 			console.log(id)
 			findNodesWithRef(ctrl.eMap[id], [371935]/*output*/, function (eOut) {
