@@ -1,28 +1,29 @@
-var initWF001 = function(){
-	console.log('read -> ',111)
+var initWF001 = function () {
+	console.log('read -> ', 111)
 
-	if(ctrl.request.parameters.p){
+	if (ctrl.request.parameters.p) {
 		console.log('read -> ', ctrl.request.parameters.p)
 		read_element_descendant(ctrl.request.parameters.p
-		, function(){
-			ctrl.project = ctrl.eMap[ctrl.request.parameters.p]
-			console.log('read -> ',ctrl.project.doc_id)
-		}, function(ad,response){
-			console.log(ad.doc_id, ad.reference2)
-			if(368817==ad.reference2){//ActivityDefinition (   definitionCanonical:369920 .369917)
-				readSql({ref2: ad.doc_id, //Task.instantiatesCanonical(ActivityDefinition)
-				sql:'SELECT parent FROM doc where reference2=:ref2 and reference=371927',
-				afterRead:function(response){
-					angular.forEach(response.data.list, function(task_iC_AD){
-						if(!ad.instantiatesCanonical)	ad.instantiatesCanonical = []
-						read_element_descendant(task_iC_AD.parent, function(){
-							ad.instantiatesCanonical.push(ctrl.eMap[task_iC_AD.parent].doc_id)
-						})
+			, function () {
+				ctrl.project = ctrl.eMap[ctrl.request.parameters.p]
+				console.log('read -> ', ctrl.project.doc_id)
+			}, function (ad, response) {
+				console.log(ad.doc_id, ad.reference2)
+				if (368817 == ad.reference2) {//ActivityDefinition (   definitionCanonical:369920 .369917)
+					readSql({
+						ref2: ad.doc_id, //Task.instantiatesCanonical(ActivityDefinition)
+						sql: 'SELECT parent FROM doc where reference2=:ref2 and reference=371927',
+						afterRead: function (response) {
+							angular.forEach(response.data.list, function (task_iC_AD) {
+								if (!ad.instantiatesCanonical) ad.instantiatesCanonical = []
+								read_element_descendant(task_iC_AD.parent, function () {
+									ad.instantiatesCanonical.push(ctrl.eMap[task_iC_AD.parent].doc_id)
+								})
+							})
+						}
 					})
 				}
 			})
-			}
-		})
 	}
 
 	// var  read_invoices_sql = 371989
@@ -86,7 +87,7 @@ var read2_element_children = function (doc_id, fnObj) {
 var buildElementSelect = function (el) {
 	var addWhere
 	el.sql = 'SELECT * FROM doc d \n'
-	if(el.doctype == 25){/**value.timestamp */
+	if (el.doctype == 25) {/**value.timestamp */
 		el.sql += 'LEFT JOIN timestamp ts ON ts.timestamp_id=d.doc_id \n'
 	}
 	angular.forEach(el.children, function (elC) {
@@ -94,20 +95,20 @@ var buildElementSelect = function (el) {
 			addWhere = 'parent = ' + elC.reference2
 		}
 	})
-	el.sql += ' WHERE '+addWhere
+	el.sql += ' WHERE ' + addWhere
 	// console.log(el, el.sql)
 }
 
 var read2
 class Read2 {
 	constructor($http) {
+		this.sql1 = function (a) {
+			this.http.get(this.url, { params: a.params })
+				.then((response) =>
+					a.fn(response)
+				)
+		}
 		this.http = $http
 		this.url = '/r/url_sql_read_db1'
-		this.sql1 = function(a){
-			read2.http.get(read2.url, {params:a.params})
-			.then(function(response){
-				a.fn(response)
-			})
-		}
 	}
 }
