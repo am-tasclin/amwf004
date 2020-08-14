@@ -14,10 +14,12 @@
                 <div> <label class="w3-col m5 15">Синонім</label> <input type="text" class="w3-col m7 17"></div>
                 <div> <label class="w3-col m5 15">Коментар</label> <input type="text" class="w3-col m7 17"></div>
                 <div> <label class="w3-col m5 15">Тип значення</label>
-                    <select class="w3-col m7 17">
+                    <select class="w3-col m7 17" data-ng-model="ctrl.selectedItemInConstructSettings.parent">
+                        <option data-ng-value="ctrl.selectedItemInConstructSettings.doc_id"></option>
                         <option
                         data-ng-if="childrenOfParentParent.reference2 == 371833"   
-                        data-ng-repeat="childrenOfParentParent in ctrl.eMap[ctrl.eMap[ctrl.selectedItemInConstructSettings.parent].parent].children">
+                        data-ng-repeat="childrenOfParentParent in ctrl.eMap[ctrl.eMap[ctrl.selectedItemInConstructSettings.parent].parent].children"
+                        data-ng-value="childrenOfParentParent.doc_id">
                             {{childrenOfParentParent.value_1_22}}+ {{childrenOfParentParent.doc_id}}
                         </option>
                     </select>
@@ -28,7 +30,7 @@
             <div id="migrations" class="w3-container content" style="display:none"></div>
         </div>
         <div class="w3-col m3 13">
-            <button type="submit" ng-click="ctrl.save_data()">OK</button>
+            <button type="submit" ng-click="ctrl.save_data();ctrl.isShow=false">OK</button>
             <button type="reset" data-ng-click="ctrl.isShow=false">Відмінити</button>
 
         </div>
