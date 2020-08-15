@@ -6,6 +6,8 @@ app.controller('AppCtrl', function ($scope, $http, $timeout) {
 	ctrl.templateView = '';
 	ctrl.isShow = false;
 	ctrl.selectItemId;
+	ctrl.oldSelectItemParentId;
+	ctrl.oldSelectItemIndex;
 	ctrl.selectedItemObject1;
 	ctrl.selectedItemInConstructSettings;
 	ctrl.newElementObject;
@@ -18,13 +20,23 @@ app.controller('AppCtrl', function ($scope, $http, $timeout) {
 	ctrl.save_data = function(){
 		var so = {
 			dataAfterSave: function (response) {
-				console.log(response)
+			if(response.data){
+				var oldParent = ctrl.eMap[ctrl.oldSelectItemParentId];
+				console.log("newPar", newParent);
+				var newParent = ctrl.eMap[ctrl.selectedItemInConstructSettings.parent];
+				console.log("oldPar",oldParent);
+				oldParent.children.splice(oldParent.children.indexOf(ctrl.oldSelectItemIndex),1);
+				// newParent.children.push(ctrl.selectedItemInConstructSettings);
+			}
 			}
 		}
-		so.sql = "UPDATE string SET value= '"+ctrl.selectedItemInConstructSettings.value_1_22+"' WHERE string_id = "+ctrl.selectedItemInConstructSettings.doc_id+"; "
+
+		so.sql = "UPDATE string SET value= '"+ctrl.selectedItemInConstructSettings.value_1_22+"' WHERE string_id = "+ctrl.selectedItemInConstructSettings.doc_id+"; "+
+		"UPDATE doc SET parent= '"+ctrl.selectedItemInConstructSettings.parent+"' WHERE doc_id = "+ctrl.selectedItemInConstructSettings.doc_id+"; ";
 		// so.sql += sql_app.SELECT_obj_with_i18n(':nextDbId1')
 		console.log(so.sql)
 		writeSql(so)
+
 	}
 	ctrl.removeSelectedNode= function(){
 		var so = {
@@ -55,7 +67,9 @@ app.directive('workSpace', function () {
 					ctrl.templateView = 'ConstructSettings';}else{
 						ctrl.templateView = '';
 					}
-				} 
+				} else{
+					ctrl.templateView = '';
+				}
 			})
 		}
 	}
@@ -69,7 +83,9 @@ app.directive('selectItem', function () {
 			element.on('click', function () {
 				ctrl.selectItemId = attr.selectItem;
 				ctrl.selectedItemInConstructSettings = ctrl.eMap[ctrl.selectItemId];
-				console.log(ctrl.selectedItemInConstructSettings);
+				ctrl.oldSelectItemParentId=ctrl.selectedItemInConstructSettings.parent;
+				ctrl.oldSelectItemIndex=ctrl.eMap[ctrl.oldSelectItemParentId].children.indexOf(ctrl.selectedItemInConstructSettings);
+				console.log(ctrl.oldSelectItemIndex);
 				var listItems = element.parent().parent().parent().children().children();
 				listItems = Object.values(listItems);
 				listItems.pop();
@@ -88,7 +104,7 @@ app.directive('newElement',function(){
 		link: function(scope, element, attr){
 				element.on('click',function(){
 					console.log(element);
-						ctrl.templateView = 'Construct';
+						ctrl.templateView = 'General';
 						ctrl.newElementObject={};
 				})
 		}
