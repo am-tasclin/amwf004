@@ -26,11 +26,17 @@
             {{ctrl.page_title}}
         </div>
         <div class="w3-small w3-light-gray">
-            <i class="fas fa-ellipsis-v"></i> <i class="fas fa-file w3-btn w3-padding-small"></i> <i
-                class="fas fa-folder-open w3-btn w3-padding-small"></i> <i
+            <i class="fas fa-ellipsis-v"></i> <i class="fas fa-file w3-btn w3-padding-small"
+                data-ng-class="{'w3-green':'new'==ctrl.programControl.openDialogName}"
+                data-ng-click="ctrl.programControl.openDialogFn('new')"></i> <i
+                data-ng-class="{'w3-green':'open'==ctrl.programControl.openDialogName}"
+                class="fas fa-folder-open w3-btn w3-padding-small"
+                data-ng-click="ctrl.programControl.openDialogFn('open')"></i> <i
                 class="fas fa-save w3-btn w3-padding-small"></i>
         </div>
-        a1
+        <div data-ng-if="ctrl.programControl.openDialogName"
+            data-ng-include="'/f/cp001/dialog_'+ctrl.programControl.openDialogName+'.html'">
+        </div>
     </div>
 </body>
 
