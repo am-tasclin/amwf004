@@ -96,7 +96,7 @@ sql_app.obj_with_i18n = function(){
 	"LEFT JOIN (SELECT COUNT(*) cnt_child, parent FROM doc GROUP BY parent) d2 ON d2.parent=d1.doc_id \n"
 	return sql
 }
-sql_app.SELECT_obj_with_i18n = function(doc_id){
+sql_app.SELECT_obj_with_i18n = (doc_id) => {
 	var sql = sql_app.obj_with_i18n()+
 	"WHERE d1.doc_id = :doc_id "
 	sql = sql.replace(':doc_id', doc_id)
@@ -106,7 +106,7 @@ sql_app.SELECT_obj_with_i18n = function(doc_id){
 //console.log(sql_app.SELECT_obj_with_i18n(':nextDbId1'))
 //console.log(sql_app.SELECT_obj_with_i18n(369574))
 
-sql_app.SELECT_children_with_i18n = function(parent_id){
+sql_app.SELECT_children_with_i18n = (parent_id) => {
 	var sql = sql_app.obj_with_i18n()+
 	"WHERE d1.parent = :parent " +
 	"ORDER BY sort "

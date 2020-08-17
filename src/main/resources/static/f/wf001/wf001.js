@@ -112,3 +112,64 @@ class Read2 {
 		this.url = '/r/url_sql_read_db1'
 	}
 }
+
+var rw2
+class ReadWrite2 {
+	constructor($http) {
+
+		this.readAll_element = (a) => {
+			a.deepRead = 0
+			a.fnForEach = (o, response) => {
+				if (a.deepRead++ > 10)
+					return
+				// if (o.cnt_child && !o.children) {
+				if (o.cnt_child) {
+					let a1 = {
+						params: { doc_id: o.doc_id, parent: o.doc_id }, deepRead:a.deepRead, fnForEach:a.fnForEach
+					}
+					this.read_element(a1)
+				}
+			}
+			this.read_element(a)
+		}
+
+
+		this.read_element = (a) => {
+			let o = ctrl.eMap[a.params.doc_id]
+			//if not element or not element.children
+			if (!o || (a.params.parent && o.cnt_child && !o.children) || o.children.length < o.cnt_child) {
+				if (a.params.parent) a.params.sql = sql_app.SELECT_children_with_i18n(a.params.parent)
+				if (!a.params.sql) a.params.sql = sql_app.SELECT_obj_with_i18n(a.params.doc_id)
+				this.http.get(this.url, { params: a.params })
+					.then((response) => {
+						angular.forEach(response.data.list, (o) => {
+							let o1 = ctrl.eMap[o.doc_id]
+							if (!o1 || (o.cnt_child && !o.children)) {
+								let parentEl = ctrl.eMap[o.parent]
+								ctrl.eMap[o.doc_id] = o
+								if (parentEl) {
+									// console.log(o.doc_id, parentEl.doc_id)
+									if (!parentEl.children) parentEl.children = []
+									parentEl.children.push(o)
+								}
+								if (a.fnForEach) {
+									a.fnForEach(o, response)
+								}
+							}
+						})
+						if (a.fnForAll) a.fnForAll(response)
+					})
+			} else {
+				// console.log('-------------------1271', o, a)
+				if (a.fnForEach) a.fnForEach(o)
+			}
+		}
+
+		this.sql1 = (a) =>
+			this.http.get(this.url, { params: a.params })
+				.then((response) => a.fnThen(response))
+
+		this.http = $http
+		this.url = '/r/url_sql_read_db1'
+	}
+}
