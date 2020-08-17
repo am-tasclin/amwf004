@@ -1,7 +1,7 @@
 <div class="w3-container ">
     <div class="w3-row">
     </div>
-    <div class="w3-row">Конструцтор </div>
+    <div class="w3-row">Конструцтор ({{ctrl.eMap[ctrl.newElementObject.reference2].value_1_22}})</div>
     <div class="w3-row">
         <div class="w3-col m9 19">
             <div class="w3-bar">
@@ -9,20 +9,21 @@
             </div>
             <div id="general" class="w3-container content">
                 <div> <label class="w3-col m5 15">Ідентифікатор</label> <input type="text" class="w3-col m7 17"
-                        data-ng-model="ctrl.selectedItemInConstructSettings.value_1_22">
+                        data-ng-model="ctrl.newElementObject.value_1_22">
                     </div>
                 <div> <label class="w3-col m5 15">Синонім</label> <input type="text" class="w3-col m7 17"></div>
                 <div> <label class="w3-col m5 15">Коментар</label> <input type="text" class="w3-col m7 17"></div>
                 <div> <label class="w3-col m5 15">Тип значення</label>
-                    <select class="w3-col m7 17" data-ng-model="ctrl.selectedItemInConstructSettings.parent"
-                    data-ng-change="ctrl.isChangeSelectParent=true">
-                        <option data-ng-value="ctrl.selectedItemInConstructSettings.doc_id"></option>
+                    <select class="w3-col m7 17" 
+                    <!-- data-ng-model="ctrl.selectedItemInConstructSettings.parent"
+                    data-ng-change="ctrl.isChangeSelectParent=true"> -->
+                        <!-- <option data-ng-value="ctrl.selectedItemInConstructSettings.doc_id"></option>
                         <option
                         data-ng-if="childrenOfParentParent.reference2 == 371833"   
                         data-ng-repeat="childrenOfParentParent in ctrl.eMap[ctrl.eMap[ctrl.selectedItemInConstructSettings.parent].parent].children"
                         data-ng-value="childrenOfParentParent.doc_id">
                             {{childrenOfParentParent.value_1_22}}
-                        </option>
+                        </option> -->
                     </select>
                 </div>
             </div>
@@ -31,8 +32,8 @@
             <div id="migrations" class="w3-container content" style="display:none"></div>
         </div>
         <div class="w3-col m3 13">
-            <button type="submit" ng-click="ctrl.save_data();ctrl.isShow=false">OK</button>
-            <button type="reset" data-ng-click="ctrl.isShow=false">Відмінити</button>
+            <button type="submit" ng-click="ctrl.creatNewRootNodeInConfiguration();ctrl.isShow=false">OK</button>
+            <button type="reset" data-ng-click="ctrl.isShow=false;ctrl.templateView=''">Відмінити</button>
 
         </div>
     </div>

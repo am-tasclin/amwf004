@@ -1,4 +1,4 @@
-<div class="w3-container w3-gray" style="overflow-y: scroll">
+<div class="w3-container w3-gray" style="overflow-y: scroll" >
     <div class="w3-row w3-padding-small">
         <div class="w3-col m6 16 w3-padding-small">
             <div class="w3-row w3-padding-small"><label class="w3-col m5 15">Ідентифікатор</label> <input type="text"
@@ -81,10 +81,12 @@
                 <button class="w3-btn w3-dark-gray w3-col m4 14 w3-padding-small w3-margin-bottom"
                     data-ng-click="ctrl.creatNewProp();ctrl.isShow=true">
                     Новий</button>
-                <button class="w3-btn w3-dark-gray w3-col m4 14 w3-padding-small w3-margin-bottom"
+                <button class="w3-btn w3-dark-gray w3-col m4 14 w3-padding-small w3-margin-bottom " 
+                data-ng-class="ctrl.isDisabled"
                     data-ng-click="ctrl.isShow=true">
                     Змінити</button>
-                <button class="w3-btn w3-dark-gray w3-col m4 14 w3-padding-small w3-margin-bottom"
+                <button class="w3-btn w3-dark-gray w3-col m4 14 w3-padding-small w3-margin-bottom "
+                data-ng-class="ctrl.isDisabled"
                 data-ng-click="ctrl.removeSelectedNode()">
                     Видалити</button>
             </div>
