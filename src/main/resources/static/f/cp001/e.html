@@ -24,6 +24,7 @@
             <span data-ng-repeat="cnf in [{show_title:'no'}]" data-ng-include="'/f/home-link.html'"
                 class="w3-small0 am-b"></span>
             {{ctrl.page_title}}
+            {{ctrl.eMap[ctrl.request.parameters.id].value_1_22}}
         </div>
         <div class="w3-small w3-light-gray">
             <i class="fas fa-ellipsis-v"></i> <i class="fas fa-file w3-btn w3-padding-small"
@@ -36,6 +37,17 @@
         </div>
         <div data-ng-if="ctrl.programControl.openDialogName"
             data-ng-include="'/f/cp001/dialog_'+ctrl.programControl.openDialogName+'.html'">
+        </div>
+        <div class="w3-row w3-border-bottom">
+            <div class="w3-threequarter">a1</div>
+            <div class="w3-quarter w3-border-left" style="height: 88vh; overflow: auto;">
+                <div class="w3-small w3-gray w3-right w3-border am-b">
+                    &NonBreakingSpace;
+                    Завдання:
+                    &NonBreakingSpace;
+                </div>
+                <div data-ng-include="'cp_tasks.html'"></div>
+            </div>
         </div>
     </div>
 </body>

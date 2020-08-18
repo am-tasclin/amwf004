@@ -1,3 +1,9 @@
 <div class="w3-card">
-open
+    open
+    <div class="w3-hover-shadow" data-ng-repeat="cp in ctrl.listCarePlan">
+        <a href="?id={{cp.doc_id}}">
+            {{cp.doc_id}}
+        </a>
+        {{cp.value}}
+    </div>
 </div>
