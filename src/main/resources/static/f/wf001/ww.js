@@ -156,53 +156,6 @@ var readDataAsTable = function (dataId) {
 	})
 }
 
-var createInsertFromElement = function (e) {
-	console.log("createInsertFromElement: ",e.doc_id)
-	e.sql_insert = 'INSERT INTO doc (:vars) VALUES (:vals);'
-	var vars = 'doc_id', vals = ':nextDbId1'
-	angular.forEach(e.children, function (e3) {
-		var r2vEl = ctrl.eMap[e3.reference2]
-		console.log(e3.doc_id, e3.reference, r2vEl)
-		vals += ', ' + e3.reference2
-		vars += ', '
-		if (e3.reference == 371969) {//parent
-			vars += 'parent'
-		} else
-			if (e3.reference == 371970) {//reference
-				vars += 'reference'
-				console.log(e3.reference2, r2vEl.doctype
-					, ctrl.doctype_content_table_name[r2vEl.doctype]
-				)
-				if (r2vEl) {
-					e.sql_insert += '\n'
-					e.sql_insert += 'INSERT INTO :valueType (:valueType_id, value) VALUES (:nextDbId1, :contentVal);'
-					var valueType = ctrl.doctype_content_table_name[r2vEl.doctype]
-					e.sql_insert = e.sql_insert.replace(':valueType', valueType)
-					e.sql_insert = e.sql_insert.replace(':valueType', valueType)
-					if (25 == r2vEl.doctype) {/** timestamp */
-						var d = new Date(e.valueDate)
-						d.setHours(e.valueHH)
-						d.setMinutes(e.valueMM)
-						console.log(e)
-						var contentVal = d.toISOString().replace('T', ' ').split('.')[0]
-					}
-					e.sql_insert = e.sql_insert.replace(':contentVal', "'" + contentVal + "'")
-				}
-			}
-	})
-	e.sql_insert = e.sql_insert.replace(':vars', vars)
-	e.sql_insert = e.sql_insert.replace(':vals', vals)
-	var sql1 = sql_app.SELECT_obj_with_i18n(':nextDbId1')
-	console.log(vars, vals)
-	console.log(e.sql_insert)
-	writeSql({
-		sql: e.sql_insert,
-		dataAfterSave: function (response) {
-			console.log(response.data)
-		}
-	})
-}
-
 var findNodesWithRef = function (element, refIds, fn) {
 	var fN = []
 	angular.forEach(element.children, function (e1) {
@@ -263,12 +216,18 @@ var initWF_run001 = function () {
 		})
 	}
 
-	ctrl.wfRun.clickTask = function (tEl) {
-		angular.forEach(tEl.children, function (e) {
-			if (e.reference == 371935) {//output
-				angular.forEach(e.children, function (e2) {
-					if (e2.reference == 371968) {//Element - metadata
+	ctrl.wfRun.clickTask = (tEl) => {
+		angular.forEach(tEl.children, (e) => {
+			if (371935 == e.reference) {//output
+				angular.forEach(e.children,  (e2) => {
+					if (371968 == e2.reference2) {//Element - metadata
 						createInsertFromElement(e2)
+						writeSql({
+							sql: e2.sql_insert,
+							dataAfterSave: function (response) {
+								console.log(response.data)
+							}
+						})
 					}
 				})
 			}

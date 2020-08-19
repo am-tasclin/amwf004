@@ -1,30 +1,26 @@
 <div>
-	<div data-ng-repeat="ad in b.children"
-		data-ng-if="ad.instantiatesCanonical">
-		<div data-ng-repeat="t_id in ad.instantiatesCanonical"
-		data-ng-init="tEl = ctrl.eMap[t_id]">
+	<div data-ng-repeat="ad in b.children" data-ng-if="ad.instantiatesCanonical">
+		<div data-ng-repeat="t_id in ad.instantiatesCanonical" data-ng-init="tEl = ctrl.eMap[t_id]">
 			<div class="w3-border-bottom">
-				<div class="w3-btn w3-ripple"
-					data-ng-click="ctrl.wfRun.clickTask(tEl)">
-					<span class="w3-tiny"> {{tEl.doc_id}} </span><span
-						data-ng-repeat="td in tEl.children"
-						data-ng-if="371941 == td.reference"> {{td.value_1_22}} </span>
+				<div class="w3-btn w3-ripple" data-ng-click="ctrl.wfRun.clickTask(tEl)">
+					<span class="w3-tiny"> {{tEl.doc_id}} </span>
+					{{tEl.value_1_22}}
+					<span data-ng-if="!tEl.value_1_22">
+						<< назва завдання >>
+					</span>
 				</div>
 			</div>
 			<div>&nbsp;</div>
-			<div data-ng-repeat="eO in ctrl.eMap[t_id].children"
-				data-ng-if="371935==eO.reference">
-				<div data-ng-repeat="eE in eO.children"
-					data-ng-if=" 371968 == eE.reference"
+			<div data-ng-repeat="eO in ctrl.eMap[t_id].children" data-ng-if="371935==eO.reference">
+				<!--  o[]37   output -->
+				<div data-ng-repeat="eE in eO.children" data-ng-if=" 371968 == eE.reference2"
 					data-ng-init="eCr = ctrl.seekChildAttEqual(eE,'reference',371970)">
-					{{ctrl.eMap[eCr.reference2].value_1_22}} 
-					<div
-						data-ng-if="25 == ctrl.eMap[eCr.reference2].doctype"> <input
-						data-ng-model="eE.valueDate" type="date" class="w3-border">
-						<input data-ng-model="eE.valueHH" type="number" class="w3-border"
-						min="0" max="23" size="2">: <input
-						data-ng-model="eE.valueMM" type="number" class="w3-border" min="0"
-						max="59" size="2">
+					<!--Element-->
+					{{ctrl.eMap[eCr.reference2].value_1_22}}
+					<div data-ng-if="25 == ctrl.eMap[eCr.reference2].doctype"> <input data-ng-model="eE.valueDate"
+							type="date" class="w3-border">
+						<input data-ng-model="eE.valueHH" type="number" class="w3-border" min="0" max="23" size="2">:
+						<input data-ng-model="eE.valueMM" type="number" class="w3-border" min="0" max="59" size="2">
 					</div>
 				</div>
 			</div>
