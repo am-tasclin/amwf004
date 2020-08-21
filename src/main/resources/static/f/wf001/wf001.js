@@ -180,13 +180,12 @@ class ReadWrite2 {
 	}
 }
 
-var createInsertFromElement = (e, i) => {
+const createInsertFromElement = (e, i) => {
 	console.log("createInsertFromElement: ", i, e.doc_id)
 	e.sql_insert = 'INSERT INTO doc (:vars) VALUES (:vals);'
-	let vars = 'doc_id', vals = ':nextDbId1'
+	let vars = 'doc_id', vals = ':nextDbId' + i
 	angular.forEach(e.children, (e3) => {
 		let r2vEl = ctrl.eMap[e3.reference2]
-		console.log(e3.doc_id, e3.reference, r2vEl)
 		vars += ', '
 		vals += ', '
 		if (e3.reference2) {
@@ -194,15 +193,21 @@ var createInsertFromElement = (e, i) => {
 		}
 		if (371969 == e3.reference) {//parent
 			vars += 'parent'
-			console.log(ctrl.programControl.selectedParentEl)
-			vals += ctrl.programControl.selectedParentEl.doc_id
+			if (!e3.reference2) {
+				vals += ctrl.programControl.selectedParentEl.doc_id
+			}
 		} else if (371971 == e3.reference) {//reference2
 			vars += 'reference2'
+			let rEl = ctrl.eMap[e3.reference2]
+			if (rEl.parent == e.parent) {
+				let rElParent = ctrl.eMap[rEl.parent]
+				let i2 = rElParent.children.indexOf(rEl) + 1
+				const valsL = vals.split(', ')
+				valsL[valsL.length - 1] = ':nextDbId' + i2
+				vals = valsL.join(', ')
+			}
 		} else if (371970 == e3.reference) {//reference
 			vars += 'reference'
-			console.log(e3.reference2, r2vEl.doctype
-				, ctrl.doctype_content_table_name[r2vEl.doctype]
-			)
 			if (r2vEl) {
 				let valueType = ctrl.doctype_content_table_name[r2vEl.doctype]
 				if (valueType) {
@@ -214,7 +219,6 @@ var createInsertFromElement = (e, i) => {
 						var d = new Date(e.valueDate)
 						d.setHours(e.valueHH)
 						d.setMinutes(e.valueMM)
-						console.log(e)
 						var contentVal = d.toISOString().replace('T', ' ').split('.')[0]
 					}
 					e.sql_insert = e.sql_insert.replace(':contentVal', "'" + contentVal + "'")
@@ -225,6 +229,5 @@ var createInsertFromElement = (e, i) => {
 	e.sql_insert = e.sql_insert.replace(':vars', vars)
 	e.sql_insert = e.sql_insert.replace(':vals', vals)
 	var sql1 = sql_app.SELECT_obj_with_i18n(':nextDbId1')
-	console.log(vars, vals)
 	console.log(e.sql_insert)
 }

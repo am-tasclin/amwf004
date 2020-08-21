@@ -48,16 +48,19 @@ initCarePlan001 = () => {
                 }
             })
         }
+        let sql_insert = ''
         angular.forEach(els, (el, i) => {
             createInsertFromElement(el, i+1)
-            console.log(el.sql_insert, ctrl.programControl.select_id, ctrl.programControl.selectedParentEl)
+            sql_insert += el.sql_insert +'\n'
+            console.log(el.doc_id, el.sql_insert)
         })
-        return
+        console.log(sql_insert)
+        // return
 
         rw2.write({
             then_fn: (response) => {
                 console.log(response.data)
-            }, params: { data: { sql: el.sql_insert } }
+            }, params: { data: { sql: sql_insert } }
         })
     }
     ctrl.programControl.openDialog = {}
