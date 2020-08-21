@@ -167,7 +167,10 @@ class ReadWrite2 {
 				if (a.fnForEach) a.fnForEach(o)
 			}
 		}
-
+		this.write = (a) => {
+			this.http.post(this.url, a.params.data)
+				.then((response) => { a.then_fn(response) }, (response) => { a.error_fn(response) })
+		}
 		this.sql1 = (a) =>
 			this.http.get(this.url, { params: a.params })
 				.then((response) => a.fnThen(response))
@@ -177,27 +180,34 @@ class ReadWrite2 {
 	}
 }
 
-var createInsertFromElement =  (e) => {
-	console.log("createInsertFromElement: ", e.doc_id)
+var createInsertFromElement = (e, i) => {
+	console.log("createInsertFromElement: ", i, e.doc_id)
 	e.sql_insert = 'INSERT INTO doc (:vars) VALUES (:vals);'
-	var vars = 'doc_id', vals = ':nextDbId1'
+	let vars = 'doc_id', vals = ':nextDbId1'
 	angular.forEach(e.children, (e3) => {
-		var r2vEl = ctrl.eMap[e3.reference2]
+		let r2vEl = ctrl.eMap[e3.reference2]
 		console.log(e3.doc_id, e3.reference, r2vEl)
-		vals += ', ' + e3.reference2
 		vars += ', '
+		vals += ', '
+		if (e3.reference2) {
+			vals += e3.reference2
+		}
 		if (371969 == e3.reference) {//parent
 			vars += 'parent'
-		} else
-			if (371970 == e3.reference) {//reference
-				vars += 'reference'
-				console.log(e3.reference2, r2vEl.doctype
-					, ctrl.doctype_content_table_name[r2vEl.doctype]
-				)
-				if (r2vEl) {
+			console.log(ctrl.programControl.selectedParentEl)
+			vals += ctrl.programControl.selectedParentEl.doc_id
+		} else if (371971 == e3.reference) {//reference2
+			vars += 'reference2'
+		} else if (371970 == e3.reference) {//reference
+			vars += 'reference'
+			console.log(e3.reference2, r2vEl.doctype
+				, ctrl.doctype_content_table_name[r2vEl.doctype]
+			)
+			if (r2vEl) {
+				let valueType = ctrl.doctype_content_table_name[r2vEl.doctype]
+				if (valueType) {
 					e.sql_insert += '\n'
 					e.sql_insert += 'INSERT INTO :valueType (:valueType_id, value) VALUES (:nextDbId1, :contentVal);'
-					var valueType = ctrl.doctype_content_table_name[r2vEl.doctype]
 					e.sql_insert = e.sql_insert.replace(':valueType', valueType)
 					e.sql_insert = e.sql_insert.replace(':valueType', valueType)
 					if (25 == r2vEl.doctype) {/** timestamp */
@@ -210,6 +220,7 @@ var createInsertFromElement =  (e) => {
 					e.sql_insert = e.sql_insert.replace(':contentVal', "'" + contentVal + "'")
 				}
 			}
+		}
 	})
 	e.sql_insert = e.sql_insert.replace(':vars', vars)
 	e.sql_insert = e.sql_insert.replace(':vals', vals)
