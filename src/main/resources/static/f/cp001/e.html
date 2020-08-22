@@ -34,6 +34,9 @@
                 class="fas fa-folder-open w3-btn w3-padding-small"
                 data-ng-click="ctrl.programControl.openDialogFn('open')"></i> <i
                 class="fas fa-save w3-btn w3-padding-small"></i>
+                <i class="fas fa-trash-alt w3-btn w3-padding-small"
+                data-ng-click="ctrl.programControl.deleteElement()"
+                ></i>
         </div>
         <div data-ng-if="ctrl.programControl.openDialogName"
             data-ng-include="'/f/cp001/dialog_'+ctrl.programControl.openDialogName+'.html'">
@@ -41,6 +44,7 @@
         <div class="w3-row w3-border-bottom">
             <div class="w3-threequarter">
                 <div data-ng-include="'/f/cp001/cp_activity.html'"></div>
+                &NonBreakingSpace;
             </div>
             <div class="w3-quarter w3-border-left" style="height: 88vh; overflow: auto;">
                 <div class="w3-small w3-gray w3-right w3-border am-b">

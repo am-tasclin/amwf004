@@ -50,17 +50,20 @@ initCarePlan001 = () => {
         }
         let sql_insert = ''
         angular.forEach(els, (el, i) => {
-            createInsertFromElement(el, i+1)
-            sql_insert += el.sql_insert +'\n'
+            createInsertFromElement(el, i + 1)
+            sql_insert += el.sql_insert + '\n'
             console.log(el.doc_id, el.sql_insert)
         })
-        console.log(sql_insert)
+        console.log(sql_insert, 11)
         // return
 
         rw2.write({
             then_fn: (response) => {
                 console.log(response.data)
-            }, params: { data: { sql: sql_insert } }
+            }, params: { data: { sql: sql_insert }},
+            error_fn: (response)=>{
+                console.log(response)
+            }
         })
     }
     ctrl.programControl.openDialog = {}
@@ -74,6 +77,17 @@ initCarePlan001 = () => {
             }, params: { sql: lCP_sql }
         })
     }
+
+    ctrl.programControl.deleteElement = () => {
+        console.log(ctrl.programControl.selectedParentEl)
+        let sql_delete = "DELETE FROM doc WHERE doc_id=:doc_id"
+        rw2.write({
+            then_fn: (response) => {
+                console.log(response.data)
+            }, params: { data: { sql: sql_delete , doc_id:ctrl.programControl.selectedParentEl.doc_id} }
+        })
+    }
+
     ctrl.programControl.openDialogFn = (name) => {
         ctrl.programControl.openDialogName = ctrl.programControl.openDialogName == name ? null : name
         console.log(name)
