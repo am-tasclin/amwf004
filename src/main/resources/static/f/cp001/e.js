@@ -30,6 +30,22 @@ initCarePlan001 = () => {
         ctrl.programControl.selectedParentEl = e
     }
 
+    ctrl.programControl.isForSelected = (e) => {
+        let isForSelected = false
+        if (ctrl.programControl.selectedParentEl)
+            angular.forEach(e.children, (e1) => {
+                if (!isForSelected) {
+                    if (ctrl.programControl.selectedParentEl.reference == e1.reference2) {
+                        if (371969 == ctrl.eMap[e1.parent].reference) {//Element.parent
+                            isForSelected = true
+                        }
+                    } else {
+                        isForSelected = ctrl.programControl.isForSelected(e1)
+                    }
+                }
+            })
+        return isForSelected
+    }
     ctrl.programControl.exeTask = (t) => {
         let els = findElement(t)
         if (!ctrl.programControl.selectedParentEl) {
@@ -52,16 +68,16 @@ initCarePlan001 = () => {
         angular.forEach(els, (el, i) => {
             createInsertFromElement(el, i + 1)
             sql_insert += el.sql_insert + '\n'
-            console.log(el.doc_id, el.sql_insert)
+            // console.log(el.doc_id, el.sql_insert)
         })
-        console.log(sql_insert, 11)
+        // console.log(sql_insert)
         // return
 
         rw2.write({
             then_fn: (response) => {
                 console.log(response.data)
-            }, params: { data: { sql: sql_insert }},
-            error_fn: (response)=>{
+            }, params: { data: { sql: sql_insert } },
+            error_fn: (response) => {
                 console.log(response)
             }
         })
@@ -84,7 +100,7 @@ initCarePlan001 = () => {
         rw2.write({
             then_fn: (response) => {
                 console.log(response.data)
-            }, params: { data: { sql: sql_delete , doc_id:ctrl.programControl.selectedParentEl.doc_id} }
+            }, params: { data: { sql: sql_delete, doc_id: ctrl.programControl.selectedParentEl.doc_id } }
         })
     }
 
