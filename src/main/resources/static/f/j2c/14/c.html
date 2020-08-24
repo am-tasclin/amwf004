@@ -1,53 +1,53 @@
 <!DOCTYPE html>
-<html data-ng-app="myApp" data-ng-controller="AppCtrl as ctrl"
-	lang="uk-UA">
+<html data-ng-app="myApp" data-ng-controller="AppCtrl as ctrl" lang="uk-UA">
+
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{{ctrl.page_title}}</title>
-<link rel="stylesheet"
-	href="/webjars/font-awesome/5.12.0/css/all.min.css">
-<link rel="stylesheet" href="/f/css/w3.css">
-<link rel="stylesheet" href="/f/css/am.css">
-<link rel="shortcut icon" href="/f/img/algoritmed.ico"
-	type="image/x-icon">
-<script src="/webjars/angularjs/1.8.0/angular.min.js"></script>
-<script src="/webjars/angularjs/1.8.0/i18n/angular-locale_uk-ua.js"></script>
-<script src="/webjars/angularjs/1.8.0/angular-sanitize.min.js"></script>
-<script src="/webjars/angularjs/1.8.0/angular-route.js"></script>
-<script src="/f/js/app004.js"></script>
-<script src="/f/js/crud004.js"></script>
-<script src="/f/j2c/14/j2c013.js"></script>
-<script src="/f/j2c/14/c.js"></script>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{{ctrl.page_title}}</title>
+	<link rel="stylesheet" href="/webjars/font-awesome/5.12.0/css/all.min.css">
+	<link rel="stylesheet" href="/f/css/w3.css">
+	<link rel="stylesheet" href="/f/css/am.css">
+	<link rel="shortcut icon" href="/f/img/algoritmed.ico" type="image/x-icon">
+	<script src="/webjars/angularjs/1.8.0/angular.min.js"></script>
+	<script src="/webjars/angularjs/1.8.0/i18n/angular-locale_uk-ua.js"></script>
+	<script src="/webjars/angularjs/1.8.0/angular-sanitize.min.js"></script>
+	<script src="/webjars/angularjs/1.8.0/angular-route.js"></script>
+	<script src="/f/js/app004.js"></script>
+	<script src="/f/js/crud004.js"></script>
+	<script src="/f/wf001/wf001.js"></script>
+	<script src="/f/j2c/14/j2c013.js"></script>
+
+	<script src="/f/j2c/14/c.js"></script>
 </head>
+
 <body data-ng-click="ctrl.bodyClick()">
 	<div class="w3-container am-max-width-1">
 		<div class="w3-border-bottom">
 			<div class="w3-right" data-ng-include="'/f/btn-to-login.html'"></div>
-			<span data-ng-repeat="cnf in [{show_title:'no'}]"
-				data-ng-include="'/f/home-link.html'" class="w3-small0 am-b"></span>
-				<span class="w3-small">
-			{{ctrl.project.value_1_22}} </span><a
-				href="http://algoritmed.com/j2c003/img-20200611/"
+			<span data-ng-repeat="cnf in [{show_title:'no'}]" data-ng-include="'/f/home-link.html'"
+				class="w3-small0 am-b"></span>
+			<span class="w3-small">
+				{{ctrl.project.value_1_22}} </span><a href="http://algoritmed.com/j2c003/img-20200611/"
 				class="w3-right w3-tiny"> j2c003-img </a>
 		</div>
 		<div class="w3-small w3-light-gray">
-			<i class="fas fa-ellipsis-v"></i> <i
-				class="fas fa-file w3-btn w3-padding-small"></i> <i
+			<i class="fas fa-ellipsis-v"></i> 
+			<i class="fas fa-file w3-btn w3-padding-small w3-btn"title="Створити новий конфігуратор" data-ng-click="ctrl.templateView='confirmNewConfigurator'"></i> 
+			<i
 				class="fas fa-folder-open w3-btn w3-padding-small"></i> <i
 				class="fas fa-save w3-btn w3-padding-small"></i>
 		</div>
 		<div data-ng-include="'c_task.html'" class="w3-border-bottom"
 			style="height: 84vh; max-height: 84vh;overflow-y: scroll"></div>
 		<div class="w3-light-gray w3-small">
-			&nbsp; &nbsp; <span class="w3-border-left"
-				data-ng-class="{'w3-border-right':$last,
+			&nbsp; &nbsp; <span class="w3-border-left" data-ng-class="{'w3-border-right':$last,
 				'w3-bottombar w3-border-yellow' : 
-			ctrl.mu_mOpenKey==k || ctrl.mu_mOverKey==k,}"
-				data-ng-mouseenter="ctrl.mu_mOverKey=k"
-				data-ng-mouseleave="ctrl.mu_mOverKey=null"
-				data-ng-repeat="(k,vn) in ctrl.mu"> &nbsp; {{vn}} &nbsp; </span>
+			ctrl.mu_mOpenKey==k || ctrl.mu_mOverKey==k,}" data-ng-mouseenter="ctrl.mu_mOverKey=k"
+				data-ng-mouseleave="ctrl.mu_mOverKey=null" data-ng-repeat="(k,vn) in ctrl.mu"> &nbsp; {{vn}} &nbsp;
+			</span>
 		</div>
 	</div>
 </body>
+
 </html>

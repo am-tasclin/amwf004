@@ -1,8 +1,4 @@
 <div data-ng-switch="ctrl.templateView">
-<!--    <div data-ng-switch-when="371832|371833|371834|371835|371836|371837|371838|371839|371840|371841|371842|371843|371844|371845|371846|371847"-->
-<!--         data-ng-switch-when-separator="|">-->
-<!--        <div ng-include="'templates/Construct.html'"></div>-->
-<!--    </div>-->
     <div data-ng-switch-when="Construct">
         <div ng-include="'templates/Construct.html'"></div>
     </div>
@@ -14,6 +10,15 @@
     </div>
     <div data-ng-switch-when="newElementConstructor">
         <div ng-include="'templates/newElementConstructor.html'"></div>
+    </div>
+    <div data-ng-switch-when="confirmNewConfigurator">
+        <div ng-include="'templates/confirmNewConfigurator.html'"></div>
+    </div>
+    <div data-ng-switch-when="newConfiguratorName">
+        <div ng-include="'templates/newConfiguratorName.html'"></div>
+    </div>
+    <div data-ng-switch-when="refToNewConfigurator">
+        <div ng-include="'templates/refToNewConfigurator.html'"></div>
     </div>
     <div data-ng-switch-default="">
         <div ng-include="'templates/emptyHTML.html'"></div>
