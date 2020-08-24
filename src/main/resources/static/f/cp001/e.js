@@ -30,6 +30,22 @@ initCarePlan001 = () => {
         ctrl.programControl.selectedParentEl = e
     }
 
+    ctrl.programControl.isForSelected = (e) => {
+        let isForSelected = false
+        if (ctrl.programControl.selectedParentEl)
+            angular.forEach(e.children, (e1) => {
+                if (!isForSelected) {
+                    if (ctrl.programControl.selectedParentEl.reference == e1.reference2) {
+                        if (371969 == ctrl.eMap[e1.parent].reference) {//Element.parent
+                            isForSelected = true
+                        }
+                    } else {
+                        isForSelected = ctrl.programControl.isForSelected(e1)
+                    }
+                }
+            })
+        return isForSelected
+    }
     ctrl.programControl.exeTask = (t) => {
         let els = findElement(t)
         if (!ctrl.programControl.selectedParentEl) {
@@ -48,16 +64,22 @@ initCarePlan001 = () => {
                 }
             })
         }
+        let sql_insert = ''
         angular.forEach(els, (el, i) => {
-            createInsertFromElement(el, i+1)
-            console.log(el.sql_insert, ctrl.programControl.select_id, ctrl.programControl.selectedParentEl)
+            createInsertFromElement(el, i + 1)
+            sql_insert += el.sql_insert + '\n'
+            // console.log(el.doc_id, el.sql_insert)
         })
-        return
+        // console.log(sql_insert)
+        // return
 
         rw2.write({
             then_fn: (response) => {
                 console.log(response.data)
-            }, params: { data: { sql: el.sql_insert } }
+            }, params: { data: { sql: sql_insert } },
+            error_fn: (response) => {
+                console.log(response)
+            }
         })
     }
     ctrl.programControl.openDialog = {}
@@ -71,6 +93,17 @@ initCarePlan001 = () => {
             }, params: { sql: lCP_sql }
         })
     }
+
+    ctrl.programControl.deleteElement = () => {
+        console.log(ctrl.programControl.selectedParentEl)
+        let sql_delete = "DELETE FROM doc WHERE doc_id=:doc_id"
+        rw2.write({
+            then_fn: (response) => {
+                console.log(response.data)
+            }, params: { data: { sql: sql_delete, doc_id: ctrl.programControl.selectedParentEl.doc_id } }
+        })
+    }
+
     ctrl.programControl.openDialogFn = (name) => {
         ctrl.programControl.openDialogName = ctrl.programControl.openDialogName == name ? null : name
         console.log(name)
