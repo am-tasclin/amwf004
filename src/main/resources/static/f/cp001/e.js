@@ -115,21 +115,29 @@ initCarePlan001 = () => {
     console.log(doc_id)
     rw2.readAll_element({
         params: { doc_id: doc_id }, fn2ForEach: (o, response) => {
-            // console.log(o.doc_id, o.reference2, o.r2value)
+            if (ctrl.eMap[o.parent] && 368789 == ctrl.eMap[o.parent].reference) {//activity
+                console.log(o.doc_id, o.reference2)
+                //MedicationRequest|...
+                rw2.readAll_element({
+                    fn2ForEach: (om) => {
+                        if(371469 == om.reference){//medication
+                            console.log(om.doc_id, om.reference2, om.reference)
+                            rw2.readAll_element({params:{doc_id:om.reference2}})
+                        }
+                    }, params: { doc_id: o.reference2 }
+                })
+            }
             if (o.reference2) {
-                console.log(o.reference2, o.r2value)
                 rw2.readAll_element({
                     params: { doc_id: o.reference2 }, fn2ForEach: (o2) => {
                         // if ([368789, 368794].indexOf(o2.doc_id) >= 0)
                         // if (o2.reference2)
-                        //     console.log(o2.doc_id, o2.reference2, o2.r2value)
                     }
                 })
             }
         }
     })
     angular.forEach([372067, 368833, 368830], (doc_id) => {
-        console.log(doc_id)
         rw2.readAll_element({ params: { doc_id: doc_id } })
     })
 }

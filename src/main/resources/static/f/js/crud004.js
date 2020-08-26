@@ -200,7 +200,7 @@ var initDataModel = function(){
 			"LEFT JOIN doctype d2 ON d2.parent_id=d1.doctype_id  \n" +
 			"WHERE d1.parent_id =18 \n" +
 			"UNION \n" +
-			"SELECT d1.*, null, null FROM doctype d1 where doctype_id=18) x ORDER BY doctype_id, doctype2_id"
+			"SELECT d1.*, null, null FROM doctype d1 where doctype_id in (18,22)) x ORDER BY doctype_id, doctype2_id"
 			readSql({ sql:sql,
 				afterRead:function(response){ 
 					ctrl.typeList = response.data.list
@@ -210,9 +210,13 @@ var initDataModel = function(){
 		}
 	}
 
-	ctrl.content_menu.setTypeIdElement = function(doctype_id, el){
-		var so = {doc_id:el.doc_id, doctype_id:doctype_id,
-			sql:"UPDATE doc SET doctype = :doctype_id WHERE doc_id = :doc_id",
+	ctrl.content_menu.setTypeIdElement = (doctype_id, el) => {
+		let sql = "UPDATE doc SET doctype = :doctype_id WHERE doc_id = :doc_id"
+		if (!doctype_id)
+			sql = "UPDATE doc SET doctype = null WHERE doc_id = :doc_id"
+		let so = {
+			doc_id: el.doc_id, doctype_id: doctype_id,
+			sql: sql,
 			dataAfterSave:function(response){
 				console.log(response)
 				el.doctype = doctype_id
@@ -220,7 +224,7 @@ var initDataModel = function(){
 		}
 		writeSql(so)
 	}
-	ctrl.content_menu.setTypeElement = function(typEl, el){
+	ctrl.content_menu.setTypeElement = (typEl, el)=>{
 		console.log(typEl, el)
 		var doctype_id = typEl.doctype_id
 		if(typEl.doctype2_id)
@@ -686,7 +690,6 @@ var initDataModel = function(){
 	}
 
 	ctrl.select_tree_item = function(d){
-		console.log(d.doc_id)
 		if(ctrl.content_menu.subSepMenuName && ctrl.content_menu.subSepMenuName.includes('pin_name')){
 			ctrl.content_menu.typeElement('pin_name',d)
 		}
@@ -1153,7 +1156,159 @@ var initSqlExe = function($timeout){
 		var o = ctrl.eMap[ctrl.eMap[ctrl.sql_exe.sql_id].ref_to_col[371682]]
 	}
 
-	ctrl.sql_exe.read = function(sql_id){
+	ctrl.sql_exe.read_select = (sql_id) => {
+		var d = ctrl.eMap[sql_id]
+		if(ctrl.sql_exe.sql_id != sql_id){
+			ctrl.sql_exe.sql_id = sql_id
+		}
+		d.sql = 'SELECT * FROM doc '
+		let fromEl
+		angular.forEach(d.children, (e) => {
+			if ( 372192  == e.reference) {//SELECT.FROM
+				fromEl = e
+				d.sql += e.value_1_22
+				angular.forEach(e.children, (e1)=>{
+					d.sql +=', doc '+ e1.value_1_22
+				})
+				d.sql += ' '
+				console.log(e.doc_id, d.sql)
+			}
+		})
+		const getCol = (e, pEl) => {
+			let col = '', prefix = pEl.value_1_22
+			if ( 372189  == e.reference) {//SELECT.cols.value
+				col += 'value '+prefix+'_value'
+			} else if (371969 == e.reference) {//SELECT.cols.parent
+				col += 'parent '+prefix+'_p'
+			} else if (371970 == e.reference) {//SELECT.cols.reference
+				col += 'reference '+prefix+'_r'
+			} else if (371971 == e.reference) {//SELECT.cols.reference2
+				col += 'reference2 '+prefix+'_r2'
+			} else if (372188 == e.reference) {//SELECT.cols.doc_id
+				col += 'doc_id '+prefix+'_id'
+			}
+			return col
+		}
+		const setLeftJoin = (e) => {
+			let sql = '\n LEFT JOIN '
+			if (e.reference2) {
+				let r2El = ctrl.eMap[e.reference2]
+				sql += '('+r2El.value_1_22+') '+e.value_1_22
+			} else if (22 == e.doctype) {
+				sql += ' string ON string_id=doc_id '
+			}
+			let cols = ''
+			angular.forEach(e.children, (e1)=>{
+				if (372181 == e1.reference) {//SELECT.LEFT JOIN
+					let sql2 = setLeftJoin(e1)
+					sql += sql2
+				}else{
+					let 
+					ljpEl	= ctrl.eMap[e.parent],
+					rEl		= ctrl.eMap[e1.reference],
+					rpEl	= ctrl.eMap[rEl.parent],
+					col		= getCol(rEl, rpEl)
+					if (372181 == ljpEl.reference) {//SELECT.LEFT JOIN
+						cols += e.value_1_22 + '.' + col.split(' ')[1]+' = '+ljpEl.value_1_22+'.'
+					}else{
+						cols += e.value_1_22 + '.' + col.split(' ')[1]+' = '
+					}
+					if (e1.reference2) {
+						let
+						r2El	= ctrl.eMap[e1.reference2],
+						rp2El	= ctrl.eMap[r2El.parent],
+						col2	= getCol(r2El, rp2El)
+						cols += col2.split(' ')[1]
+					}else{
+						cols += 'doc_id'
+					}
+				}
+			})
+			if (cols.length > 0)
+				sql += ' ON ' + cols
+			return sql
+		}
+		let cols = '' 
+		angular.forEach(d.children, (e) => {
+			if ( 372183  == e.reference) {//SELECT.cols
+				let prefix = e.value_1_22,
+				r2FromEl = ctrl.eMap[e.reference2]
+				if (e.reference2) {
+					let r2E = ctrl.eMap[e.reference2]
+					prefix = r2E.value_1_22
+				}
+				if(!e.children){
+					if (cols.length>0) cols += ', '
+					cols += prefix + '.*'
+				}else{
+					angular.forEach(e.children, (e1) => {
+						console.log(e1.doc_id)
+						if (cols.length>0) cols += ', '
+						let rEl, rpEl
+						if(e1.reference){
+							rEl = ctrl.eMap[e1.reference]
+							if(rEl){
+								rpEl = ctrl.eMap[rEl.parent]
+							}
+						}
+						if (rEl && rpEl && 372183 == rpEl.reference) {
+							let rCol = getCol(rEl, rpEl)
+							console.log(rCol,1, prefix)
+							cols += prefix+'.'+rCol.split(' ')[1]
+						}else{
+							if (fromEl){
+								if (r2FromEl && r2FromEl.parent == fromEl.doc_id)
+									cols += r2FromEl.value_1_22 + '.'
+								else
+									cols += fromEl.value_1_22 + '.'
+							}
+							cols += getCol(e1, e)
+						}
+					})
+				}
+			} else if (372181 == e.reference) {//SELECT.LEFT JOIN
+				d.sql += setLeftJoin(e)
+			}
+		})
+		if (cols.length > 0)
+			d.sql = d.sql.replace(' * ', ' '+cols+' ')
+		angular.forEach(d.children, (e) => {
+			if (371992 == e.reference) {//SELECT.WHERE
+				let sql_where = '\n WHERE '
+				const add_where = (e1, attName)=>{
+					if(fromEl){
+						let r2FromEl = ctrl.eMap[e1.reference2]
+						if(r2FromEl && r2FromEl.parent==fromEl.doc_id){
+							sql_where += fromEl.value_1_22+'.'+attName+' = '+r2FromEl.value_1_22+'.doc_id '
+						}else{
+							sql_where += fromEl.value_1_22+'.'+attName+' = '+e1.reference2
+						}
+					}else{
+						sql_where += ' '+attName+' = '+e1.reference2
+					}
+				}
+				angular.forEach(e.children, (e1, i) => {
+					if(i>0){
+						sql_where += ' AND '
+					}
+					if ( 371969  == e1.reference) {//parent
+						add_where(e1, 'parent')
+					} else if (371970 == e1.reference) {//reference
+						add_where(e1, 'reference')
+					}
+				})
+				d.sql += sql_where
+			}
+		})
+		console.log(d.sql)
+		readSql({ sql:d.sql+' LIMIT 10',
+			afterRead:function(response){ 
+				ctrl.sql_exe.readList = response.data.list
+			}
+		})
+	}
+
+	ctrl.sql_exe.read = (sql_id)=>{
 		var d = ctrl.eMap[sql_id]
 		//console.log(sql_id, d.doc_id)
 		if(d.cnt_child>0 && !d.children){
@@ -1216,7 +1371,7 @@ var initSqlExe = function($timeout){
 		}
 	}
 
-	ctrl.sql_exe.add2exe = function(doc_id){
+	ctrl.sql_exe.add2exe = (doc_id)=>{
 		if(!sql_app.exe.list2exe) sql_app.exe.list2exe = {}
 		sql_app.exe.list2exe[doc_id] = doc_id
 		//ctrl.select_tree_item(ctrl.eMap[ctrl.doc2doc_ids[0]])
