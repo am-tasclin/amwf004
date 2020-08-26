@@ -1,6 +1,9 @@
-var initJ2C = function () {
-	console.log('read -> ', 371831)
-
+var initJ2C = function ($http) {
+	console.log('read -> ', 371831);
+	rw2 = new ReadWrite2($http);
+	
+	rw2.readAll_element({ params: { doc_id: 372091 }});
+	console.log(rw2);
 	read_element_descendant(371831, function () {
 		if (ctrl.request.parameters.p) {
 			read_element(ctrl.request.parameters.p, function () {
@@ -29,7 +32,8 @@ var initJ2C = function () {
 				ctrl.selectItemId=newE.doc_id;
 				ctrl.selectedItemInConstructSettings=newE;
 		console.log(e.children, newE)
-		e.children.push(newE) 
+		e.children.push(newE)
+		ctrl.eMap[newE.doc_id] = newE 
 			}
 		}
 		so.sql = "INSERT INTO doc (doc_id, parent) VALUES (:nextDbId1, " + ctrl.templateEditId + " ); "

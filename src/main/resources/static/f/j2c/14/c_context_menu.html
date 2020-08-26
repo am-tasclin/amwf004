@@ -6,9 +6,18 @@
 	</span> ]
 	<div class="w3-dropdown-content w3-card-4 w3-leftbar w3-border">
 		<div>&nbsp;</div>
-		<div data-ng-if="c.e.parent!=c.p.doc_id">
-			<div class="w3-btn" data-new-element="{{c_task.doc_id}}">
-				<i class="far fa-file"></i> Новий елемент ({{c.e.value_1_22}})
+		<div data-ng-if="c.e.parent==371831">
+			<div data-ng-if="c.e.parent!=c.p.doc_id">
+				<div class="w3-btn" data-new-element="{{c_task.doc_id}}">
+					<i class="far fa-file"></i> Новий елемент ({{c.e.value_1_22}})
+				</div>
+			</div>
+		</div>
+		<div data-ng-if="c.e.parent!=371831">
+			<div data-ng-if="c.e.parent!=c.p.doc_id">
+				<div class="w3-btn" data-ng-click="ctrl.removeSelectedNode(c.e.doc_id);">
+					<i class="far fa-file"></i> Видалити ({{c.e.value_1_22}})
+				</div>
 			</div>
 		</div>
 		<div>{{c.e.doc_id}}</div>
