@@ -1156,6 +1156,40 @@ var initSqlExe = function($timeout){
 		var o = ctrl.eMap[ctrl.eMap[ctrl.sql_exe.sql_id].ref_to_col[371682]]
 	}
 
+	ctrl.sql_exe.read_select2 = (sql_id) => {
+		console.log(sql_id)
+		let sp_sql_ids = {}
+		let d = ctrl.eMap[sql_id]
+		ctrl.sql_exe.rs2_id = sql_id
+		ctrl.sql_exe.sql = d.value_1_22
+		ctrl.sql_exe.sql_exe = d.value_1_22
+		const fn2ForEach = (o, response)=>{
+			if(sp_sql_ids[o.doc_id]){
+				if(ctrl.sql_exe.sql_exe.includes(o.doc_id)){
+					if (371682 == o.reference) {//like_all
+						let replace = "'%" + o.r2value+"%'"
+						ctrl.sql_exe.sql_exe = ctrl.sql_exe.sql_exe.split(':sql_'+o.doc_id).join(replace)
+						console.log(1, o.doc_id, sp_sql_ids, sp_sql_ids[o.doc_id], replace)
+					}
+				}
+			}
+		}
+		rw2.readAll_element({fn2ForEach: fn2ForEach, params: { doc_id: sql_id } })
+		let sp_sql = ctrl.sql_exe.sql.replace(/\n/g, ' ').split(':sql_')
+		angular.forEach(sp_sql, (s, i) => {
+			if (i > 0) {
+				let id = s.split(' ')[0]
+				sp_sql_ids[id] = {}
+				rw2.readAll_element({ fn2ForEach: fn2ForEach, params: { doc_id: id } })
+				if (id == d.reference2) {
+					ctrl.sql_exe.sql_exe = ctrl.sql_exe.sql_exe.replace(':sql_' + id, d.r2value)
+					console.log(id, 1, d, ctrl.sql_exe.sql_exe)
+				}
+			}
+		})
+		console.log(sp_sql_ids)
+	}
+
 	ctrl.sql_exe.read_select = (sql_id) => {
 		var d = ctrl.eMap[sql_id]
 		if(ctrl.sql_exe.sql_id != sql_id){
@@ -1310,7 +1344,7 @@ var initSqlExe = function($timeout){
 
 	ctrl.sql_exe.read = (sql_id)=>{
 		var d = ctrl.eMap[sql_id]
-		//console.log(sql_id, d.doc_id)
+		console.log(sql_id, d.doc_id)
 		if(d.cnt_child>0 && !d.children){
 			read_element_children(sql_id)
 		}
@@ -1324,20 +1358,17 @@ var initSqlExe = function($timeout){
 		}
 		//console.log(ctrl.sql_exe.read_sql)
 		var sp_sql = ctrl.sql_exe.read_sql.replace(/\n/g,' ').split(':sql_')
-//		console.log(sql_id, sp_sql[1])
+		console.log(sql_id, sp_sql[1])
 		if(sp_sql[1]){
 			var sql_id2 = sp_sql[1].split(' ')[0]
 			var d2 = ctrl.eMap[sql_id2]
-			//console.log(sql_id, sql_id2, d2)
-			var fn2 = function(d2){
+			var fn2 = (d2)=>{
 				var sql2 = d2.value_1_22
 				var sql_id2 = d2.doc_id
-				console.log(d2, sql2, sql_id2)
 				if(371682==d2.reference){// seek.like_all 
 					sql2 = "'%" + d2.r2value + "%'"
 				}else 
 				if(371820==d2.reference){//parameter_to_seek 
-					console.log(sql2)
 					sql2 = d2.r2value
 				}else{
 				}
@@ -1350,7 +1381,7 @@ var initSqlExe = function($timeout){
 				read_element_children(sql_id2)
 			}
 			if(!d2){
-				read_element(sql_id2, function(response){
+				read_element(sql_id2, (response)=>{
 					var d2 = ctrl.eMap[sql_id2]
 					//console.log(sql_id, sql_id2, d2)
 					fn2(d2)

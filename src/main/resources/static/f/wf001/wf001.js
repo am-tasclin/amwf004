@@ -140,23 +140,24 @@ class ReadWrite2 {
 		this.read_element = (a) => {
 			let o = ctrl.eMap[a.params.doc_id]
 			//if not element or not element.children
-			if (!o || (a.params.parent && o.cnt_child && !o.children) || o.children.length < o.cnt_child) {
+			if (!o || (a.params.parent && o.cnt_child && !o.children) || (o.children && o.children.length < o.cnt_child)) {
 				if (a.params.parent) a.params.sql = sql_app.SELECT_children_with_i18n(a.params.parent)
 				if (!a.params.sql) a.params.sql = sql_app.SELECT_obj_with_i18n(a.params.doc_id)
 				this.http.get(this.url, { params: a.params })
 					.then((response) => {
-						angular.forEach(response.data.list, (o) => {
-							let o1 = ctrl.eMap[o.doc_id]
-							if (!o1 || (o.cnt_child && !o.children)) {
-								let parentEl = ctrl.eMap[o.parent]
-								ctrl.eMap[o.doc_id] = o
+						angular.forEach(response.data.list, (o1) => {
+							let o2 = ctrl.eMap[o1.doc_id]
+							if (!o2) {
+							// if (!o2 || (o1.cnt_child && !o1.children)) {
+								ctrl.eMap[o1.doc_id] = o1
+								let parentEl = ctrl.eMap[o1.parent]
 								if (parentEl) {
 									// console.log(o.doc_id, parentEl.doc_id)
 									if (!parentEl.children) parentEl.children = []
-									parentEl.children.push(o)
+									parentEl.children.push(o1)
 								}
 								if (a.fnForEach) {
-									a.fnForEach(o, response)
+									a.fnForEach(o1, response)
 								}
 							}
 						})
