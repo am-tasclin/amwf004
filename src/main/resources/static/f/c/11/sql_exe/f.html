@@ -14,7 +14,9 @@
 			<span data-ng-class="{'w3-yellow':ctrl.sql_exe.sql_id==v}">
 				<a data-ng-if="371985!=ctrl.eMap[v].reference" data-ng-click="ctrl.sql_exe.read(v)" href="#"> {{v}} </a>
 				<span data-ng-if="371985==ctrl.eMap[v].reference">
-					<a data-ng-click="ctrl.sql_exe.read_select(v)" href="#"> {{v}} </a>
+					<span title="new code" class="w3-tiny">
+						<a data-ng-click="ctrl.sql_exe.read_select2(v)" href="#">rs2</a>-</span><a
+						data-ng-click="ctrl.sql_exe.read_select(v)" href="#">{{v}}</a>
 				</span>
 			</span>
 		</span>
@@ -24,6 +26,14 @@
 			data-ng-click="ctrl.sql_exe.notShow_sql=!ctrl.sql_exe.notShow_sql">
 			<i class="fas fa-terminal"></i>:
 			{{ctrl.eMap[ctrl.eMap[ctrl.sql_exe.sql_id].ref_to_col[371335]].value_1_22}}
+		</div>
+		<div data-ng-if="ctrl.sql_exe.rs2_id" class="w3-small w3-responsive">
+			<pre data-ng-if="ctrl.sql_exe.show_sql_type=='read_sql'">
+{{ctrl.sql_exe.sql_exe}}
+		</pre>
+			<pre data-ng-if="ctrl.sql_exe.show_sql_type!='read_sql'">
+{{ctrl.sql_exe.sql}}
+		</pre>
 		</div>
 		<div data-ng-if="371985==ctrl.eMap[ctrl.sql_exe.sql_id].reference">
 			{{ctrl.eMap[ctrl.sql_exe.sql_id].sql}}
