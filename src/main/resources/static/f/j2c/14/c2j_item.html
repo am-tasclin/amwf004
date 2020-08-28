@@ -1,6 +1,6 @@
 <div
 		data-ng-repeat="c_task in ctrl.eMap[c_task_id].children  track by $index">
-	<span data-ng-repeat="c in [{e:c_task,p:c_task}]"
+	<span data-ng-repeat="c in [{e:c_task,p:c_task}]" 
 		  data-ng-include="'c_context_menu.html'"></span> <span
 		class="w3-hover-shadow" data-ng-click="ctrl.conf_menu_click(c_task)">
 		<span data-work-space="{{c_task.doc_id}}" id="{{c_task.doc_id}}">{{c_task.value_1_22}}</span>

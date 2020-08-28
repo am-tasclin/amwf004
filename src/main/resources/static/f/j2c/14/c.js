@@ -1,6 +1,6 @@
 app.controller('AppCtrl', function ($scope, $http, $timeout, $location) {
 	ctrl = this
-	ctrl.getURL = $location;
+	ctrl.getURL = $location.$$absUrl;
 	initApp($scope, $http, $timeout)
 	ctrl.page_title = 'j2c:'
 	initJ2C($http)
@@ -17,6 +17,10 @@ app.controller('AppCtrl', function ($scope, $http, $timeout, $location) {
 	ctrl.newConfigeratorModel={};
 	ctrl.linkNewConfigurator="";
 	(function(){ctrl.newConfigeratorModel.name="New";}());
+	ctrl.getUrlWithParam=function(doc_id){
+		var p = ctrl.getURL.split('?p=')[1];
+		return ctrl.getURL.replace(p,doc_id);
+	}
 	ctrl.cancel = function () {
 		ctrl.templateView = '';
 		ctrl.isChangeSelectParent = false;
@@ -28,8 +32,8 @@ app.controller('AppCtrl', function ($scope, $http, $timeout, $location) {
 				 var newE = response.data.list2[0];
 				 ctrl.eMap[newE.doc_id]=newE;
 				 if(response.data.list2[0])
-				 {var p = ctrl.getURL.$$absUrl.split('?p=')[1];
-				 ctrl.linkNewConfigurator= $location.$$absUrl.replace(p,newE.doc_id);
+				 {var p = ctrl.getURL.split('?p=')[1];
+				 ctrl.linkNewConfigurator= ctrl.getURL.replace(p,newE.doc_id);
 				 ctrl.templateView='refToNewConfigurator';
 				}
 			}
@@ -43,6 +47,18 @@ app.controller('AppCtrl', function ($scope, $http, $timeout, $location) {
 	}
 	ctrl.nextViewOfNewElement = function () {
 		ctrl.templateView = '';
+	}
+	ctrl.openConfigurato = function (){
+		console.log('so.sql');
+		var so = {
+			dataAfterSave: function (response) {
+				console.log(response);
+			}
+		}
+
+		so.sql = "SELECT * FROM doc WHERE parent = 371855";
+		console.log(so.sql);
+		writeSql(so)
 	}
 	ctrl.save_data = function () {
 		var so = {
