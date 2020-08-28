@@ -8,7 +8,8 @@
 		<tr data-ng-repeat="row in tab">
 			<td data-ng-repeat="(k,v) in row"
 				ng-bind-html="ctrl.highlight(v
-				, ctrl.eMap[ctrl.eMap[ctrl.sql_exe.sql_id].ref_to_col[371682]].r2value)"
+				, ctrl.eMap[ctrl.eMap[ctrl.sql_exe.sql_id].ref_to_col[371682]].r2value
+				||ctrl.sql_exe.contains_child_type(ctrl.eMap[ctrl.sql_exe.rs2_id], 371682).r2value)"
 			>{{v}}</td>
 		</tr>
 	</tbody>

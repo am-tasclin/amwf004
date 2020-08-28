@@ -1182,42 +1182,41 @@ var initSqlExe = function($timeout){
 				})
 		return (sql_name.length>0?':':'') + sql_name
 	}
+
 	let _timeout_seek_fn3
 	ctrl.sql_exe.change_sql_seek3 = (el)=>{
 		ctrl.sql_exe.el_seek = el
 		if(_timeout_seek_fn3) $timeout.cancel(_timeout_seek_fn3)
 		_timeout_seek_fn3 = $timeout(()=> {
-			
-			// console.log(ctrl.sql_exe.sql_exe, ctrl.sql_exe.el_seek, ctrl.sql_exe.sql)
-			console.log(ctrl.sql_exe.el_seek, ctrl.sql_exe.sql)
-			
 			create_sql_exe(ctrl.sql_exe.rs2_id)
-
+			rw2.sql1({
+				fnThen: (response) => {
+					ctrl.sql_exe.readList = response.data.list
+					console.log(ctrl.sql_exe.readList)
+				}, params: { sql: ctrl.sql_exe.sql_exe }
+			})
 		}, 1000)
+	}
+
+	const replace_sql = (id) => {
+		console.log(id)
+		let o = ctrl.eMap[id]
+		let replace = o.value_1_22
+		if (371682 == o.reference) {//like_all
+			replace = "'%" + o.r2value+"%'"
+		}
+		ctrl.sql_exe.sql_exe = ctrl.sql_exe.sql_exe.split(':sql_'+o.doc_id).join(replace)
 	}
 
 	const create_sql_exe = (sql_id) => {
 		ctrl.sql_exe.sql_exe = ctrl.sql_exe.sql
-		console.log(ctrl.sql_exe.sp_sql_ids, ctrl.sql_exe.sql)
-		angular.forEach(ctrl.sql_exe.sp_sql_ids, (v, id)=>{
-			let o = ctrl.eMap[id]
-			let replace = o.value_1_22
-			if (371682 == o.reference) {//like_all
-				replace = "'%" + o.r2value+"%'"
-			}
-			console.log(id, replace, ctrl.sql_exe.sql_exe, o)
-			ctrl.sql_exe.sql_exe = ctrl.sql_exe.sql_exe.split(':sql_'+o.doc_id).join(replace)
-		})
-		console.log(ctrl.sql_exe.sql_exe)
+		angular.forEach(ctrl.sql_exe.sp_sql_ids, (v, id) => { replace_sql(id) })
 	}
 
 	const fn2ForEach = (o, response)=>{
 		if(ctrl.sql_exe.sp_sql_ids[o.doc_id]){
 			if(ctrl.sql_exe.sql_exe.includes(o.doc_id)){
-				if (371682 == o.reference) {//like_all
-					let replace = "'%" + o.r2value+"%'"
-					ctrl.sql_exe.sql_exe = ctrl.sql_exe.sql_exe.split(':sql_'+o.doc_id).join(replace)
-				}
+				replace_sql(o.doc_id)
 			}
 		}
 	}
@@ -1235,10 +1234,10 @@ var initSqlExe = function($timeout){
 				let id = s.split(' ')[0]
 				ctrl.sql_exe.sp_sql_ids[id] = {}
 				rw2.readAll_element({ fn2ForEach: fn2ForEach, params: { doc_id: id } })
-				if (id == d.reference2) {
-					// ctrl.sql_exe.sp_sql_ids[id].v = d.r2value
-					ctrl.sql_exe.sql_exe = ctrl.sql_exe.sql_exe.replace(':sql_' + id, d.r2value)
-				}
+				// if (id == d.reference2) {
+				// 	// ctrl.sql_exe.sp_sql_ids[id].v = d.r2value
+				// 	ctrl.sql_exe.sql_exe = ctrl.sql_exe.sql_exe.replace(':sql_' + id, d.r2value)
+				// }
 			}
 		})
 	}
