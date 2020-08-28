@@ -720,8 +720,14 @@ var initDataModel = function(){
 
 }
 
-var open_children_doc2doc = function(){
-	ctrl.change_panel = function(){
+var open_children_doc2doc = ()=>{
+	
+	ctrl.reverced_page_link = () => {
+		const reverced_page_link = [...ctrl.request.path].reverse().join('/')+'.html?doc2doc='+ctrl.doc2doc_ids.join(',')
+		return reverced_page_link
+	}
+
+	ctrl.change_panel = ()=>{
 		ctrl.doc2doc_ids.unshift(ctrl.doc2doc_ids[1])
 		ctrl.doc2doc_ids.splice(2, 1)
 		console.log(ctrl.doc2doc_ids)
@@ -1115,6 +1121,7 @@ var initSqlExe = function($timeout){
 		_timeout_seek_fn2 = $timeout(fn, 1000)
 	}
 
+
 	var _timeout_seek_fn
 	ctrl.sql_exe.change_sql_seek = function(){
 		if(_timeout_seek_fn) $timeout.cancel(_timeout_seek_fn)
@@ -1156,38 +1163,84 @@ var initSqlExe = function($timeout){
 		var o = ctrl.eMap[ctrl.eMap[ctrl.sql_exe.sql_id].ref_to_col[371682]]
 	}
 
-	ctrl.sql_exe.read_select2 = (sql_id) => {
-		console.log(sql_id)
-		let sp_sql_ids = {}
-		let d = ctrl.eMap[sql_id]
-		ctrl.sql_exe.rs2_id = sql_id
-		ctrl.sql_exe.sql = d.value_1_22
-		ctrl.sql_exe.sql_exe = d.value_1_22
-		const fn2ForEach = (o, response)=>{
-			if(sp_sql_ids[o.doc_id]){
-				if(ctrl.sql_exe.sql_exe.includes(o.doc_id)){
-					if (371682 == o.reference) {//like_all
-						let replace = "'%" + o.r2value+"%'"
-						ctrl.sql_exe.sql_exe = ctrl.sql_exe.sql_exe.split(':sql_'+o.doc_id).join(replace)
-						console.log(1, o.doc_id, sp_sql_ids, sp_sql_ids[o.doc_id], replace)
+	ctrl.sql_exe.contains_child_type = (el, type_id) => {
+		let r
+		if (el && el.children)
+			angular.forEach(el.children, (e) => {
+				if (type_id == e.reference) r = e
+			})
+		return r
+	}
+	ctrl.sql_exe.sql_name = (sql_id) => {
+		let sql_name = ''
+		if (ctrl.eMap[sql_id])
+			if (ctrl.eMap[sql_id].children)
+				angular.forEach(ctrl.eMap[sql_id].children, (e) => {
+					if (e && 371335 == e.reference) {//sql_name
+						sql_name = e.value_1_22
 					}
+				})
+		return (sql_name.length>0?':':'') + sql_name
+	}
+	let _timeout_seek_fn3
+	ctrl.sql_exe.change_sql_seek3 = (el)=>{
+		ctrl.sql_exe.el_seek = el
+		if(_timeout_seek_fn3) $timeout.cancel(_timeout_seek_fn3)
+		_timeout_seek_fn3 = $timeout(()=> {
+			
+			// console.log(ctrl.sql_exe.sql_exe, ctrl.sql_exe.el_seek, ctrl.sql_exe.sql)
+			console.log(ctrl.sql_exe.el_seek, ctrl.sql_exe.sql)
+			
+			create_sql_exe(ctrl.sql_exe.rs2_id)
+
+		}, 1000)
+	}
+
+	const create_sql_exe = (sql_id) => {
+		ctrl.sql_exe.sql_exe = ctrl.sql_exe.sql
+		console.log(ctrl.sql_exe.sp_sql_ids, ctrl.sql_exe.sql)
+		angular.forEach(ctrl.sql_exe.sp_sql_ids, (v, id)=>{
+			let o = ctrl.eMap[id]
+			let replace = o.value_1_22
+			if (371682 == o.reference) {//like_all
+				replace = "'%" + o.r2value+"%'"
+			}
+			console.log(id, replace, ctrl.sql_exe.sql_exe, o)
+			ctrl.sql_exe.sql_exe = ctrl.sql_exe.sql_exe.split(':sql_'+o.doc_id).join(replace)
+		})
+		console.log(ctrl.sql_exe.sql_exe)
+	}
+
+	const fn2ForEach = (o, response)=>{
+		if(ctrl.sql_exe.sp_sql_ids[o.doc_id]){
+			if(ctrl.sql_exe.sql_exe.includes(o.doc_id)){
+				if (371682 == o.reference) {//like_all
+					let replace = "'%" + o.r2value+"%'"
+					ctrl.sql_exe.sql_exe = ctrl.sql_exe.sql_exe.split(':sql_'+o.doc_id).join(replace)
 				}
 			}
 		}
+	}
+
+	ctrl.sql_exe.read_select2 = (sql_id) => {
+		let d = ctrl.eMap[sql_id]
+		ctrl.sql_exe.sp_sql_ids = {}
+		ctrl.sql_exe.rs2_id = sql_id
+		ctrl.sql_exe.sql = d.value_1_22
+		ctrl.sql_exe.sql_exe = d.value_1_22
 		rw2.readAll_element({fn2ForEach: fn2ForEach, params: { doc_id: sql_id } })
 		let sp_sql = ctrl.sql_exe.sql.replace(/\n/g, ' ').split(':sql_')
 		angular.forEach(sp_sql, (s, i) => {
 			if (i > 0) {
 				let id = s.split(' ')[0]
-				sp_sql_ids[id] = {}
+				ctrl.sql_exe.sp_sql_ids[id] = {}
 				rw2.readAll_element({ fn2ForEach: fn2ForEach, params: { doc_id: id } })
 				if (id == d.reference2) {
+					// ctrl.sql_exe.sp_sql_ids[id].v = d.r2value
 					ctrl.sql_exe.sql_exe = ctrl.sql_exe.sql_exe.replace(':sql_' + id, d.r2value)
-					console.log(id, 1, d, ctrl.sql_exe.sql_exe)
 				}
 			}
 		})
-		console.log(sp_sql_ids)
 	}
 
 	ctrl.sql_exe.read_select = (sql_id) => {

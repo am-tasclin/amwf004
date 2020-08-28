@@ -27,13 +27,22 @@
 			<i class="fas fa-terminal"></i>:
 			{{ctrl.eMap[ctrl.eMap[ctrl.sql_exe.sql_id].ref_to_col[371335]].value_1_22}}
 		</div>
+		<div data-ng-if="ctrl.sql_exe.rs2_id"
+			data-ng-repeat="el in [ctrl.sql_exe.contains_child_type(ctrl.eMap[ctrl.sql_exe.rs2_id], 371682)]">
+			<i class="fas fa-search"></i> <input class="w3-border " data-ng-change="ctrl.sql_exe.change_sql_seek3(el)"
+				data-ng-model="el.r2value">
+		</div>
 		<div data-ng-if="ctrl.sql_exe.rs2_id" class="w3-small w3-responsive">
 			<pre data-ng-if="ctrl.sql_exe.show_sql_type=='read_sql'">
-{{ctrl.sql_exe.sql_exe}}
-		</pre>
-			<pre data-ng-if="ctrl.sql_exe.show_sql_type!='read_sql'">
-{{ctrl.sql_exe.sql}}
-		</pre>
+				</pre>
+			<div data-ng-if="ctrl.sql_exe.show_sql_type!='read_sql'">
+				<pre><span
+						data-ng-repeat="v in ctrl.sql_exe.sql.split(':sql_')"
+							>{{$index>0?':sql_':''}}{{v.split(' ')[0]}}<a class="am-b" href="#"
+							data-ng-click="ctrl.sql_exe.add2exe(v.split(' ')[0]);"
+							 data-ng-if="ctrl.eMap[v.split(' ')[0]]">{{ctrl.sql_exe.sql_name(v.split(' ')[0])}}</a>{{v.replace(v.split(' ')[0],'')}}</span>
+							</pre>
+			</div>
 		</div>
 		<div data-ng-if="371985==ctrl.eMap[ctrl.sql_exe.sql_id].reference">
 			{{ctrl.eMap[ctrl.sql_exe.sql_id].sql}}
