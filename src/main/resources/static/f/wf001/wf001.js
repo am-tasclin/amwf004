@@ -118,10 +118,13 @@ class ReadWrite2 {
 	constructor($http) {
 
 		this.readAll_element = (a) => {
+			console.log(a)
 			a.deepRead = 0
 			a.fnForEach = (o, response) => {
-				if (a.deepRead++ > 25)
+				if (++a.deepRead > 60){
+					console.log(a.deepRead, a.params.doc_id, a.params.parent, response)
 					return
+				} 
 				// if (o.cnt_child && !o.children) {
 				if (o.cnt_child) {
 					let a1 = {
@@ -135,8 +138,8 @@ class ReadWrite2 {
 			}
 			this.read_element(a)
 		}
-
-
+		
+		
 		this.read_element = (a) => {
 			let o = ctrl.eMap[a.params.doc_id]
 			//if not element or not element.children

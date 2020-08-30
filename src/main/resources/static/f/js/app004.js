@@ -14,6 +14,18 @@ var initApp = function($scope, $http, $timeout){
 	ctrl.openUrl = function(url){
 		window.location.href = url;
 	}
+	
+	ctrl.contains_child_type = (el, type_id) => {
+		let r
+		if (el && el.children)
+			angular.forEach(el.children, (e) => {
+				if (type_id == e.reference){
+					r = e
+				}
+			})
+		return r
+	}
+
 	readPrincipal($http)
 }
 

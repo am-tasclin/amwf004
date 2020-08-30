@@ -5,6 +5,7 @@ app.controller('AppCtrl', class {
         ctrl.page_title = 'CarePlanEdit001:'
         rw2 = new ReadWrite2($http)
         initCarePlan001()
+        initSqlExe($timeout)
     }
 })
 
@@ -47,7 +48,9 @@ initCarePlan001 = () => {
         return isForSelected
     }
     ctrl.programControl.exeTask = (t) => {
+        ctrl.programControl.selectedTaskEl = t
         let els = findElement(t)
+        console.log(t, els)
         if (!ctrl.programControl.selectedParentEl) {
             // console.log(t.doc_id, els)
             angular.forEach(els.children, (elAttEl) => {
@@ -72,15 +75,24 @@ initCarePlan001 = () => {
         })
         // console.log(sql_insert)
         // return
-
-        rw2.write({
-            then_fn: (response) => {
-                console.log(response.data)
-            }, params: { data: { sql: sql_insert } },
-            error_fn: (response) => {
-                console.log(response)
-            }
-        })
+        if (sql_insert) {
+            rw2.write({
+                then_fn: (response) => {
+                    console.log(response.data, sql_insert)
+                }, params: { data: { sql: sql_insert } },
+                error_fn: (response) => {
+                    console.log(response)
+                }
+            })
+        }else{
+            console.log('no insert', t)
+            let iX = ctrl.contains_child_type(t,  371928 )
+            console.log(iX)
+            let sE = ctrl.contains_child_type(iX,  371681 )
+            console.log(sE)
+            let ssE = ctrl.eMap[sE.reference2]
+            ctrl.sql_exe.read_select2(ssE.doc_id)
+        }
     }
     ctrl.programControl.openDialog = {}
     ctrl.programControl.openDialog.open = () => {

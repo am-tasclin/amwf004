@@ -1163,14 +1163,6 @@ var initSqlExe = function($timeout){
 		var o = ctrl.eMap[ctrl.eMap[ctrl.sql_exe.sql_id].ref_to_col[371682]]
 	}
 
-	ctrl.sql_exe.contains_child_type = (el, type_id) => {
-		let r
-		if (el && el.children)
-			angular.forEach(el.children, (e) => {
-				if (type_id == e.reference) r = e
-			})
-		return r
-	}
 	ctrl.sql_exe.sql_name = (sql_id) => {
 		let sql_name = ''
 		if (ctrl.eMap[sql_id])
@@ -1185,6 +1177,8 @@ var initSqlExe = function($timeout){
 
 	let _timeout_seek_fn3
 	ctrl.sql_exe.change_sql_seek3 = (el)=>{
+		console.log(el)
+		ctrl.sql_exe.rs2_id = el.parent
 		ctrl.sql_exe.el_seek = el
 		if(_timeout_seek_fn3) $timeout.cancel(_timeout_seek_fn3)
 		_timeout_seek_fn3 = $timeout(()=> {
@@ -1192,14 +1186,12 @@ var initSqlExe = function($timeout){
 			rw2.sql1({
 				fnThen: (response) => {
 					ctrl.sql_exe.readList = response.data.list
-					console.log(ctrl.sql_exe.readList)
 				}, params: { sql: ctrl.sql_exe.sql_exe }
 			})
 		}, 1000)
 	}
 
 	const replace_sql = (id) => {
-		console.log(id)
 		let o = ctrl.eMap[id]
 		let replace = o.value_1_22
 		if (371682 == o.reference) {//like_all
@@ -1214,6 +1206,7 @@ var initSqlExe = function($timeout){
 	}
 
 	const fn2ForEach = (o, response)=>{
+		console.log(o.doc_id)
 		if(ctrl.sql_exe.sp_sql_ids[o.doc_id]){
 			if(ctrl.sql_exe.sql_exe.includes(o.doc_id)){
 				replace_sql(o.doc_id)
@@ -1227,9 +1220,12 @@ var initSqlExe = function($timeout){
 		ctrl.sql_exe.rs2_id = sql_id
 		ctrl.sql_exe.sql = d.value_1_22
 		ctrl.sql_exe.sql_exe = d.value_1_22
+		console.log(sql_id, 0)
 		rw2.readAll_element({fn2ForEach: fn2ForEach, params: { doc_id: sql_id } })
+		console.log(sql_id, 1)
 		let sp_sql = ctrl.sql_exe.sql.replace(/\n/g, ' ').split(':sql_')
 		angular.forEach(sp_sql, (s, i) => {
+			console.log(sql_id, i)
 			if (i > 0) {
 				let id = s.split(' ')[0]
 				ctrl.sql_exe.sp_sql_ids[id] = {}

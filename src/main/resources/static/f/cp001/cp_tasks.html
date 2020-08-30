@@ -1,6 +1,7 @@
 <div data-ng-repeat="dt in ctrl.eMap[372067].children" data-ng-if="369861==dt.reference2">
     <div class="w3-border-bottom " data-ng-repeat="t in dt.children" data-ng-if="369861==t.reference2">
-        <div data-ng-click="ctrl.programControl.exeTask(t)" class="w3-hover-shadow">
+        <div data-ng-click="ctrl.programControl.exeTask(t)" class="w3-hover-shadow"
+            data-ng-class="{'w3-rightbar w3-card':t.doc_id==ctrl.programControl.selectedTaskEl.doc_id}">
             <span class="w3-tiny">
                 <i class="fas fa-paste" data-ng-if="ctrl.programControl.isForSelected(t)"></i>
                 {{t.doc_id}}
