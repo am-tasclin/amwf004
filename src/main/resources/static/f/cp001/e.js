@@ -27,6 +27,12 @@ initCarePlan001 = () => {
     ctrl.programControl = {}
     ctrl.programControl.openDialogName
 
+    ctrl.programControl.setFrom = (e) => {
+        if (!ctrl.programControl.fromTo)
+            ctrl.programControl.fromTo = {}
+        ctrl.programControl.fromTo.from = e
+    }
+
     ctrl.programControl.clickSelect = (e) => {
         ctrl.programControl.selectedParentEl = e
     }
@@ -84,11 +90,11 @@ initCarePlan001 = () => {
                     console.log(response)
                 }
             })
-        }else{
+        } else {
             console.log('no insert', t)
-            let iX = ctrl.contains_child_type(t,  371928 )
+            let iX = ctrl.contains_child_type(t, 371928)
             console.log(iX)
-            let sE = ctrl.contains_child_type(iX,  371681 )
+            let sE = ctrl.contains_child_type(iX, 371681)
             console.log(sE)
             let ssE = ctrl.eMap[sE.reference2]
             ctrl.sql_exe.read_select2(ssE.doc_id)
@@ -132,9 +138,9 @@ initCarePlan001 = () => {
                 //MedicationRequest|...
                 rw2.readAll_element({
                     fn2ForEach: (om) => {
-                        if(371469 == om.reference){//medication
+                        if (371469 == om.reference) {//medication
                             console.log(om.doc_id, om.reference2, om.reference)
-                            rw2.readAll_element({params:{doc_id:om.reference2}})
+                            rw2.readAll_element({ params: { doc_id: om.reference2 } })
                         }
                     }, params: { doc_id: o.reference2 }
                 })

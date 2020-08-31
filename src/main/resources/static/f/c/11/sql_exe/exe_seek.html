@@ -1,5 +1,5 @@
-<div data-ng-repeat="like_all_el in [ctrl.contains_child_type(ctrl.eMap[seek_id], 371682)]">
-    <i class="fas fa-search"></i> <input class="w3-border " data-ng-change="ctrl.sql_exe.change_sql_seek3(like_all_el)"
+<div class="w3-border-bottom" data-ng-repeat="like_all_el in [ctrl.contains_child_type(ctrl.eMap[seek_id], 371682)]">
+    <i class="fas fa-search"></i> <input class="w3-border" data-ng-change="ctrl.sql_exe.change_sql_seek3(like_all_el)"
         data-ng-model="like_all_el.r2value">
-    <div data-ng-include="'/f/cp001/seek_'+ctrl.programControl.selectedTaskEl.doc_id+'.html'"></div>
 </div>
+<div data-ng-include="'/f/cp001/seek_'+ctrl.programControl.selectedTaskEl.doc_id+'.html'"></div>

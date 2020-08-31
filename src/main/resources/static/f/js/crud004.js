@@ -1206,7 +1206,6 @@ var initSqlExe = function($timeout){
 	}
 
 	const fn2ForEach = (o, response)=>{
-		console.log(o.doc_id)
 		if(ctrl.sql_exe.sp_sql_ids[o.doc_id]){
 			if(ctrl.sql_exe.sql_exe.includes(o.doc_id)){
 				replace_sql(o.doc_id)

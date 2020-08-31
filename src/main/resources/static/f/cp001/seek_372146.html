@@ -1,5 +1,7 @@
 <div data-ng-repeat="sk in [ctrl.contains_child_type(ctrl.eMap[ctrl.sql_exe.rs2_id], 371682).r2value]">
-    <div data-ng-repeat="e in ctrl.sql_exe.readList" class="w3-hover-shadow">
+    <div data-ng-repeat="e in ctrl.sql_exe.readList" class="w3-hover-shadow"
+    data-ng-class="{'w3-light-grey':ctrl.programControl.fromTo.from==e}"
+        data-ng-click="ctrl.programControl.setFrom(e)">
         <span class="w3-tiny"> {{e.med_id}} </span>
         <span ng-bind-html="ctrl.highlight(e.med_value, sk)"> </span>
         <span data-ng-if="e.substance_id">
