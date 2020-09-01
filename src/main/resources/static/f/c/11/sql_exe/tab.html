@@ -8,7 +8,12 @@
 		</thead>
 		<tbody>
 			<tr data-ng-repeat="row in tab">
-				<td data-ng-repeat="(k,v) in row" ng-bind-html="ctrl.highlight(v, sk)"></td>
+				<td data-ng-repeat="(k,v) in row" data-ng-switch="k">
+					<a data-ng-switch-when="parent"
+						href="/f/c/11/eh004.html?doc2doc={{v}},{{ctrl.request.parameters.doc2doc.split(',')[1]}}"> {{v}}
+					</a>
+					<div ng-bind-html="ctrl.highlight(v, sk)" ng-switch-default></div>
+				</td>
 			</tr>
 		</tbody>
 	</table>

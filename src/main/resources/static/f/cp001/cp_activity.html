@@ -7,10 +7,10 @@
 
     </div>
     <div class="w3-hover-shadow" data-ng-repeat="mr in a.children"
-        data-ng-class="{'w3-border':ctrl.programControl.selectedParentEl.doc_id==mr.doc_id}"
+        data-ng-class="{'w3-leftbar w3-border':ctrl.programControl.selectedParentEl.doc_id==mr.doc_id}"
         data-ng-click="ctrl.programControl.clickSelect(mr)">
-        {{mr.doc_id}}
-        {{mr.reference2}}
+        <span class="w3-tiny" title="mr.r2:{{mr.reference2}}
+        "> {{mr.doc_id}} </span>
         <span data-ng-repeat="m in ctrl.eMap[mr.reference2].children" data-ng-if="371469 == m.reference">
             {{m.doc_id}}
             {{m.reference2}}

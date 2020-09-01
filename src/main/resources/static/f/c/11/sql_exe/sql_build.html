@@ -1,0 +1,13 @@
+<div class="w3-border-bottom">
+    {{ctrl.eMap[ctrl.sql_exe.rs2_id].r1value}}
+    <div data-ng-repeat="e in ctrl.eMap[ctrl.sql_exe.rs2_id].children" data-ng-switch="e.reference">
+        <span title="id:{{e.doc_id}}, r:{{e.reference}}"> {{e.r1value}} </span>
+        <span data-ng-switch-when="372183">()</span>
+        <span data-ng-switch-when="372181" data-ng-switch="e.doctype">
+            <span data-ng-switch-when="22">string</span>
+        </span>
+        <span data-ng-switch-when="371992" data-ng-repeat="e1 in e.children">
+            {{e1.r1value}} = {{e1.reference2}}
+        </span>
+    </div>
+</div>

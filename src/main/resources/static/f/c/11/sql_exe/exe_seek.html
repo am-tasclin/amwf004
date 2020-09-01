@@ -1,5 +1,7 @@
 <div class="w3-border-bottom" data-ng-repeat="like_all_el in [ctrl.contains_child_type(ctrl.eMap[seek_id], 371682)]">
     <i class="fas fa-search"></i> <input class="w3-border" data-ng-change="ctrl.sql_exe.change_sql_seek3(like_all_el)"
         data-ng-model="like_all_el.r2value">
+    <i class="w3-btn w3-padding-small far fa-save" data-ng-click="ctrl.programControl.fromToDo()"></i>
 </div>
-<div data-ng-include="'/f/cp001/seek_'+ctrl.programControl.selectedTaskEl.doc_id+'.html'"></div>
+<div data-ng-if="ctrl.seek_template_list.indexOf(ctrl.programControl.selectedTaskEl.doc_id)>=0"
+    data-ng-include="'/f/cp001/seek_'+ctrl.programControl.selectedTaskEl.doc_id+'.html'"></div>

@@ -47,10 +47,9 @@
                 <div class=" w3-container" data-ng-if=" 371928 == inputX.reference"
                     data-ng-repeat="inputX in ctrl.programControl.selectedTaskEl.children">
                     <div data-ng-repeat="seek in [ctrl.contains_child_type(inputX, 371681)]" class="w3-leftbar w3-card">
-                        <div class="w3-border-bottom w3-small am-b w3-container">
+                        <div class="w3-border-bottom w3-small am-b w3-container"
+                            title="{{ctrl.programControl.selectedTaskEl.doc_id}}">
                             {{ctrl.eMap[ctrl.programControl.selectedTaskEl.doc_id].value_1_22}}
-                            a1
-                            {{ctrl.programControl.selectedTaskEl.doc_id}}
                         </div>
                         <div data-ng-repeat="seek_id in [ctrl.eMap[seek.reference2].doc_id]"
                             data-ng-include="'/f/c/11/sql_exe/exe_seek.html'"></div>

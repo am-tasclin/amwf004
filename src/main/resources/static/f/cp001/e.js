@@ -27,6 +27,10 @@ initCarePlan001 = () => {
     ctrl.programControl = {}
     ctrl.programControl.openDialogName
 
+    ctrl.programControl.fromToDo = ()=>{
+        console.log(ctrl.programControl.fromTo, ctrl.programControl.selectedParentEl)
+    }
+
     ctrl.programControl.setFrom = (e) => {
         if (!ctrl.programControl.fromTo)
             ctrl.programControl.fromTo = {}
@@ -53,6 +57,7 @@ initCarePlan001 = () => {
             })
         return isForSelected
     }
+
     ctrl.programControl.exeTask = (t) => {
         ctrl.programControl.selectedTaskEl = t
         let els = findElement(t)

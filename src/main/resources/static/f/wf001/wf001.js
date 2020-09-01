@@ -118,11 +118,11 @@ class ReadWrite2 {
 	constructor($http) {
 
 		this.readAll_element = (a) => {
-			console.log(a)
+			console.log(a.params.doc_id)
 			a.deepRead = 0
 			a.fnForEach = (o, response) => {
 				if (++a.deepRead > 60){
-					console.log(a.deepRead, a.params.doc_id, a.params.parent, response)
+					// console.log(a.deepRead, a.params.doc_id, a.params.parent, response)
 					return
 				} 
 				// if (o.cnt_child && !o.children) {

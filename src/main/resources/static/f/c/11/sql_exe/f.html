@@ -29,6 +29,7 @@
 		</div>
 		<div data-ng-repeat="seek_id in [ctrl.sql_exe.rs2_id]" data-ng-include="'/f/c/11/sql_exe/exe_seek.html'"></div>
 		<div data-ng-if="ctrl.sql_exe.rs2_id" class="w3-small w3-responsive">
+			<div data-ng-include="'/f/c/11/sql_exe/sql_build.html'"></div>
 			<pre data-ng-if="ctrl.sql_exe.show_sql_type=='read_sql'">
 {{ctrl.sql_exe.sql_exe}}
 				</pre>
