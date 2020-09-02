@@ -192,6 +192,7 @@ app.directive('newElement', function () {
 				ctrl.newElementObject.r2value = ctrl.eMap[attr.newElement].value_1_22;
 				console.log(ctrl.eMap[attr.newElement].doc_id);
 				ctrl.newElementObject.refEl
+
 				angular.forEach(ctrl.eMap[372091].children, (e) => {//Element
 					angular.forEach(e.children, (a1) => {
 						angular.forEach(a1.children, (a2) => {

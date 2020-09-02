@@ -1,8 +1,8 @@
 var initJ2C = function ($http) {
 	console.log('read -> ', 371831);
 	rw2 = new ReadWrite2($http);
-	rw2.readAll_element({ params: { doc_id: 372091 }});
 	rw2.readAll_element({params:{doc_id:371855}});
+	rw2.readAll_element({ params: { doc_id: 372091 }});
 	console.log(rw2);
 	read_element_descendant(371831, function () {
 		if (ctrl.request.parameters.p) {
@@ -15,9 +15,9 @@ var initJ2C = function ($http) {
 						//						read_element_descendant(v.doc_id)
 						var p = ctrl.eMap[v.reference2]
 						console.log(v.doc_id, v.reference2)
-						if(p){
-						children_push(p, v)}
-						
+						if (p) {
+							children_push(p, v)
+						}
 					})
 				})
 			})

@@ -1108,6 +1108,33 @@ var initWiki = function(){
 	}
 }
 
+var getCol2 = (e1)=>{
+	let
+	r2El	= ctrl.eMap[e1.reference2],
+	rp2El	= ctrl.eMap[r2El.parent],
+	col2	= getCol(r2El, rp2El)
+	return col2
+}
+
+const getCol = (e, pEl, prefix0) => {
+	console.log(e.doc_id, pEl.doc_id, prefix0)
+	let col = '', prefix = pEl.value_1_22
+	if(!pEl.value_1_22) prefix = pEl.r2value
+	if(prefix0) prefix = prefix0
+	if ( 372189  == e.reference) {//SELECT.cols.value
+		col += 'value '+prefix+'_value'
+	} else if (371969 == e.reference) {//SELECT.cols.parent
+		col += 'parent '+prefix+'_p'
+	} else if (371970 == e.reference) {//SELECT.cols.reference
+		col += 'reference '+prefix+'_r'
+	} else if (371971 == e.reference) {//SELECT.cols.reference2
+		col += 'reference2 '+prefix+'_r2'
+	} else if (372188 == e.reference) {//SELECT.cols.doc_id
+		col += 'doc_id '+prefix+'_id'
+	}
+	return col
+}
+
 var initSqlExe = function($timeout){
 
 	sql_app.exe = {}
@@ -1259,23 +1286,6 @@ var initSqlExe = function($timeout){
 			}
 		})
 
-		const getCol = (e, pEl, prefix0) => {
-			let col = '', prefix = pEl.value_1_22
-			if(prefix0) prefix = prefix0
-			if ( 372189  == e.reference) {//SELECT.cols.value
-				col += 'value '+prefix+'_value'
-			} else if (371969 == e.reference) {//SELECT.cols.parent
-				col += 'parent '+prefix+'_p'
-			} else if (371970 == e.reference) {//SELECT.cols.reference
-				col += 'reference '+prefix+'_r'
-			} else if (371971 == e.reference) {//SELECT.cols.reference2
-				col += 'reference2 '+prefix+'_r2'
-			} else if (372188 == e.reference) {//SELECT.cols.doc_id
-				col += 'doc_id '+prefix+'_id'
-			}
-			return col
-		}
-		
 		const setLeftJoin = (e) => {
 			let sql = '\n LEFT JOIN ', onAtt
 
@@ -1291,13 +1301,20 @@ var initSqlExe = function($timeout){
 				}
 			}
 			let cols = ''
+			
 			angular.forEach(e.children, (e1)=>{
+				console.log(e1.doc_id, e1.reference, ctrl.eMap[e1.reference])
 				if (371971 == e1.reference) {//SELECT.LEFT JOIN.reference2
 					onAtt = 'reference2'
-				}else
-				if (372181 == e1.reference) {//SELECT.LEFT JOIN
+				} else if (372181 == e1.reference) {//SELECT.LEFT JOIN
 					let sql2 = setLeftJoin(e1)
 					sql += sql2
+				} else if (!e1.reference && e1.reference2) {//SELECT.LEFT JOIN.ON doc_id=?
+					if (!ctrl.eMap[e1.reference2])
+						console.error(e1.reference2, 'is not element')
+					let col2 = getCol2(e1)
+					console.log(e1.reference2, col2)
+					cols += col2.split(' ')[1] + ' = doc_id '
 				}else{
 					let 
 					ljpEl	= ctrl.eMap[e.parent],
@@ -1310,10 +1327,7 @@ var initSqlExe = function($timeout){
 						cols += e.value_1_22 + '.' + col.split(' ')[1]+' = '
 					}
 					if (e1.reference2) {
-						let
-						r2El	= ctrl.eMap[e1.reference2],
-						rp2El	= ctrl.eMap[r2El.parent],
-						col2	= getCol(r2El, rp2El)
+						let col2 = getCol2(e1)
 						cols += col2.split(' ')[1]
 					}else{
 						cols += 'doc_id'
