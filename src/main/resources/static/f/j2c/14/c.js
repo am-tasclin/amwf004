@@ -14,32 +14,32 @@ app.controller('AppCtrl', function ($scope, $http, $timeout, $location) {
 	ctrl.selectedItemObject1;
 	ctrl.selectedItemInConstructSettings;
 	ctrl.newElementObject;
-	ctrl.newConfigeratorModel={};
-	ctrl.linkNewConfigurator="";
-	(function(){ctrl.newConfigeratorModel.name="New";}());
-	ctrl.getUrlWithParam=function(doc_id){
+	ctrl.newConfigeratorModel = {};
+	ctrl.linkNewConfigurator = "";
+	(function () { ctrl.newConfigeratorModel.name = "New"; }());
+	ctrl.getUrlWithParam = function (doc_id) {
 		var p = ctrl.getURL.split('?p=')[1];
-		return ctrl.getURL.replace(p,doc_id);
+		return ctrl.getURL.replace(p, doc_id);
 	}
 	ctrl.cancel = function () {
 		ctrl.templateView = '';
 		ctrl.isChangeSelectParent = false;
 	}
-	ctrl.createNewConfigurator=()=>{
+	ctrl.createNewConfigurator = () => {
 		var so = {
 			dataAfterSave: function (response) {
 				console.log(response.data)
-				 var newE = response.data.list2[0];
-				 ctrl.eMap[newE.doc_id]=newE;
-				 if(response.data.list2[0])
-				 {var p = ctrl.getURL.split('?p=')[1];
-				 ctrl.linkNewConfigurator= ctrl.getURL.replace(p,newE.doc_id);
-				 ctrl.templateView='refToNewConfigurator';
+				var newE = response.data.list2[0];
+				ctrl.eMap[newE.doc_id] = newE;
+				if (response.data.list2[0]) {
+					var p = ctrl.getURL.split('?p=')[1];
+					ctrl.linkNewConfigurator = ctrl.getURL.replace(p, newE.doc_id);
+					ctrl.templateView = 'refToNewConfigurator';
 				}
 			}
 		}
 		so.sql = "INSERT INTO doc (doc_id, parent,reference) VALUES (:nextDbId1, "
-		 + 371855 + "," + 371830 + " ); "
+			+ 371855 + "," + 371830 + " ); "
 		so.sql += "INSERT INTO string (string_id, value) VALUES (:nextDbId1, '" + ctrl.newConfigeratorModel.name + "' ); "
 		so.sql += sql_app.SELECT_obj_with_i18n(':nextDbId1')
 		console.log(so.sql)
@@ -48,7 +48,7 @@ app.controller('AppCtrl', function ($scope, $http, $timeout, $location) {
 	ctrl.nextViewOfNewElement = function () {
 		ctrl.templateView = '';
 	}
-	ctrl.openConfigurato = function (){
+	ctrl.openConfigurato = function () {
 		console.log('so.sql');
 		var so = {
 			dataAfterSave: function (response) {
@@ -85,10 +85,12 @@ app.controller('AppCtrl', function ($scope, $http, $timeout, $location) {
 			dataAfterSave: function (response) {
 				if (response.data.update_0) {
 					var Parent = ctrl.eMap[e].parent;
-					console.log(ctrl.eMap[Parent]);
-								var index=ctrl.eMap[Parent].children.indexOf(ctrl.eMap[e]);
-								console.log(index);
-								ctrl.eMap[Parent].children.splice(index, 1);
+					var index = ctrl.eMap[Parent].children.indexOf(ctrl.eMap[e]);
+					ctrl.eMap[Parent].children.splice(index, 1);
+					// if(document.getElementById(e)){
+					// 	var elem=document.getElementById(e);
+					// 	elem.parentNode.removeChild(elem);
+					// }
 				}
 			}
 		}
@@ -103,27 +105,27 @@ app.controller('AppCtrl', function ($scope, $http, $timeout, $location) {
 				var e = ctrl.eMap[ctrl.templateEditId];
 				var newE = response.data.list2[0];
 				ctrl.templateView = '';
-				ctrl.eMap[newE.doc_id]=newE;
+				ctrl.eMap[newE.doc_id] = newE;
 				console.log(e.children, newE)
 				e.children.push(newE)
 			}
 		}
 		console.log(ctrl.newElementObject)
-		let ref =ctrl.newElementObject.refEl.reference2
+		let ref = ctrl.newElementObject.refEl.reference2
 		so.sql = "INSERT INTO doc (doc_id, parent,reference,reference2) VALUES (:nextDbId1, "
-		 + ctrl.newElementObject.parent + "," + ref + ","+ctrl.newElementObject.reference2+" ); "
+			+ ctrl.newElementObject.parent + "," + ref + "," + ctrl.newElementObject.reference2 + " ); "
 		so.sql += "INSERT INTO string (string_id, value) VALUES (:nextDbId1, '" + ctrl.newElementObject.value_1_22 + "' ); "
 		so.sql += sql_app.SELECT_obj_with_i18n(':nextDbId1')
 		console.log(ctrl.templateEditId, so.sql)
 		writeSql(so)
 	}
-	
+
 })
 
 app.directive('workSpace', function () {
 	return {
 		replace: true,
-		restrict: 'AE',
+		restrict: 'A',
 		link: function (scope, element, attr) {
 			element.on('click', function () {
 				ctrl.isDisabled = 'w3-disabled';
@@ -179,7 +181,7 @@ app.directive('newElement', function () {
 		restrict: 'A',
 		link: function (scope, element, attr) {
 			element.on('click', function () {
-				var p = ctrl.getURL.$$absUrl.split('?p=')[1];
+				var p = ctrl.getURL.split('?p=')[1];
 				ctrl.templateView = 'newElementConstructor';
 				ctrl.templateEditId = attr.newElement;
 				ctrl.selectedItemInConstructSettings = null;

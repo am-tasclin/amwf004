@@ -1,7 +1,6 @@
 var initJ2C = function ($http) {
 	console.log('read -> ', 371831);
 	rw2 = new ReadWrite2($http);
-	// rw2Beta=new ReadWrite2($http);
 	rw2.readAll_element({ params: { doc_id: 372091 }});
 	rw2.readAll_element({params:{doc_id:371855}});
 	console.log(rw2);
@@ -34,7 +33,12 @@ var initJ2C = function ($http) {
 				ctrl.selectItemId=newE.doc_id;
 				ctrl.selectedItemInConstructSettings=newE;
 		console.log(e.children, newE)
-		e.children.push(newE)
+		if(!e.children){
+			e.children=new Array();
+			e.children.push(newE);
+		}else{
+			e.children.push(newE)
+		}
 		ctrl.eMap[newE.doc_id] = newE 
 			}
 		}
