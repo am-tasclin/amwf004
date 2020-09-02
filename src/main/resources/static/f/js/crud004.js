@@ -1221,7 +1221,9 @@ var initSqlExe = function($timeout){
 		ctrl.sql_exe.sql_exe = d.value_1_22
 		console.log(sql_id, 0)
 		rw2.readAll_element({fn2ForEach: fn2ForEach, params: { doc_id: sql_id } })
-		console.log(sql_id, 1)
+		if (!d.value_1_22) 
+			return
+		console.log(sql_id, 1, ctrl.sql_exe.sql, d)
 		let sp_sql = ctrl.sql_exe.sql.replace(/\n/g, ' ').split(':sql_')
 		angular.forEach(sp_sql, (s, i) => {
 			console.log(sql_id, i)
@@ -1255,8 +1257,10 @@ var initSqlExe = function($timeout){
 				console.log(e.doc_id, d.sql)
 			}
 		})
-		const getCol = (e, pEl) => {
+
+		const getCol = (e, pEl, prefix0) => {
 			let col = '', prefix = pEl.value_1_22
+			if(prefix0) prefix = prefix0
 			if ( 372189  == e.reference) {//SELECT.cols.value
 				col += 'value '+prefix+'_value'
 			} else if (371969 == e.reference) {//SELECT.cols.parent
@@ -1270,16 +1274,26 @@ var initSqlExe = function($timeout){
 			}
 			return col
 		}
+		
 		const setLeftJoin = (e) => {
-			let sql = '\n LEFT JOIN '
+			let sql = '\n LEFT JOIN ', onAtt
+
 			if (e.reference2) {
 				let r2El = ctrl.eMap[e.reference2]
 				sql += '('+r2El.value_1_22+') '+e.value_1_22
-			} else if (22 == e.doctype) {
-				sql += ' string ON string_id=doc_id '
+			} else if ([23,22].indexOf(e.doctype) >= 0) {
+				onAtt = 'doc_id'
+				if (23 == e.doctype) {
+					sql += ' integer ON integer_id= '
+				} else if (22 == e.doctype) {
+					sql += ' string ON string_id= '
+				}
 			}
 			let cols = ''
 			angular.forEach(e.children, (e1)=>{
+				if (371971 == e1.reference) {//SELECT.LEFT JOIN.reference2
+					onAtt = 'reference2'
+				}else
 				if (372181 == e1.reference) {//SELECT.LEFT JOIN
 					let sql2 = setLeftJoin(e1)
 					sql += sql2
@@ -1305,6 +1319,8 @@ var initSqlExe = function($timeout){
 					}
 				}
 			})
+			if (onAtt)
+				sql += onAtt + ' '
 			if (cols.length > 0)
 				sql += ' ON ' + cols
 			return sql
@@ -1316,8 +1332,13 @@ var initSqlExe = function($timeout){
 				r2FromEl = ctrl.eMap[e.reference2]
 				if (e.reference2) {
 					let r2E = ctrl.eMap[e.reference2]
-					prefix = r2E.value_1_22
+					if(r2E){
+						prefix = r2E.value_1_22
+					}else{
+						prefix = e.r2value
+					}
 				}
+				console.log(e.doc_id, prefix)
 				if(!e.children){
 					if (cols.length>0) cols += ', '
 					cols += prefix + '.*'
@@ -1332,7 +1353,7 @@ var initSqlExe = function($timeout){
 								rpEl = ctrl.eMap[rEl.parent]
 							}
 						}
-						if (rEl && rpEl && 372183 == rpEl.reference) {
+						if (rEl && rpEl && 372183 == rpEl.reference) {//cols
 							let rCol = getCol(rEl, rpEl)
 							console.log(rCol,1, prefix)
 							cols += prefix+'.'+rCol.split(' ')[1]
@@ -1343,7 +1364,7 @@ var initSqlExe = function($timeout){
 								else
 									cols += fromEl.value_1_22 + '.'
 							}
-							cols += getCol(e1, e)
+							cols += getCol(e1, e, prefix)
 						}
 					})
 				}
