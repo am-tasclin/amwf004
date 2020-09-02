@@ -179,7 +179,7 @@ app.directive('newElement', function () {
 		restrict: 'A',
 		link: function (scope, element, attr) {
 			element.on('click', function () {
-				var p = ctrl.getURL.$$absUrl.split('?p=')[1];
+				var p = ctrl.getURL.split('?p=')[1];
 				ctrl.templateView = 'newElementConstructor';
 				ctrl.templateEditId = attr.newElement;
 				ctrl.selectedItemInConstructSettings = null;

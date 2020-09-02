@@ -1183,6 +1183,7 @@ var initSqlExe = function($timeout){
 		if(_timeout_seek_fn3) $timeout.cancel(_timeout_seek_fn3)
 		_timeout_seek_fn3 = $timeout(()=> {
 			create_sql_exe(ctrl.sql_exe.rs2_id)
+			console.log(ctrl.sql_exe.sql_exe)
 			rw2.sql1({
 				fnThen: (response) => {
 					ctrl.sql_exe.readList = response.data.list
