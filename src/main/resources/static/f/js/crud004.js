@@ -1209,7 +1209,7 @@ var initSqlExe = function($timeout){
 		ctrl.sql_exe.el_seek = el
 		if(_timeout_seek_fn3) $timeout.cancel(_timeout_seek_fn3)
 		_timeout_seek_fn3 = $timeout(()=> {
-			create_sql_exe(ctrl.sql_exe.rs2_id)
+			// create_sql_exe(ctrl.sql_exe.rs2_id)
 			console.log(ctrl.sql_exe.sql_exe)
 			rw2.sql1({
 				fnThen: (response) => {
@@ -1241,14 +1241,34 @@ var initSqlExe = function($timeout){
 		}
 	}
 
+	ctrl.sql_exe.read_select3 = (sql_id) => {
+		console.log(sql_id, ctrl.sql_exe.sql_exe)
+		rw2.sql1({
+			fnThen: (response) => {
+				let sql0 = response.data.list[0].value
+				if (!ctrl.sql_exe.sql) {
+					ctrl.sql_exe.sql = sql0
+					ctrl.sql_exe.sql_exe = sql0
+				}
+				ctrl.sql_exe.sql_exe = ctrl.sql_exe.sql_exe.split(':sql_'+sql_id).join(sql0)
+				if (ctrl.sql_exe.sql_exe.includes(':sql_')) {
+					let sql_id = ctrl.sql_exe.sql_exe.split(':sql_')[1].split(' ')[0]
+					console.log(2, sql_id, ctrl.sql_exe.sql_exe)
+					ctrl.sql_exe.read_select3(sql_id)
+				}
+			},
+			params: { sql: 'SELECT value FROM string WHERE string_id='+ sql_id }
+		})
+	}
+
 	ctrl.sql_exe.read_select2 = (sql_id) => {
 		let d = ctrl.eMap[sql_id]
 		ctrl.sql_exe.sp_sql_ids = {}
 		ctrl.sql_exe.rs2_id = sql_id
 		ctrl.sql_exe.sql = d.value_1_22
 		ctrl.sql_exe.sql_exe = d.value_1_22
-		console.log(sql_id, 0)
 		rw2.readAll_element({fn2ForEach: fn2ForEach, params: { doc_id: sql_id } })
+		console.log('ctrl.sql_exe.read_select2', sql_id, d)
 		if (!d.value_1_22) 
 			return
 		console.log(sql_id, 1, ctrl.sql_exe.sql, d)

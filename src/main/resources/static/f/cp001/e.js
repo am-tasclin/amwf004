@@ -6,8 +6,13 @@ app.controller('AppCtrl', class {
         rw2 = new ReadWrite2($http)
         initCarePlan001()
         initSqlExe($timeout)
+        ctrl.seek_template_list = [372146]
     }
 })
+
+var testFunction = (p)=>{
+    ctrl.sql_exe.read_select3 (p)
+}
 
 findElement = (e) => {
     let els = [], fEl = (e) => {
@@ -62,7 +67,7 @@ initCarePlan001 = () => {
         ctrl.programControl.selectedTaskEl = t
         let els = findElement(t)
         console.log(t, els)
-        if (!ctrl.programControl.selectedParentEl) {
+        if (!ctrl.programControl.selectedParentEl) {//not to/source/parent element
             // console.log(t.doc_id, els)
             angular.forEach(els.children, (elAttEl) => {
                 if (371969 == elAttEl.reference) {//parent
@@ -97,12 +102,13 @@ initCarePlan001 = () => {
             })
         } else {
             console.log('no insert', t)
-            let iX = ctrl.contains_child_type(t, 371928)
-            console.log(iX)
-            let sE = ctrl.contains_child_type(iX, 371681)
-            console.log(sE)
-            let ssE = ctrl.eMap[sE.reference2]
-            ctrl.sql_exe.read_select2(ssE.doc_id)
+            let iX = ctrl.contains_child_type(t, 371928)//☰ [371928] o[]37|input 
+            console.log(iX.doc_id)
+            let sE = ctrl.contains_child_type(iX, 371681)// SQL_Model.seek
+            console.log(sE.doc_id)
+            let ssE = ctrl.eMap[sE.reference2]// SELECT to seek element
+            console.log(ssE)
+            ctrl.sql_exe.read_select3(ssE.doc_id)
         }
     }
     ctrl.programControl.openDialog = {}

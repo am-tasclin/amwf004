@@ -15,6 +15,7 @@
 				<a data-ng-if="371985!=ctrl.eMap[v].reference" data-ng-click="ctrl.sql_exe.read(v)" href="#"> {{v}} </a>
 				<span data-ng-if="371985==ctrl.eMap[v].reference">
 					<span title="new code" class="w3-tiny">
+						<a data-ng-click="ctrl.sql_exe.read_select3(v)" href="#">rs3</a>-
 						<a data-ng-click="ctrl.sql_exe.read_select2(v)" href="#">rs2</a>-</span><a
 						data-ng-click="ctrl.sql_exe.read_select(v)" href="#">{{v}}</a>
 				</span>
