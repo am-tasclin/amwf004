@@ -538,7 +538,7 @@ var initDataModel = function(){
 		console.log(o)
 	}
 	ctrl.content_menu.pasteElement = function(el){
-		console.log(el)
+		// console.log('pasteElement:',el)
 		ctrl.content_menu.typeElement('paste',el)
 	}
 
@@ -637,9 +637,9 @@ var initDataModel = function(){
 		writeSql(so)
 	}
 	ctrl.content_menu.expandNodeData = function(node_id){
-		console.log(node_id)
+		// console.log(node_id)
 		read_element(node_id, function(response){
-			console.log(ctrl.eMap[node_id])
+			// console.log('expandNodeData:',ctrl.eMap[node_id])
 			ctrl.content_menu.copyObject = ctrl.eMap[node_id]
 		})
 	}
@@ -1204,9 +1204,9 @@ var initSqlExe = function($timeout){
 
 	let _timeout_seek_fn3
 	ctrl.sql_exe.change_sql_seek3 = (el)=>{
-		console.log(el)
 		ctrl.sql_exe.rs2_id = el.parent
 		ctrl.sql_exe.el_seek = el
+		// console.log(el, ctrl.sql_exe.sql_exe)
 		if(_timeout_seek_fn3) $timeout.cancel(_timeout_seek_fn3)
 		_timeout_seek_fn3 = $timeout(()=> {
 			// create_sql_exe(ctrl.sql_exe.rs2_id)
@@ -1239,6 +1239,30 @@ var initSqlExe = function($timeout){
 				replace_sql(o.doc_id)
 			}
 		}
+	}
+
+	ctrl.sql_exe.read_select4 = (sql_id) => {
+		// console.log(sql_id, ctrl.sql_exe.sql_exe)
+		rw2.read_element({
+			params: { doc_id:sql_id}, fnForEach: (o) => {
+				let sql0 = o.value_1_22
+				// console.log(o.doc_id, o)
+				if (!ctrl.sql_exe.sql) {
+					ctrl.sql_exe.sql = sql0
+					ctrl.sql_exe.sql_exe = sql0
+					ctrl.sql_exe.sp_sql_ids = {}
+				}
+				if(371682 == o.reference){// SELECT.like_all
+					if(!sql0) sql0 = "'%%'"
+				}
+				ctrl.sql_exe.sql_exe = ctrl.sql_exe.sql_exe.split(':sql_'+sql_id).join(sql0)
+				if (ctrl.sql_exe.sql_exe.includes(':sql_')) {
+					let sql_id = ctrl.sql_exe.sql_exe.split(':sql_')[1].split(' ')[0]
+					ctrl.sql_exe.sp_sql_ids[sql_id] = {}
+					// console.log(2, sql_id, ctrl.sql_exe.sql_exe)
+					ctrl.sql_exe.read_select4(sql_id)
+				}
+			}})
 	}
 
 	ctrl.sql_exe.read_select3 = (sql_id) => {

@@ -115,10 +115,10 @@ class Read2 {
 
 var rw2
 class ReadWrite2 {
-	constructor($http) {
+	constructor($http, $timeout) {
 
 		this.readAll_element = (a) => {
-			console.log(a.params.doc_id)
+			// console.log(a.params.doc_id)
 			a.deepRead = 0
 			a.fnForEach = (o, response) => {
 				if (++a.deepRead > 60){
@@ -147,10 +147,10 @@ class ReadWrite2 {
 				if (a.params.parent) a.params.sql = sql_app.SELECT_children_with_i18n(a.params.parent)
 				if (!a.params.sql) a.params.sql = sql_app.SELECT_obj_with_i18n(a.params.doc_id)
 				this.http.get(this.url, { params: a.params })
-					.then((response) => {
-						angular.forEach(response.data.list, (o1) => {
-							let o2 = ctrl.eMap[o1.doc_id]
-							if (!o2) {
+				.then((response) => {
+					angular.forEach(response.data.list, (o1) => {
+						let o2 = ctrl.eMap[o1.doc_id]
+						if (!o2) {
 							// if (!o2 || (o1.cnt_child && !o1.children)) {
 								ctrl.eMap[o1.doc_id] = o1
 								let parentEl = ctrl.eMap[o1.parent]
@@ -166,9 +166,9 @@ class ReadWrite2 {
 						})
 						if (a.fnForAll) a.fnForAll(response)
 					})
-			} else {
-				// console.log('-------------------1271', o, a)
-				if (a.fnForEach) a.fnForEach(o)
+				} else {
+					// console.log('-------------------1271', o, a)
+					if (a.fnForEach) a.fnForEach(o)
 			}
 		}
 		this.write = (a) => {
@@ -180,6 +180,7 @@ class ReadWrite2 {
 				.then((response) => a.fnThen(response))
 
 		this.http = $http
+		this.timeout = $timeout
 		this.url = '/r/url_sql_read_db1'
 	}
 }

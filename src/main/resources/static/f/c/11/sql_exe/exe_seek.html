@@ -3,5 +3,6 @@
         data-ng-model="like_all_el.r2value">
     <i class="w3-btn w3-padding-small far fa-save" data-ng-click="ctrl.programControl.fromToDo()"></i>
 </div>
-<div data-ng-if="ctrl.seek_template_list.indexOf(ctrl.programControl.selectedTaskEl.doc_id)>=0"
+<div data-ng-repeat="sk in [ctrl.contains_child_type(ctrl.eMap[ctrl.sql_exe.rs2_id], 371682).r2value]"
+    data-ng-if="ctrl.seek_template_list.indexOf(ctrl.programControl.selectedTaskEl.doc_id)>=0"
     data-ng-include="'/f/cp001/seek_'+ctrl.programControl.selectedTaskEl.doc_id+'.html'"></div>

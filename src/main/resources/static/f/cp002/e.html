@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html data-ng-app="myApp" data-ng-controller="AppCtrl as ctrl" lang="uk-UA">
+
+<head>
+    <meta charset="utf-8" />
+    <title>{{ctrl.page_title}}</title>
+    <link rel="stylesheet" href="/webjars/font-awesome/5.12.0/css/all.min.css">
+    <link rel="stylesheet" href="/f/css/w3.css">
+    <link rel="stylesheet" href="/f/css/am.css">
+    <link rel="shortcut icon" href="/f/img/algoritmed.ico" type="image/x-icon">
+    <script src="/webjars/angularjs/1.8.0/angular.min.js"></script>
+    <script src="/webjars/angularjs/1.8.0/i18n/angular-locale_uk-ua.js"></script>
+    <script src="/webjars/angularjs/1.8.0/angular-sanitize.min.js"></script>
+    <script src="/webjars/angularjs/1.8.0/angular-route.js"></script>
+    <script src="/f/js/app004.js"></script>
+    <script src="/f/js/crud004.js"></script>
+    <script src="/f/wf001/wf001.js"></script>
+    <script src="/f/cp002/e.js"></script>
+</head>
+
+<body data-ng-click="ctrl.bodyClick()">
+    <div class="w3-container am-max-width-1">
+        <div class="w3-border-bottom">
+            <div class="w3-right" data-ng-include="'/f/btn-to-login.html'"></div>
+            <span data-ng-repeat="cnf in [{show_title:'no'}]" data-ng-include="'/f/home-link.html'"
+                class="w3-small0 am-b"></span>
+            {{ctrl.page_title}}
+            {{ctrl.eMap[ctrl.request.parameters.id].value_1_22}}
+        </div>
+        <div data-ng-include="'/f/cp002/e_top_toolbar.html'"></div>
+        <div class="w3-row w3-border-bottom w3-border-right">
+            <div class="w3-col w3-right w3-border-left" style="width:30%; height: 88vh; overflow: auto;">
+                <div class="w3-small w3-gray w3-right w3-border am-b">
+                    &NonBreakingSpace;
+                    Завдання:
+                    &NonBreakingSpace;
+                </div>
+                <div data-ng-include="'/f/cp001/cp_tasks.html'"></div>
+            </div>
+            <div class="w3-rest">
+                <div data-ng-include="'/f/cp001/cp_activity.html'"></div>
+                &NonBreakingSpace;
+                <div class=" w3-container" data-ng-if="371928 == inputX.reference"
+                    data-ng-repeat="inputX in ctrl.programControl.selectedTaskEl.children">
+                    <div data-ng-repeat="seek in [ctrl.contains_child_type(inputX, 371681)]" class="w3-leftbar w3-card">
+                        <div class="w3-border-bottom w3-small am-b w3-container"
+                            title="{{ctrl.programControl.selectedTaskEl.doc_id}}">
+                            {{ctrl.eMap[ctrl.programControl.selectedTaskEl.doc_id].value_1_22}}
+                        </div>
+                        <div data-ng-repeat="seek_id in [ctrl.eMap[seek.reference2].doc_id]"
+                            data-ng-include="'/f/c/11/sql_exe/exe_seek.html'"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</body>
+
+</html>
