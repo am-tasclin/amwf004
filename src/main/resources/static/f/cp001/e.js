@@ -3,11 +3,16 @@ app.controller('AppCtrl', class {
         ctrl = this
         initApp($scope, $http, $timeout)
         ctrl.page_title = 'CarePlanEdit001:'
-        rw2 = new ReadWrite2($http)
+        rw2 = new ReadWrite2($http, $timeout)
         initCarePlan001()
         initSqlExe($timeout)
+        ctrl.seek_template_list = [372146, 372307]
     }
 })
+
+var testFunction = (p) => {
+    ctrl.sql_exe.read_select4(p)
+}
 
 findElement = (e) => {
     let els = [], fEl = (e) => {
@@ -23,7 +28,7 @@ findElement = (e) => {
     return els
 }
 
-initCarePlan001 = () => {
+initCarePlan001 = ($timeout) => {
     ctrl.programControl = {}
     ctrl.programControl.openDialogName
 
@@ -61,8 +66,10 @@ initCarePlan001 = () => {
     ctrl.programControl.exeTask = (t) => {
         ctrl.programControl.selectedTaskEl = t
         let els = findElement(t)
+
         console.log(t, els)
-        if (!ctrl.programControl.selectedParentEl) {
+
+        if (!ctrl.programControl.selectedParentEl) {//not to/source/parent element
             // console.log(t.doc_id, els)
             angular.forEach(els.children, (elAttEl) => {
                 if (371969 == elAttEl.reference) {//parent
@@ -96,13 +103,19 @@ initCarePlan001 = () => {
                 }
             })
         } else {
-            console.log('no insert', t)
-            let iX = ctrl.contains_child_type(t, 371928)
-            console.log(iX)
-            let sE = ctrl.contains_child_type(iX, 371681)
-            console.log(sE)
-            let ssE = ctrl.eMap[sE.reference2]
-            ctrl.sql_exe.read_select2(ssE.doc_id)
+            console.log('no insert', t.doc_id)
+            let iX = ctrl.contains_child_type(t, 371928)//☰ [371928] o[]37|input 
+            // console.log(iX.doc_id)
+            let sE = ctrl.contains_child_type(iX, 371681)// SQL_Model.seek
+            // console.log(sE.doc_id)
+            let ssE = ctrl.eMap[sE.reference2]// SELECT to seek element
+            console.log(ssE)
+            delete ctrl.sql_exe.sql
+            ctrl.sql_exe.read_select4(ssE.doc_id)
+            rw2.timeout(() => {
+                console.log(ctrl.sql_exe.sql)
+                console.log(ctrl.sql_exe.sql_exe)
+            }, 2)
         }
     }
     ctrl.programControl.openDialog = {}
@@ -142,12 +155,12 @@ initCarePlan001 = () => {
                 console.log(o.doc_id, o.reference2)
                 //MedicationRequest|...
                 rw2.readAll_element({
-                    fn2ForEach: (om) => {
-                        if (371469 == om.reference) {//medication
+                    params: { doc_id: o.reference2 }, fn2ForEach: (om) => {
+                        if (371469 == om.reference) {//MedicationRequest.medication
                             console.log(om.doc_id, om.reference2, om.reference)
                             rw2.readAll_element({ params: { doc_id: om.reference2 } })
                         }
-                    }, params: { doc_id: o.reference2 }
+                    }
                 })
             }
             if (o.reference2) {

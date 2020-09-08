@@ -15,7 +15,7 @@
     <script src="/f/js/app004.js"></script>
     <script src="/f/js/crud004.js"></script>
     <script src="/f/wf001/wf001.js"></script>
-    <script src="/f/cp001/e.js"></script>
+    <script src="/f/cp002/e.js"></script>
 </head>
 
 <body data-ng-click="ctrl.bodyClick()">
@@ -27,24 +27,20 @@
             {{ctrl.page_title}}
             {{ctrl.eMap[ctrl.request.parameters.id].value_1_22}}
         </div>
-        <div class="w3-small w3-light-gray">
-            <i class="fas fa-ellipsis-v"></i> <i class="fas fa-file w3-btn w3-padding-small"
-                data-ng-class="{'w3-green':'new'==ctrl.programControl.openDialogName}"
-                data-ng-click="ctrl.programControl.openDialogFn('new')"></i> <i
-                data-ng-class="{'w3-green':'open'==ctrl.programControl.openDialogName}"
-                class="fas fa-folder-open w3-btn w3-padding-small"
-                data-ng-click="ctrl.programControl.openDialogFn('open')"></i> <i
-                class="fas fa-save w3-btn w3-padding-small"></i>
-            <i class="fas fa-trash-alt w3-btn w3-padding-small" data-ng-click="ctrl.programControl.deleteElement()"></i>
-        </div>
-        <div data-ng-if="ctrl.programControl.openDialogName" class="w3-leftbar"
-            data-ng-include="'/f/cp001/dialog_'+ctrl.programControl.openDialogName+'.html'">
-        </div>
+        <div data-ng-include="'/f/cp002/e_top_toolbar.html'"></div>
         <div class="w3-row w3-border-bottom w3-border-right">
-            <div class="w3-threequarter">
+            <div class="w3-col w3-right w3-border-left" style="width:30%; height: 88vh; overflow: auto;">
+                <div class="w3-small w3-gray w3-right w3-border am-b">
+                    &NonBreakingSpace;
+                    Завдання:
+                    &NonBreakingSpace;
+                </div>
+                <div data-ng-include="'/f/cp001/cp_tasks.html'"></div>
+            </div>
+            <div class="w3-rest">
                 <div data-ng-include="'/f/cp001/cp_activity.html'"></div>
                 &NonBreakingSpace;
-                <div class=" w3-container" data-ng-if=" 371928 == inputX.reference"
+                <div class=" w3-container" data-ng-if="371928 == inputX.reference"
                     data-ng-repeat="inputX in ctrl.programControl.selectedTaskEl.children">
                     <div data-ng-repeat="seek in [ctrl.contains_child_type(inputX, 371681)]" class="w3-leftbar w3-card">
                         <div class="w3-border-bottom w3-small am-b w3-container"
@@ -56,16 +52,7 @@
                     </div>
                 </div>
             </div>
-            <div class="w3-quarter w3-border-left" style="height: 88vh; overflow: auto;">
-                <div class="w3-small w3-gray w3-right w3-border am-b">
-                    &NonBreakingSpace;
-                    Завдання:
-                    &NonBreakingSpace;
-                </div>
-                <div data-ng-include="'cp_tasks.html'"></div>
-            </div>
         </div>
-    </div>
 </body>
 
 </html>

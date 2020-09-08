@@ -538,7 +538,7 @@ var initDataModel = function(){
 		console.log(o)
 	}
 	ctrl.content_menu.pasteElement = function(el){
-		console.log(el)
+		// console.log('pasteElement:',el)
 		ctrl.content_menu.typeElement('paste',el)
 	}
 
@@ -637,9 +637,9 @@ var initDataModel = function(){
 		writeSql(so)
 	}
 	ctrl.content_menu.expandNodeData = function(node_id){
-		console.log(node_id)
+		// console.log(node_id)
 		read_element(node_id, function(response){
-			console.log(ctrl.eMap[node_id])
+			// console.log('expandNodeData:',ctrl.eMap[node_id])
 			ctrl.content_menu.copyObject = ctrl.eMap[node_id]
 		})
 	}
@@ -1108,6 +1108,33 @@ var initWiki = function(){
 	}
 }
 
+var getCol2 = (e1)=>{
+	let
+	r2El	= ctrl.eMap[e1.reference2],
+	rp2El	= ctrl.eMap[r2El.parent],
+	col2	= getCol(r2El, rp2El)
+	return col2
+}
+
+const getCol = (e, pEl, prefix0) => {
+	console.log(e.doc_id, pEl.doc_id, prefix0)
+	let col = '', prefix = pEl.value_1_22
+	if(!pEl.value_1_22) prefix = pEl.r2value
+	if(prefix0) prefix = prefix0
+	if ( 372189  == e.reference) {//SELECT.cols.value
+		col += 'value '+prefix+'_value'
+	} else if (371969 == e.reference) {//SELECT.cols.parent
+		col += 'parent '+prefix+'_p'
+	} else if (371970 == e.reference) {//SELECT.cols.reference
+		col += 'reference '+prefix+'_r'
+	} else if (371971 == e.reference) {//SELECT.cols.reference2
+		col += 'reference2 '+prefix+'_r2'
+	} else if (372188 == e.reference) {//SELECT.cols.doc_id
+		col += 'doc_id '+prefix+'_id'
+	}
+	return col
+}
+
 var initSqlExe = function($timeout){
 
 	sql_app.exe = {}
@@ -1177,12 +1204,13 @@ var initSqlExe = function($timeout){
 
 	let _timeout_seek_fn3
 	ctrl.sql_exe.change_sql_seek3 = (el)=>{
-		console.log(el)
 		ctrl.sql_exe.rs2_id = el.parent
 		ctrl.sql_exe.el_seek = el
+		// console.log(el, ctrl.sql_exe.sql_exe)
 		if(_timeout_seek_fn3) $timeout.cancel(_timeout_seek_fn3)
 		_timeout_seek_fn3 = $timeout(()=> {
-			create_sql_exe(ctrl.sql_exe.rs2_id)
+			// create_sql_exe(ctrl.sql_exe.rs2_id)
+			console.log(ctrl.sql_exe.sql_exe)
 			rw2.sql1({
 				fnThen: (response) => {
 					ctrl.sql_exe.readList = response.data.list
@@ -1213,14 +1241,58 @@ var initSqlExe = function($timeout){
 		}
 	}
 
+	ctrl.sql_exe.read_select4 = (sql_id) => {
+		// console.log(sql_id, ctrl.sql_exe.sql_exe)
+		rw2.read_element({
+			params: { doc_id:sql_id}, fnForEach: (o) => {
+				let sql0 = o.value_1_22
+				// console.log(o.doc_id, o)
+				if (!ctrl.sql_exe.sql) {
+					ctrl.sql_exe.sql = sql0
+					ctrl.sql_exe.sql_exe = sql0
+					ctrl.sql_exe.sp_sql_ids = {}
+				}
+				if(371682 == o.reference){// SELECT.like_all
+					if(!sql0) sql0 = "'%%'"
+				}
+				ctrl.sql_exe.sql_exe = ctrl.sql_exe.sql_exe.split(':sql_'+sql_id).join(sql0)
+				if (ctrl.sql_exe.sql_exe.includes(':sql_')) {
+					let sql_id = ctrl.sql_exe.sql_exe.split(':sql_')[1].split(' ')[0]
+					ctrl.sql_exe.sp_sql_ids[sql_id] = {}
+					// console.log(2, sql_id, ctrl.sql_exe.sql_exe)
+					ctrl.sql_exe.read_select4(sql_id)
+				}
+			}})
+	}
+
+	ctrl.sql_exe.read_select3 = (sql_id) => {
+		console.log(sql_id, ctrl.sql_exe.sql_exe)
+		rw2.sql1({
+			fnThen: (response) => {
+				let sql0 = response.data.list[0].value
+				if (!ctrl.sql_exe.sql) {
+					ctrl.sql_exe.sql = sql0
+					ctrl.sql_exe.sql_exe = sql0
+				}
+				ctrl.sql_exe.sql_exe = ctrl.sql_exe.sql_exe.split(':sql_'+sql_id).join(sql0)
+				if (ctrl.sql_exe.sql_exe.includes(':sql_')) {
+					let sql_id = ctrl.sql_exe.sql_exe.split(':sql_')[1].split(' ')[0]
+					console.log(2, sql_id, ctrl.sql_exe.sql_exe)
+					ctrl.sql_exe.read_select3(sql_id)
+				}
+			},
+			params: { sql: 'SELECT value FROM string WHERE string_id='+ sql_id }
+		})
+	}
+
 	ctrl.sql_exe.read_select2 = (sql_id) => {
 		let d = ctrl.eMap[sql_id]
 		ctrl.sql_exe.sp_sql_ids = {}
 		ctrl.sql_exe.rs2_id = sql_id
 		ctrl.sql_exe.sql = d.value_1_22
 		ctrl.sql_exe.sql_exe = d.value_1_22
-		console.log(sql_id, 0)
 		rw2.readAll_element({fn2ForEach: fn2ForEach, params: { doc_id: sql_id } })
+		console.log('ctrl.sql_exe.read_select2', sql_id, d)
 		if (!d.value_1_22) 
 			return
 		console.log(sql_id, 1, ctrl.sql_exe.sql, d)
@@ -1258,23 +1330,6 @@ var initSqlExe = function($timeout){
 			}
 		})
 
-		const getCol = (e, pEl, prefix0) => {
-			let col = '', prefix = pEl.value_1_22
-			if(prefix0) prefix = prefix0
-			if ( 372189  == e.reference) {//SELECT.cols.value
-				col += 'value '+prefix+'_value'
-			} else if (371969 == e.reference) {//SELECT.cols.parent
-				col += 'parent '+prefix+'_p'
-			} else if (371970 == e.reference) {//SELECT.cols.reference
-				col += 'reference '+prefix+'_r'
-			} else if (371971 == e.reference) {//SELECT.cols.reference2
-				col += 'reference2 '+prefix+'_r2'
-			} else if (372188 == e.reference) {//SELECT.cols.doc_id
-				col += 'doc_id '+prefix+'_id'
-			}
-			return col
-		}
-		
 		const setLeftJoin = (e) => {
 			let sql = '\n LEFT JOIN ', onAtt
 
@@ -1290,13 +1345,20 @@ var initSqlExe = function($timeout){
 				}
 			}
 			let cols = ''
+			
 			angular.forEach(e.children, (e1)=>{
+				console.log(e1.doc_id, e1.reference, ctrl.eMap[e1.reference])
 				if (371971 == e1.reference) {//SELECT.LEFT JOIN.reference2
 					onAtt = 'reference2'
-				}else
-				if (372181 == e1.reference) {//SELECT.LEFT JOIN
+				} else if (372181 == e1.reference) {//SELECT.LEFT JOIN
 					let sql2 = setLeftJoin(e1)
 					sql += sql2
+				} else if (!e1.reference && e1.reference2) {//SELECT.LEFT JOIN.ON doc_id=?
+					if (!ctrl.eMap[e1.reference2])
+						console.error(e1.reference2, 'is not element')
+					let col2 = getCol2(e1)
+					console.log(e1.reference2, col2)
+					cols += col2.split(' ')[1] + ' = doc_id '
 				}else{
 					let 
 					ljpEl	= ctrl.eMap[e.parent],
@@ -1309,10 +1371,7 @@ var initSqlExe = function($timeout){
 						cols += e.value_1_22 + '.' + col.split(' ')[1]+' = '
 					}
 					if (e1.reference2) {
-						let
-						r2El	= ctrl.eMap[e1.reference2],
-						rp2El	= ctrl.eMap[r2El.parent],
-						col2	= getCol(r2El, rp2El)
+						let col2 = getCol2(e1)
 						cols += col2.split(' ')[1]
 					}else{
 						cols += 'doc_id'

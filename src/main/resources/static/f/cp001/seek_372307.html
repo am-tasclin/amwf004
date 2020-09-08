@@ -1,0 +1,5 @@
+<div data-ng-repeat="e in ctrl.sql_exe.readList" class="w3-hover-shadow"
+    data-ng-class="{'w3-light-grey':ctrl.programControl.fromTo.from==e}" data-ng-click="ctrl.programControl.setFrom(e)">
+    <span class="w3-tiny"> {{e.doc_id}} </span>
+    <span ng-bind-html="ctrl.highlight(e.seektext, sk)"> </span>
+</div>
