@@ -2,8 +2,8 @@ app.controller('AppCtrl', function ($scope, $http, $timeout, $location) {
 	ctrl = this
 	ctrl.getURL = $location.$$absUrl;
 	initApp($scope, $http, $timeout)
-	ctrl.page_title = 'j2c:'
-	initJ2C($http)
+	ctrl.page_title = 'j2c:';
+	initJ2C($http);
 	ctrl.templateView = '';
 	ctrl.isDisabled = 'w3-disabled';
 	ctrl.isShow = false;
@@ -17,6 +17,7 @@ app.controller('AppCtrl', function ($scope, $http, $timeout, $location) {
 	ctrl.newConfigeratorModel = {};
 	ctrl.linkNewConfigurator = "";
 	(function () { ctrl.newConfigeratorModel.name = "New"; }());
+	
 	ctrl.getUrlWithParam = function (doc_id) {
 		var p = ctrl.getURL.split('?p=')[1];
 		return ctrl.getURL.replace(p, doc_id);
