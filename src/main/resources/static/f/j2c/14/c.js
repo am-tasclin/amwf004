@@ -85,9 +85,10 @@ app.controller('AppCtrl', function ($scope, $http, $timeout, $location) {
 		var so = {
 			dataAfterSave: function (response) {
 				if (response.data.update_0) {
-					var Parent = ctrl.eMap[e].parent;
-					var index = ctrl.eMap[Parent].children.indexOf(ctrl.eMap[e]);
-					ctrl.eMap[Parent].children.splice(index, 1);
+					var ParentId = ctrl.eMap[e].parent;
+					var index = ctrl.eMap[ParentId].children.indexOf(ctrl.eMap[e]);
+					ctrl.eMap[ParentId].children.splice(index, 1);
+					console.log(index);
 					// if(document.getElementById(e)){
 					// 	var elem=document.getElementById(e);
 					// 	elem.parentNode.removeChild(elem);
@@ -102,13 +103,18 @@ app.controller('AppCtrl', function ($scope, $http, $timeout, $location) {
 	ctrl.creatNewRootNodeInConfiguration = function (e) {
 		var so = {
 			dataAfterSave: function (response) {
-				console.log(response)
+				console.log(response);
 				var e = ctrl.eMap[ctrl.templateEditId];
 				var newE = response.data.list2[0];
 				ctrl.templateView = '';
 				ctrl.eMap[newE.doc_id] = newE;
-				console.log(e.children, newE)
-				e.children.push(newE)
+				console.log(e.children, newE);
+				if(e.children){
+				e.children.push(newE);
+				}else{
+					e.children=[];
+					e.children.push(newE);
+				}
 			}
 		}
 		console.log(ctrl.newElementObject)
