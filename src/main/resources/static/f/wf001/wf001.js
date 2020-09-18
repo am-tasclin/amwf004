@@ -171,10 +171,12 @@ class ReadWrite2 {
 					if (a.fnForEach) a.fnForEach(o)
 			}
 		}
+
 		this.write = (a) => {
 			this.http.post(this.url, a.params.data)
 				.then((response) => { a.then_fn(response) }, (response) => { a.error_fn(response) })
 		}
+
 		this.sql1 = (a) =>
 			this.http.get(this.url, { params: a.params })
 				.then((response) => a.fnThen(response))
