@@ -1,17 +1,14 @@
-<div
-		data-ng-repeat="c_task in ctrl.eMap[c_task_id].children  track by $index">
-	<span data-ng-repeat="c in [{e:c_task,p:c_task}] track by $index" 
-		  data-ng-include="'c_context_menu.html'"></span> <span
-		class="w3-hover-shadow" data-ng-click="ctrl.conf_menu_click(c_task)">
-		<span data-work-space="{{c_task.doc_id}}" id="{{c_task.doc_id}}">{{c_task.value_1_22}}</span>
-		{{!c_task.value_1_22&&c_task.r1value?'-'+c_task.r1value:''}} <span
-		data-ng-if="37==c_task.doctype"> <i class="fas fa-table"> </i>
-			Таб. частина
+<div data-ng-repeat="c_task in ctrl.eMap[c_task_id].children  track by $index">
+	<span data-ng-repeat="c in [{e:c_task,p:c_task}] track by $index" data-ng-include="'c_context_menu.html'"></span>
+	<span class="w3-hover-shadow" data-ng-click="ctrl.conf_menu_click(c_task)">
+		<span data-work-space="{{c_task.doc_id}}" id="{{c_task.doc_id}}"><span data-ng-if="37==c_task.doctype"> <i
+					class="fas fa-table"> </i>
+				Таб. частина
+			</span>{{c_task.value_1_22}}</span>
+		{{!c_task.value_1_22&&c_task.r1value?'-'+c_task.r1value:''}}
 	</span>
-	</span>
-	<div class="w3-container w3-border-left"
-		 data-ng-if="c_task.open_children">
-		<div data-ng-repeat="c_task_id in [c_task.doc_id] track by $index"
-			 data-ng-include="'/f/j2c/14/c2j_item.html'"></div>
+	<div class="w3-container w3-border-left" data-ng-if="c_task.open_children">
+		<div data-ng-repeat="c_task_id in [c_task.doc_id] track by $index" data-ng-include="'/f/j2c/14/c2j_item.html'">
+		</div>
 	</div>
 </div>

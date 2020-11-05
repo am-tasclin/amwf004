@@ -151,6 +151,10 @@ app.directive('workSpace', function () {
 				} else {
 					ctrl.templateView = '';
 				}
+				if(ctrl.eMap[ctrl.templateEditId].doctype==37){
+					ctrl.templateView='tableView';
+				}
+				
 			})
 		}
 	}
