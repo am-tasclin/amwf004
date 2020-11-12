@@ -15,7 +15,10 @@
         </div>
         <div class="w3-col m6 16 w3-padding-small">
             <div class="w3-row w3-padding-small"><label class="w3-col m5 15">Підпорядкований</label><select>
-                    <option>(Не підпорядковано)</option>
+                    <option data-ng-if="ctrl.selectedItemObject1.doctype==null">(Не підпорядковано)</option>
+                    <option data-ng-repeat="doc_type_value in ctrl.docTypeArr" >
+                        &lt;&lt;{{doc_type_value.doctype}}&gt;&gt;
+                    </option>
                     <option data-ng-repeat="item in ctrl.eMap[371831].children">
                         {{item.value_1_22}}
                     </option>

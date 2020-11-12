@@ -8,6 +8,7 @@ app.controller('AppCtrl', function ($scope, $http, $timeout, $location) {
 	ctrl.isDisabled = 'w3-disabled';
 	ctrl.isShow = false;
 	ctrl.isChangeSelectParent = false;
+	ctrl.isChangeSelecDocType = false;
 	ctrl.selectItemId;
 	ctrl.oldSelectItemParentId;
 	ctrl.oldSelectItemIndex;
@@ -16,8 +17,46 @@ app.controller('AppCtrl', function ($scope, $http, $timeout, $location) {
 	ctrl.newElementObject;
 	ctrl.newConfigeratorModel = {};
 	ctrl.linkNewConfigurator = "";
-	(function () { ctrl.newConfigeratorModel.name = "New"; }());
+	ctrl.docTypeArr = [];
+	ctrl.NameDocTypeFnRet;
+	(function () { 
+		ctrl.newConfigeratorModel.name = "New"; 
+		function docType_Name (){
+			this.docTypeName="";
+			this.getDocTypeName=function (doctype_id) {
+				let tempName="";
+				ctrl.docTypeArr.forEach(function (val, index, arr) 
+				{ 
+					if (val.doctype_id == doctype_id) 
+					{ 
+					tempName = val.doctype; 
+						} });
+						if(tempName==""){return null};
+						this.docTypeName = tempName;
+					return 	tempName;
+			}
+		};
+		ctrl.NameDocTypeFnRet=new docType_Name();
+	}());
 	
+	(ctrl.getDocTypeValueArr = () => {
+		var so = {
+			dataAfterSave: function (response) {
+				// console.log("doc_Type", response.data)
+				ctrl.docTypeArr = response.data.list0.filter(function (docType) {
+					if (docType.doctype_id == 1 || docType.doctype_id == 18 || docType.doctype_id == 22 || docType.doctype_id == 23 || docType.doctype_id == 24 || docType.doctype_id == 25 || docType.doctype_id == 26 || docType.doctype_id == 28 || docType.doctype_id == 29 || docType.doctype_id == 32) {
+						return docType;
+					}
+				});
+				// console.log("ctrl.docTypeArr", ctrl.docTypeArr)
+
+			}
+		}
+		so.sql = "SELECT * FROM doctype"
+		// console.log("doc_Type", so.sql)
+		writeSql(so)
+	})();
+
 	ctrl.getUrlWithParam = function (doc_id) {
 		var p = ctrl.getURL.split('?p=')[1];
 		return ctrl.getURL.replace(p, doc_id);
@@ -25,6 +64,7 @@ app.controller('AppCtrl', function ($scope, $http, $timeout, $location) {
 	ctrl.cancel = function () {
 		ctrl.templateView = '';
 		ctrl.isChangeSelectParent = false;
+		ctrl.isChangeSelecDocType = false;
 	}
 	ctrl.createNewConfigurator = () => {
 		var so = {
@@ -75,7 +115,8 @@ app.controller('AppCtrl', function ($scope, $http, $timeout, $location) {
 		}
 
 		so.sql = "UPDATE string SET value= '" + ctrl.selectedItemInConstructSettings.value_1_22 + "' WHERE string_id = " + ctrl.selectedItemInConstructSettings.doc_id + "; ";
-		if (ctrl.isChangeSelectParent) { so.sql += "UPDATE doc SET parent= '" + ctrl.selectedItemInConstructSettings.parent + "' WHERE doc_id = " + ctrl.selectedItemInConstructSettings.doc_id + "; "; }
+		if (ctrl.isChangeSelectParent) { so.sql += "UPDATE doc SET reference= '" + ctrl.selectedItemInConstructSettings.reference + "' WHERE doc_id = " + ctrl.selectedItemInConstructSettings.doc_id + "; "; }
+		if (ctrl.isChangeSelecDocType) { so.sql += "UPDATE doc SET doctype= '" + ctrl.selectedItemInConstructSettings.doctype + "' WHERE doc_id = " + ctrl.selectedItemInConstructSettings.doc_id + "; "; }
 		// so.sql += sql_app.SELECT_obj_with_i18n(':nextDbId1')
 		console.log(so.sql)
 		writeSql(so)
@@ -109,10 +150,10 @@ app.controller('AppCtrl', function ($scope, $http, $timeout, $location) {
 				ctrl.templateView = '';
 				ctrl.eMap[newE.doc_id] = newE;
 				console.log(e.children, newE);
-				if(e.children){
-				e.children.push(newE);
-				}else{
-					e.children=[];
+				if (e.children) {
+					e.children.push(newE);
+				} else {
+					e.children = [];
 					e.children.push(newE);
 				}
 			}
@@ -129,6 +170,8 @@ app.controller('AppCtrl', function ($scope, $http, $timeout, $location) {
 
 })
 
+
+ 
 app.directive('workSpace', function () {
 	return {
 		replace: true,
@@ -151,10 +194,10 @@ app.directive('workSpace', function () {
 				} else {
 					ctrl.templateView = '';
 				}
-				if(ctrl.eMap[ctrl.templateEditId].doctype==37){
-					ctrl.templateView='tableView';
+				if (ctrl.eMap[ctrl.templateEditId].doctype == 37) {
+					ctrl.templateView = 'tableView';
 				}
-				
+
 			})
 		}
 	}
@@ -169,6 +212,7 @@ app.directive('selectItem', function () {
 				ctrl.newElementObject = null;
 				ctrl.isDisabled = '';
 				ctrl.isChangeSelectParent = false;
+				ctrl.isChangeSelecDocType = false;
 				ctrl.selectItemId = attr.selectItem;
 				console.log(ctrl.selectItemId);
 				ctrl.selectedItemInConstructSettings = ctrl.eMap[ctrl.selectItemId];

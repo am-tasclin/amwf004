@@ -1,7 +1,7 @@
 <div class="w3-container ">
     <div class="w3-row">
     </div>
-    <div class="w3-row">Конструцтор ({{ctrl.eMap[ctrl.newElementObject.reference2].value_1_22}})</div>
+    <div class="w3-row">Конструктор ({{ctrl.eMap[ctrl.newElementObject.reference2].value_1_22}})</div>
     <div class="w3-row">
         <div class="w3-col m9 19">
             <div class="w3-bar">
@@ -15,8 +15,13 @@
                 <div> <label class="w3-col m5 15">Коментар</label> <input type="text" class="w3-col m7 17"></div>
                 <div> <label class="w3-col m5 15">Тип значення</label>
                     <select class="w3-col m7 17" 
-                    <!-- data-ng-model="ctrl.selectedItemInConstructSettings.parent"
-                    data-ng-change="ctrl.isChangeSelectParent=true"> -->
+                    data-ng-model="ctrl.selectedItemInConstructSettings.parent"
+                   data-ng-change="ctrl.isChangeSelectParent=true"> 
+                    <option data-ng-repeat="doc_type_value in ctrl.docTypeArr" 
+                    >
+                        &lt;&lt;{{doc_type_value.doctype}}&gt;&gt;
+                    </option>
+                </select>
                         <!-- <option data-ng-value="ctrl.selectedItemInConstructSettings.doc_id"></option>
                         <option
                         data-ng-if="childrenOfParentParent.reference2 == 371833"   
@@ -24,7 +29,7 @@
                         data-ng-value="childrenOfParentParent.doc_id">
                             {{childrenOfParentParent.value_1_22}}
                         </option> -->
-                    </select>
+                    
                 </div>
             </div>
             <div id="additional" class="w3-container content" style="display:none"></div>
