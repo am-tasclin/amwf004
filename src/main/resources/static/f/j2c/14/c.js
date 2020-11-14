@@ -19,6 +19,7 @@ app.controller('AppCtrl', function ($scope, $http, $timeout, $location) {
 	ctrl.linkNewConfigurator = "";
 	ctrl.docTypeArr = [];
 	ctrl.NameDocTypeFnRet;
+	ctrl.arrDoc_idAndNameForSelect=[];
 	(function () { 
 		ctrl.newConfigeratorModel.name = "New"; 
 		function docType_Name (){
@@ -56,7 +57,61 @@ app.controller('AppCtrl', function ($scope, $http, $timeout, $location) {
 		// console.log("doc_Type", so.sql)
 		writeSql(so)
 	})();
-
+   
+	ctrl.getArrName=function(selectdNode){
+		var arr=ctrl.eMap[ctrl.eMap[selectdNode.parent].parent].children;
+		var reference2=ctrl.eMap[selectdNode.parent].reference2;
+		var thisDoc_id=selectdNode.doc_id;
+		var p = ctrl.getURL.split('?p=')[1];
+		let array=[];
+		arr=arr.map(element=>{
+			if(element.parent==p&&element.reference2==reference2){
+				return element
+			}
+		})
+		arr.forEach(function(val,index,arr){
+			if(val){
+				array.push({doc_id:val.doc_id,
+							name:val.value_1_22})
+			
+			if(val.cnt_child && !val.children ){
+				read_element_children(val.doc_id, function(){
+					val.children.forEach(element => {
+						if(element.doc_id!=thisDoc_id){
+							array.push({doc_id:element.doc_id,
+								name:val.value_1_22+"."+element.value_1_22});
+						}
+					});
+					});
+					
+			}else if(val.children){
+				val.children.forEach(element => {
+					if(element.doc_id!=thisDoc_id){
+						array.push({doc_id:element.doc_id,
+							name:val.value_1_22+"."+element.value_1_22});
+					}
+				});
+			};
+		    }
+		})
+		array.sort(function(a,b){
+			var first,second;
+			first=a.name.replace('.','');
+			second=b.name.replace('.','');
+			console.log(first);
+			console.log(second);
+			
+			if (first > second) {
+				return 1;
+			  }
+			  if (first < second) {
+				return -1;
+			  }
+			  // a должно быть равным b
+			  return 0;
+		});
+		ctrl.arrDoc_idAndNameForSelect=array;
+	}
 	ctrl.getUrlWithParam = function (doc_id) {
 		var p = ctrl.getURL.split('?p=')[1];
 		return ctrl.getURL.replace(p, doc_id);
@@ -105,10 +160,7 @@ app.controller('AppCtrl', function ($scope, $http, $timeout, $location) {
 		var so = {
 			dataAfterSave: function (response) {
 				if (response.data.update_1) {
-					var oldParent = ctrl.eMap[ctrl.oldSelectItemParentId];
 					var newParent = ctrl.eMap[ctrl.selectedItemInConstructSettings.parent];
-					oldParent.children.splice(ctrl.oldSelectItemIndex, 1);
-					newParent.children.push(ctrl.selectedItemInConstructSettings);
 					newParent.children.sort();
 				}
 			}
@@ -146,7 +198,7 @@ app.controller('AppCtrl', function ($scope, $http, $timeout, $location) {
 			dataAfterSave: function (response) {
 				console.log(response);
 				var e = ctrl.eMap[ctrl.templateEditId];
-				var newE = response.data.list2[0];
+				var newE = response.data.list3[0];
 				ctrl.templateView = '';
 				ctrl.eMap[newE.doc_id] = newE;
 				console.log(e.children, newE);
@@ -159,13 +211,18 @@ app.controller('AppCtrl', function ($scope, $http, $timeout, $location) {
 			}
 		}
 		console.log(ctrl.newElementObject)
-		let ref = ctrl.newElementObject.refEl.reference2
+		let ref = ctrl.newElementObject.refEl.reference2;
 		so.sql = "INSERT INTO doc (doc_id, parent,reference,reference2) VALUES (:nextDbId1, "
-			+ ctrl.newElementObject.parent + "," + ref + "," + ctrl.newElementObject.reference2 + " ); "
-		so.sql += "INSERT INTO string (string_id, value) VALUES (:nextDbId1, '" + ctrl.newElementObject.value_1_22 + "' ); "
-		so.sql += sql_app.SELECT_obj_with_i18n(':nextDbId1')
-		console.log(ctrl.templateEditId, so.sql)
-		writeSql(so)
+			+ ctrl.newElementObject.parent + "," + ref + "," + ctrl.newElementObject.reference2 + " ); ";
+		if (ctrl.isChangeSelecDocType) { so.sql += "UPDATE doc SET doctype= '" 
+			+ ctrl.newElementObject.doctype + "' WHERE doc_id = :nextDbId1" + "; "; }
+		else if(!ctrl.isChangeSelecDocType){
+			so.sql += "UPDATE doc SET doctype = NULL WHERE doc_id = :nextDbId1" + "; ";
+			}
+		so.sql += "INSERT INTO string (string_id, value) VALUES (:nextDbId1, '" + ctrl.newElementObject.value_1_22 + "' ); ";
+		so.sql += sql_app.SELECT_obj_with_i18n(':nextDbId1');
+		console.log(ctrl.templateEditId, so.sql);
+		writeSql(so);
 	}
 
 })
@@ -194,10 +251,11 @@ app.directive('workSpace', function () {
 				} else {
 					ctrl.templateView = '';
 				}
-				if (ctrl.eMap[ctrl.templateEditId].doctype == 37) {
-					ctrl.templateView = 'tableView';
-				}
-
+				// if (ctrl.eMap[ctrl.templateEditId].doctype == 37) {
+				// 	ctrl.templateView = 'tableView';
+				// }
+				var p = ctrl.getURL.split('?p=')[1];
+				if(ctrl.selectedItemObject1.parent!=p){ctrl.templateView = '';}
 			})
 		}
 	}
@@ -241,11 +299,12 @@ app.directive('newElement', function () {
 				ctrl.templateEditId = attr.newElement;
 				ctrl.selectedItemInConstructSettings = null;
 				ctrl.newElementObject = {};
+				ctrl.newElementObject.doctype=null;
 				ctrl.newElementObject.value_1_22 = "Новий";
 				ctrl.newElementObject.parent = p;
 				ctrl.newElementObject.reference2 = attr.newElement;
 				ctrl.newElementObject.r2value = ctrl.eMap[attr.newElement].value_1_22;
-				console.log(ctrl.eMap[attr.newElement].doc_id);
+				console.log(ctrl.newElementObject);
 				ctrl.newElementObject.refEl
 
 				angular.forEach(ctrl.eMap[372091].children, (e) => {//Element
@@ -263,4 +322,15 @@ app.directive('newElement', function () {
 			})
 		}
 	}
+})
+
+app.directive('initFunc', function (){
+return {
+	priority: Number.MIN_SAFE_INTEGER,
+	restrict: 'A',
+	link: function($scope, $element, $attributes) {
+		$scope.$eval($attributes.initFunc); 
+	}
+	
+}
 })

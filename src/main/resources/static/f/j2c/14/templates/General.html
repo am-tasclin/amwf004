@@ -1,7 +1,7 @@
 <div class="w3-container ">
     <div class="w3-row">
     </div>
-    <div class="w3-row">Конструктор general</div>
+    <div class="w3-row">Конструктор ({{ctrl.eMap[ctrl.selectedItemInConstructSettings.parent].value_1_22}})</div>
     <div class="w3-row">
         <div class="w3-col m9 19">
             <div class="w3-bar">
@@ -30,41 +30,21 @@
                 <div>
                     <label class="w3-col m5 15">Підпорядкований</label>
                     <select class="w3-col m7 17" 
+                    data-init-func="ctrl.getArrName(ctrl.selectedItemInConstructSettings)"
                     data-ng-model="ctrl.selectedItemInConstructSettings.reference"
                     data-ng-value="{{ctrl.selectedItemInConstructSettings.reference}}"
                     data-ng-change="ctrl.isChangeSelectParent=true">
                     <option data-ng-value="null">
                         &lt;&lt;Невизначений&gt;&gt;
                     </option>
+
                     <option style="overflow: hidden;"
-                    data-ng-if="childrenOfParentParent.reference2 == 371833"
-                    data-ng-repeat="childrenOfParentParent in ctrl.eMap[ctrl.eMap[ctrl.selectedItemInConstructSettings.parent].parent].children "
+                    data-ng-repeat="childrenOfParentParent in ctrl.arrDoc_idAndNameForSelect"
                     data-ng-value="childrenOfParentParent.doc_id">
-                    {{childrenOfParentParent.value_1_22}}
+                    {{childrenOfParentParent.name}}
                     </option>
                     </select>
                 </div>
-                <!-- <div><label class="w3-col m5 15">Підпорядкований</label>
-                    <select class="w3-col m7 17" data-ng-model="ctrl.selectedItemInConstructSettings.reference"
-                    data-ng-change="ctrl.isChangeSelectParent=true">
-                    <option data-ng-if="!ctrl.selectedItemInConstructSettings.reference"
-                    data-ng-value="null">
-                    &lt;&lt;Не підпорядкований&lt;&lt;
-                </option>
-                    <option data-ng-if="ctrl.selectedItemInConstructSettings.reference"
-                    data-ng-value="ctrl.selectedItemInConstructSettings.reference">
-                {{ctrl.eMap[ctrl.selectedItemInConstructSettings.reference].value_1_22}}
-                </option>
-
-                    
-                    <option style="overflow: hidden;"
-                    data-ng-if="childrenOfParentParent.reference2 == 371833"
-                    data-ng-repeat="childrenOfParentParent in ctrl.eMap[ctrl.eMap[ctrl.selectedItemInConstructSettings.parent].parent].children "
-                    data-ng-value="childrenOfParentParent.doc_id"
-                    >
-                    {{childrenOfParentParent.value_1_22}}
-                    </option>
-                </div> -->
             </div>
             <div id="additional" class="w3-container content" style="display:none"></div>
             <div id="rights" class="w3-container content" style="display:none"></div>
