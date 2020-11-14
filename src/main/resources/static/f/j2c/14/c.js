@@ -8,6 +8,7 @@ app.controller('AppCtrl', function ($scope, $http, $timeout, $location) {
 	ctrl.isDisabled = 'w3-disabled';
 	ctrl.isShow = false;
 	ctrl.isChangeSelectParent = false;
+	ctrl.isChangeSelecDocType = false;
 	ctrl.selectItemId;
 	ctrl.oldSelectItemParentId;
 	ctrl.oldSelectItemIndex;
@@ -16,8 +17,101 @@ app.controller('AppCtrl', function ($scope, $http, $timeout, $location) {
 	ctrl.newElementObject;
 	ctrl.newConfigeratorModel = {};
 	ctrl.linkNewConfigurator = "";
-	(function () { ctrl.newConfigeratorModel.name = "New"; }());
+	ctrl.docTypeArr = [];
+	ctrl.NameDocTypeFnRet;
+	ctrl.arrDoc_idAndNameForSelect=[];
+	(function () { 
+		ctrl.newConfigeratorModel.name = "New"; 
+		function docType_Name (){
+			this.docTypeName="";
+			this.getDocTypeName=function (doctype_id) {
+				let tempName="";
+				ctrl.docTypeArr.forEach(function (val, index, arr) 
+				{ 
+					if (val.doctype_id == doctype_id) 
+					{ 
+					tempName = val.doctype; 
+						} });
+						if(tempName==""){return null};
+						this.docTypeName = tempName;
+					return 	tempName;
+			}
+		};
+		ctrl.NameDocTypeFnRet=new docType_Name();
+	}());
 	
+	(ctrl.getDocTypeValueArr = () => {
+		var so = {
+			dataAfterSave: function (response) {
+				// console.log("doc_Type", response.data)
+				ctrl.docTypeArr = response.data.list0.filter(function (docType) {
+					if (docType.doctype_id == 1 || docType.doctype_id == 18 || docType.doctype_id == 22 || docType.doctype_id == 23 || docType.doctype_id == 24 || docType.doctype_id == 25 || docType.doctype_id == 26 || docType.doctype_id == 28 || docType.doctype_id == 29 || docType.doctype_id == 32) {
+						return docType;
+					}
+				});
+				// console.log("ctrl.docTypeArr", ctrl.docTypeArr)
+
+			}
+		}
+		so.sql = "SELECT * FROM doctype"
+		// console.log("doc_Type", so.sql)
+		writeSql(so)
+	})();
+   
+	ctrl.getArrName=function(selectdNode){
+		var arr=ctrl.eMap[ctrl.eMap[selectdNode.parent].parent].children;
+		var reference2=ctrl.eMap[selectdNode.parent].reference2;
+		var thisDoc_id=selectdNode.doc_id;
+		var p = ctrl.getURL.split('?p=')[1];
+		let array=[];
+		arr=arr.map(element=>{
+			if(element.parent==p&&element.reference2==reference2){
+				return element
+			}
+		})
+		arr.forEach(function(val,index,arr){
+			if(val){
+				array.push({doc_id:val.doc_id,
+							name:val.value_1_22})
+			
+			if(val.cnt_child && !val.children ){
+				read_element_children(val.doc_id, function(){
+					val.children.forEach(element => {
+						if(element.doc_id!=thisDoc_id){
+							array.push({doc_id:element.doc_id,
+								name:val.value_1_22+"."+element.value_1_22});
+						}
+					});
+					});
+					
+			}else if(val.children){
+				val.children.forEach(element => {
+					if(element.doc_id!=thisDoc_id){
+						array.push({doc_id:element.doc_id,
+							name:val.value_1_22+"."+element.value_1_22});
+					}
+				});
+			};
+		    }
+		})
+		array.sort(function(a,b){
+			var first,second;
+			first=a.name.replace('.','');
+			second=b.name.replace('.','');
+			console.log(first);
+			console.log(second);
+			
+			if (first > second) {
+				return 1;
+			  }
+			  if (first < second) {
+				return -1;
+			  }
+			  // a должно быть равным b
+			  return 0;
+		});
+		ctrl.arrDoc_idAndNameForSelect=array;
+	}
 	ctrl.getUrlWithParam = function (doc_id) {
 		var p = ctrl.getURL.split('?p=')[1];
 		return ctrl.getURL.replace(p, doc_id);
@@ -25,6 +119,7 @@ app.controller('AppCtrl', function ($scope, $http, $timeout, $location) {
 	ctrl.cancel = function () {
 		ctrl.templateView = '';
 		ctrl.isChangeSelectParent = false;
+		ctrl.isChangeSelecDocType = false;
 	}
 	ctrl.createNewConfigurator = () => {
 		var so = {
@@ -65,17 +160,15 @@ app.controller('AppCtrl', function ($scope, $http, $timeout, $location) {
 		var so = {
 			dataAfterSave: function (response) {
 				if (response.data.update_1) {
-					var oldParent = ctrl.eMap[ctrl.oldSelectItemParentId];
 					var newParent = ctrl.eMap[ctrl.selectedItemInConstructSettings.parent];
-					oldParent.children.splice(ctrl.oldSelectItemIndex, 1);
-					newParent.children.push(ctrl.selectedItemInConstructSettings);
 					newParent.children.sort();
 				}
 			}
 		}
 
 		so.sql = "UPDATE string SET value= '" + ctrl.selectedItemInConstructSettings.value_1_22 + "' WHERE string_id = " + ctrl.selectedItemInConstructSettings.doc_id + "; ";
-		if (ctrl.isChangeSelectParent) { so.sql += "UPDATE doc SET parent= '" + ctrl.selectedItemInConstructSettings.parent + "' WHERE doc_id = " + ctrl.selectedItemInConstructSettings.doc_id + "; "; }
+		if (ctrl.isChangeSelectParent) { so.sql += "UPDATE doc SET reference= '" + ctrl.selectedItemInConstructSettings.reference + "' WHERE doc_id = " + ctrl.selectedItemInConstructSettings.doc_id + "; "; }
+		if (ctrl.isChangeSelecDocType) { so.sql += "UPDATE doc SET doctype= '" + ctrl.selectedItemInConstructSettings.doctype + "' WHERE doc_id = " + ctrl.selectedItemInConstructSettings.doc_id + "; "; }
 		// so.sql += sql_app.SELECT_obj_with_i18n(':nextDbId1')
 		console.log(so.sql)
 		writeSql(so)
@@ -105,30 +198,37 @@ app.controller('AppCtrl', function ($scope, $http, $timeout, $location) {
 			dataAfterSave: function (response) {
 				console.log(response);
 				var e = ctrl.eMap[ctrl.templateEditId];
-				var newE = response.data.list2[0];
+				var newE = response.data.list3[0];
 				ctrl.templateView = '';
 				ctrl.eMap[newE.doc_id] = newE;
 				console.log(e.children, newE);
-				if(e.children){
-				e.children.push(newE);
-				}else{
-					e.children=[];
+				if (e.children) {
+					e.children.push(newE);
+				} else {
+					e.children = [];
 					e.children.push(newE);
 				}
 			}
 		}
 		console.log(ctrl.newElementObject)
-		let ref = ctrl.newElementObject.refEl.reference2
+		let ref = ctrl.newElementObject.refEl.reference2;
 		so.sql = "INSERT INTO doc (doc_id, parent,reference,reference2) VALUES (:nextDbId1, "
-			+ ctrl.newElementObject.parent + "," + ref + "," + ctrl.newElementObject.reference2 + " ); "
-		so.sql += "INSERT INTO string (string_id, value) VALUES (:nextDbId1, '" + ctrl.newElementObject.value_1_22 + "' ); "
-		so.sql += sql_app.SELECT_obj_with_i18n(':nextDbId1')
-		console.log(ctrl.templateEditId, so.sql)
-		writeSql(so)
+			+ ctrl.newElementObject.parent + "," + ref + "," + ctrl.newElementObject.reference2 + " ); ";
+		if (ctrl.isChangeSelecDocType) { so.sql += "UPDATE doc SET doctype= '" 
+			+ ctrl.newElementObject.doctype + "' WHERE doc_id = :nextDbId1" + "; "; }
+		else if(!ctrl.isChangeSelecDocType){
+			so.sql += "UPDATE doc SET doctype = NULL WHERE doc_id = :nextDbId1" + "; ";
+			}
+		so.sql += "INSERT INTO string (string_id, value) VALUES (:nextDbId1, '" + ctrl.newElementObject.value_1_22 + "' ); ";
+		so.sql += sql_app.SELECT_obj_with_i18n(':nextDbId1');
+		console.log(ctrl.templateEditId, so.sql);
+		writeSql(so);
 	}
 
 })
 
+
+ 
 app.directive('workSpace', function () {
 	return {
 		replace: true,
@@ -151,6 +251,11 @@ app.directive('workSpace', function () {
 				} else {
 					ctrl.templateView = '';
 				}
+				// if (ctrl.eMap[ctrl.templateEditId].doctype == 37) {
+				// 	ctrl.templateView = 'tableView';
+				// }
+				var p = ctrl.getURL.split('?p=')[1];
+				if(ctrl.selectedItemObject1.parent!=p){ctrl.templateView = '';}
 			})
 		}
 	}
@@ -165,6 +270,7 @@ app.directive('selectItem', function () {
 				ctrl.newElementObject = null;
 				ctrl.isDisabled = '';
 				ctrl.isChangeSelectParent = false;
+				ctrl.isChangeSelecDocType = false;
 				ctrl.selectItemId = attr.selectItem;
 				console.log(ctrl.selectItemId);
 				ctrl.selectedItemInConstructSettings = ctrl.eMap[ctrl.selectItemId];
@@ -193,11 +299,12 @@ app.directive('newElement', function () {
 				ctrl.templateEditId = attr.newElement;
 				ctrl.selectedItemInConstructSettings = null;
 				ctrl.newElementObject = {};
+				ctrl.newElementObject.doctype=null;
 				ctrl.newElementObject.value_1_22 = "Новий";
 				ctrl.newElementObject.parent = p;
 				ctrl.newElementObject.reference2 = attr.newElement;
 				ctrl.newElementObject.r2value = ctrl.eMap[attr.newElement].value_1_22;
-				console.log(ctrl.eMap[attr.newElement].doc_id);
+				console.log(ctrl.newElementObject);
 				ctrl.newElementObject.refEl
 
 				angular.forEach(ctrl.eMap[372091].children, (e) => {//Element
@@ -215,4 +322,15 @@ app.directive('newElement', function () {
 			})
 		}
 	}
+})
+
+app.directive('initFunc', function (){
+return {
+	priority: Number.MIN_SAFE_INTEGER,
+	restrict: 'A',
+	link: function($scope, $element, $attributes) {
+		$scope.$eval($attributes.initFunc); 
+	}
+	
+}
 })

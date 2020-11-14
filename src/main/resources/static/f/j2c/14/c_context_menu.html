@@ -15,7 +15,7 @@
 		</div>
 		<div data-ng-if="c.e.parent!=371831">
 			<div data-ng-if="c.e.parent!=c.p.doc_id">
-				<div class="w3-btn" data-ng-click="ctrl.removeSelectedNode(c.e.doc_id);">
+				<div data-ng-if="c.e.parent" class="w3-btn" data-ng-click="ctrl.removeSelectedNode(c.e.doc_id);">
 					<i class="far fa-file"></i> Видалити ({{c.e.value_1_22}})
 				</div>
 			</div>

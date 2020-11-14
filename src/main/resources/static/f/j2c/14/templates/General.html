@@ -1,7 +1,7 @@
 <div class="w3-container ">
     <div class="w3-row">
     </div>
-    <div class="w3-row">Конструцтор </div>
+    <div class="w3-row">Конструктор ({{ctrl.eMap[ctrl.selectedItemInConstructSettings.parent].value_1_22}})</div>
     <div class="w3-row">
         <div class="w3-col m9 19">
             <div class="w3-bar">
@@ -14,15 +14,35 @@
                 <div> <label class="w3-col m5 15">Синонім</label> <input type="text" class="w3-col m7 17"></div>
                 <div> <label class="w3-col m5 15">Коментар</label> <input type="text" class="w3-col m7 17"></div>
                 <div> <label class="w3-col m5 15">Тип значення</label>
-                    <select class="w3-col m7 17" data-ng-model="ctrl.selectedItemInConstructSettings.parent"
+                    <select class="w3-col m7 17" 
+                    data-ng-model="ctrl.selectedItemInConstructSettings.doctype"
+                    data-ng-change="ctrl.isChangeSelecDocType=true;"
+                    data-ng-value="{{ctrl.NameDocTypeFnRet.getDocTypeName(ctrl.selectedItemInConstructSettings.doctype)}}">
+                    <option data-ng-value="null">
+                        &lt;&lt;Невизначений&gt;&gt;
+                    </option>
+                <option data-ng-repeat="doc_type_value in ctrl.docTypeArr" 
+                data-ng-value="doc_type_value.doctype_id">
+                    &lt;&lt;{{doc_type_value.doctype}}&gt;&gt;
+                </option>
+                    </select>
+                </div>
+                <div>
+                    <label class="w3-col m5 15">Підпорядкований</label>
+                    <select class="w3-col m7 17" 
+                    data-init-func="ctrl.getArrName(ctrl.selectedItemInConstructSettings)"
+                    data-ng-model="ctrl.selectedItemInConstructSettings.reference"
+                    data-ng-value="{{ctrl.selectedItemInConstructSettings.reference}}"
                     data-ng-change="ctrl.isChangeSelectParent=true">
-                        <option data-ng-value="ctrl.selectedItemInConstructSettings.doc_id"></option>
-                        <option
-                        data-ng-if="childrenOfParentParent.reference2 == 371833"   
-                        data-ng-repeat="childrenOfParentParent in ctrl.eMap[ctrl.eMap[ctrl.selectedItemInConstructSettings.parent].parent].children"
-                        data-ng-value="childrenOfParentParent.doc_id">
-                            {{childrenOfParentParent.value_1_22}}
-                        </option>
+                    <option data-ng-value="null">
+                        &lt;&lt;Невизначений&gt;&gt;
+                    </option>
+
+                    <option style="overflow: hidden;"
+                    data-ng-repeat="childrenOfParentParent in ctrl.arrDoc_idAndNameForSelect"
+                    data-ng-value="childrenOfParentParent.doc_id">
+                    {{childrenOfParentParent.name}}
+                    </option>
                     </select>
                 </div>
             </div>
