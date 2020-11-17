@@ -39,6 +39,7 @@ var initJ2C = function ($http) {
 				var newE = response.data.list2[0]
 				ctrl.selectItemId=newE.doc_id;
 				ctrl.selectedItemInConstructSettings=newE;
+				ctrl.getArrName(ctrl.selectedItemInConstructSettings);
 		console.log(e.children, newE)
 		if(!e.children){
 			e.children=new Array();
