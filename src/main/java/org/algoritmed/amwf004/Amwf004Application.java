@@ -12,4 +12,8 @@ public class Amwf004Application {
 		SpringApplication.run(Amwf004Application.class, args);
 	}
 
+	// @Autowired NamedParameterJdbcTemplate db1ParamJdbcTemplat;
+	// @Bean
+	// public ExecuteSqlBlock db1ExecuteSqlBlock = new ExecuteSqlBlock(db1JdbcTemplate, db1ParamJdbcTemplate);
+
 }
