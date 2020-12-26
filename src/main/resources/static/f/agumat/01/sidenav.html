@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="uk-UA">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/webjars/font-awesome/5.15.1/css/all.min.css">
+<link rel="stylesheet" href="/f/css/w3.css" type="text/css">
+<link rel="stylesheet" href="/f/css/am.css" type="text/css">
+<link rel="stylesheet" href="sidenav.css" type="text/css">
+<link rel="stylesheet" href="/webjars/angular-material/1.2.1/angular-material.css" type="text/css">
+<link rel="shortcut icon" href="/f/img/algoritmed.ico" type="image/x-icon">
+<script src="/webjars/angular/1.8.2/angular.min.js" type="application/javascript"></script>
+<script src="/webjars/angular-animate/1.8.2/angular-animate.min.js" type="application/javascript"></script>
+<script src="/webjars/angular-aria/1.8.2/angular-aria.min.js" type="application/javascript"></script>
+<script src="/webjars/angular-messages/1.8.2/angular-messages.min.js" type="application/javascript"></script>
+<script src="/webjars/angular-material/1.2.1/angular-material.min.js" type="application/javascript"></script>
+<script src="sidenav.js" type="application/javascript"></script>
+
+<body ng-app="MyApp" layout="row" ng-cloak>
+
+    <md-sidenav layout="column" class="sidenav1" md-is-locked-open='true'>
+        SideNav
+    </md-sidenav>
+
+    <md-content flex layout="column">
+        <ng-view>
+            View Content
+        </ng-view>
+    </md-content>
+</body>
+
+</html>

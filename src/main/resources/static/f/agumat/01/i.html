@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html data-ng-app="myApp" lang="uk-UA">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/webjars/font-awesome/5.15.1/css/all.min.css">
+    <link rel="stylesheet" href="/f/css/w3.css" type="text/css">
+    <link rel="stylesheet" href="/f/css/am.css" type="text/css">
+    <link rel="stylesheet" href="/webjars/angular-material/1.2.1/angular-material.css" type="text/css">
+    <link rel="shortcut icon" href="/f/img/algoritmed.ico" type="image/x-icon">
+    <script src="/webjars/angular/1.8.2/angular.min.js" type="application/javascript"></script>
+    <script src="/webjars/angular-animate/1.8.2/angular-animate.min.js" type="application/javascript"></script>
+    <script src="/webjars/angular-aria/1.8.2/angular-aria.min.js" type="application/javascript"></script>
+    <script src="/webjars/angular-messages/1.8.2/angular-messages.min.js" type="application/javascript"></script>
+    <script src="/webjars/angular-material/1.2.1/angular-material.min.js" type="application/javascript"></script>
+    <script src="i.js" type="application/javascript"></script>
+</head>
+
+<body>
+    <div class="w3-container am-max-width-1">
+        <div data-ng-include="'h.html'"></div>
+        <div class="w3-white">
+            <div>
+                <a href="sidenav.html">sidenav</a>
+                | <a href="insideDialog.html">insideDialog</a>
+            </div>
+            <div data-ng-include="'floatingLabel.html'"></div>
+            <div data-ng-include="'ott3b.html'"></div>
+            <div data-ng-include="'p01.card.html'" data-ng-controller="AppCtrl as ctrl_p01"></div>
+            &nbsp;
+        </div>
+
+    </div>
+</body>
+
+</html>

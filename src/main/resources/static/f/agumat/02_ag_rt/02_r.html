@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="/webjars/angular/1.8.2/angular.min.js" type="application/javascript"></script>
+    <script src="/webjars/angular-route/1.8.2/angular-route.min.js" type="application/javascript"></script>
+</head>
+
+<body>
+    <div ng-app="">
+        a1
+    </div>
+    <div ng-app="myApp">
+        <p><a href="#/!">Main</a></p>
+        <a href="#!red">Red</a>
+        <a href="#!green">Green</a>
+        <a href="#!blue">Blue</a>
+        <div ng-view></div>
+    </div>
+
+    <script>
+        var app = angular.module("myApp", ["ngRoute"]);
+        app.config(function ($routeProvider) {
+            $routeProvider
+                .when("/", {
+                    templateUrl: "02main.html"
+                })
+                .when("/red", {
+                    templateUrl: "02red.html"
+                })
+                .when("/green", {
+                    templateUrl: "green.htm"
+                })
+                .when("/blue", {
+                    templateUrl: "blue.htm"
+                });
+        });
+    </script>
+
+    <p>Click on the links to navigate to "red.htm", "green.htm", "blue.htm", or back to "main.htm"</p>
+</body>
+
+</html>
