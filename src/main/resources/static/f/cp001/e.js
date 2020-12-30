@@ -4,8 +4,8 @@ app.controller('AppCtrl', class {
         initApp($scope, $http, $timeout)
         ctrl.page_title = 'CarePlanEdit001:'
         rw2 = new ReadWrite2($http, $timeout)
-        initCarePlan001()
         initSqlExe($timeout)
+        initCarePlan001()
         ctrl.seek_template_list = [372146, 372307]
     }
 })
@@ -31,7 +31,7 @@ findElement = (e) => {
 initCarePlan001 = ($timeout) => {
     ctrl.programControl = {}
     ctrl.programControl.openDialogName
-
+    
     ctrl.programControl.fromToDo = ()=>{
         console.log(ctrl.programControl.fromTo, ctrl.programControl.selectedParentEl)
     }

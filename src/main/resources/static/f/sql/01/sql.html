@@ -1,0 +1,19 @@
+<div>
+    sql.html {{x}}
+    <div style="height:400px; overflow:auto;" class="w3-border">
+        <table data-ng-init="c={doc_id:{name:'id'},value:{name:'sql'}}">
+            <thead>
+                <tr>
+                    <th data-ng-repeat="(k,v) in c">
+                        {{v.name}}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="r in data.list" class="w3-hover-shadow">
+                    <td data-ng-repeat="(k,v) in c">{{r[k]}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

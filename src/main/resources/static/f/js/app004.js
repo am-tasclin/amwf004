@@ -146,11 +146,12 @@ function Exe_fn($http){
 			$http.post(progr_am.url, progr_am.data)
 			.then(progr_am.then_fn)
 	}
-	this.httpGet_j2c_table_db1_params_then_fn = function(params, then_fn){ return {
-		url : '/r/url_sql_read_db1',
-		params : params,
-		then_fn : then_fn,
-		error_fn : params.error_fn,
+	this.httpGet_j2c_table_db1_params_then_fn = function (params, then_fn) {
+		return {
+			url: '/r/url_sql_read_db1',
+			params: params,
+			then_fn: then_fn,
+			error_fn: params.error_fn,
 	}	}
 
 }

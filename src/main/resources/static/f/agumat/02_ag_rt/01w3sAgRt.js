@@ -1,3 +1,5 @@
+var rtApp = angular.module("rtApp", ["ngRoute"]);
+// rtApp.config(RouteProviderConfig)
 class RouteProviderConfig {
     constructor($routeProvider) {
         console.log(2, $routeProvider)
@@ -10,7 +12,9 @@ class RouteProviderConfig {
         })
     }
 }
+rtApp.config(RouteProviderConfig)
 
+// rtApp.controller("NamesController", NamesController)
 class NamesController {
     constructor() {
         var nc = this
@@ -21,8 +25,7 @@ class NamesController {
         }]
     }
 }
-
-var rtApp = angular.module("rtApp", ["ngRoute"]);
-console.log(1, rtApp)
-rtApp.config(RouteProviderConfig)
 rtApp.controller("NamesController", NamesController)
+
+console.log(1, rtApp)
+console.log(2, window.localStorage)
