@@ -87,7 +87,7 @@ sql_app.select_i18n_all= function(left_join_ref, i18n_parent){
 	return sql
 }
 
-sql_app.obj_with_i18n = function(){
+sql_app.obj_with_i18n = () => {
 //	", s1.value value_1_22, s1.string_id id_1_22, i1.value value_1_23, i1.integer_id id_1_23, f1.value value_1_24, f1.double_id id_1_24 \n" +
 	var sql = "SELECT d1.*, dr1.doctype doctype_r \n" +
 	", s1.value value_1_22, i1.value value_1_23, f1.value value_1_24 , ts1.value value_1_25, dt1.value value_1_26 \n" +

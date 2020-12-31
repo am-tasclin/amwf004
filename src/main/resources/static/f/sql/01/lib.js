@@ -6,47 +6,75 @@ function TreeFactory(dataFactory, $q) {
         readDocument: function (doc_id) {
 
         },
-        readElement: function (el_id) {
+        readElement: (el_id) => {
             console.log(el_id, !d.elMap[el_id])
-            var deferred = $q.defer()
+            let deferred = $q.defer()
             if (d.elMap[el_id]) deferred.resolve(d.elMap[el_id])
             else {
-                var sql1 = sql_app.SELECT_obj_with_i18n(el_id)
+                let sql1 = sql_app.SELECT_obj_with_i18n(el_id)
                 dataFactory.httpGet({ sql: sql1 })
-                    .then(function (data) {
-                        var el = data.list[0]
+                    .then((data) => {
+                        let el = data.list[0]
                         d.elMap[el.doc_id] = el
                         deferred.resolve(d.elMap[el.doc_id])
                     })
             }
             return deferred.promise
         },
-        readChildrenDeep: function (parent_id, deep) {
-            console.log(deep, deep > 0, parent_id)
-            if (deep > 0)
-                this.readChildrenDeep(1, --deep)
+        readChildrenDeep: function (parent_ids, deep) {
+            console.log(deep, deep > 0, parent_ids)
+            if (deep > 0) {
+                this.readListChildren(parent_ids)
+                    .then((data) => {
+                        console.log(data)
+                        this.readChildrenDeep(data, --deep)
+                    })
+            }
+        },
+        readListChildren: function (parent_ids) {
+            let deferred = $q.defer()
+            let sql1 = sql_app.SELECT_parentsList_with_i18n(parent_ids)
+            // console.log(parent_ids, sql1)
+            let setChildrenEl = this.setChildrenEl
+            dataFactory.httpGet({ sql: sql1 })
+                .then((data) => {
+                    let children = setChildrenEl(data)
+                    // console.log(data, children)
+                    deferred.resolve(children)
+                })
+            return deferred.promise
+            angular.forEach(parent_ids, function (parent_id) {
+                readListChildren(parent_id)
+            })
         },
         readChildren: function (parent_id) {
-            var deferred = $q.defer()
+            let deferred = $q.defer()
             if (d.clList[parent_id]) deferred.resolve(d.clList[parent_id])
             else {
-                var sql1 = sql_app.SELECT_children_with_i18n(parent_id)
+                let sql1 = sql_app.SELECT_children_with_i18n(parent_id)
                 // console.log(parent_id, d, sql1)
+                let setChildrenEl = this.setChildrenEl
                 dataFactory.httpGet({ sql: sql1 })
-                    .then(function (data) {
-                        angular.forEach(data.list, function (el) {
-                            d.elMap[el.doc_id] = el
-                            if (!d.clList[parent_id])
-                                d.clList[parent_id] = []
-                            d.clList[parent_id].push(el.doc_id)
-                        })
+                    .then((data) => {
+                        setChildrenEl(data)
                         deferred.resolve(d.clList[parent_id])
                     })
             }
             return deferred.promise
         },
+        setChildrenEl: (data) => {
+            let children = []
+            angular.forEach(data.list, (el) => {
+                d.elMap[el.doc_id] = el
+                if (!d.clList[el.parent]) d.clList[el.parent] = []
+                d.clList[el.parent].push(el.doc_id)
+                children.push(el.doc_id)
+            })
+            return children
+        },
     }
 }
+
 // app.factory("dataFactory", DataFactory)
 function DataFactory($http, $q) {
     return {
@@ -67,7 +95,7 @@ function DataFactory($http, $q) {
 }
 
 const sql_app = {}
-sql_app.obj_with_i18n = function () {
+sql_app.obj_with_i18n = () => {
     //	", s1.value value_1_22, s1.string_id id_1_22, i1.value value_1_23, i1.integer_id id_1_23, f1.value value_1_24, f1.double_id id_1_24 \n" +
     var sql = "SELECT d1.*, dr1.doctype doctype_r \n\
         , s1.value value_1_22, i1.value value_1_23, f1.value value_1_24 \n\
@@ -90,7 +118,7 @@ sql_app.obj_with_i18n = function () {
     return sql
 }
 
-sql_app.select_i18n_all = function (left_join_ref, i18n_parent) {
+sql_app.select_i18n_all = (left_join_ref, i18n_parent) => {
     var sql = "SELECT reference i18n_ref, doc_id i18n_id, value i18n \n\
 	FROM (SELECT d2.* FROM doc d1, doc d2 where d2.parent=d1.doc_id and d1.reference=285596) d \n\
 	LEFT JOIN string s1 ON s1.string_id=doc_id "
@@ -109,6 +137,15 @@ sql_app.SELECT_children_with_i18n = (parent_id) => {
         "WHERE d1.parent = :parent " +
         "ORDER BY sort "
     sql = sql.replace(':parent', parent_id)
+    //	console.log(sql)
+    return sql
+}
+
+sql_app.SELECT_parentsList_with_i18n = (parentsList) => {
+    var sql = sql_app.obj_with_i18n() +
+        "WHERE d1.parent IN (:parentsList) " +
+        "ORDER BY sort "
+    sql = sql.replace(':parentsList', parentsList)
     //	console.log(sql)
     return sql
 }

@@ -1,4 +1,7 @@
 var app = angular.module("app", ['ngRoute']);
+app.factory("treeFactory", TreeFactory)
+app.factory("dataFactory", DataFactory)
+
 const read_doc_id = 369927
 const conf = {
     singlePagesUrl: {
@@ -14,21 +17,22 @@ const conf = {
     }
 }
 
-app.factory("treeFactory", TreeFactory)
 
 // app.controller("CarePlan001Controller", CarePlan001Controller)
 class CarePlan001Controller {
     constructor($scope, treeFactory) {
-        treeFactory.readChildrenDeep(read_doc_id, 2)
         treeFactory.readElement(read_doc_id)
-            .then(function (el) {
+            .then((el) => {
+                treeFactory.readChildrenDeep([el.doc_id], 3)
+                return
                 treeFactory.readChildren(el.doc_id)
-                .then(function(children_ids){
-                    angular.forEach(children_ids, function(parent_id){
-                        console.log(parent_id)
-                        treeFactory.readChildren(parent_id)
+                    .then((children_ids) => {
+                        angular.forEach(children_ids, (parent_id) => {
+                            console.log(parent_id)
+                            treeFactory.readChildren(parent_id)
+                        })
                     })
-                })
+
             })
     }
 }
@@ -52,8 +56,6 @@ class FirstController {
 }
 app.controller("FirstController", FirstController)
 
-app.factory("dataFactory", DataFactory)
-
 const sql1 = 'SELECT * FROM doc \n\
 LEFT JOIN string ON string_id=doc_id \n\
 WHERE 371327 IN (reference2)'
@@ -64,7 +66,7 @@ class SqlController {
         console.log(dataFactory)
         if (!$scope.data) {
             dataFactory.httpGet({ sql: sql1 })
-                .then(function (data) {
+                .then((data) => {
                     $scope.data = data
                     console.log(1, data)
                 })
