@@ -21,21 +21,29 @@ const conf = {
 // app.controller("CarePlan001Controller", CarePlan001Controller)
 class CarePlan001Controller {
     constructor($scope, treeFactory) {
+        $scope.d = d
+        $scope.read_doc_id = read_doc_id
+        conf.extraReadIds = [368794]
+        conf.readExtra = function (el) {
+            if(conf.extraReadIds.indexOf(el.reference)>=0){
+                console.log(el.doc_id, el.reference, conf.extraReadIds.indexOf(el.reference))
+            }
+        }
         treeFactory.readElement(read_doc_id)
-            .then((el) => {
-                treeFactory.readChildrenDeep([el.doc_id], 3)
-                return
-                treeFactory.readChildren(el.doc_id)
-                    .then((children_ids) => {
-                        angular.forEach(children_ids, (parent_id) => {
-                            console.log(parent_id)
-                            treeFactory.readChildren(parent_id)
-                        })
-                    })
-
-            })
+            .then((el) => treeFactory.readChildrenDeep([el.doc_id], 3))
     }
 }
+/**
+ * 
+ return
+ treeFactory.readChildren(el.doc_id)
+     .then((children_ids) => {
+         angular.forEach(children_ids, (parent_id) => {
+             console.log(parent_id)
+             treeFactory.readChildren(parent_id)
+         })
+     })
+*/
 app.controller("CarePlan001Controller", CarePlan001Controller)
 
 // app.config(RouteProviderConfig)

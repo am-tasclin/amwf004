@@ -1,3 +1,12 @@
 <div>
     carePlan001
+    <div>
+        <div data-ng-repeat="id in [read_doc_id]" data-ng-include="'el.html'"></div>
+        <div data-ng-repeat="id in d.clList[read_doc_id]" class="w3-container">
+            <div data-ng-include="'el.html'"></div>
+            <div data-ng-repeat="id in d.clList[id]" class="w3-container">
+                <div data-ng-include="'el.html'"></div>
+            </div>
+        </div>
+    </div>
 </div>
