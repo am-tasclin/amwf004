@@ -23,10 +23,15 @@ class CarePlan001Controller {
     constructor($scope, treeFactory) {
         $scope.d = d
         $scope.read_doc_id = read_doc_id
-        conf.extraReadIds = [368794]
-        conf.readExtra = function (el) {
-            if(conf.extraReadIds.indexOf(el.reference)>=0){
+        conf.extraReadIds = [
+            368794, // CarePlan.activity.plannedActivityReference
+        ]
+        conf.readExtra = (el) => {
+            if (conf.extraReadIds.indexOf(el.reference) >= 0) {
                 console.log(el.doc_id, el.reference, conf.extraReadIds.indexOf(el.reference))
+                console.log(el.reference2,)
+                treeFactory.readElement(el.reference2)
+                    .then((el) => treeFactory.readChildrenDeep([el.doc_id], 3))
             }
         }
         treeFactory.readElement(read_doc_id)
@@ -64,22 +69,38 @@ class FirstController {
 }
 app.controller("FirstController", FirstController)
 
-const sql1 = 'SELECT * FROM doc \n\
-LEFT JOIN string ON string_id=doc_id \n\
-WHERE 371327 IN (reference2)'
+sql_app.simpleSQLs = [
+    {
+        n: 'SQL from DB',
+        c: 'SELECT doc_id, value sql_select FROM doc \n\
+    LEFT JOIN string ON string_id=doc_id \n\
+    WHERE 371327 IN (reference2)'
+    },
+    {
+        n: 'FHIR.DomainResource',
+        c: 'SELECT value FHIR_DomainResource, d.* FROM doc d \n\
+    LEFT JOIN string ON string_id=doc_id \n\
+    WHERE 369789 in (reference)'
+    },
+]
 
 // app.controller("SqlController", SqlController)
 class SqlController {
     constructor($scope, dataFactory) {
-        console.log(dataFactory)
-        if (!$scope.data) {
-            dataFactory.httpGet({ sql: sql1 })
-                .then((data) => {
-                    $scope.data = data
-                    console.log(1, data)
+        let readSql = (sqlN) => {
+            $scope.simpleSQLselect = sqlN
+            console.log(sqlN, sql_app.simpleSQLs[sqlN].c)
+            dataFactory.httpGet({ sql: sql_app.simpleSQLs[sqlN].c })
+                .then((dataSqlRequest) => {
+                    $scope.data = dataSqlRequest
+                    console.log(1, dataSqlRequest)
                 })
+
         }
-        $scope.x = 2
+        $scope.readSql = readSql
+        $scope.simpleSQLs = sql_app.simpleSQLs
+        $scope.simpleSQLselect = 1
+        if (!$scope.data) readSql($scope.simpleSQLselect)
     }
 }
 app.controller("SqlController", SqlController)
