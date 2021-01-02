@@ -1,12 +1,10 @@
-<p data-ng-switch-when="p">
-    {{d.elMap[id].value_1_22}}
+<p data-ng-switch-when="p" data-ng-bind-html="markdownInLine(d.elMap[id].value_1_22)">
 </p>
 <h2 data-ng-switch-when="h2">
     {{d.elMap[id].value_1_22}}
 </h2>
 <ol data-ng-switch-when="ol">
-    <li data-ng-repeat="id in d.clList[id]">
-        {{d.elMap[id].value_1_22}}
+    <li data-ng-repeat="id in d.clList[id]" data-ng-bind-html="markdownInLine(d.elMap[id].value_1_22)"></li>
     </li>
 </ol>
 <div data-ng-switch-default>

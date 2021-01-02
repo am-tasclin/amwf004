@@ -1,4 +1,4 @@
-var app = angular.module("app", ['ngRoute']);
+var app = angular.module("app", ['ngRoute','ngSanitize']);
 app.factory("treeFactory", TreeFactory)
 app.factory("dataFactory", DataFactory)
 
@@ -26,6 +26,7 @@ class Wiki001Controller {
     constructor($scope, treeFactory) {
         console.log(read_wiki_id)
         $scope.d = d
+        $scope.markdownInLine = markdownInLine
         $scope.read_wiki_id = read_wiki_id
         treeFactory.readElement(read_wiki_id)
             .then((el) => treeFactory.readChildrenDeep([el.doc_id], 3))
