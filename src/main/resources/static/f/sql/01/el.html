@@ -1,14 +1,16 @@
-<div data-ng-repeat="id in [id]" data-ng-init="el=d.elMap[id]" class="w3-hover-shadow">
+<div class="w3-hover-shadow">
     {{id}}
     <span class="w3-small am-b">
         {{d.elMap[id].r1value}}{{d.elMap[id].r1value?':':''}}
     </span>
     {{d.elMap[id].value_1_22}}
-    {{d.elMap[id].r2value||d.elMap[el.reference2].r2value?'::':''}}{{d.elMap[el.reference2].r2value}}{{d.elMap[id].r2value}}
+    {{d.elMap[id].r2value||d.elMap[el.reference2].r2value?'::':''
+    }}{{d.elMap[d.elMap[id].reference2].r2value}}{{d.elMap[id].r2value}}
     <span class="w3-tiny w3-right">
-        {{el.reference?'r ':''}}{{el.reference}}:{{el.reference2?'rr ':''}}{{el.reference2}}
+        {{d.elMap[id].reference?'r ':''}}{{d.elMap[id].reference}}:{{d.elMap[id].reference2?'rr
+        ':''}}{{d.elMap[id].reference2}}
     </span>
-    <div data-ng-repeat="id in d.clList[el.reference2]" class="w3-container">
+    <div data-ng-repeat="id in d.clList[d.elMap[id].reference2]" class="w3-container">
         <div data-ng-include="'el.html'"></div>
     </div>
 </div>

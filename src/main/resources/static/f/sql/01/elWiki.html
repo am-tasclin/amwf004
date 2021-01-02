@@ -1,0 +1,20 @@
+<p data-ng-switch-when="p">
+    {{d.elMap[id].value_1_22}}
+</p>
+<h2 data-ng-switch-when="h2">
+    {{d.elMap[id].value_1_22}}
+</h2>
+<ol data-ng-switch-when="ol">
+    <li data-ng-repeat="id in d.clList[id]">
+        {{d.elMap[id].value_1_22}}
+    </li>
+</ol>
+<div data-ng-switch-default>
+    {{id}}
+    {{d.elMap[id].value_1_22}}
+</div>
+<div data-ng-if="'ol|p'.indexOf(d.elMap[id].r1value)<0">
+    <div id="_{{id}}" data-ng-repeat="id in d.clList[id]" data-ng-switch="d.elMap[id].r1value"
+        data-ng-include="'elWiki.html'">
+    </div>
+</div>

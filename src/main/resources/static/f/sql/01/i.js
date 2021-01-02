@@ -2,7 +2,6 @@ var app = angular.module("app", ['ngRoute']);
 app.factory("treeFactory", TreeFactory)
 app.factory("dataFactory", DataFactory)
 
-const read_doc_id = 369927
 const conf = {
     singlePagesUrl: {
         'sql': {
@@ -13,11 +12,28 @@ const conf = {
             templateUrl: 'carePlan001.html',
             controller: 'CarePlan001Controller'
         },
-        'wiki': { templateUrl: 'wiki.html' },
+        'wiki': {
+            templateUrl: 'wiki.html',
+            controller: 'Wiki001Controller'
+        },
     }
 }
 
 
+const read_wiki_id = 371357
+// app.controller("Wiki001Controller", Wiki001Controller)
+class Wiki001Controller {
+    constructor($scope, treeFactory) {
+        console.log(read_wiki_id)
+        $scope.d = d
+        $scope.read_wiki_id = read_wiki_id
+        treeFactory.readElement(read_wiki_id)
+            .then((el) => treeFactory.readChildrenDeep([el.doc_id], 3))
+    }
+}
+app.controller("Wiki001Controller", Wiki001Controller)
+
+const read_doc_id = 369927
 // app.controller("CarePlan001Controller", CarePlan001Controller)
 class CarePlan001Controller {
     constructor($scope, treeFactory) {
