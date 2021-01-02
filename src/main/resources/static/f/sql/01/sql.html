@@ -4,13 +4,13 @@
             <span class="w3-small">readSql:</span>
             <span class="am-b w3-small">{{simpleSQLs[simpleSQLselect].n}}</span>
         </button>
-        <div class="w3-dropdown-content w3-card" style="width: 400px;">
+        <div class="w3-dropdown-content w3-card" style="width: 600px;">
             <pre data-ng-repeat="sql in simpleSQLs" class="w3-hover-shadow  w3-small" data-ng-click="readSql($index)">
 <strong>{{sql.n}}</strong>: {{sql.c}}
             </pre>
         </div>
     </div>
-    <div style="height:400px; overflow:auto;" class="w3-border">
+    <div style="height:88vh; overflow:auto;" class="w3-border">
         <table>
             <thead class="w3-blue-gray w3-small">
                 <tr>
