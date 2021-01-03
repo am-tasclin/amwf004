@@ -78,6 +78,9 @@ class RouteProviderConfig {
         angular.forEach(conf.singlePagesUrl, (v, k) => {
             $routeProvider.when("/" + k, v)
         })
+        $routeProvider.otherwise({
+            redirectTo: '/wiki'
+        })
     }
 }
 app.config(RouteProviderConfig)

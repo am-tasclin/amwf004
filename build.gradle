@@ -26,6 +26,7 @@ dependencies {
 	runtimeOnly 'org.webjars.npm:angular-animate:1.8.2'
 	runtimeOnly 'org.webjars.npm:angular-aria:1.8.2'
 	runtimeOnly 'org.webjars.npm:angular-route:1.8.2'
+	runtimeOnly 'org.webjars.npm:angular-resource:1.8.2'
 	runtimeOnly 'org.webjars.npm:angular-messages:1.8.2'
 	runtimeOnly 'org.webjars.npm:angular-sanitize:1.8.2'
 	runtimeOnly 'org.webjars.npm:angular-material:1.2.1'

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 
 @Controller
-@RequestMapping("/r/adn")
+@RequestMapping("r/adn")
 public class AbstractDataNodeRest {
     protected static final Logger logger = LoggerFactory.getLogger(AbstractDataNodeRest.class);
     protected @Autowired @Qualifier("db1AbstractDataNode") AbstractDataNode abstractDataNode;

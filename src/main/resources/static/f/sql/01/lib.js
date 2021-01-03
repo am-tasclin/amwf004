@@ -3,7 +3,7 @@ const d = { elMap: {}, clList: {} }
 // app.factory("treeFactory", TreeFactory)
 function TreeFactory(dataFactory, $q) {
     return {
-        dataFactory:dataFactory,
+        dataFactory: dataFactory,
         readDocument: function (doc_id) {
 
         },
@@ -99,10 +99,14 @@ function DataFactory($http, $q) {
         },
         httpGetRest: function (url) {
             var deferred = $q.defer()
-            console.log(url,1)
+            console.log(url, 1)
             $http.get(url)
-                .then(function success(response) {
+                .then((response) => {
                     deferred.resolve(response.data)
+                }, (response) => {
+                    console.log(response.status)
+                    // deferred.reject(response.status)
+                    // https://metanit.com/web/angular/3.3.php
                 })
             return deferred.promise
         },
@@ -149,8 +153,8 @@ sql_app.SELECT_obj_with_i18n = (doc_id) => {
 
 sql_app.SELECT_children_with_i18n = (parent_id) => {
     var sql = sql_app.obj_with_i18n() +
-        "WHERE d1.parent = :parent " +
-        "ORDER BY sort "
+        "WHERE d1.parent = :parent \n\
+        ORDER BY sort "
     sql = sql.replace(':parent', parent_id)
     //	console.log(sql)
     return sql
@@ -158,8 +162,8 @@ sql_app.SELECT_children_with_i18n = (parent_id) => {
 
 sql_app.SELECT_parentsList_with_i18n = (parentsList) => {
     var sql = sql_app.obj_with_i18n() +
-        "WHERE d1.parent IN (:parentsList) " +
-        "ORDER BY sort "
+        "WHERE d1.parent IN (:parentsList) \n\
+        ORDER BY sort "
     sql = sql.replace(':parentsList', parentsList)
     //	console.log(sql)
     return sql
