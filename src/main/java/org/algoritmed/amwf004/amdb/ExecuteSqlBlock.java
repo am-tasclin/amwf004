@@ -16,14 +16,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class ExecuteSqlBlock {
+public class ExecuteSqlBlock extends DbCommon {
 	protected static final Logger logger = LoggerFactory.getLogger(ExecuteSqlBlock.class);
-	private NamedParameterJdbcTemplate dbParamJdbcTemplate;
-	private JdbcTemplate dbJdbcTemplate;
 
 	ExecuteSqlBlock(JdbcTemplate dbJdbcTemplate, NamedParameterJdbcTemplate dbParamJdbcTemplate) {
-		this.dbParamJdbcTemplate = dbParamJdbcTemplate;
-		this.dbJdbcTemplate = dbJdbcTemplate;
+		super(dbJdbcTemplate, dbParamJdbcTemplate);
 	}
 
 	// private Environment env;
@@ -36,7 +33,7 @@ public class ExecuteSqlBlock {
 	 * @return Наступний ID единий для всієй БД.
 	 */
 	protected Integer nextDbId() {
-		String sql_nextDbId = env.getProperty("sql.nextDbId");
+		String sql_nextDbId = env.getProperty("sql_app.nextDbId");
 		Integer nextDbId = dbJdbcTemplate.queryForObject(sql_nextDbId, Integer.class);
 		return nextDbId;
 	}
@@ -122,9 +119,9 @@ public class ExecuteSqlBlock {
 
 		int i = 0;
 		for (String sql_command : sql.split(";")) {
-			System.err.println("--125-- i = "+i);
+			System.err.println("--125-- i = " + i);
 			String sql2 = sql_command.trim();
-			System.err.println("--127-- sql2 = "+sql2);
+			System.err.println("--127-- sql2 = " + sql2);
 			String first_word = sql2.split(" ")[0];
 			if ("SELECT".equals(first_word)) {
 				List<Map<String, Object>> list = dbParamJdbcTemplate.queryForList(sql2, data);

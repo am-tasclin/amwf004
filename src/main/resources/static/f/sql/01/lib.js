@@ -3,6 +3,7 @@ const d = { elMap: {}, clList: {} }
 // app.factory("treeFactory", TreeFactory)
 function TreeFactory(dataFactory, $q) {
     return {
+        dataFactory:dataFactory,
         readDocument: function (doc_id) {
 
         },
@@ -31,13 +32,13 @@ function TreeFactory(dataFactory, $q) {
             let deferred = $q.defer()
             let toReadChildren = []
             angular.forEach(parent_ids, (id) => {
-                if(d.clList[id]==null && d.elMap[id].cnt_child!=null){
+                if (d.clList[id] == null && d.elMap[id].cnt_child != null) {
                     toReadChildren.push(id)
                 }
             })
-            if(toReadChildren.length==0){
+            if (toReadChildren.length == 0) {
                 deferred.resolve(toReadChildren)
-            }else{
+            } else {
                 let sql1 = sql_app.SELECT_parentsList_with_i18n(parent_ids)
                 // console.log(parent_ids, sql1)
                 let setChildrenEl = this.setChildrenEl
@@ -95,7 +96,16 @@ function DataFactory($http, $q) {
                     // https://metanit.com/web/angular/3.3.php
                 })
             return deferred.promise
-        }
+        },
+        httpGetRest: function (url) {
+            var deferred = $q.defer()
+            console.log(url,1)
+            $http.get(url)
+                .then(function success(response) {
+                    deferred.resolve(response.data)
+                })
+            return deferred.promise
+        },
     }
 }
 
@@ -155,16 +165,16 @@ sql_app.SELECT_parentsList_with_i18n = (parentsList) => {
     return sql
 }
 
-var markdownInLine = function(text){
+var markdownInLine = function (text) {
     if (!text) return
-    var t2		= (''+text)
-    var bold	= /\u002A\u002A([\wа-яА-Яі\-]+[\s+[\wа-яА-Яі\-]*]*)\u002A\u002A/gmi;
-//		var bold	= /\u002A\u002A([\wа-яА-Яі\-]+\s*[\wа-яА-Яі\-]*)\u002A\u002A/gmi;
-    var t2		= t2.replace(bold, '<strong>$1</strong>');
-//		var bold = "\u002A\u002A([\wа-яА-Яі\-]+\s*[\wа-яА-Яі\-]*)\u002A\u002A";
-//		var t2 = (''+text).replace(new RegExp(bold, 'gi'), '<strong>$1</strong>');
-    var link	= /\[([^`]{1,40})\]\(([^`)]*)\)/gmi
-//			var link	= /\[([^`]*)\]\(([^`)]*)\)/gmi
-    var t2		= t2.replace(link, '<a href="$2">$1</a>');
+    var t2 = ('' + text)
+    var bold = /\u002A\u002A([\wа-яА-Яі\-]+[\s+[\wа-яА-Яі\-]*]*)\u002A\u002A/gmi;
+    //		var bold	= /\u002A\u002A([\wа-яА-Яі\-]+\s*[\wа-яА-Яі\-]*)\u002A\u002A/gmi;
+    var t2 = t2.replace(bold, '<strong>$1</strong>');
+    //		var bold = "\u002A\u002A([\wа-яА-Яі\-]+\s*[\wа-яА-Яі\-]*)\u002A\u002A";
+    //		var t2 = (''+text).replace(new RegExp(bold, 'gi'), '<strong>$1</strong>');
+    var link = /\[([^`]{1,40})\]\(([^`)]*)\)/gmi
+    //			var link	= /\[([^`]*)\]\(([^`)]*)\)/gmi
+    var t2 = t2.replace(link, '<a href="$2">$1</a>');
     return t2
 }

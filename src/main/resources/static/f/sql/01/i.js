@@ -1,4 +1,4 @@
-var app = angular.module("app", ['ngRoute','ngSanitize']);
+var app = angular.module("app", ['ngRoute', 'ngSanitize']);
 app.factory("treeFactory", TreeFactory)
 app.factory("dataFactory", DataFactory)
 
@@ -19,7 +19,6 @@ const conf = {
     }
 }
 
-
 const read_wiki_id = 371357
 // app.controller("Wiki001Controller", Wiki001Controller)
 class Wiki001Controller {
@@ -30,6 +29,11 @@ class Wiki001Controller {
         $scope.read_wiki_id = read_wiki_id
         treeFactory.readElement(read_wiki_id)
             .then((el) => treeFactory.readChildrenDeep([el.doc_id], 3))
+
+        treeFactory.dataFactory.httpGetRest('/r/adn/el/'+read_wiki_id)
+            .then((data) => {
+                console.log(data.doc_id, data.sqlName, data.list)
+            })
     }
 }
 app.controller("Wiki001Controller", Wiki001Controller)

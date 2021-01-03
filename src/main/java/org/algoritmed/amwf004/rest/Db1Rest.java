@@ -7,7 +7,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.algoritmed.amwf004.amdb.DbCommon;
 import org.algoritmed.amwf004.amdb.ExecuteSqlBlock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-public class Db1Rest extends DbCommon{
+public class Db1Rest{
 	protected static final Logger logger = LoggerFactory.getLogger(Db1Rest.class);
 	protected @Autowired @Qualifier("db1ExecuteSqlBlock")	ExecuteSqlBlock executeSqlBlock;
 
@@ -50,7 +49,7 @@ public class Db1Rest extends DbCommon{
 			@RequestParam(value = "sql", required = true) String sql
 			,HttpServletRequest request
 		) {
-		Map<String, Object> map = sqlParamToMap(request);
+		Map<String, Object> map = executeSqlBlock.sqlParamToMap(request);
 //		Map m = new HashMap();
 //		m.put("k", "v");
 //		m.put("sql", sql);
@@ -60,10 +59,11 @@ public class Db1Rest extends DbCommon{
 				+ " SQL = \n"+sql
 //				+ "\n" + data
 				);
-		List<Map<String, Object>> list = dbParamJdbcTemplate.queryForList(sql, map);
+		List<Map<String, Object>> list = executeSqlBlock.qForList(sql, map);
 		map.put("list", list);
 		return map;
 	}
+
 
 	@GetMapping("/r/html/{id}")
 	@ResponseBody
