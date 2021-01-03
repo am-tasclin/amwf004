@@ -6,6 +6,12 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
 
+	<bean id="db1AbstractDataNode"
+		class="org.algoritmed.amwf004.amdb.AbstractDataNode">
+		<constructor-arg ref="db1JdbcTemplate" />
+		<constructor-arg ref="db1ParamJdbcTemplate" />
+	</bean>
+
 	<bean id="db1ExecuteSqlBlock"
 		class="org.algoritmed.amwf004.amdb.ExecuteSqlBlock">
 		<constructor-arg ref="db1JdbcTemplate" />
