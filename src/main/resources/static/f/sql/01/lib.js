@@ -1,11 +1,42 @@
+// data collection
 const d = { elMap: {}, clList: {} }
 
 // app.factory("treeFactory", TreeFactory)
 function TreeFactory(dataFactory, $q) {
+    let setEl = (el) => {
+        d.elMap[el.doc_id] = el
+        return el
+    }
+    let setChildrenEl = (data) => {
+        let children = []
+        angular.forEach(data.list, (el) => {
+            setEl(el)
+            if (!d.clList[el.parent]) d.clList[el.parent] = []
+            d.clList[el.parent].push(el.doc_id)
+            children.push(el.doc_id)
+            if (conf.readExtra)
+                conf.readExtra(el)
+        })
+        return children
+    }
     return {
         dataFactory: dataFactory,
         readDocument: function (doc_id) {
 
+        },
+        readElementRest: (el_id) => {
+            console.log(el_id, !d.elMap[el_id])
+            let deferred = $q.defer()
+            if (d.elMap[el_id]) deferred.resolve(d.elMap[el_id])
+            else {
+                dataFactory.httpGetRest('/r/adn/el/' + el_id)
+                    .then((data) => {
+                        console.log(data.doc_id, data.sqlName, data.list)
+                        let el = setEl(data.list[0])
+                        deferred.resolve(d.elMap[el.doc_id])
+                    })
+            }
+            return deferred.promise
         },
         readElement: (el_id) => {
             console.log(el_id, !d.elMap[el_id])
@@ -15,18 +46,35 @@ function TreeFactory(dataFactory, $q) {
                 let sql1 = sql_app.SELECT_obj_with_i18n(el_id)
                 dataFactory.httpGet({ sql: sql1 })
                     .then((data) => {
-                        let el = data.list[0]
-                        d.elMap[el.doc_id] = el
+                        let el = setEl(data.list[0])
                         deferred.resolve(d.elMap[el.doc_id])
                     })
             }
             return deferred.promise
         },
         readChildrenDeep: function (parent_ids, deep) {
-            // console.log(deep, deep > 0, parent_ids)
-            if (deep > 0)
+            // console.log(deep, deep > 0, parent_ids, 1)
+            if (--deep > 0)
                 this.readListChildren(parent_ids)
-                    .then((new_parent_ids) => this.readChildrenDeep(new_parent_ids, --deep))
+                    .then((new_parent_ids) => this.readChildrenDeep(new_parent_ids, deep))
+        },
+        getListChildrenRest: (parent_ids, deferred) => {
+            dataFactory.httpGetRest('/r/adn/l/' + parent_ids)
+                .then((data) => {
+                    let children = setChildrenEl(data)
+                    // console.log(data, children)
+                    deferred.resolve(children)
+                })
+        },
+        getListChildrenSql: (parent_ids, deferred) => {
+            let sql1 = sql_app.SELECT_parentsList_with_i18n(parent_ids)
+            // console.log(parent_ids, sql1)
+            dataFactory.httpGet({ sql: sql1 })
+                .then((data) => {
+                    let children = setChildrenEl(data)
+                    // console.log(data, children)
+                    deferred.resolve(children)
+                })
         },
         readListChildren: function (parent_ids) {
             let deferred = $q.defer()
@@ -39,15 +87,8 @@ function TreeFactory(dataFactory, $q) {
             if (toReadChildren.length == 0) {
                 deferred.resolve(toReadChildren)
             } else {
-                let sql1 = sql_app.SELECT_parentsList_with_i18n(parent_ids)
-                // console.log(parent_ids, sql1)
-                let setChildrenEl = this.setChildrenEl
-                dataFactory.httpGet({ sql: sql1 })
-                    .then((data) => {
-                        let children = setChildrenEl(data)
-                        // console.log(data, children)
-                        deferred.resolve(children)
-                    })
+                console.log(conf.getListChildren)
+                this[conf.getListChildren](parent_ids, deferred)
             }
             return deferred.promise
         },
@@ -57,7 +98,6 @@ function TreeFactory(dataFactory, $q) {
             else {
                 let sql1 = sql_app.SELECT_children_with_i18n(parent_id)
                 // console.log(parent_id, d, sql1)
-                let setChildrenEl = this.setChildrenEl
                 dataFactory.httpGet({ sql: sql1 })
                     .then((data) => {
                         setChildrenEl(data)
@@ -66,18 +106,7 @@ function TreeFactory(dataFactory, $q) {
             }
             return deferred.promise
         },
-        setChildrenEl: (data) => {
-            let children = []
-            angular.forEach(data.list, (el) => {
-                d.elMap[el.doc_id] = el
-                if (!d.clList[el.parent]) d.clList[el.parent] = []
-                d.clList[el.parent].push(el.doc_id)
-                children.push(el.doc_id)
-                if (conf.readExtra)
-                    conf.readExtra(el)
-            })
-            return children
-        },
+
     }
 }
 

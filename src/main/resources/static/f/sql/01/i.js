@@ -12,6 +12,10 @@ const conf = {
             templateUrl: 'carePlan001.html',
             controller: 'CarePlan001Controller'
         },
+        'carePlan002Rest': {
+            templateUrl: 'carePlan001.html',
+            controller: 'CarePlan002RestController'
+        },
         'wiki': {
             templateUrl: 'wiki.html',
             controller: 'Wiki001Controller'
@@ -30,7 +34,7 @@ class Wiki001Controller {
         treeFactory.readElement(read_wiki_id)
             .then((el) => treeFactory.readChildrenDeep([el.doc_id], 3))
 
-        treeFactory.dataFactory.httpGetRest('/r/adn/el/'+read_wiki_id)
+        treeFactory.dataFactory.httpGetRest('/r/adn/el/' + read_wiki_id)
             .then((data) => {
                 console.log(data.doc_id, data.sqlName, data.list)
             })
@@ -40,13 +44,17 @@ app.controller("Wiki001Controller", Wiki001Controller)
 
 const read_doc_id = 369927
 // app.controller("CarePlan001Controller", CarePlan001Controller)
-class CarePlan001Controller {
-    constructor($scope, treeFactory) {
+class CarePlan000AbstractController {
+    constructor($scope) {
         $scope.d = d
         $scope.read_doc_id = read_doc_id
         conf.extraReadIds = [
             368794, // CarePlan.activity.plannedActivityReference
         ]
+    }
+    init($scope, treeFactory, ctrl) {
+        $scope.ctrl = ctrl
+        console.log($scope.ctrl.constructor.name, 1)
         conf.readExtra = (el) => {
             if (conf.extraReadIds.indexOf(el.reference) >= 0) {
                 console.log(el.doc_id, el.reference, conf.extraReadIds.indexOf(el.reference))
@@ -59,6 +67,26 @@ class CarePlan001Controller {
             .then((el) => treeFactory.readChildrenDeep([el.doc_id], 3))
     }
 }
+// app.controller("CarePlan002RestController", CarePlan002RestController)
+class CarePlan002RestController extends CarePlan000AbstractController {
+    constructor($scope, treeFactory) {
+        super($scope)
+        conf.getListChildren = 'getListChildrenRest'
+        this.init($scope, treeFactory, this)
+    }
+}
+app.controller("CarePlan002RestController", CarePlan002RestController)
+
+// app.controller("CarePlan001Controller", CarePlan001Controller)
+class CarePlan001Controller extends CarePlan000AbstractController {
+    constructor($scope, treeFactory) {
+        super($scope)
+        conf.getListChildren = 'getListChildrenSql'
+        this.init($scope, treeFactory, this)
+    }
+}
+app.controller("CarePlan001Controller", CarePlan001Controller)
+
 /**
  * 
  return
@@ -70,7 +98,6 @@ class CarePlan001Controller {
          })
      })
 */
-app.controller("CarePlan001Controller", CarePlan001Controller)
 
 // app.config(RouteProviderConfig)
 class RouteProviderConfig {
@@ -128,3 +155,4 @@ class SqlController {
     }
 }
 app.controller("SqlController", SqlController)
+
