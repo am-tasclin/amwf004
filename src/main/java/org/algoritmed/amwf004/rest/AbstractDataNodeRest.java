@@ -24,7 +24,7 @@ public class AbstractDataNodeRest {
     protected @Autowired @Qualifier("db1AbstractDataNode") AbstractDataNode abstractDataNode;
 
     @GetMapping("el/{doc_id}")
-    public @ResponseBody Map<String, Object> getElementById(@PathVariable Integer doc_id) {
+    public @ResponseBody Map<String, Object> getElementById(@PathVariable Long doc_id) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("doc_id", doc_id);
         abstractDataNode.exeQueryListFromSqlName("sql_app.SELECT_obj_with_i18n", map);
@@ -32,7 +32,7 @@ public class AbstractDataNodeRest {
     }
 
     @GetMapping("l/{parentsList}")
-    public @ResponseBody Map<String, Object> getListByParentIds(@PathVariable List<Integer> parentsList) {
+    public @ResponseBody Map<String, Object> getListByParentIds(@PathVariable List<Long> parentsList) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("parentsList", parentsList);
         abstractDataNode.exeQueryListFromSqlName("sql_app.SELECT_parentsList_with_i18n", map);
@@ -40,32 +40,49 @@ public class AbstractDataNodeRest {
     }
 
     @GetMapping("d/{doc_id}")
-    public @ResponseBody Map<String, Object> getListDeepByParentIds(@PathVariable Integer doc_id) {
+    public @ResponseBody Map<String, Object> getListDeepByParentIds(@PathVariable Long doc_id) {
         Map<String, Object> d = new HashMap<String, Object>();
-        d.put("elMap", new HashMap<Integer, Object>());
-        d.put("clList", new HashMap<Integer, Object>());
+        d.put("elMap", new HashMap<Long, Object>());
+        d.put("clList", new HashMap<Long, List<Long>>());
         d.put("doc_id", doc_id);
-        List<Integer> parentsList = readSqlName("sql_app.SELECT_obj_with_i18n", Map.of("doc_id", doc_id), d);
-        d.put("x1", parentsList);
-        List<Integer> parentsList2 = readSqlName("sql_app.SELECT_parentsList_with_i18n", Map.of("parentsList", parentsList),
-                d);
-        d.put("x2", parentsList2);
+        List<Long> parentsList1 = readSqlName("sql_app.SELECT_obj_with_i18n", Map.of("doc_id", doc_id), d);
+        d.put("parentsList1", parentsList1);
+        List<Long> parentsList2 = readSqlName("sql_app.SELECT_parentsList_with_i18n",
+                Map.of("parentsList", parentsList1), d);
+        d.put("parentsList2", parentsList2);
+        List<Long> parentsList3 = readSqlName("sql_app.SELECT_parentsList_with_i18n",
+                Map.of("parentsList", parentsList2), d);
+        d.put("parentsList3", parentsList3);
+        List<Long> parentsList4 = readSqlName("sql_app.SELECT_parentsList_with_i18n",
+                Map.of("parentsList", parentsList3), d);
+        d.put("parentsList4", parentsList4);
+        List<Long> parentsList5 = readSqlName("sql_app.SELECT_parentsList_with_i18n",
+                Map.of("parentsList", parentsList4), d);
+        d.put("parentsList5", parentsList5);
         return d;
     }
 
-    private List<Integer> readSqlName(String sqlName, Map<String, Object> mapParams, Map<String, Object> d) {
-        List<Integer> parentsList = new ArrayList<>();
+    private List<Long> readSqlName(String sqlName, Map<String, Object> mapParams, Map<String, Object> d) {
+        List<Long> parentsList = new ArrayList<>();
         abstractDataNode.sqlNameToDataList(sqlName, mapParams).forEach(setEl(d, parentsList));
         return parentsList;
     }
 
-    private Consumer<? super Map<String, Object>> setEl(Map<String, Object> d, List<Integer> parentsList) {
+    private Consumer<? super Map<String, Object>> setEl(Map<String, Object> d, List<Long> parentsList) {
         return el -> {
-            Integer docId = (Integer) el.get("doc_id");
-            parentsList.add(docId);
-            Map<Integer, Object> elMap = (Map<Integer, Object>) d.get("elMap");
-            elMap.put(docId, el);
-            Map<Integer, Object> clList = (Map<Integer, Object>) d.get("clList");
+            // Long docId = (Long) d.get("doc_id");
+            Long elDocId = (Long) el.get("doc_id");
+            parentsList.add(elDocId);
+            Map<Long, Object> elMap = (Map<Long, Object>) d.get("elMap");
+            elMap.put(elDocId, el);
+            Long parent = (Long) el.get("parent");
+            if (elMap.containsKey(parent)) {
+                Map<Long, Object> clList = (Map<Long, Object>) d.get("clList");
+                if (!clList.containsKey(parent))
+                    clList.put(parent, new ArrayList<Long>());
+                List<Long> parentChildren = (List<Long>) clList.get(parent);
+                parentChildren.add(elDocId);
+            }
         };
     }
 

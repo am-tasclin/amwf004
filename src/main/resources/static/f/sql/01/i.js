@@ -1,4 +1,5 @@
-var app = angular.module("app", ['ngRoute', 'ngSanitize']);
+'use strict';
+var app = angular.module("app", ['ngRoute', 'ngResource', 'ngSanitize']);
 app.factory("treeFactory", TreeFactory)
 app.factory("dataFactory", DataFactory)
 
@@ -20,24 +21,49 @@ const conf = {
             templateUrl: 'wiki.html',
             controller: 'Wiki001Controller'
         },
+        'wiki003Rest': {
+            templateUrl: 'wiki.html',
+            controller: 'Wiki003RestController'
+        },
     }
 }
 
 const read_wiki_id = 371357
-// app.controller("Wiki001Controller", Wiki001Controller)
-class Wiki001Controller {
-    constructor($scope, treeFactory) {
+class Wiki000AbstractController {
+    constructor($scope) {
         console.log(read_wiki_id)
+        conf.getListChildren = 'getListChildrenSql'
         $scope.d = d
         $scope.markdownInLine = markdownInLine
         $scope.read_wiki_id = read_wiki_id
-        treeFactory.readElement(read_wiki_id)
-            .then((el) => treeFactory.readChildrenDeep([el.doc_id], 3))
+    }
+}
 
-        treeFactory.dataFactory.httpGetRest('/r/adn/el/' + read_wiki_id)
+// app.controller("Wiki003RestController", Wiki003RestController)
+class Wiki003RestController extends Wiki000AbstractController {
+    constructor($scope, treeFactory) {
+        super($scope)
+        treeFactory.dataFactory.httpGetRest('/r/adn/d/' + read_wiki_id)
             .then((data) => {
-                console.log(data.doc_id, data.sqlName, data.list)
+                console.log(data.elMap, data.clList)
+                d.elMap = data.elMap
+                d.clList = data.clList
             })
+            let obj_a = {a:1}
+            let obj_b = {b:2}
+            console.log(obj_a, obj_b)
+            let obj_ab = angular.extend({c:3}, obj_a, obj_b)
+            console.log(obj_ab)
+    }
+}
+app.controller("Wiki003RestController", Wiki003RestController)
+// app.controller("Wiki001Controller", Wiki001Controller)
+class Wiki001Controller extends Wiki000AbstractController {
+    constructor($scope, treeFactory) {
+        super($scope)
+        treeFactory.readElement(read_wiki_id)
+            .then((el) => treeFactory.readChildrenDeep([el.doc_id], 4))
+
     }
 }
 app.controller("Wiki001Controller", Wiki001Controller)

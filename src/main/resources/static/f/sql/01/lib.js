@@ -1,3 +1,4 @@
+'use strict';
 // data collection
 const d = { elMap: {}, clList: {} }
 
