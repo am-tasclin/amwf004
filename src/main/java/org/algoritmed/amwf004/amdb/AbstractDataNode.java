@@ -13,14 +13,18 @@ public class AbstractDataNode extends DbCommon {
 
     AbstractDataNode(JdbcTemplate dbJdbcTemplate, NamedParameterJdbcTemplate dbParamJdbcTemplate) {
         super(dbJdbcTemplate, dbParamJdbcTemplate);
-        logger.info("16 - msg");
     }
-    
-    public void exeQueryForSqlName(String sqlName, Map<String, Object> map) {
+
+    public List<Map<String, Object>> sqlNameToDataList(String sqlName, Map<String, Object> mapParams) {
+        String sql = env.getProperty(sqlName);
+        return dbParamJdbcTemplate.queryForList(sql, mapParams);
+    }
+
+    public List<Map<String, Object>> exeQueryListFromSqlName(String sqlName, Map<String, Object> map) {
+        List<Map<String, Object>> list = sqlNameToDataList(sqlName, map);
         map.put("sqlName", sqlName);
-        String sql = getEnvProperty(sqlName);
-        List<Map<String, Object>> list = super.qForList(sql, map);
         map.put("list", list);
+        return list;
     }
 
 }

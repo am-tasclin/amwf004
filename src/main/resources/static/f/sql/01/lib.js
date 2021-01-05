@@ -31,7 +31,6 @@ function TreeFactory(dataFactory, $q) {
             else {
                 dataFactory.httpGetRest('/r/adn/el/' + el_id)
                     .then((data) => {
-                        console.log(data.doc_id, data.sqlName, data.list)
                         let el = setEl(data.list[0])
                         deferred.resolve(d.elMap[el.doc_id])
                     })
@@ -128,7 +127,7 @@ function DataFactory($http, $q) {
         },
         httpGetRest: function (url) {
             var deferred = $q.defer()
-            console.log(url, 1)
+            // console.log(url, 1)
             $http.get(url)
                 .then((response) => {
                     deferred.resolve(response.data)

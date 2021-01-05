@@ -59,19 +59,21 @@ class CarePlan000AbstractController {
             if (conf.extraReadIds.indexOf(el.reference) >= 0) {
                 console.log(el.doc_id, el.reference, conf.extraReadIds.indexOf(el.reference))
                 console.log(el.reference2,)
-                treeFactory.readElement(el.reference2)
+                treeFactory[conf.readElement](el.reference2)
                     .then((el) => treeFactory.readChildrenDeep([el.doc_id], 3))
             }
         }
-        treeFactory.readElement(read_doc_id)
+        treeFactory[conf.readElement](read_doc_id)
             .then((el) => treeFactory.readChildrenDeep([el.doc_id], 3))
     }
 }
+
 // app.controller("CarePlan002RestController", CarePlan002RestController)
 class CarePlan002RestController extends CarePlan000AbstractController {
     constructor($scope, treeFactory) {
         super($scope)
         conf.getListChildren = 'getListChildrenRest'
+        conf.readElement = 'readElementRest'
         this.init($scope, treeFactory, this)
     }
 }
@@ -82,6 +84,7 @@ class CarePlan001Controller extends CarePlan000AbstractController {
     constructor($scope, treeFactory) {
         super($scope)
         conf.getListChildren = 'getListChildrenSql'
+        conf.readElement = 'readElement'
         this.init($scope, treeFactory, this)
     }
 }
@@ -155,4 +158,3 @@ class SqlController {
     }
 }
 app.controller("SqlController", SqlController)
-
