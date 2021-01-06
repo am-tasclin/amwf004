@@ -20,7 +20,7 @@
     <div class="w3-container am-max-width-1" data-ng-controller="FirstController as ctrl_f">
         <div data-ng-include="'/f/agumat/01/h.html'"></div>
         <div>
-            <span data-ng-repeat="(u,v) in conf.singlePagesUrl">
+            <span data-ng-repeat="u in 'sql|carePlan001|carePlan002Rest|wiki|wiki003Rest'.split('|')">
                 {{$first?'':'|'}}
                 <a href="#!{{u}}">{{u}}</a>
             </span>

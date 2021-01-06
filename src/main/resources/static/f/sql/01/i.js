@@ -2,28 +2,38 @@
 var app = angular.module("app", ['ngRoute', 'ngResource', 'ngSanitize']);
 app.factory("treeFactory", TreeFactory)
 app.factory("dataFactory", DataFactory)
+app.factory("Wiki", Wiki)
+
 
 const conf = {
     singlePagesUrl: {
-        'sql': {
+        sql: {
             templateUrl: 'sql.html',
             controller: 'SqlController'
         },
-        'carePlan001': {
+        carePlan001: {
             templateUrl: 'carePlan001.html',
             controller: 'CarePlan001Controller'
         },
-        'carePlan002Rest': {
+        carePlan002Rest: {
             templateUrl: 'carePlan001.html',
             controller: 'CarePlan002RestController'
         },
-        'wiki': {
+        wiki: {
             templateUrl: 'wiki.html',
             controller: 'Wiki001Controller'
         },
-        'wiki003Rest': {
+        wiki003Rest: {
             templateUrl: 'wiki.html',
             controller: 'Wiki003RestController'
+        },
+        'wiki004Rest/:doc_id': {
+            templateUrl: 'wiki.html',
+            controller: 'Wiki004RestController'
+        },
+        'wiki005Rest/:doc_id': {
+            templateUrl: 'wiki.html',
+            controller: 'Wiki005RestController'
         },
     }
 }
@@ -31,29 +41,50 @@ const conf = {
 const read_wiki_id = 371357
 class Wiki000AbstractController {
     constructor($scope) {
-        console.log(read_wiki_id)
-        conf.getListChildren = 'getListChildrenSql'
+        console.log(read_wiki_id, 'start history')
         $scope.d = d
         $scope.markdownInLine = markdownInLine
         $scope.read_wiki_id = read_wiki_id
     }
+    setWiki = (data) => {
+        console.log(data.elMap, data.clList)
+        d.elMap = data.elMap
+        d.clList = data.clList
+    }
 }
+
+// app.controller("Wiki005RestController", Wiki005RestController)
+class Wiki005RestController extends Wiki000AbstractController {
+    constructor($scope, $routeParams, $resource, Wiki) {
+        super($scope)
+        $scope.read_wiki_id = $routeParams.doc_id
+        console.log($scope.read_wiki_id)
+        Wiki.get({ doc_id: $scope.read_wiki_id }).$ikipromise.then(this.setWiki);
+    }
+}
+app.controller("Wiki005RestController", Wiki005RestController)
+
+// app.controller("Wiki004RestController", Wiki004RestController)
+class Wiki004RestController extends Wiki000AbstractController {
+    constructor($scope, $routeParams, dataFactory) {
+        super($scope)
+        $scope.read_wiki_id = $routeParams.doc_id
+        console.log($scope.read_wiki_id)
+        dataFactory.httpGetRest('/r/adn/d/' + $scope.read_wiki_id).then(this.setWiki)
+    }
+}
+app.controller("Wiki004RestController", Wiki004RestController)
 
 // app.controller("Wiki003RestController", Wiki003RestController)
 class Wiki003RestController extends Wiki000AbstractController {
-    constructor($scope, treeFactory) {
+    constructor($scope, dataFactory) {
         super($scope)
-        treeFactory.dataFactory.httpGetRest('/r/adn/d/' + read_wiki_id)
+        dataFactory.httpGetRest('/r/adn/d/' + read_wiki_id)
             .then((data) => {
                 console.log(data.elMap, data.clList)
                 d.elMap = data.elMap
                 d.clList = data.clList
             })
-            let obj_a = {a:1}
-            let obj_b = {b:2}
-            console.log(obj_a, obj_b)
-            let obj_ab = angular.extend({c:3}, obj_a, obj_b)
-            console.log(obj_ab)
     }
 }
 app.controller("Wiki003RestController", Wiki003RestController)
@@ -61,9 +92,9 @@ app.controller("Wiki003RestController", Wiki003RestController)
 class Wiki001Controller extends Wiki000AbstractController {
     constructor($scope, treeFactory) {
         super($scope)
+        conf.getListChildren = 'getListChildrenSql'
         treeFactory.readElement(read_wiki_id)
             .then((el) => treeFactory.readChildrenDeep([el.doc_id], 4))
-
     }
 }
 app.controller("Wiki001Controller", Wiki001Controller)
@@ -115,18 +146,6 @@ class CarePlan001Controller extends CarePlan000AbstractController {
     }
 }
 app.controller("CarePlan001Controller", CarePlan001Controller)
-
-/**
- * 
- return
- treeFactory.readChildren(el.doc_id)
-     .then((children_ids) => {
-         angular.forEach(children_ids, (parent_id) => {
-             console.log(parent_id)
-             treeFactory.readChildren(parent_id)
-         })
-     })
-*/
 
 // app.config(RouteProviderConfig)
 class RouteProviderConfig {

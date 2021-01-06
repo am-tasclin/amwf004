@@ -51,4 +51,5 @@ myApp.controller('PersonDetailCtrl', function ($scope, $routeParams, Adult) {
     $scope.saveAdult = function (adult) {
         adult.$save()
     }
+
 })

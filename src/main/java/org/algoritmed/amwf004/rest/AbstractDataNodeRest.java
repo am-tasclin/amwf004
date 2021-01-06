@@ -50,15 +50,21 @@ public class AbstractDataNodeRest {
         List<Long> parentsList2 = readSqlName("sql_app.SELECT_parentsList_with_i18n",
                 Map.of("parentsList", parentsList1), d);
         d.put("parentsList2", parentsList2);
-        List<Long> parentsList3 = readSqlName("sql_app.SELECT_parentsList_with_i18n",
-                Map.of("parentsList", parentsList2), d);
-        d.put("parentsList3", parentsList3);
-        List<Long> parentsList4 = readSqlName("sql_app.SELECT_parentsList_with_i18n",
+        if (parentsList2.size() > 0) {
+            List<Long> parentsList3 = readSqlName("sql_app.SELECT_parentsList_with_i18n",
+            Map.of("parentsList", parentsList2), d);
+            d.put("parentsList3", parentsList3);
+            if (parentsList3.size() > 0) {
+                List<Long> parentsList4 = readSqlName("sql_app.SELECT_parentsList_with_i18n",
                 Map.of("parentsList", parentsList3), d);
-        d.put("parentsList4", parentsList4);
-        List<Long> parentsList5 = readSqlName("sql_app.SELECT_parentsList_with_i18n",
-                Map.of("parentsList", parentsList4), d);
-        d.put("parentsList5", parentsList5);
+                d.put("parentsList4", parentsList4);
+                if (parentsList4.size() > 0) {
+                    List<Long> parentsList5 = readSqlName("sql_app.SELECT_parentsList_with_i18n",
+                            Map.of("parentsList", parentsList4), d);
+                    d.put("parentsList5", parentsList5);
+                }
+            }
+        }
         return d;
     }
 
