@@ -55,7 +55,7 @@ class Wiki000AbstractController {
 
 // app.controller("Wiki005RestController", Wiki005RestController)
 class Wiki005RestController extends Wiki000AbstractController {
-    constructor($scope, $routeParams, $resource, Wiki) {
+    constructor($scope, $routeParams, Wiki) {
         super($scope)
         $scope.read_wiki_id = $routeParams.doc_id
         console.log($scope.read_wiki_id)
