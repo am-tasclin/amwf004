@@ -59,7 +59,7 @@ class Wiki005RestController extends Wiki000AbstractController {
         super($scope)
         $scope.read_wiki_id = $routeParams.doc_id
         console.log($scope.read_wiki_id)
-        Wiki.get({ doc_id: $scope.read_wiki_id }).$ikipromise.then(this.setWiki);
+        Wiki.get({ doc_id: $scope.read_wiki_id }).$promise.then(this.setWiki);
     }
 }
 app.controller("Wiki005RestController", Wiki005RestController)
