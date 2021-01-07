@@ -1,7 +1,7 @@
 'use strict';
 var app = angular.module("app", ['ngRoute', 'ngResource', 'ngSanitize']);
-app.factory("treeFactory", TreeFactory)
 app.factory("dataFactory", DataFactory)
+app.factory("treeFactory", TreeFactory)
 app.factory("Wiki", Wiki)
 
 
@@ -79,12 +79,7 @@ app.controller("Wiki004RestController", Wiki004RestController)
 class Wiki003RestController extends Wiki000AbstractController {
     constructor($scope, dataFactory) {
         super($scope)
-        dataFactory.httpGetRest('/r/adn/d/' + read_wiki_id)
-            .then((data) => {
-                console.log(data.elMap, data.clList)
-                d.elMap = data.elMap
-                d.clList = data.clList
-            })
+        dataFactory.httpGetRest('/r/adn/d/' + read_wiki_id).then(this.setWiki)
     }
 }
 app.controller("Wiki003RestController", Wiki003RestController)
