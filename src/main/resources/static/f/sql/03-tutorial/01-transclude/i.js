@@ -1,6 +1,7 @@
+'use strict';
 var app = angular.module('docsAgjsExample', [])
 
-app.controller('ExampleController', ['$scope',  ($scope) => {
+app.controller('ExampleController', ['$scope', ($scope) => {
     $scope.title = 'Lorem Ipsum'
     $scope.text = 'Neque porro quisquam est qui dolorem ipsum quia dolor...'
     $scope.customer = {
@@ -10,11 +11,12 @@ app.controller('ExampleController', ['$scope',  ($scope) => {
     $scope.naomi = { name: 'Naomi', address: '1600 Amphitheatre' };
     $scope.igor = { name: 'Igor', address: '123 Somewhere' };
     $scope.format = 'M/d/yy h:mm:ss a';
+    console.log($scope)
 }])
 
-app.directive('pane',  () => {
+app.directive('pane', () => {
     return {
-        restrict: 'E',
+        restrict: 'A',
         transclude: true,
         scope: { title: '@' },
         templateUrl: 'pane.html'
@@ -23,7 +25,8 @@ app.directive('pane',  () => {
 
 app.directive('myCustomer', () => {
     return {
-        templateUrl: (elem, attr) => {
+        restrict: 'A',
+        templateUrl: (e, attr) => {
             return 'customer-' + attr.type + '.html'
         }
     }
@@ -31,7 +34,7 @@ app.directive('myCustomer', () => {
 
 app.directive('myCustomer2', () => {
     return {
-        restrict: 'EA',
+        restrict: 'A',
         scope: {
             customerInfo: '=info'
         },
@@ -40,9 +43,9 @@ app.directive('myCustomer2', () => {
 })
 
 app.directive('myCurrentTime', ['$interval', 'dateFilter', ($interval, dateFilter) => {
-    link = ($scope, element, attrs) => {
+    let link = ($scope, element, attrs) => {
         var format, timeoutId
-        updateTime = () => element.text(dateFilter(new Date(), format))
+        let updateTime = () => element.text(dateFilter(new Date(), format))
         $scope.$watch(attrs.myCurrentTime, (value) => {
             format = value
             updateTime()
@@ -51,7 +54,8 @@ app.directive('myCurrentTime', ['$interval', 'dateFilter', ($interval, dateFilte
         timeoutId = $interval(() => updateTime(), 1330)
     }
     return {
-        link: link
+        restrict: 'A',
+        link: link,
     }
 }])
 
@@ -66,6 +70,7 @@ class My03TabsController {
             if (panes.length === 0) $scope.select(pane)
             panes.push(pane);
         }
+        console.log($scope.panes)
     }
 }
 
