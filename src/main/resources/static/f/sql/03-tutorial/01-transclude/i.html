@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Example - example-simpleTranscludeExample-production</title>
+  <link rel="stylesheet" href="/f/css/w3.css" type="text/css">
+  <link rel="stylesheet" href="/f/css/am.css" type="text/css">
+  <link rel="shortcut icon" href="/f/img/algoritmed.ico" type="image/x-icon">
+  <script src="/webjars/angular/1.8.2/angular.min.js" type="application/javascript"></script>
+  <script src="i.js" type="application/javascript"></script>
+</head>
+
+<body data-ng-app="docsAgjsExample" class="w3-container">
+  <div data-ng-controller="ExampleController">
+    <div data-my03-tabs>
+      <div data-my03-pane title="Hello">
+        <p>Lorem ipsum dolor sit amet</p>
+      </div>
+      <div data-my03-pane title="World">
+        <em>Mauris elementum elementum enim at suscipit.</em>
+        <p><a href ng-click="i = i + 1">counter: {{i || 0}}</a></p>
+      </div>
+    </div>
+    <div class="w3-border">
+      <div class="am-b w3-small">pane</div>
+      <input data-ng-model="title" aria-label="title" class="w3-border">
+      <textarea data-ng-model="text" aria-label="text" class="w3-border" style="width: 400px;"></textarea> <br />
+      <pane title="{{title}}"><span>{{text}}</span></pane>
+    </div>
+    <div class="w3-leftbar">
+      <div class="am-b w3-small">my-customer</div>
+      <div data-my-customer type="name"></div>
+      <div data-my-customer type="address"></div>
+    </div>
+    <div class="w3-border-left w3-border-right w3-border-top">
+      <div class="am-b w3-small">my-customer2</div>
+      <div data-my-customer2 info="naomi" class="w3-border-bottom"></div>
+      <div data-my-customer2 info="igor" class="w3-border-bottom"></div>
+    </div>
+    <div class="w3-border w3-topbar">
+      <div class="am-b w3-small">my-current-time</div>
+      Date format: <input data-ng-model="format" class="w3-border">
+      <div class="w3-border-top">
+        Current time is: <span data-my-current-time="format" class="w3-border"></span>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

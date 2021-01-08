@@ -1,0 +1,9 @@
+<nav class="w3-hover-shadow">
+    <span data-ng-repeat="pane in panes">
+        {{$first?'|':''}}
+        <a href="" data-ng-class="{'w3-light-gray':pane.selected}" data-ng-click="select(pane)">{{pane.title}}</a>
+        |
+    </span>
+    <span class="am-b w3-small"> my03-tabs.my-pane </span>
+</nav>
+<div class="w3-card" data-ng-transclude></div>

@@ -4,7 +4,6 @@ app.factory("dataFactory", DataFactory)
 app.factory("treeFactory", TreeFactory)
 app.factory("Wiki", Wiki)
 
-
 const conf = {
     singlePagesUrl: {
         sql: {
@@ -127,6 +126,9 @@ class CarePlan002RestController extends CarePlan000AbstractController {
         conf.getListChildren = 'getListChildrenRest'
         conf.readElement = 'readElementRest'
         this.init($scope, treeFactory, this)
+        $scope.morEventFn = ($event) => {
+            console.log($event)
+        }
     }
 }
 app.controller("CarePlan002RestController", CarePlan002RestController)
