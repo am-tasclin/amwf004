@@ -1,5 +1,8 @@
 'use strict';
 var app = angular.module("app", ['ngRoute', 'ngResource', 'ngSanitize']);
+angular.element(function () {
+    angular.bootstrap(document, ['app'])
+})
 app.factory("dataFactory", DataFactory)
 app.factory("treeFactory", TreeFactory)
 app.factory("Wiki", Wiki)
@@ -33,6 +36,10 @@ const conf = {
         'wiki005Rest/:doc_id': {
             templateUrl: 'wiki.html',
             controller: 'Wiki005RestController'
+        },
+        wikiList: {
+            templateUrl: 'wikiList.html',
+            controller: 'WikiListController'
         },
     }
 }
@@ -176,10 +183,23 @@ sql_app.simpleSQLs = [
         n: 'FHIR.DomainResource',
         c: 'SELECT value FHIR_DomainResource, d.* FROM doc d \n\
     LEFT JOIN string ON string_id=doc_id \n\
-    WHERE 369789 in (reference)'
+    WHERE 369789 IN (reference)'
+    },
+    {
+        n: 'WikiList',
+        c: 'SELECT * FROM doc d \n\
+        LEFT JOIN string ON string_id=doc_id \n\
+        WHERE 369940 IN (reference, doc_id, reference2)'
     },
 ]
 
+// app.controller("WikiListController", WikiListController)
+class WikiListController {
+    constructor($scope, dataFactory) {
+        console.log(1)
+    }
+}
+app.controller("WikiListController", WikiListController)
 // app.controller("SqlController", SqlController)
 class SqlController {
     constructor($scope, dataFactory) {

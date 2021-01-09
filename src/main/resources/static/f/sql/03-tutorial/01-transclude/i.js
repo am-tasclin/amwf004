@@ -1,5 +1,8 @@
 'use strict';
 var app = angular.module('docsAgjsExample', [])
+angular.element(function () {
+    angular.bootstrap(document, ['docsAgjsExample'])
+})
 
 app.controller('ExampleController', ['$scope', ($scope) => {
     $scope.title = 'Lorem Ipsum'
@@ -96,3 +99,4 @@ app.directive('my03Pane', () => {
         templateUrl: '03/my-pane.html',
     }
 })
+

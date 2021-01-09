@@ -16,11 +16,11 @@
     <script src="i.js" type="application/javascript"></script>
 </head>
 
-<body data-ng-app="app">
+<body>
     <div class="w3-container am-max-width-1" data-ng-controller="FirstController as ctrl_f">
         <div data-ng-include="'/f/agumat/01/h.html'"></div>
         <div>
-            <span data-ng-repeat="u in 'sql|carePlan001|carePlan002Rest|wiki|wiki003Rest'.split('|')">
+            <span data-ng-repeat="u in 'sql|carePlan001|carePlan002Rest|wiki|wiki003Rest|wikiList'.split('|')">
                 {{$first?'':'|'}}
                 <a href="#!{{u}}">{{u}}</a>
             </span>
