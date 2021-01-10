@@ -8,8 +8,9 @@ app.factory("Wiki", Wiki)
 const conf = {
     singlePagesUrl: {
         sql: {
-            templateUrl: 'sql.html',
-            controller: 'SqlController'
+            templateUrl: 'sql1.html',
+            controller: 'SqlController',
+            controllerAs: '$ctrl',
         },
         carePlan001: {
             templateUrl: 'carePlan001.html',
@@ -32,6 +33,10 @@ const conf = {
             controller: 'Wiki004RestController'
         },
         'wiki005Rest/:doc_id': {
+            templateUrl: 'wiki.html',
+            controller: 'Wiki005RestController'
+        },
+        'wiki005Rest/:doc_id/:el_id': {
             templateUrl: 'wiki.html',
             controller: 'Wiki005RestController'
         },
@@ -246,6 +251,7 @@ class SqlController extends SqlAbstractController {
         $scope.simpleSQLs = sql_app.simpleSQLs
         $scope.simpleSQLselect = 1
         if (!$scope.data) this.readSql($scope.simpleSQLselect)
+        this.tut = 'tutorial links'
     }
 }
 app.controller("SqlController", SqlController)

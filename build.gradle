@@ -21,7 +21,7 @@ dependencies {
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'org.postgresql:postgresql'
 	//runtimeOnly 'org.webjars:angularjs:1.7.9'
-	// runtimeOnly 'org.webjars:angularjs:1.8.0'
+	runtimeOnly 'org.webjars:angularjs:1.8.0'
 	runtimeOnly 'org.webjars.npm:angular:1.8.2'
 	runtimeOnly 'org.webjars.npm:angular-animate:1.8.2'
 	runtimeOnly 'org.webjars.npm:angular-aria:1.8.2'
