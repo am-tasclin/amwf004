@@ -1,8 +1,6 @@
 'use strict';
 var app = angular.module("app", ['ngRoute', 'ngResource', 'ngSanitize']);
-angular.element(function () {
-    angular.bootstrap(document, ['app'])
-})
+angular.element(() => angular.bootstrap(document, ['app']))
 app.factory("dataFactory", DataFactory)
 app.factory("treeFactory", TreeFactory)
 app.factory("Wiki", Wiki)
@@ -47,7 +45,6 @@ const conf = {
 const read_wiki_id = 371357
 class Wiki000AbstractController {
     constructor($scope) {
-        console.log(read_wiki_id, 'start history')
         $scope.d = d
         $scope.markdownInLine = markdownInLine
         $scope.read_wiki_id = read_wiki_id
@@ -63,7 +60,7 @@ class Wiki000AbstractController {
 class Wiki005RestController extends Wiki000AbstractController {
     constructor($scope, $routeParams, Wiki) {
         super($scope)
-        $scope.read_wiki_id = $routeParams.doc_id
+        d.conf.read_wiki_id = $scope.read_wiki_id = $routeParams.doc_id
         console.log($scope.read_wiki_id)
         Wiki.get({ doc_id: $scope.read_wiki_id }).$promise.then(this.setWiki);
     }
@@ -104,15 +101,17 @@ const read_doc_id = 369927
 // app.controller("CarePlan001Controller", CarePlan001Controller)
 class CarePlan000AbstractController {
     constructor($scope) {
+        this.scope = $scope
         $scope.d = d
         $scope.read_doc_id = read_doc_id
         conf.extraReadIds = [
             368794, // CarePlan.activity.plannedActivityReference
         ]
     }
-    init($scope, treeFactory, ctrl) {
-        $scope.ctrl = ctrl
-        console.log($scope.ctrl.constructor.name, 1)
+    scope
+    init(treeFactory, ctrl) {
+        this.scope.ctrl = ctrl
+        console.log(this.scope.ctrl.constructor.name, 1)
         conf.readExtra = (el) => {
             if (conf.extraReadIds.indexOf(el.reference) >= 0) {
                 console.log(el.doc_id, el.reference, conf.extraReadIds.indexOf(el.reference))
@@ -132,7 +131,7 @@ class CarePlan002RestController extends CarePlan000AbstractController {
         super($scope)
         conf.getListChildren = 'getListChildrenRest'
         conf.readElement = 'readElementRest'
-        this.init($scope, treeFactory, this)
+        this.init(treeFactory, this)
         $scope.morEventFn = ($event) => {
             console.log($event)
         }
@@ -146,7 +145,7 @@ class CarePlan001Controller extends CarePlan000AbstractController {
         super($scope)
         conf.getListChildren = 'getListChildrenSql'
         conf.readElement = 'readElement'
-        this.init($scope, treeFactory, this)
+        this.init(treeFactory, this)
     }
 }
 app.controller("CarePlan001Controller", CarePlan001Controller)
@@ -167,7 +166,8 @@ app.config(RouteProviderConfig)
 // app.controller("FirstController", FirstController)
 class FirstController {
     constructor($scope, $http) {
-        $scope.conf = conf
+        // $scope.conf = conf
+        $scope.dConf = d.conf
     }
 }
 app.controller("FirstController", FirstController)
@@ -187,36 +187,65 @@ sql_app.simpleSQLs = [
     },
     {
         n: 'WikiList',
-        c: 'SELECT * FROM doc d \n\
+        c: 'SELECT doc_id, value FROM doc d \n\
         LEFT JOIN string ON string_id=doc_id \n\
-        WHERE 369940 IN (reference, doc_id, reference2)'
+        WHERE 369940 IN (reference, doc_id, reference2)',
+        sqlHtml: { doc_id: '<a href="#!/wiki005Rest/{{r[k]}}">{{r[k]}}</a>', },
     },
 ]
 
-// app.controller("WikiListController", WikiListController)
-class WikiListController {
+class SqlAbstractController {
+    scope
+    dataFactory
     constructor($scope, dataFactory) {
-        console.log(1)
+        this.scope = $scope
+        this.dataFactory = dataFactory
+    }
+    readSql = (sqlN) => {
+        let scope = this.scope
+        sql_app.simpleSQLselect = scope.simpleSQLselect = sqlN
+        console.log(sqlN, sql_app.simpleSQLs[sqlN].c)
+        this.dataFactory.httpGet({ sql: sql_app.simpleSQLs[sqlN].c })
+            .then((dataSqlRequest) => {
+                scope.data = dataSqlRequest
+                console.log(1, dataSqlRequest)
+            })
+    }
+}
+
+app.directive('amSqlHtml', ($compile) => {
+    return {
+        restrict: 'A',
+        link: (s, e) => {
+            let sqlE = sql_app.simpleSQLs[sql_app.simpleSQLselect]
+            if (sqlE.sqlHtml) {
+                if (sqlE.sqlHtml[s.k]!=null) {
+                    e.html(sqlE.sqlHtml[s.k])
+                    $compile(e.contents())(s)
+                }
+            }
+        },
+    }
+})
+
+// app.controller("WikiListController", WikiListController)
+class WikiListController extends SqlAbstractController {
+    constructor($scope, dataFactory) {
+        super($scope, dataFactory)
+        $scope.wikiListConf = 1
+        if (!$scope.data) this.readSql(2)
     }
 }
 app.controller("WikiListController", WikiListController)
-// app.controller("SqlController", SqlController)
-class SqlController {
-    constructor($scope, dataFactory) {
-        let readSql = (sqlN) => {
-            $scope.simpleSQLselect = sqlN
-            console.log(sqlN, sql_app.simpleSQLs[sqlN].c)
-            dataFactory.httpGet({ sql: sql_app.simpleSQLs[sqlN].c })
-                .then((dataSqlRequest) => {
-                    $scope.data = dataSqlRequest
-                    console.log(1, dataSqlRequest)
-                })
 
-        }
-        $scope.readSql = readSql
+// app.controller("SqlController", SqlController)
+class SqlController extends SqlAbstractController {
+    constructor($scope, dataFactory) {
+        super($scope, dataFactory)
+        $scope.readSql = this.readSql
         $scope.simpleSQLs = sql_app.simpleSQLs
         $scope.simpleSQLselect = 1
-        if (!$scope.data) readSql($scope.simpleSQLselect)
+        if (!$scope.data) this.readSql($scope.simpleSQLselect)
     }
 }
 app.controller("SqlController", SqlController)

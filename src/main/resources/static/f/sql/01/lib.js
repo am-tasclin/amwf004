@@ -1,6 +1,6 @@
 'use strict';
 // data collection
-const d = { elMap: {}, clList: {} }
+const d = { elMap: {}, clList: {}, conf:{} }
 
 // app.factory("Wiki", Wiki)
 class Wiki {

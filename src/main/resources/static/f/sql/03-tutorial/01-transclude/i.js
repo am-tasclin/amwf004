@@ -1,8 +1,6 @@
 'use strict';
 var app = angular.module('docsAgjsExample', [])
-angular.element(function () {
-    angular.bootstrap(document, ['docsAgjsExample'])
-})
+angular.element(() => angular.bootstrap(document, ['docsAgjsExample']))
 
 app.controller('ExampleController', ['$scope', ($scope) => {
     $scope.title = 'Lorem Ipsum'
@@ -14,7 +12,7 @@ app.controller('ExampleController', ['$scope', ($scope) => {
     $scope.naomi = { name: 'Naomi', address: '1600 Amphitheatre' };
     $scope.igor = { name: 'Igor', address: '123 Somewhere' };
     $scope.format = 'M/d/yy h:mm:ss a';
-    console.log($scope)
+    // console.log($scope)
 }])
 
 app.directive('pane', () => {
@@ -30,7 +28,8 @@ app.directive('myCustomer', () => {
     return {
         restrict: 'A',
         templateUrl: (e, attr) => {
-            return 'customer-' + attr.type + '.html'
+            // console.log(e, attr)
+            return 'customer-' + attr.myCustomer + '.html'
         }
     }
 })
@@ -95,8 +94,10 @@ app.directive('my03Pane', () => {
             title: '@'
         },
         require: '^^my03Tabs',
-        link: ($scope, e, a, tabsCtrl) => tabsCtrl.addPane($scope),
+        link: ($scope, e, a, tabsCtrl) => {
+            console.log($scope)
+            tabsCtrl.addPane($scope)
+        },
         templateUrl: '03/my-pane.html',
     }
 })
-

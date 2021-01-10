@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Example - example-simpleTranscludeExample-production</title>
+    <link rel="stylesheet" href="/f/css/w3.css" type="text/css">
+    <link rel="stylesheet" href="/f/css/am.css" type="text/css">
+    <link rel="shortcut icon" href="/f/img/algoritmed.ico" type="image/x-icon">
+    <script src="/webjars/angular/1.8.2/angular.min.js" type="application/javascript"></script>
+    <script src="i.js" type="application/javascript"></script>
+</head>
+
+<body>
+    <div class="w3-container" data-ng-controller="ExampleController">
+        <div class="w3-border">
+            <div>
+                level-123:
+                https://www.jvandemo.com/the-nitty-gritty-of-compile-and-link-functions-inside-angularjs-directives/
+            </div>
+            <!--
+
+                <level-one>Ok?
+                    <level-two> Hi! 
+                        <level-three>
+                            Hello {{name}}
+                        </level-three>
+                    </level-two>
+                </level-one>
+            -->
+        </div>
+        <div class="w3-border">
+            Hello World!
+            <input ng-model="name"> <br />
+            <textarea ng-model="html"></textarea> <br />
+            <div compile="html">a1</div>
+        </div>
+    </div>
+</body>
+
+</html>
