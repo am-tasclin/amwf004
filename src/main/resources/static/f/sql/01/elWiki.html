@@ -1,7 +1,20 @@
-<p data-ng-switch-when="p" data-ng-bind-html="markdownInLine(d.elMap[id].value_1_22)">
-</p>
-<h2 data-ng-switch-when="h2" ><span  data-ng-include="'h23Wiki.html'"></span></h2>
-<h3 data-ng-switch-when="h3" ><span  data-ng-include="'h23Wiki.html'"></span></h3>
+<div data-ng-switch-when="p">
+    <div data-am-ed-text data-el:ed:id="id" class="w3-tooltip">
+        <p data-ng-bind-html="markdownInLine(d.elMap[id].value_1_22)"></p>
+        <span class="w3-text w3-border" style="position:absolute;left:0;bottom: -1em;"
+            data-ng-include="'wikiTootipText.html'"></span>
+    </div>
+</div>
+<div data-ng-switch-when="h2">
+    <div data-am-ed-text data-el:ed:id="id">
+        <h2><span data-ng-include="'h23Wiki.html'"></span></h2>
+    </div>
+</div>
+<div data-ng-switch-when="h3">
+    <div data-am-ed-text data-el:ed:id="id">
+        <h3><span data-ng-include="'h23Wiki.html'"></span></h3>
+    </div>
+</div>
 <ol data-ng-switch-when="ol">
     <li data-ng-repeat="id in d.clList[id]" data-ng-bind-html="markdownInLine(d.elMap[id].value_1_22)"></li>
     </li>

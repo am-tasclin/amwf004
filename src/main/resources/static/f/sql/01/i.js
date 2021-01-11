@@ -34,11 +34,18 @@ const conf = {
         },
         'wiki005Rest/:doc_id': {
             templateUrl: 'wiki.html',
-            controller: 'Wiki005RestController'
+            controller: 'Wiki005RestController',
+            controllerAs: 'ctrl',
         },
         'wiki005Rest/:doc_id/:el_id': {
             templateUrl: 'wiki.html',
-            controller: 'Wiki005RestController'
+            controller: 'Wiki005RestController',
+            controllerAs: 'ctrl',
+        },
+        'wiki005Rest/:doc_id/:el_id/:crud': {
+            templateUrl: 'wiki.html',
+            controller: 'Wiki005RestController',
+            controllerAs: 'ctrl',
         },
         wikiList: {
             templateUrl: 'wikiList.html',
@@ -65,6 +72,8 @@ class Wiki000AbstractController {
 class Wiki005RestController extends Wiki000AbstractController {
     constructor($scope, $routeParams, Wiki) {
         super($scope)
+        console.log($routeParams, d.conf)
+        d.conf.$routeParams = $scope.$routeParams = $routeParams
         d.conf.read_wiki_id = $scope.read_wiki_id = $routeParams.doc_id
         console.log($scope.read_wiki_id)
         Wiki.get({ doc_id: $scope.read_wiki_id }).$promise.then(this.setWiki);
@@ -162,7 +171,7 @@ class RouteProviderConfig {
             $routeProvider.when("/" + k, v)
         })
         $routeProvider.otherwise({
-            redirectTo: '/wiki'
+            redirectTo: '/wikiList'
         })
     }
 }
@@ -218,13 +227,32 @@ class SqlAbstractController {
     }
 }
 
+app.directive('amEdText', () => {
+    return {
+        restrict: 'A',
+        transclude: true,
+        scope: {
+            elId: '=elEdId',
+        },
+        link: (s) => {
+            console.log(s.elId, d.conf.$routeParams.el_id == s.elId)
+            if (d.conf.$routeParams.el_id == s.elId)
+                s.elEdId = s.elId
+        },
+        templateUrl: (e, a) => {
+            console.log(d.conf.$routeParams, d.conf.elEdId)
+            return 'amEdText.html'
+        }
+    }
+})
+
 app.directive('amSqlHtml', ($compile) => {
     return {
         restrict: 'A',
         link: (s, e) => {
             let sqlE = sql_app.simpleSQLs[sql_app.simpleSQLselect]
             if (sqlE.sqlHtml) {
-                if (sqlE.sqlHtml[s.k]!=null) {
+                if (sqlE.sqlHtml[s.k] != null) {
                     e.html(sqlE.sqlHtml[s.k])
                     $compile(e.contents())(s)
                 }
@@ -255,3 +283,4 @@ class SqlController extends SqlAbstractController {
     }
 }
 app.controller("SqlController", SqlController)
+
