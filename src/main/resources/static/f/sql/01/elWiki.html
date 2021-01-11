@@ -1,8 +1,10 @@
 <div data-ng-switch-when="p">
-    <div data-am-ed-text data-el:ed:id="id" class="w3-tooltip">
-        <p data-ng-bind-html="markdownInLine(d.elMap[id].value_1_22)"></p>
-        <span class="w3-text w3-border" style="position:absolute;left:0;bottom: -1em;"
-            data-ng-include="'wikiTootipText.html'"></span>
+    <div data-am-ed-text data-el:ed:id="id">
+        <div class="w3-tooltip">
+            <p data-ng-bind-html="markdownInLine(d.elMap[id].value_1_22)"></p>
+            <span class="w3-text w3-border" style="position:absolute;left:0;bottom: -1em;"
+                data-ng-include="'wikiTootipText.html'"></span>
+        </div>
     </div>
 </div>
 <div data-ng-switch-when="h2">

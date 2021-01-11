@@ -2,8 +2,8 @@
 // data collection
 const d = { elMap: {}, clList: {}, conf:{} }
 
-// app.factory("Wiki", Wiki)
-class Wiki {
+// app.factory("wikiResourceFactory", WikiResourceFactory)
+class WikiResourceFactory {
     constructor($resource) {
         return $resource('/r/adn/d/:doc_id', { doc_id: '@doc_id' })
     }

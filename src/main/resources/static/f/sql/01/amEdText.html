@@ -1,5 +1,11 @@
 <div data-ng-transclude></div>
-<div data-ng-show="elId==elEdId" class="w3-card">
-    {{elEdId}}
-    {{elId}}
+<div data-ng-show="elId==elEdId" class="w3-card w3-leftbar">
+    <div class="w3-blue-grey">
+        <i class="fas fa-edit"></i>
+        <a href="#!/wiki005Rest/{{d.conf.read_wiki_id}}" class="w3-right"><i class="far fa-window-close"></i></a>
+    </div>
+    <div>
+        <textarea class="am-width-100pr" data-ng-model="d.elMap[elId].value_1_22"></textarea>
+    </div>
+    <button class="w3-btn">save</button>
 </div>

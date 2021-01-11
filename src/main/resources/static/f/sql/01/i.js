@@ -3,14 +3,19 @@ var app = angular.module("app", ['ngRoute', 'ngResource', 'ngSanitize']);
 angular.element(() => angular.bootstrap(document, ['app']))
 app.factory("dataFactory", DataFactory)
 app.factory("treeFactory", TreeFactory)
-app.factory("Wiki", Wiki)
+app.factory("wikiResourceFactory", WikiResourceFactory)
 
 const conf = {
     singlePagesUrl: {
         sql: {
             templateUrl: 'sql1.html',
             controller: 'SqlController',
-            controllerAs: '$ctrl',
+            controllerAs: 'ctrlSql',
+        },
+        wikiList: {
+            templateUrl: 'wikiList.html',
+            controller: 'WikiListController',
+            controllerAs: 'ctrlSql',
         },
         carePlan001: {
             templateUrl: 'carePlan001.html',
@@ -47,10 +52,6 @@ const conf = {
             controller: 'Wiki005RestController',
             controllerAs: 'ctrl',
         },
-        wikiList: {
-            templateUrl: 'wikiList.html',
-            controller: 'WikiListController'
-        },
     }
 }
 
@@ -70,13 +71,13 @@ class Wiki000AbstractController {
 
 // app.controller("Wiki005RestController", Wiki005RestController)
 class Wiki005RestController extends Wiki000AbstractController {
-    constructor($scope, $routeParams, Wiki) {
+    constructor($scope, $routeParams, wikiResourceFactory) {
         super($scope)
         console.log($routeParams, d.conf)
         d.conf.$routeParams = $scope.$routeParams = $routeParams
         d.conf.read_wiki_id = $scope.read_wiki_id = $routeParams.doc_id
         console.log($scope.read_wiki_id)
-        Wiki.get({ doc_id: $scope.read_wiki_id }).$promise.then(this.setWiki);
+        wikiResourceFactory.get({ doc_id: $scope.read_wiki_id }).$promise.then(this.setWiki);
     }
 }
 app.controller("Wiki005RestController", Wiki005RestController)
@@ -115,8 +116,8 @@ const read_doc_id = 369927
 // app.controller("CarePlan001Controller", CarePlan001Controller)
 class CarePlan000AbstractController {
     constructor($scope) {
-        this.scope = $scope
         $scope.d = d
+        this.scope = $scope
         $scope.read_doc_id = read_doc_id
         conf.extraReadIds = [
             368794, // CarePlan.activity.plannedActivityReference
@@ -164,19 +165,6 @@ class CarePlan001Controller extends CarePlan000AbstractController {
 }
 app.controller("CarePlan001Controller", CarePlan001Controller)
 
-// app.config(RouteProviderConfig)
-class RouteProviderConfig {
-    constructor($routeProvider) {
-        angular.forEach(conf.singlePagesUrl, (v, k) => {
-            $routeProvider.when("/" + k, v)
-        })
-        $routeProvider.otherwise({
-            redirectTo: '/wikiList'
-        })
-    }
-}
-app.config(RouteProviderConfig)
-
 // app.controller("FirstController", FirstController)
 class FirstController {
     constructor($scope, $http) {
@@ -208,41 +196,26 @@ sql_app.simpleSQLs = [
     },
 ]
 
-class SqlAbstractController {
-    scope
-    dataFactory
-    constructor($scope, dataFactory) {
-        this.scope = $scope
-        this.dataFactory = dataFactory
-    }
-    readSql = (sqlN) => {
-        let scope = this.scope
-        sql_app.simpleSQLselect = scope.simpleSQLselect = sqlN
-        console.log(sqlN, sql_app.simpleSQLs[sqlN].c)
-        this.dataFactory.httpGet({ sql: sql_app.simpleSQLs[sqlN].c })
-            .then((dataSqlRequest) => {
-                scope.data = dataSqlRequest
-                console.log(1, dataSqlRequest)
-            })
+class EdTextController {
+    constructor($scope) {
+        $scope.d = d
+        console.log(d.conf.read_wiki_id)
     }
 }
-
 app.directive('amEdText', () => {
     return {
         restrict: 'A',
         transclude: true,
-        scope: {
-            elId: '=elEdId',
-        },
+        templateUrl: 'amEdText.html',
+        controller: ['$scope', EdTextController],
+        controllerAs: 'edTextCtrl',
+        scope: { elId: '<elEdId', },
         link: (s) => {
-            console.log(s.elId, d.conf.$routeParams.el_id == s.elId)
-            if (d.conf.$routeParams.el_id == s.elId)
+            if (d.conf.$routeParams.el_id == s.elId) {
                 s.elEdId = s.elId
+                console.log(s, d.conf.$routeParams.el_id == s.elId)
+            }
         },
-        templateUrl: (e, a) => {
-            console.log(d.conf.$routeParams, d.conf.elEdId)
-            return 'amEdText.html'
-        }
     }
 })
 
@@ -261,26 +234,53 @@ app.directive('amSqlHtml', ($compile) => {
     }
 })
 
+class SqlAbstractController {
+    dataFactory
+    constructor(dataFactory) {
+        this.dataFactory = dataFactory
+    }
+    readSql = (sqlN) => {
+        let ctrlSql = this
+        sql_app.simpleSQLselect = this.simpleSQLselect = sqlN
+        console.log(sqlN, sql_app.simpleSQLs[sqlN].c)
+        this.dataFactory.httpGet({ sql: sql_app.simpleSQLs[sqlN].c })
+            .then((dataSqlRequest) => {
+                ctrlSql.data = dataSqlRequest
+                console.log(dataSqlRequest)
+            })
+    }
+}
+
 // app.controller("WikiListController", WikiListController)
 class WikiListController extends SqlAbstractController {
-    constructor($scope, dataFactory) {
-        super($scope, dataFactory)
-        $scope.wikiListConf = 1
-        if (!$scope.data) this.readSql(2)
+    constructor(dataFactory) {
+        super(dataFactory)
+        if (!this.data) this.readSql(2)
     }
 }
 app.controller("WikiListController", WikiListController)
 
 // app.controller("SqlController", SqlController)
 class SqlController extends SqlAbstractController {
-    constructor($scope, dataFactory) {
-        super($scope, dataFactory)
-        $scope.readSql = this.readSql
-        $scope.simpleSQLs = sql_app.simpleSQLs
-        $scope.simpleSQLselect = 1
-        if (!$scope.data) this.readSql($scope.simpleSQLselect)
+    constructor(dataFactory) {
+        super(dataFactory)
+        this.simpleSQLs = sql_app.simpleSQLs
+        this.simpleSQLselect = 1
+        if (!this.data) this.readSql(this.simpleSQLselect)
         this.tut = 'tutorial links'
     }
 }
 app.controller("SqlController", SqlController)
 
+// app.config(RouteProviderConfig)
+class RouteProviderConfig {
+    constructor($routeProvider) {
+        angular.forEach(conf.singlePagesUrl, (v, k) => {
+            $routeProvider.when("/" + k, v)
+        })
+        $routeProvider.otherwise({
+            redirectTo: '/wikiList'
+        })
+    }
+}
+app.config(RouteProviderConfig)
