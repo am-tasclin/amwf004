@@ -19,23 +19,28 @@ const conf = {
         },
         carePlan001: {
             templateUrl: 'carePlan001.html',
-            controller: 'CarePlan001Controller'
+            controller: 'CarePlan001Controller',
+            controllerAs: 'ctrlCarePlan',
         },
         carePlan002Rest: {
             templateUrl: 'carePlan001.html',
-            controller: 'CarePlan002RestController'
+            controller: 'CarePlan002RestController',
+            controllerAs: 'ctrlCarePlan',
         },
         wiki: {
             templateUrl: 'wiki.html',
-            controller: 'Wiki001Controller'
+            controller: 'Wiki001Controller',
+            controllerAs: 'ctrl',
         },
         wiki003Rest: {
             templateUrl: 'wiki.html',
-            controller: 'Wiki003RestController'
+            controller: 'Wiki003RestController',
+            controllerAs: 'ctrl',
         },
         'wiki004Rest/:doc_id': {
             templateUrl: 'wiki.html',
-            controller: 'Wiki004RestController'
+            controller: 'Wiki004RestController',
+            controllerAs: 'ctrl',
         },
         'wiki005Rest/:doc_id': {
             templateUrl: 'wiki.html',
@@ -56,9 +61,9 @@ const conf = {
 }
 
 const read_wiki_id = 371357
-class Wiki000AbstractController {
+class Wiki000AbstractController extends AmDocAbstractController {
     constructor($scope) {
-        $scope.d = d
+        super($scope)
         $scope.markdownInLine = markdownInLine
         $scope.read_wiki_id = read_wiki_id
     }
@@ -114,19 +119,17 @@ app.controller("Wiki001Controller", Wiki001Controller)
 
 const read_doc_id = 369927
 // app.controller("CarePlan001Controller", CarePlan001Controller)
-class CarePlan000AbstractController {
+class CarePlan000AbstractController extends AmDocAbstractController {
     constructor($scope) {
-        $scope.d = d
-        this.scope = $scope
-        $scope.read_doc_id = read_doc_id
+        super($scope)
+        d.conf.read_doc_id = read_doc_id
         conf.extraReadIds = [
             368794, // CarePlan.activity.plannedActivityReference
         ]
     }
     scope
-    init(treeFactory, ctrl) {
-        this.scope.ctrl = ctrl
-        console.log(this.scope.ctrl.constructor.name, 1)
+    init(treeFactory) {
+        console.log(this.constructor.name, 1)
         conf.readExtra = (el) => {
             if (conf.extraReadIds.indexOf(el.reference) >= 0) {
                 console.log(el.doc_id, el.reference, conf.extraReadIds.indexOf(el.reference))
@@ -166,10 +169,9 @@ class CarePlan001Controller extends CarePlan000AbstractController {
 app.controller("CarePlan001Controller", CarePlan001Controller)
 
 // app.controller("FirstController", FirstController)
-class FirstController {
-    constructor($scope, $http) {
-        // $scope.conf = conf
-        $scope.dConf = d.conf
+class FirstController extends AmDocAbstractController {
+    constructor($scope) {
+        super($scope)
     }
 }
 app.controller("FirstController", FirstController)

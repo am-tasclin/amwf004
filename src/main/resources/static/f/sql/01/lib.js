@@ -1,6 +1,12 @@
 'use strict';
 // data collection
-const d = { elMap: {}, clList: {}, conf:{} }
+const d = { elMap: {}, clList: {}, conf: {} }
+
+class AmDocAbstractController {
+    constructor($scope) {
+        $scope.d = d
+    }
+}
 
 // app.factory("wikiResourceFactory", WikiResourceFactory)
 class WikiResourceFactory {
