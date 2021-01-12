@@ -65,7 +65,6 @@ class Wiki000AbstractController extends AmDocAbstractController {
     constructor($scope) {
         super($scope)
         $scope.markdownInLine = markdownInLine
-        $scope.read_wiki_id = read_wiki_id
     }
     setWiki = (data) => {
         console.log(data.elMap, data.clList)
@@ -78,11 +77,11 @@ class Wiki000AbstractController extends AmDocAbstractController {
 class Wiki005RestController extends Wiki000AbstractController {
     constructor($scope, $routeParams, wikiResourceFactory) {
         super($scope)
-        console.log($routeParams, d.conf)
-        d.conf.$routeParams = $scope.$routeParams = $routeParams
-        d.conf.read_wiki_id = $scope.read_wiki_id = $routeParams.doc_id
-        console.log($scope.read_wiki_id)
-        wikiResourceFactory.get({ doc_id: $scope.read_wiki_id }).$promise.then(this.setWiki);
+        console.log(d.conf)
+        d.conf.$routeParams = $routeParams
+        d.conf.read_wiki_id = $routeParams.doc_id
+        console.log(d.conf.read_wiki_id)
+        wikiResourceFactory.get({ doc_id: d.conf.read_wiki_id }).$promise.then(this.setWiki);
     }
 }
 app.controller("Wiki005RestController", Wiki005RestController)
@@ -91,9 +90,9 @@ app.controller("Wiki005RestController", Wiki005RestController)
 class Wiki004RestController extends Wiki000AbstractController {
     constructor($scope, $routeParams, dataFactory) {
         super($scope)
-        $scope.read_wiki_id = $routeParams.doc_id
-        console.log($scope.read_wiki_id)
-        dataFactory.httpGetRest('/r/adn/d/' + $scope.read_wiki_id).then(this.setWiki)
+        d.conf.read_wiki_id = $routeParams.doc_id
+        console.log(d.conf.read_wiki_id)
+        dataFactory.httpGetRest('/r/adn/d/' + d.conf.read_wiki_id).then(this.setWiki)
     }
 }
 app.controller("Wiki004RestController", Wiki004RestController)
@@ -199,23 +198,75 @@ sql_app.simpleSQLs = [
 ]
 
 class EdTextController {
-    constructor($scope) {
-        $scope.d = d
-        console.log(d.conf.read_wiki_id)
+    edTextFactory
+    constructor(edTextFactory) { this.edTextFactory = edTextFactory }
+}
+
+// app.factory("edTextFactory", EdTextFactory)
+class EdTextFactory {
+    constructor($timeout, $q) {
+        let toChangeToSave, toSecToSave
+        let secToSave = (o) => {
+            if (toSecToSave) $timeout.cancel(toSecToSave)
+            toSecToSave = $timeout(() => {
+                if (o.s.cntChange > 0) {
+                    if (!o.startTime)
+                        o.startTime = new Date()
+                    o.s.runSec = Math.round((new Date() - o.startTime.getTime())/1000)
+                    console.log(1, o.s.runTime, $q)
+                    if(o.s.runSec>30){
+                        o.save()
+                    }
+                }
+                secToSave(o)
+            }, 2000)
+        }
+        let o = {
+            initElEdId: (s) => {
+                let o = this
+                o.s = s
+                o.s.d = d
+                o.s.value_1_edit = d.elMap[s.elEdId].value_1_22
+                console.log(s.elEdId, d.elMap[s.elEdId], s)
+                o.s.cntChange = 0
+                secToSave(o)
+            },
+            save: () => {
+                let o = this
+                o.s.cntChange = 0
+                delete o.startTime
+                console.log(o.s.cntChange, o.s.value_1_edit)
+            },
+            onChange: () => {
+                let o = this
+                if (toChangeToSave) $timeout.cancel(toChangeToSave)
+                toChangeToSave = $timeout(() => {
+                    if (d.elMap[o.s.elEdId].value_1_22 != o.s.value_1_edit) {
+                        o.s.cntChange++
+                        d.elMap[o.s.elEdId].value_1_22 = o.s.value_1_edit
+                    }
+                    console.log(o.s.cntChange, o.s.value_1_edit == d.elMap[o.s.elEdId].value_1_22)
+                }, 500)
+            },
+        }
+        return o
     }
 }
+app.factory("edTextFactory", EdTextFactory)
+
+
 app.directive('amEdText', () => {
     return {
         restrict: 'A',
         transclude: true,
         templateUrl: 'amEdText.html',
-        controller: ['$scope', EdTextController],
-        controllerAs: 'edTextCtrl',
+        controller: ['edTextFactory', EdTextController],
+        controllerAs: 'ctrlEdText',
         scope: { elId: '<elEdId', },
-        link: (s) => {
+        link: (s, e, a, c) => {
             if (d.conf.$routeParams.el_id == s.elId) {
                 s.elEdId = s.elId
-                console.log(s, d.conf.$routeParams.el_id == s.elId)
+                c.edTextFactory.initElEdId(s)
             }
         },
     }

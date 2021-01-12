@@ -2,10 +2,13 @@
 <div data-ng-show="elId==elEdId" class="w3-card w3-leftbar">
     <div class="w3-blue-grey">
         <i class="fas fa-edit"></i>
-        <a href="#!/wiki005Rest/{{d.conf.read_wiki_id}}" class="w3-right"><i class="far fa-window-close"></i></a>
+        <span class="w3-tiny"> {{cntChange}}/{{runSec}} </span>
+        <a href="#!/wiki005Rest/{{d.conf.read_wiki_id}}" class="w3-right"> <i class="far fa-window-close"></i></a>
     </div>
     <div>
-        <textarea class="am-width-100pr" data-ng-model="d.elMap[elId].value_1_22"></textarea>
+        <textarea class="am-width-100pr" data-ng-change="ctrlEdText.edTextFactory.onChange()"
+            data-ng-model="value_1_edit"></textarea>
     </div>
-    <button class="w3-btn">save</button>
+    <button class="w3-btn w3-border" data-ng-class="{'w3-disabled':cntChange==0}"
+        data-ng-click="ctrlEdText.edTextFactory.save()">save</button>
 </div>
