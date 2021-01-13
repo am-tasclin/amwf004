@@ -205,48 +205,72 @@ class EdTextController {
 // app.factory("edTextFactory", EdTextFactory)
 class EdTextFactory {
     constructor($timeout, $q) {
-        let toChangeToSave, toSecToSave
-        let secToSave = (o) => {
-            if (toSecToSave) $timeout.cancel(toSecToSave)
-            toSecToSave = $timeout(() => {
-                if (o.s.cntChange > 0) {
-                    if (!o.startTime)
-                        o.startTime = new Date()
-                    o.s.runSec = Math.round((new Date() - o.startTime.getTime())/1000)
-                    console.log(1, o.s.runTime, $q)
-                    if(o.s.runSec>30){
-                        o.save()
-                    }
+        let timeoutChangeToSave, timeoutSecToSave
+        //повтореня DWCS та запис
+        let repeatDWCStoSave = (o) => {
+            if (o.s.runSec > 0) {
+                if (o.s.runSec < 10) {
+                    console.log(o.s.runSec)
+                    deferWaitChangeSave(o).then(repeatDWCStoSave)
+                } else {
+                    console.log('goto save', o.s.runSec)
+                    o.save()
                 }
-                secToSave(o)
-            }, 2000)
+            } else {
+                console.error('repeatDWCS ERROR:')
+            }
+        }
+        //deferWaitChangeSave DWCS - відкласти очікування після змін для збереження
+        let deferWaitChangeSave = (o) => {
+            let deferred = $q.defer()
+            if (o.s.cntChange > 0) {
+                if (!o.startTime) o.startTime = new Date()
+                if (timeoutSecToSave) $timeout.cancel(timeoutSecToSave)
+                timeoutSecToSave = $timeout(() => {
+                    if (o.startTime)
+                        o.s.runSec = Math.round((new Date() - o.startTime.getTime()) / 1000)
+                    deferred.resolve(o)
+                }, 2000)
+            } else {
+                deferred.resolve(o)
+            }
+            return deferred.promise
         }
         let o = {
-            initElEdId: (s) => {
+            onChange: function () {
                 let o = this
+                if (timeoutChangeToSave) $timeout.cancel(timeoutChangeToSave)
+                timeoutChangeToSave = $timeout(() => {
+                    if (d.elMap[o.s.elEdId].value_1_22 != o.s.value_1_edit) {
+                        o.s.cntChange++
+                        d.elMap[o.s.elEdId].value_1_22 = o.s.value_1_edit
+                        console.log('goto deferWaitChangeSave', o)
+                        deferWaitChangeSave(o).then(repeatDWCStoSave)
+                        if (o.s.cntChange > 3) {
+                            console.log('goto save', o.s.cntChange > 3)
+                            o.save()
+                        }
+                    }
+                    console.log(o.s.cntChange, o.s.value_1_edit == d.elMap[o.s.elEdId].value_1_22)
+                }, 500)
+            },
+            save: function () {
+                let o = this
+                console.log('run save', o)
+                o.s.cntChange = 0
+                delete o.startTime
+                delete o.s.runSec
+                console.log(o.s.cntChange, o.s.value_1_edit)
+            },
+            initElEdId: function (s) {
+                let o = this
+                console.log(o)
                 o.s = s
                 o.s.d = d
                 o.s.value_1_edit = d.elMap[s.elEdId].value_1_22
                 console.log(s.elEdId, d.elMap[s.elEdId], s)
                 o.s.cntChange = 0
-                secToSave(o)
-            },
-            save: () => {
-                let o = this
-                o.s.cntChange = 0
-                delete o.startTime
-                console.log(o.s.cntChange, o.s.value_1_edit)
-            },
-            onChange: () => {
-                let o = this
-                if (toChangeToSave) $timeout.cancel(toChangeToSave)
-                toChangeToSave = $timeout(() => {
-                    if (d.elMap[o.s.elEdId].value_1_22 != o.s.value_1_edit) {
-                        o.s.cntChange++
-                        d.elMap[o.s.elEdId].value_1_22 = o.s.value_1_edit
-                    }
-                    console.log(o.s.cntChange, o.s.value_1_edit == d.elMap[o.s.elEdId].value_1_22)
-                }, 500)
+                // secToSave(o)
             },
         }
         return o
