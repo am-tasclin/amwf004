@@ -60,6 +60,22 @@ const conf = {
     }
 }
 
+d.conf.wiki = {
+    cl: {
+        root: ['h1', 'p', 'h2', 'ol'],
+        h2: ['h3', 'p', 'ol'],
+        h3: ['p', 'ol'],
+    },
+    menu: ['h2', 'h3', 'p', 'ol'],
+    ref: {
+        h1: 1,
+        h2: 371364,
+        h3: 371363,
+        p: 371359,
+        ol: 371367,
+    }
+}
+
 const read_wiki_id = 371357
 class Wiki000AbstractController extends AmDocAbstractController {
     constructor($scope) {
@@ -75,13 +91,16 @@ class Wiki000AbstractController extends AmDocAbstractController {
 
 // app.controller("Wiki005RestController", Wiki005RestController)
 class Wiki005RestController extends Wiki000AbstractController {
-    constructor($scope, $routeParams, wikiResourceFactory) {
+    constructor($scope, $routeParams, wikiResourceFactory, edTextFactory) {
         super($scope)
         console.log(d.conf)
         d.conf.$routeParams = $routeParams
         d.conf.read_wiki_id = $routeParams.doc_id
         console.log(d.conf.read_wiki_id)
-        wikiResourceFactory.get({ doc_id: d.conf.read_wiki_id }).$promise.then(this.setWiki);
+        wikiResourceFactory.adn_d.get({ doc_id: d.conf.read_wiki_id }).$promise.then(this.setWiki);
+        return {
+            wikiItemAddEl: edTextFactory.wikiItemAddEl,
+        }
     }
 }
 app.controller("Wiki005RestController", Wiki005RestController)
@@ -199,7 +218,12 @@ sql_app.simpleSQLs = [
 
 class EdTextController {
     edTextFactory
-    constructor(edTextFactory) { this.edTextFactory = edTextFactory }
+    constructor(edTextFactory) {
+        return {
+            edTextFactory: edTextFactory,
+            wikiItemAddEl: edTextFactory.wikiItemAddEl,
+        }
+    }
 }
 
 // app.factory("edTextFactory", EdTextFactory)
@@ -232,11 +256,27 @@ class EdTextFactory {
                     deferred.resolve(o)
                 }, 2000)
             } else {
-                deferred.resolve(o)
+                // deferred.resolve(o) // endless
             }
             return deferred.promise
         }
         let o = {
+            wikiItemAddEl: (newTagName, id) => {
+                let elParent = d.elMap[id]
+                let sqlCmdMap = {
+                    next_doc_ids: 1,
+                    insert_doc: {
+                        calc_doc_id: 0,
+                        reference: d.conf.wiki.ref[newTagName],
+                        parent: elParent.doc_id,
+                        insert_string:{},
+                    }
+                }
+                console.log(1, newTagName, d.conf.wiki.ref[newTagName], id, elParent.r1value, elParent, sqlCmdMap)
+                wikiResourceFactory.adn_insert.save(sqlCmdMap).$promise.then((map) => {
+                    console.log(map)
+                })
+            },
             onChange: function () {
                 let o = this
                 if (timeoutChangeToSave) $timeout.cancel(timeoutChangeToSave)
@@ -262,9 +302,10 @@ class EdTextFactory {
                 delete o.startTime
                 delete o.s.runSec
                 console.log(o.s.cntChange, o.s.value_1_edit)
-                wikiResourceFactory.save({ doc_id: o.s.elId, value: o.s.value_1_edit }).$promise.then((map) => {
+                const paramDefaults = { doc_id: o.s.elEdId, value: o.s.value_1_edit }
+                wikiResourceFactory.adn_d.save(paramDefaults).$promise.then((map) => {
                     console.log(map)
-                });
+                })
             },
             initElEdId: function (s) {
                 let o = this
@@ -289,11 +330,11 @@ app.directive('amEdText', () => {
         transclude: true,
         templateUrl: 'amEdText.html',
         controller: ['edTextFactory', EdTextController],
-        controllerAs: 'ctrlEdText',
-        scope: { elId: '<elEdId', },
+        controllerAs: 'ctrl',
+        scope: { id: '<elEdId', },
         link: (s, e, a, c) => {
-            if (d.conf.$routeParams.el_id == s.elId) {
-                s.elEdId = s.elId
+            if (d.conf.$routeParams.el_id == s.id) {
+                s.elEdId = s.id
                 c.edTextFactory.initElEdId(s)
             }
         },

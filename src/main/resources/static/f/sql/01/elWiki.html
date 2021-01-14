@@ -2,7 +2,8 @@
     <div data-am-ed-text data-el:ed:id="id">
         <div class="w3-tooltip">
             <p data-ng-bind-html="markdownInLine(d.elMap[id].value_1_22)"></p>
-            <span class="w3-text w3-border" style="position:absolute;left:0;bottom: -1em;"
+            <span data-ng-if="!d.elMap[id].value_1_22"> {{d.elMap[id].r1value}} {{d.elMap[id].doc_id}} </span>
+            <span class="w3-text w3-border w3-card w3-white" style="position:absolute;left:0;bottom: -1em;"
                 data-ng-include="'wikiTootipText.html'"></span>
         </div>
     </div>

@@ -27,9 +27,41 @@ public class AbstractDataNode extends DbCommon {
         return list;
     }
 
-	public void updateString(Map<String, Object> map) {
-        int update = dbParamJdbcTemplate.update("UPDATE string SET value=:value WHERE string_id=:doc_id", map);
+    public void updateString(Map<String, Object> map) {
+        String sql = "UPDATE string SET value=:value WHERE string_id=:doc_id";
+        int update = dbParamJdbcTemplate.update(sql, map);
         map.put("update", update);
-	}
+    }
 
+	public void sqlCmdMapToSql(Map<String, Object> sqlCmdMap) {
+        int next_doc_ids = (int) sqlCmdMap.get("next_doc_ids");
+        long[] idsForAction = new long[next_doc_ids];
+        for (int i = 0; i < idsForAction.length; i++) {
+            long l = nextDbId();
+            idsForAction[i]=l;
+        }
+        logger.info("idsForAction = " + idsForAction);
+        sqlCmdMap.put("idsForAction", idsForAction);
+        Map<String, Object> insert_doc =  (Map<String, Object>) sqlCmdMap.get("insert_doc");
+        int calc_doc_id = (int) insert_doc.get("calc_doc_id");
+        long doc_id = idsForAction[calc_doc_id];
+        logger.info("doc_id = " + doc_id);
+        insert_doc.put("doc_id", doc_id);
+        String sql = "INSERT INTO doc (doc_id,parent,reference) VALUES (:doc_id,:parent,:reference);";
+        sql = sql.replace(":doc_id", ""+doc_id);
+        sql = sql.replace(":parent", ""+insert_doc.get("parent"));
+        sql = sql.replace(":reference", ""+insert_doc.get("reference"));
+        insert_doc.put("sql", sql);
+        logger.info("sqlCmdMap = " + sqlCmdMap);
+	}
+	/**
+	 * Генератор наступного ID единого для всієї БД.
+	 * 
+	 * @return Наступний ID единий для всієй БД.
+	 */
+	protected long nextDbId() {
+		String sql_nextDbId = env.getProperty("sql_app.nextDbId");
+		long nextDbId = dbJdbcTemplate.queryForObject(sql_nextDbId, Integer.class);
+		return nextDbId;
+	}
 }

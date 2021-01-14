@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -25,6 +26,13 @@ public class AbstractDataNodeRest {
     protected static final Logger logger = LoggerFactory.getLogger(AbstractDataNodeRest.class);
     protected @Autowired @Qualifier("db1AbstractDataNode") AbstractDataNode abstractDataNode;
 
+    @PostMapping("insert")
+    public @ResponseBody Map<String, Object> insertElementFromSqlCmdMap(@RequestBody Map<String, Object> sqlCmdMap) {
+        abstractDataNode.sqlCmdMapToSql(sqlCmdMap);
+        sqlCmdMap.put("hello", "insert World!");
+        return sqlCmdMap;
+    }
+
     @PostMapping("d/{doc_id}")
     public @ResponseBody Map<String, Object> updateElementStringValue(@PathVariable Long doc_id,
             @RequestParam(value = "value", required = true) String value) {
@@ -32,7 +40,7 @@ public class AbstractDataNodeRest {
         map.put("doc_id", doc_id);
         map.put("value", value);
         abstractDataNode.updateString(map);
-        logger.info("msg "+map);
+        logger.info("msg " + map);
         return map;
     }
 
