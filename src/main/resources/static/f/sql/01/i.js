@@ -204,7 +204,7 @@ class EdTextController {
 
 // app.factory("edTextFactory", EdTextFactory)
 class EdTextFactory {
-    constructor($timeout, $q) {
+    constructor($timeout, $q, wikiResourceFactory) {
         let timeoutChangeToSave, timeoutSecToSave
         //повтореня DWCS та запис
         let repeatDWCStoSave = (o) => {
@@ -256,11 +256,15 @@ class EdTextFactory {
             },
             save: function () {
                 let o = this
-                console.log('run save', o)
+                // console.log('run save', o)
+                console.log('run save', d.elMap[o.s.elId], wikiResourceFactory)
                 o.s.cntChange = 0
                 delete o.startTime
                 delete o.s.runSec
                 console.log(o.s.cntChange, o.s.value_1_edit)
+                wikiResourceFactory.save({ doc_id: o.s.elId, value: o.s.value_1_edit }).$promise.then((map) => {
+                    console.log(map)
+                });
             },
             initElEdId: function (s) {
                 let o = this

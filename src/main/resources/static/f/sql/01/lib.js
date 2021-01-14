@@ -11,7 +11,7 @@ class AmDocAbstractController {
 // app.factory("wikiResourceFactory", WikiResourceFactory)
 class WikiResourceFactory {
     constructor($resource) {
-        return $resource('/r/adn/d/:doc_id', { doc_id: '@doc_id' })
+        return $resource('/r/adn/d/:doc_id', { doc_id: '@doc_id', value:'@value' })
     }
     then = (success) => {//not work
         this.$promise.then(success)

@@ -14,7 +14,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -22,6 +24,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class AbstractDataNodeRest {
     protected static final Logger logger = LoggerFactory.getLogger(AbstractDataNodeRest.class);
     protected @Autowired @Qualifier("db1AbstractDataNode") AbstractDataNode abstractDataNode;
+
+    @PostMapping("d/{doc_id}")
+    public @ResponseBody Map<String, Object> updateElementStringValue(@PathVariable Long doc_id,
+            @RequestParam(value = "value", required = true) String value) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("doc_id", doc_id);
+        map.put("value", value);
+        abstractDataNode.updateString(map);
+        logger.info("msg "+map);
+        return map;
+    }
 
     @GetMapping("el/{doc_id}")
     public @ResponseBody Map<String, Object> getElementById(@PathVariable Long doc_id) {
@@ -52,11 +65,11 @@ public class AbstractDataNodeRest {
         d.put("parentsList2", parentsList2);
         if (parentsList2.size() > 0) {
             List<Long> parentsList3 = readSqlName("sql_app.SELECT_parentsList_with_i18n",
-            Map.of("parentsList", parentsList2), d);
+                    Map.of("parentsList", parentsList2), d);
             d.put("parentsList3", parentsList3);
             if (parentsList3.size() > 0) {
                 List<Long> parentsList4 = readSqlName("sql_app.SELECT_parentsList_with_i18n",
-                Map.of("parentsList", parentsList3), d);
+                        Map.of("parentsList", parentsList3), d);
                 d.put("parentsList4", parentsList4);
                 if (parentsList4.size() > 0) {
                     List<Long> parentsList5 = readSqlName("sql_app.SELECT_parentsList_with_i18n",

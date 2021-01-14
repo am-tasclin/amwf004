@@ -27,4 +27,9 @@ public class AbstractDataNode extends DbCommon {
         return list;
     }
 
+	public void updateString(Map<String, Object> map) {
+        int update = dbParamJdbcTemplate.update("UPDATE string SET value=:value WHERE string_id=:doc_id", map);
+        map.put("update", update);
+	}
+
 }
