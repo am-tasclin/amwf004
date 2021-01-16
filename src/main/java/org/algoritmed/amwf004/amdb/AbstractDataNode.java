@@ -33,35 +33,43 @@ public class AbstractDataNode extends DbCommon {
         map.put("update", update);
     }
 
-	public void sqlCmdMapToSql(Map<String, Object> sqlCmdMap) {
+    public void sqlCmdMapToSql(Map<String, Object> sqlCmdMap) {
         int next_doc_ids = (int) sqlCmdMap.get("next_doc_ids");
         long[] idsForAction = new long[next_doc_ids];
         for (int i = 0; i < idsForAction.length; i++) {
             long l = nextDbId();
-            idsForAction[i]=l;
+            idsForAction[i] = l;
         }
         logger.info("idsForAction = " + idsForAction);
         sqlCmdMap.put("idsForAction", idsForAction);
-        Map<String, Object> insert_doc =  (Map<String, Object>) sqlCmdMap.get("insert_doc");
+        Map<String, Object> insert_doc = (Map<String, Object>) sqlCmdMap.get("insert_doc");
         int calc_doc_id = (int) insert_doc.get("calc_doc_id");
         long doc_id = idsForAction[calc_doc_id];
         logger.info("doc_id = " + doc_id);
         insert_doc.put("doc_id", doc_id);
-        String sql = "INSERT INTO doc (doc_id,parent,reference) VALUES (:doc_id,:parent,:reference);";
-        sql = sql.replace(":doc_id", ""+doc_id);
-        sql = sql.replace(":parent", ""+insert_doc.get("parent"));
-        sql = sql.replace(":reference", ""+insert_doc.get("reference"));
+        String sql = "INSERT INTO doc (doc_id,parent,reference) VALUES (:doc_id,:parent,:reference); ";
+        sql = sql.replace(":doc_id", "" + doc_id);
+        sql = sql.replace(":parent", "" + insert_doc.get("parent"));
+        sql = sql.replace(":reference", "" + insert_doc.get("reference"));
+        Map<String, Object> insert_string = (Map<String, Object>) insert_doc.get("insert_string");
+        if (insert_string != null) {
+            logger.info("insert_string = " + insert_string);
+            String sql_string = "INSERT INTO string (doc_id) VALUES (:doc_id); ";
+            sql_string = sql_string.replace(":doc_id", "" + doc_id);
+            sql += sql_string;
+        }
         insert_doc.put("sql", sql);
         logger.info("sqlCmdMap = " + sqlCmdMap);
-	}
-	/**
-	 * Генератор наступного ID единого для всієї БД.
-	 * 
-	 * @return Наступний ID единий для всієй БД.
-	 */
-	protected long nextDbId() {
-		String sql_nextDbId = env.getProperty("sql_app.nextDbId");
-		long nextDbId = dbJdbcTemplate.queryForObject(sql_nextDbId, Integer.class);
-		return nextDbId;
-	}
+    }
+
+    /**
+     * Генератор наступного ID единого для всієї БД.
+     * 
+     * @return Наступний ID единий для всієй БД.
+     */
+    protected long nextDbId() {
+        String sql_nextDbId = env.getProperty("sql_app.nextDbId");
+        long nextDbId = dbJdbcTemplate.queryForObject(sql_nextDbId, Integer.class);
+        return nextDbId;
+    }
 }

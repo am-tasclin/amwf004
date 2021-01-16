@@ -61,7 +61,7 @@ const conf = {
 }
 
 d.conf.wiki = {
-    cl: {
+    cl: {//допустимі children елементи для елементів.
         root: ['h1', 'p', 'h2', 'ol'],
         h2: ['h3', 'p', 'ol'],
         h3: ['p', 'ol'],
@@ -263,16 +263,28 @@ class EdTextFactory {
         let o = {
             wikiItemAddEl: (newTagName, id) => {
                 let elParent = d.elMap[id]
+                let parentId = elParent.doc_id
+                /**
+                 * коррекція parent елемента для нового вузла даних
+                 */
+                if ('p|ol'.indexOf(elParent.r1value) >= 0) {//parent елемент кінцевий елемент
+                    elParent = d.elMap[elParent.parent]
+                }
+                if ('h2' == newTagName && 'h2' == elParent.r1value) {
+                    elParent = d.elMap[elParent.parent]
+                } else if ('h3' == newTagName && 'h3' == elParent.r1value) {
+                    elParent = d.elMap[elParent.parent]
+                }
                 let sqlCmdMap = {
                     next_doc_ids: 1,
                     insert_doc: {
                         calc_doc_id: 0,
                         reference: d.conf.wiki.ref[newTagName],
                         parent: elParent.doc_id,
-                        insert_string:{},
+                        insert_string: {},
                     }
                 }
-                console.log(1, newTagName, d.conf.wiki.ref[newTagName], id, elParent.r1value, elParent, sqlCmdMap)
+                console.log(newTagName, d.conf.wiki.ref[newTagName], id, elParent.r1value, elParent, sqlCmdMap)
                 wikiResourceFactory.adn_insert.save(sqlCmdMap).$promise.then((map) => {
                     console.log(map)
                 })
