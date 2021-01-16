@@ -113,6 +113,7 @@ public class ExecuteSqlBlock extends DbCommon {
 		return sql_from_env;
 	}
 
+	@Transactional
 	public void executeSql(Map<String, Object> data) {
 		String sql = (String) data.get("sql");
 		updateNewIds(sql, data, env);

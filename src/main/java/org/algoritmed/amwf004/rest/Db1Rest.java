@@ -27,7 +27,7 @@ public class Db1Rest{
 	protected static final Logger logger = LoggerFactory.getLogger(Db1Rest.class);
 	protected @Autowired @Qualifier("db1ExecuteSqlBlock")	ExecuteSqlBlock executeSqlBlock;
 
-	@Transactional
+	// @Transactional
 	@PostMapping("/r/url_sql_read_db1")
 	public @ResponseBody Map<String, Object> url_sql_read_db1(
 			@RequestBody Map<String, Object> data

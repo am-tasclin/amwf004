@@ -7,8 +7,8 @@
         <span data-ng-include="'wikiElMenu.html'"></span>|
         <i class="fas fa-minus"></i><i class="fas fa-trash w3-btn w3-padding-small"></i>|
         <i class="fas fa-arrows-alt-v"></i>
-        <i class="fas fa-arrow-up w3-btn w3-padding-small"></i>
-        <i class="fas fa-arrow-down w3-btn w3-padding-small"></i>
+        <i class="fas fa-arrow-up w3-btn w3-padding-small" data-ng:click="ctrl.sortUpElement(id)"></i>
+        <i class="fas fa-arrow-down w3-btn w3-padding-small" data-ng:click="ctrl.sortDownElement(id)"></i>
         <i class="fas fa-compress-alt w3-btn w3-padding-small"></i>
         <i class="fas fa-expand-alt w3-btn w3-padding-small"></i>
     </div>

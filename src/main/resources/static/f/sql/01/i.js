@@ -100,6 +100,7 @@ class Wiki005RestController extends Wiki000AbstractController {
         wikiResourceFactory.adn_d.get({ doc_id: d.conf.read_wiki_id }).$promise.then(this.setWiki);
         return {
             wikiItemAddEl: edTextFactory.wikiItemAddEl,
+            hideChildren: edTextFactory.hideChildren,
         }
     }
 }
@@ -222,6 +223,8 @@ class EdTextController {
         return {
             edTextFactory: edTextFactory,
             wikiItemAddEl: edTextFactory.wikiItemAddEl,
+            sortUpElement: edTextFactory.sortUpElement,
+            sortDownElement: edTextFactory.sortDownElement,
         }
     }
 }
@@ -261,6 +264,29 @@ class EdTextFactory {
             return deferred.promise
         }
         let o = {
+            sortDownElement: (id) => {
+                let el = d.elMap[id]
+                console.log(id, el)
+                let so = upDowntElement(el, 1)
+                console.log(so)
+                wikiResourceFactory.url_sql_read_db1.save(so).$promise.then((map) => {
+                    console.log(map)
+                })
+            },
+            sortUpElement: (id) => {
+                let el = d.elMap[id]
+                console.log(id, el)
+                let so = upDowntElement(el, -1)
+                console.log(so)
+                wikiResourceFactory.url_sql_read_db1.save(so).$promise.then((map) => {
+                    console.log(map)
+                })
+            },
+            hideChildren: (id) => {
+                let el = d.elMap[id]
+                el.hidedChildren = !el.hidedChildren
+                console.log(id, el)
+            },
             wikiItemAddEl: (newTagName, id) => {
                 let elParent = d.elMap[id]
                 let parentId = elParent.doc_id

@@ -13,7 +13,8 @@ class WikiResourceFactory {
     constructor($resource) {
         return {
             adn_d: $resource('/r/adn/d/:doc_id', { doc_id: '@doc_id', value: '@value' }),
-            adn_insert: $resource('/r/adn/insert', {  sqlCmdMap: '@sqlCmdMap' }),
+            adn_insert: $resource('/r/adn/insert', { sqlCmdMap: '@sqlCmdMap' }),
+            url_sql_read_db1: $resource('/r/url_sql_read_db1', { data: '@data' }),
         }
     }
     then = (success) => {//not work
@@ -163,6 +164,30 @@ class DataFactory {
 }
 
 const sql_app = {}
+
+sql_app.replace_params = (sql, data)=>{
+	angular.forEach(sql.split(':'), function (v){
+		var v1 = v.split(' ')[0]
+		.replace(',','')
+		.replace(')','').trim()
+		if(data[v1]){
+			sql = sql.replace(':'+v1, data[v1])
+		}
+	})
+	return sql
+}
+
+
+sql_app.doc_insert_sort = () =>{
+	var sql = "INSERT INTO sort (sort, sort_id) VALUES (:sort, :sort_id)"
+	return sql
+}
+
+sql_app.doc_update_sort = ()=>{
+	var sql = "UPDATE sort SET sort=:sort WHERE sort_id=:sort_id"
+	return sql
+}
+
 sql_app.obj_with_i18n = () => {
     //	", s1.value value_1_22, s1.string_id id_1_22, i1.value value_1_23, i1.integer_id id_1_23, f1.value value_1_24, f1.double_id id_1_24 \n" +
     var sql = "SELECT d1.*, dr1.doctype doctype_r \n\
@@ -231,3 +256,57 @@ var markdownInLine = function (text) {
     var t2 = t2.replace(link, '<a href="$2">$1</a>');
     return t2
 }
+
+function sqlSort(parentClList) {
+    var so = { sql: '' }
+    console.log(parentClList)
+    let sort = 0
+    angular.forEach(parentClList, function (k) {
+        let v = d.elMap[k]
+        if (v.sort_id)
+            var sql = sql_app.doc_update_sort()
+        else
+            var sql = sql_app.doc_insert_sort()
+        sql = sql_app.replace_params(sql, { sort: ++sort, sort_id: v.doc_id, })
+        so.sql += sql + ';\n'
+    })
+    return so
+}
+
+var upDowntElement = function (o, direction) {
+    //	var oParent = this.eMap[o.parent]
+    var oParent = d.elMap[o.parent]
+    let parentClList = d.clList[o.parent]
+    var position = parentClList.indexOf(o.doc_id)
+    console.log(position, o.doc_id, direction)
+    if ((position + 1 == parentClList.length) && direction == 1) {// зробити першим
+        var x = parentClList.splice(position, 1)
+        parentClList.splice(0, 0, x[0])
+    } else if ((position == 0) && direction == -1) {// зробити останнім
+        console.log('зробити останнім')
+        var x = parentClList.splice(position, 1)
+        parentClList.push(x[0])
+    } else {
+        var x = parentClList.splice(position, 1)
+        parentClList.splice(position + direction, 0, x[0])
+    }
+    var so = sqlSort(parentClList)
+    so.sql += sql_app.SELECT_children_with_i18n(oParent.doc_id)
+    //		so.sql += sql_app.SELECT_with_parent(oParent)
+    so.dataAfterSave = function (response) {
+        angular.forEach(response.data, function (v, k) {
+            if (k.includes('list')) {
+                angular.forEach(v, function (v2) {
+                    let v2_old = ctrl.eMap[v2.doc_id]
+                    if (v2_old && v2_old.children)
+                        v2.children = v2_old.children
+                    v2_old = null
+                    ctrl.eMap[v2.doc_id] = v2
+                })
+                d.clList[o.parent] = v
+            }
+        })
+    }
+    return so
+}
+

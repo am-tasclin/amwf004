@@ -919,16 +919,7 @@ var upDowntElement = function(o, direction){
 			var x = oParent.children.splice(position, 1)
 			oParent.children.splice(position + direction, 0, x[0])
 		}
-		var so = {sql:''}
-		angular.forEach(oParent.children, function(v,k){
-			var data = { sort:k+1, sort_id:v.doc_id, }
-			if(v.sort_id)
-				var sql = sql_app.doc_update_sort()
-			else
-				var sql = sql_app.doc_insert_sort()
-			sql = sql_app.replace_params(sql, data)
-			so.sql += sql +';\n'
-		})
+		var so = sqlSort(oParent)
 		so.sql += sql_app.SELECT_children_with_i18n(oParent.doc_id)
 //		so.sql += sql_app.SELECT_with_parent(oParent)
 		so.dataAfterSave = function(response) {
@@ -1538,3 +1529,16 @@ var initSqlExe = function($timeout){
 	}
 
 }
+function sqlSort(oParent) {
+	var so = { sql: '' }
+	angular.forEach(oParent.children, function (v, k) {
+		if (v.sort_id)
+			var sql = sql_app.doc_update_sort()
+		else
+			var sql = sql_app.doc_insert_sort()
+		sql = sql_app.replace_params(sql, { sort: k + 1, sort_id: v.doc_id, })
+		so.sql += sql + ';\n'
+	})
+	return so
+}
+
