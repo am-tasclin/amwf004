@@ -5,7 +5,7 @@
                 class="far fa-window-close"></i></a>
         <i class="fas fa-edit"></i>| <i class="fas fa-plus"></i>
         <span data-ng-include="'wikiElMenu.html'"></span>|
-        <i class="fas fa-minus"></i><i class="fas fa-trash w3-btn w3-padding-small"></i>|
+        <i class="fas fa-minus"></i><i class="fas fa-trash w3-btn w3-padding-small" data-ng:click="ctrl.deleteEndEl(id)"></i>|
         <i class="fas fa-arrows-alt-v"></i>
         <i class="fas fa-arrow-up w3-btn w3-padding-small" data-ng:click="ctrl.sortUpElement(id)"></i>
         <i class="fas fa-arrow-down w3-btn w3-padding-small" data-ng:click="ctrl.sortDownElement(id)"></i>

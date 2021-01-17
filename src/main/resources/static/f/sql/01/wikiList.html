@@ -1,4 +1,24 @@
 <div>
-    <span class="w3-small am-b"> wikiList </span>
+    <span class="w3-small">
+        <span class="am-b"> wikiList: </span>
+        <span class="w3-dropdown-click">
+            <span class="w3-btn w3-border w3-padding-small" data-ng:click="ctrl.createWikiDocDialog()">
+                <i class="fab fa-wikipedia-w"></i>
+                <i class="far fa-file"></i>
+            </span>
+            <div class="w3-dropdown-content w3-card w3-leftbar" data-ng:class="{'w3-show':ctrl.openedCreateWikiDoc}"
+                style="min-width: 22em;">
+                <div class="w3-blue-gray w3-tiny am-b">Створити новий Wiki документ
+                    <a href="" class="w3-right w3-btn w3-padding-small" data-ng:click="ctrl.createWikiDocDialog()"><i
+                            class="far fa-window-close"></i></a>
+                </div>
+                Назва Wiki документу:
+                <div>
+                    <textarea data-ng:model="ctrl.nameNewWikiDoc" class="w3-border am-width-100pr"></textarea>
+                </div>
+                <button class="w3-btn w3-border" data-ng:click="ctrl.createWikiDoc()">save</button>
+            </div>
+        </span>
+    </span>
     <div data-ng-include="'sql.html'"></div>
 </div>

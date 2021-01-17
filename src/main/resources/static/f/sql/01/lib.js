@@ -14,6 +14,7 @@ class WikiResourceFactory {
         return {
             adn_d: $resource('/r/adn/d/:doc_id', { doc_id: '@doc_id', value: '@value' }),
             adn_insert: $resource('/r/adn/insert', { sqlCmdMap: '@sqlCmdMap' }),
+            adn_delete: $resource('/r/adn/delete', { sqlCmdMap: '@sqlCmdMap' }),
             url_sql_read_db1: $resource('/r/url_sql_read_db1', { data: '@data' }),
         }
     }
@@ -273,7 +274,8 @@ function sqlSort(parentClList) {
     return so
 }
 
-var upDowntElement = function (o, direction) {
+var upDowntElement = function (id, direction) {
+    let o = d.elMap[id]
     //	var oParent = this.eMap[o.parent]
     var oParent = d.elMap[o.parent]
     let parentClList = d.clList[o.parent]

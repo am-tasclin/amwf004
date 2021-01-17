@@ -1,12 +1,12 @@
 <div>
     <div class="w3-dropdown-hover">
         <button class="w3-btn w3-padding-small w3-white">
-            <span class="w3-small">readSql {{ctrlSql.simpleSQLselect}}:</span>
-            <span class="am-b w3-small">{{ctrlSql.simpleSQLs[ctrlSql.simpleSQLselect].n}}</span>
+            <span class="w3-small">readSql {{ctrl.simpleSQLselect}}:</span>
+            <span class="am-b w3-small">{{ctrl.simpleSQLs[ctrlSql.simpleSQLselect].n}}</span>
         </button>
         <div class="w3-dropdown-content w3-card" style="width: 600px;">
-            <pre data-ng-repeat="sql in ctrlSql.simpleSQLs" class="w3-hover-shadow  w3-small"
-                data-ng-click="ctrlSql.readSql($index)">
+            <pre data-ng-repeat="sql in ctrl.simpleSQLs" class="w3-hover-shadow  w3-small"
+                data-ng-click="ctrl.readSql($index)">
 <strong>{{sql.n}}</strong>: {{sql.c}}
             </pre>
         </div>
@@ -15,12 +15,12 @@
         <table>
             <thead class="w3-blue-gray w3-small">
                 <tr>
-                    <th data-ng-repeat="(k,v) in ctrlSql.data.list[0]"> {{k}} </th>
+                    <th data-ng-repeat="(k,v) in ctrl.data.list[0]"> {{k}} </th>
                 </tr>
             </thead>
             <tbody>
-                <tr data-ng-repeat="r in ctrlSql.data.list" class="w3-hover-shadow">
-                    <td data-ng-repeat="(k,v) in ctrlSql.data.list[0]" data-am-sql-html>{{r[k]}}</td>
+                <tr data-ng-repeat="r in ctrl.data.list" class="w3-hover-shadow">
+                    <td data-ng-repeat="(k,v) in ctrl.data.list[0]" data-am-sql-html>{{r[k]}}</td>
                 </tr>
             </tbody>
         </table>

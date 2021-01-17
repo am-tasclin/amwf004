@@ -10,12 +10,12 @@ const conf = {
         sql: {
             templateUrl: 'sql1.html',
             controller: 'SqlController',
-            controllerAs: 'ctrlSql',
+            controllerAs: 'ctrl',
         },
         wikiList: {
             templateUrl: 'wikiList.html',
             controller: 'WikiListController',
-            controllerAs: 'ctrlSql',
+            controllerAs: 'ctrl',
         },
         carePlan001: {
             templateUrl: 'carePlan001.html',
@@ -213,6 +213,7 @@ sql_app.simpleSQLs = [
         c: 'SELECT doc_id, value FROM doc d \n\
         LEFT JOIN string ON string_id=doc_id \n\
         WHERE 369940 IN (reference, doc_id, reference2)',
+        wikiFolderId: 371645,
         sqlHtml: { doc_id: '<a href="#!/wiki005Rest/{{r[k]}}">{{r[k]}}</a>', },
     },
 ]
@@ -225,6 +226,7 @@ class EdTextController {
             wikiItemAddEl: edTextFactory.wikiItemAddEl,
             sortUpElement: edTextFactory.sortUpElement,
             sortDownElement: edTextFactory.sortDownElement,
+            deleteEndEl: edTextFactory.deleteEndEl,
         }
     }
 }
@@ -264,20 +266,28 @@ class EdTextFactory {
             return deferred.promise
         }
         let o = {
+            deleteEndEl: (id) => {
+                let clList = d.clList[id]
+                if (!clList) {
+                    let sqlCmdMap = {
+                        delete_doc: {
+                            doc_id: id,
+                        }
+                    }
+                    console.log(id, clList, sqlCmdMap)
+                    wikiResourceFactory.adn_delete.save(sqlCmdMap).$promise.then((map) => {
+                        console.log(map)
+                    })
+                }
+            },
             sortDownElement: (id) => {
-                let el = d.elMap[id]
-                console.log(id, el)
-                let so = upDowntElement(el, 1)
-                console.log(so)
+                let so = upDowntElement(id, 1)
                 wikiResourceFactory.url_sql_read_db1.save(so).$promise.then((map) => {
                     console.log(map)
                 })
             },
             sortUpElement: (id) => {
-                let el = d.elMap[id]
-                console.log(id, el)
-                let so = upDowntElement(el, -1)
-                console.log(so)
+                let so = upDowntElement(id, -1)
                 wikiResourceFactory.url_sql_read_db1.save(so).$promise.then((map) => {
                     console.log(map)
                 })
@@ -416,6 +426,13 @@ class WikiListController extends SqlAbstractController {
     constructor(dataFactory) {
         super(dataFactory)
         if (!this.data) this.readSql(2)
+    }
+    createWikiDoc = () => {
+        let wikiConfigData = sql_app.simpleSQLs[2]
+        console.log(1, this.nameNewWikiDoc, wikiConfigData.wikiFolderId, wikiConfigData)
+    }
+    createWikiDocDialog = () => {
+        this.openedCreateWikiDoc = !this.openedCreateWikiDoc
     }
 }
 app.controller("WikiListController", WikiListController)

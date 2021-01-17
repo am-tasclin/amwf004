@@ -35,7 +35,19 @@ public class AbstractDataNode extends DbCommon {
     }
 
     @Transactional
-    public void sqlCmdMapToSql(Map<String, Object> sqlCmdMap) {
+    public void sqlCmdMapToSqlDelete(Map<String, Object> sqlCmdMap) {
+        Map<String, Object> map_delete_doc = (Map<String, Object>) sqlCmdMap.get("delete_doc");
+        logger.info("sqlCmdMap = " + sqlCmdMap + " | " + map_delete_doc + " | ");
+        logger.info("sqlCmdMap = " + sqlCmdMap + " | " + map_delete_doc + " | " + map_delete_doc.get("doc_id"));
+        String sql_delete_doc = "DELETE FROM doc WHERE doc_id=:doc_id; ";
+        sql_delete_doc = sql_delete_doc.replace(":doc_id", "" + map_delete_doc.get("doc_id"));
+        logger.info("sqlCmdMap = " + sqlCmdMap + " | " + map_delete_doc + " | " + sql_delete_doc);
+        int update = dbParamJdbcTemplate.update(sql_delete_doc, map_delete_doc);
+        map_delete_doc.put("update", update);
+    }
+
+    @Transactional
+    public void sqlCmdMapToSqlInsert(Map<String, Object> sqlCmdMap) {
         int next_doc_ids = (int) sqlCmdMap.get("next_doc_ids");
         long[] idsForAction = new long[next_doc_ids];
         for (int i = 0; i < idsForAction.length; i++) {
