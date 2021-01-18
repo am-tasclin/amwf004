@@ -68,7 +68,14 @@ public class AbstractDataNode extends DbCommon {
         Map<String, Object> map_insert_string = (Map<String, Object>) map_insert_doc.get("insert_string");
         if (map_insert_string != null) {
             logger.info("insert_string = " + map_insert_string);
-            String sql_insert_string = "INSERT INTO string (string_id) VALUES (:doc_id); ";
+            String value = (String) map_insert_string.get("value");
+            String sql_insert_string;
+            if (value != null) {
+                sql_insert_string = "INSERT INTO string (string_id, value) VALUES (:doc_id, :value); ";
+                sql_insert_string = sql_insert_string.replace(":value", "'" + value + "'");
+            } else {
+                sql_insert_string = "INSERT INTO string (string_id) VALUES (:doc_id); ";
+            }
             sql_insert_string = sql_insert_string.replace(":doc_id", "" + doc_id);
             sql_insert_doc += sql_insert_string;
         }

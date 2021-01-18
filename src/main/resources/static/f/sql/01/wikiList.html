@@ -13,12 +13,10 @@
                             class="far fa-window-close"></i></a>
                 </div>
                 Назва Wiki документу:
-                <div>
-                    <textarea data-ng:model="ctrl.nameNewWikiDoc" class="w3-border am-width-100pr"></textarea>
-                </div>
+                <textarea data-ng:model="ctrl.nameNewWikiDoc" class="w3-border am-width-100pr w3-medium"></textarea>
                 <button class="w3-btn w3-border" data-ng:click="ctrl.createWikiDoc()">save</button>
             </div>
         </span>
     </span>
-    <div data-ng-include="'sql.html'"></div>
+    <div data-ng:include="'sql.html'"></div>
 </div>

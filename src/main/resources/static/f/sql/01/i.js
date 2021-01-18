@@ -213,6 +213,7 @@ sql_app.simpleSQLs = [
         c: 'SELECT doc_id, value FROM doc d \n\
         LEFT JOIN string ON string_id=doc_id \n\
         WHERE 369940 IN (reference, doc_id, reference2)',
+        wikiReference: 369940,
         wikiFolderId: 371645,
         sqlHtml: { doc_id: '<a href="#!/wiki005Rest/{{r[k]}}">{{r[k]}}</a>', },
     },
@@ -269,13 +270,8 @@ class EdTextFactory {
             deleteEndEl: (id) => {
                 let clList = d.clList[id]
                 if (!clList) {
-                    let sqlCmdMap = {
-                        delete_doc: {
-                            doc_id: id,
-                        }
-                    }
-                    console.log(id, clList, sqlCmdMap)
-                    wikiResourceFactory.adn_delete.save(sqlCmdMap).$promise.then((map) => {
+                    console.log(id, { delete_doc: { doc_id: id, } })
+                    wikiResourceFactory.adn_delete.save({ delete_doc: { doc_id: id, } }).$promise.then((map) => {
                         console.log(map)
                     })
                 }
@@ -423,17 +419,32 @@ class SqlAbstractController {
 
 // app.controller("WikiListController", WikiListController)
 class WikiListController extends SqlAbstractController {
-    constructor(dataFactory) {
+    constructor(dataFactory, wikiResourceFactory) {
         super(dataFactory)
+        this.wikiResourceFactory = wikiResourceFactory
         if (!this.data) this.readSql(2)
     }
+    wikiResourceFactory
     createWikiDoc = () => {
         let wikiConfigData = sql_app.simpleSQLs[2]
-        console.log(1, this.nameNewWikiDoc, wikiConfigData.wikiFolderId, wikiConfigData)
+        let sqlCmdMap = {
+            next_doc_ids: 1,
+            insert_doc: {
+                calc_doc_id: 0,
+                reference: wikiConfigData.wikiReference,
+                parent: wikiConfigData.wikiFolderId,
+                insert_string: {
+                    value: this.nameNewWikiDoc,
+                },
+            }
+        }
+        console.log(2, this.nameNewWikiDoc, wikiConfigData.wikiFolderId, wikiConfigData, sqlCmdMap)
+        this.wikiResourceFactory.adn_insert.save(sqlCmdMap).$promise.then((map) => {
+            console.log(map)
+        })
     }
-    createWikiDocDialog = () => {
-        this.openedCreateWikiDoc = !this.openedCreateWikiDoc
-    }
+    createWikiDocDialog = () => this.openedCreateWikiDoc = !this.openedCreateWikiDoc
+
 }
 app.controller("WikiListController", WikiListController)
 
