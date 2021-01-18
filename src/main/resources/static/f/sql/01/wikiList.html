@@ -18,5 +18,10 @@
             </div>
         </span>
     </span>
+    <i class="far fa-trash-alt w3-border w3-btn w3-padding-small" data-ng:click="ctrl.deleteWikiDoc()"
+        data-ng:class="{'w3-disabled':!ctrl.choisedListItem}"></i>
+    <div data-ng:repeat="d in ctrl.noDeletable" class="w3-text-red w3-border">
+        {{d}}
+    </div>
     <div data-ng:include="'sql.html'"></div>
 </div>

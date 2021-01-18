@@ -8,20 +8,6 @@ class AmDocAbstractController {
     }
 }
 
-// app.factory("wikiResourceFactory", WikiResourceFactory)
-class WikiResourceFactory {
-    constructor($resource) {
-        return {
-            adn_d: $resource('/r/adn/d/:doc_id', { doc_id: '@doc_id', value: '@value' }),
-            adn_insert: $resource('/r/adn/insert', { sqlCmdMap: '@sqlCmdMap' }),
-            adn_delete: $resource('/r/adn/delete', { sqlCmdMap: '@sqlCmdMap' }),
-            url_sql_read_db1: $resource('/r/url_sql_read_db1', { data: '@data' }),
-        }
-    }
-    then = (success) => {//not work
-        this.$promise.then(success)
-    }
-}
 // app.factory("treeFactory", TreeFactory)
 class TreeFactory {
     constructor(dataFactory, $q) {
@@ -132,8 +118,12 @@ class TreeFactory {
 
 // app.factory("dataFactory", DataFactory)
 class DataFactory {
-    constructor($http, $q) {
+    constructor($http, $q, $resource) {
         return {
+            adn_d: $resource('/r/adn/d/:doc_id', { doc_id: '@doc_id', value: '@value' }),
+            adn_insert: $resource('/r/adn/insert', { sqlCmdMap: '@sqlCmdMap' }),
+            adn_delete: $resource('/r/adn/delete', { sqlCmdMap: '@sqlCmdMap' }),
+            url_sql_read_db1: $resource('/r/url_sql_read_db1', { data: '@data' }),
             url: '/r/url_sql_read_db1',
             httpGet: function (params) {
                 var deferred = $q.defer()

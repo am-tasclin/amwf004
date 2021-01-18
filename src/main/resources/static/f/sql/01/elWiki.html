@@ -3,13 +3,13 @@
         <div class="w3-tooltip">
             <p data-ng-bind-html="markdownInLine(d.elMap[id].value_1_22)"></p>
             <span data-ng-if="!d.elMap[id].value_1_22"> {{d.elMap[id].r1value}} {{d.elMap[id].doc_id}} </span>
-            <span class="w3-text w3-border w3-card w3-white" style="position:absolute;left:0;bottom: -1em;"
+            <span class="w3-text w3-border w3-card w3-white" style="position:absolute;left:0;bottom: -2em;"
                 data-ng-include="'wikiTootipText.html'"></span>
         </div>
     </div>
 </div>
 <div data-ng-switch-when="h2">
-    <div data-am-ed-text data-el:ed:id="id">
+    <div data-am:ed:text data-el:ed:id="id">
         <h2><span data-ng-include="'h23Wiki.html'"></span></h2>
     </div>
 </div>

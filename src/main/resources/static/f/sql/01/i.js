@@ -3,7 +3,6 @@ var app = angular.module("app", ['ngRoute', 'ngResource', 'ngSanitize']);
 angular.element(() => angular.bootstrap(document, ['app']))
 app.factory("dataFactory", DataFactory)
 app.factory("treeFactory", TreeFactory)
-app.factory("wikiResourceFactory", WikiResourceFactory)
 
 const conf = {
     singlePagesUrl: {
@@ -83,7 +82,7 @@ class Wiki000AbstractController extends AmDocAbstractController {
         $scope.markdownInLine = markdownInLine
     }
     setWiki = (data) => {
-        console.log(data.elMap, data.clList)
+        console.log(1, data.elMap, data.clList)
         d.elMap = data.elMap
         d.clList = data.clList
     }
@@ -91,13 +90,13 @@ class Wiki000AbstractController extends AmDocAbstractController {
 
 // app.controller("Wiki005RestController", Wiki005RestController)
 class Wiki005RestController extends Wiki000AbstractController {
-    constructor($scope, $routeParams, wikiResourceFactory, edTextFactory) {
+    constructor($scope, $routeParams, dataFactory, edTextFactory) {
         super($scope)
         console.log(d.conf)
         d.conf.$routeParams = $routeParams
         d.conf.read_wiki_id = $routeParams.doc_id
         console.log(d.conf.read_wiki_id)
-        wikiResourceFactory.adn_d.get({ doc_id: d.conf.read_wiki_id }).$promise.then(this.setWiki);
+        dataFactory.adn_d.get({ doc_id: d.conf.read_wiki_id }).$promise.then(this.setWiki);
         return {
             wikiItemAddEl: edTextFactory.wikiItemAddEl,
             hideChildren: edTextFactory.hideChildren,
@@ -210,8 +209,11 @@ sql_app.simpleSQLs = [
     },
     {
         n: 'WikiList',
-        c: 'SELECT doc_id, value FROM doc d \n\
+        c: 'SELECT doc_id, value, cnt_child, parent FROM doc d \n\
         LEFT JOIN string ON string_id=doc_id \n\
+        LEFT JOIN ( \n\
+            SELECT count(parent) cnt_child, parent child FROM doc GROUP BY parent \n\
+            ) cnt ON cnt.child=d.doc_id \n\
         WHERE 369940 IN (reference, doc_id, reference2)',
         wikiReference: 369940,
         wikiFolderId: 371645,
@@ -234,7 +236,7 @@ class EdTextController {
 
 // app.factory("edTextFactory", EdTextFactory)
 class EdTextFactory {
-    constructor($timeout, $q, wikiResourceFactory) {
+    constructor($timeout, $q, dataFactory) {
         let timeoutChangeToSave, timeoutSecToSave
         //повтореня DWCS та запис
         let repeatDWCStoSave = (o) => {
@@ -270,21 +272,21 @@ class EdTextFactory {
             deleteEndEl: (id) => {
                 let clList = d.clList[id]
                 if (!clList) {
-                    console.log(id, { delete_doc: { doc_id: id, } })
-                    wikiResourceFactory.adn_delete.save({ delete_doc: { doc_id: id, } }).$promise.then((map) => {
-                        console.log(map)
+                    console.log(1, id, { delete_doc: { doc_id: id, } })
+                    dataFactory.adn_delete.save({ delete_doc: { doc_id: id, } }).$promise.then((map) => {
+                        console.log(1, map)
                     })
                 }
             },
             sortDownElement: (id) => {
                 let so = upDowntElement(id, 1)
-                wikiResourceFactory.url_sql_read_db1.save(so).$promise.then((map) => {
+                dataFactory.url_sql_read_db1.save(so).$promise.then((map) => {
                     console.log(map)
                 })
             },
             sortUpElement: (id) => {
                 let so = upDowntElement(id, -1)
-                wikiResourceFactory.url_sql_read_db1.save(so).$promise.then((map) => {
+                dataFactory.url_sql_read_db1.save(so).$promise.then((map) => {
                     console.log(map)
                 })
             },
@@ -317,8 +319,8 @@ class EdTextFactory {
                     }
                 }
                 console.log(newTagName, d.conf.wiki.ref[newTagName], id, elParent.r1value, elParent, sqlCmdMap)
-                wikiResourceFactory.adn_insert.save(sqlCmdMap).$promise.then((map) => {
-                    console.log(map)
+                dataFactory.adn_insert.save(sqlCmdMap).$promise.then((map) => {
+                    console.log(1, map)
                 })
             },
             onChange: function () {
@@ -341,14 +343,14 @@ class EdTextFactory {
             save: function () {
                 let o = this
                 // console.log('run save', o)
-                console.log('run save', d.elMap[o.s.elId], wikiResourceFactory)
+                console.log('run save', d.elMap[o.s.elId])
                 o.s.cntChange = 0
                 delete o.startTime
                 delete o.s.runSec
                 console.log(o.s.cntChange, o.s.value_1_edit)
                 const paramDefaults = { doc_id: o.s.elEdId, value: o.s.value_1_edit }
-                wikiResourceFactory.adn_d.save(paramDefaults).$promise.then((map) => {
-                    console.log(map)
+                dataFactory.adn_d.save(paramDefaults).$promise.then((map) => {
+                    console.log(1, map)
                 })
             },
             initElEdId: function (s) {
@@ -419,31 +421,57 @@ class SqlAbstractController {
 
 // app.controller("WikiListController", WikiListController)
 class WikiListController extends SqlAbstractController {
-    constructor(dataFactory, wikiResourceFactory) {
+    constructor(dataFactory) {
         super(dataFactory)
-        this.wikiResourceFactory = wikiResourceFactory
         if (!this.data) this.readSql(2)
+        console.log(this.data)
+        this.wikiConfigData = sql_app.simpleSQLs[2]
+        console.log(this.wikiConfigData)
     }
-    wikiResourceFactory
+    wikiConfigData
     createWikiDoc = () => {
-        let wikiConfigData = sql_app.simpleSQLs[2]
         let sqlCmdMap = {
             next_doc_ids: 1,
             insert_doc: {
                 calc_doc_id: 0,
-                reference: wikiConfigData.wikiReference,
-                parent: wikiConfigData.wikiFolderId,
+                reference: this.wikiConfigData.wikiReference,
+                parent: this.wikiConfigData.wikiFolderId,
                 insert_string: {
                     value: this.nameNewWikiDoc,
                 },
             }
         }
-        console.log(2, this.nameNewWikiDoc, wikiConfigData.wikiFolderId, wikiConfigData, sqlCmdMap)
-        this.wikiResourceFactory.adn_insert.save(sqlCmdMap).$promise.then((map) => {
+        console.log(2, this.nameNewWikiDoc, this.wikiConfigData.wikiFolderId, this.wikiConfigData, sqlCmdMap)
+        this.dataFactory.adn_insert.save(sqlCmdMap).$promise.then((map) => {
             console.log(map)
         })
     }
     createWikiDocDialog = () => this.openedCreateWikiDoc = !this.openedCreateWikiDoc
+    choiseListItem = (r) => {
+        delete this.noDeletable
+        this.choisedListItem = r.doc_id
+    }
+    deleteWikiDoc = () => {
+        let ctrl = this
+        console.log(this.choisedListItem, ctrl.wikiConfigData.wikiFolderId)
+        ctrl.noDeletable = []
+        angular.forEach(this.data.list, (li) => {
+            if (li.doc_id == this.choisedListItem) {
+                if (li.parent != ctrl.wikiConfigData.wikiFolderId) {
+                    ctrl.noDeletable.push('Файл в спеціалізованій папці, не видаляється в цьому діалозі')
+                }
+                if (li.cnt_child) {
+                    ctrl.noDeletable.push('Файл не пустий, видаляються тільки пусті файли')
+                }
+                console.log(li.doc_id, li.parent != ctrl.wikiConfigData.wikiFolderId, li, ctrl.noDeletable, ctrl.noDeletable.length)
+            }
+        })
+        if (ctrl.noDeletable.length == 0) {//delete element - empty wiki doc
+            this.dataFactory.adn_delete.save({ delete_doc: { doc_id: this.choisedListItem, } }).$promise.then((map) => {
+                console.log(map)
+            })
+        }
+    }
 
 }
 app.controller("WikiListController", WikiListController)
