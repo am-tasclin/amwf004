@@ -194,45 +194,31 @@ class FirstController extends AmDocAbstractController {
 }
 app.controller("FirstController", FirstController)
 
-sql_app.simpleSQLs = [
-    {
-        n: 'SQL from DB',
+sql_app.simpleSQLs = {
+    SQL_from_DB: {
         c: 'SELECT doc_id, value sql_select FROM doc \n\
     LEFT JOIN string ON string_id=doc_id \n\
     WHERE 371327 IN (reference2)'
     },
-    {
-        n: 'FHIR.DomainResource',
+    FHIR_DomainResource: {
         c: 'SELECT value FHIR_DomainResource, d.* FROM doc d \n\
     LEFT JOIN string ON string_id=doc_id \n\
     WHERE 369789 IN (reference)'
     },
-    {
-        n: 'WikiList',
+    WikiList: {
         c: 'SELECT doc_id, value, cnt_child, parent FROM doc d \n\
         LEFT JOIN string ON string_id=doc_id \n\
         LEFT JOIN ( \n\
             SELECT count(parent) cnt_child, parent child FROM doc GROUP BY parent \n\
             ) cnt ON cnt.child=d.doc_id \n\
         WHERE 369940 IN (reference, doc_id, reference2)',
+        newDocMenu: {},
         wikiReference: 369940,
         wikiFolderId: 371645,
         sqlHtml: { doc_id: '<a href="#!/wiki005Rest/{{r[k]}}">{{r[k]}}</a>', },
     },
-]
-
-class EdTextController {
-    edTextFactory
-    constructor(edTextFactory) {
-        return {
-            edTextFactory: edTextFactory,
-            wikiItemAddEl: edTextFactory.wikiItemAddEl,
-            sortUpElement: edTextFactory.sortUpElement,
-            sortDownElement: edTextFactory.sortDownElement,
-            deleteEndEl: edTextFactory.deleteEndEl,
-        }
-    }
 }
+console.log(1)
 
 // app.factory("edTextFactory", EdTextFactory)
 class EdTextFactory {
@@ -369,7 +355,6 @@ class EdTextFactory {
 }
 app.factory("edTextFactory", EdTextFactory)
 
-
 app.directive('amEdText', () => {
     return {
         restrict: 'A',
@@ -384,6 +369,34 @@ app.directive('amEdText', () => {
                 c.edTextFactory.initElEdId(s)
             }
         },
+    }
+})
+
+class EdTextController {
+    edTextFactory
+    constructor(edTextFactory) {
+        return {
+            edTextFactory: edTextFactory,
+            wikiItemAddEl: edTextFactory.wikiItemAddEl,
+            sortUpElement: edTextFactory.sortUpElement,
+            sortDownElement: edTextFactory.sortDownElement,
+            deleteEndEl: edTextFactory.deleteEndEl,
+        }
+    }
+}
+
+class CreateDocController {
+    constructor() {
+    }
+    createWikiDocDialog = () => this.openedCreateWikiDoc = !this.openedCreateWikiDoc
+}
+
+app.directive('amCreateDoc', () => {
+    return {
+        restrict: 'A',
+        templateUrl: 'newDocMenu.html',
+        controllerAs: 'ctrl',
+        controller: [CreateDocController],
     }
 })
 
@@ -417,16 +430,19 @@ class SqlAbstractController {
                 console.log(dataSqlRequest)
             })
     }
+    choiseListItem = (r) => {
+        delete this.noDeletable
+        this.choisedListItem = r.doc_id
+    }
 }
 
 // app.controller("WikiListController", WikiListController)
 class WikiListController extends SqlAbstractController {
     constructor(dataFactory) {
         super(dataFactory)
-        if (!this.data) this.readSql(2)
-        console.log(this.data)
-        this.wikiConfigData = sql_app.simpleSQLs[2]
-        console.log(this.wikiConfigData)
+        if (!this.data) this.readSql('WikiList')
+        this.wikiConfigData = sql_app.simpleSQLs['WikiList']
+        //this.simpleSQLs = sql_app.simpleSQLs // :)
     }
     wikiConfigData
     createWikiDoc = () => {
@@ -447,10 +463,6 @@ class WikiListController extends SqlAbstractController {
         })
     }
     createWikiDocDialog = () => this.openedCreateWikiDoc = !this.openedCreateWikiDoc
-    choiseListItem = (r) => {
-        delete this.noDeletable
-        this.choisedListItem = r.doc_id
-    }
     deleteWikiDoc = () => {
         let ctrl = this
         console.log(this.choisedListItem, ctrl.wikiConfigData.wikiFolderId)
@@ -481,7 +493,7 @@ class SqlController extends SqlAbstractController {
     constructor(dataFactory) {
         super(dataFactory)
         this.simpleSQLs = sql_app.simpleSQLs
-        this.simpleSQLselect = 1
+        this.simpleSQLselect = 'SQL_from_DB'
         if (!this.data) this.readSql(this.simpleSQLselect)
         this.tut = 'tutorial links'
     }
@@ -500,3 +512,4 @@ class RouteProviderConfig {
     }
 }
 app.config(RouteProviderConfig)
+
