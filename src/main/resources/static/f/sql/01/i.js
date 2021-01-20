@@ -385,10 +385,64 @@ class EdTextController {
     }
 }
 
-class CreateDocController {
-    constructor() {
+class CreateDocFactory {
+    constructor(dataFactory) {
+        let wikiConfigData = sql_app.simpleSQLs['WikiList']
+        return {
+            createDocDialog: function () {
+                console.log(1)
+                this.openedDocDialog = !this.openedDocDialog
+            },
+            createDoc: function () {
+                let sqlCmdMap = {
+                    next_doc_ids: 1,
+                    insert_doc: {
+                        calc_doc_id: 0,
+                        reference: wikiConfigData.wikiReference,
+                        parent: wikiConfigData.wikiFolderId,
+                        insert_string: {
+                            value: this.nameNewWikiDoc,
+                        },
+                    }
+                }
+                console.log(2, this.nameNewWikiDoc, wikiConfigData.wikiFolderId, wikiConfigData, sqlCmdMap)
+                dataFactory.adn_insert.save(sqlCmdMap).$promise.then((map) => {
+                    console.log(map)
+                })
+            },
+            deleteWikiDoc: function () {
+                console.log(1)
+                const configData = sql_app.simpleSQLs[sql_app.simpleSQLselect];
+                sql_app.simpleSQLs[sql_app.simpleSQLselect].noDeletable = []
+                angular.forEach(configData.data.list, (li) => {
+                    if (li.doc_id == sql_app.simpleSQLs[sql_app.simpleSQLselect].choisedListItem) {
+                        if (li.parent != wikiConfigData.wikiFolderId) {
+                            sql_app.simpleSQLs[sql_app.simpleSQLselect].noDeletable.push('Файл в спеціалізованій папці, не видаляється в цьому діалозі')
+                        }
+                        if (li.cnt_child) {
+                            sql_app.simpleSQLs[sql_app.simpleSQLselect].noDeletable.push('Файл не пустий, видаляються тільки пусті файли')
+                        }
+                        console.log(li.doc_id, li.parent != wikiConfigData.wikiFolderId, li, sql_app.simpleSQLs[sql_app.simpleSQLselect].noDeletable)
+                    }
+                })
+                if (sql_app.simpleSQLs[sql_app.simpleSQLselect].noDeletable.length == 0) {//delete element - empty wiki doc
+                    dataFactory.adn_delete.save({ delete_doc: { doc_id: sql_app.simpleSQLs[sql_app.simpleSQLselect].choisedListItem, } }).$promise.then((map) => {
+                        console.log(map)
+                    })
+                }
+            },
+        }
     }
-    createWikiDocDialog = () => this.openedCreateWikiDoc = !this.openedCreateWikiDoc
+}
+app.factory("createDocFactory", CreateDocFactory)
+
+class CreateDocController {
+    constructor(createDocFactory) {
+        console.log(1, this)
+        this.createDocFactory = createDocFactory
+    }
+    createDocFactory
+    getChoisedListItem = () => sql_app.simpleSQLs[sql_app.simpleSQLselect].choisedListItem
 }
 
 app.directive('amCreateDoc', () => {
@@ -396,7 +450,7 @@ app.directive('amCreateDoc', () => {
         restrict: 'A',
         templateUrl: 'newDocMenu.html',
         controllerAs: 'ctrl',
-        controller: [CreateDocController],
+        controller: ['createDocFactory', CreateDocController],
     }
 })
 
@@ -423,68 +477,30 @@ class SqlAbstractController {
     readSql = (sqlN) => {
         let ctrlSql = this
         sql_app.simpleSQLselect = this.simpleSQLselect = sqlN
+        sql_app.simpleSQLs[sql_app.simpleSQLselect].choisedListItem = 0
         console.log(sqlN, sql_app.simpleSQLs[sqlN].c)
         this.dataFactory.httpGet({ sql: sql_app.simpleSQLs[sqlN].c })
             .then((dataSqlRequest) => {
-                ctrlSql.data = dataSqlRequest
-                console.log(dataSqlRequest)
+                sql_app.simpleSQLs[sqlN].data = ctrlSql.data = dataSqlRequest
+                console.log(1, dataSqlRequest)
             })
     }
+    getChoisedListItem = () => sql_app.simpleSQLs[sql_app.simpleSQLselect].choisedListItem
     choiseListItem = (r) => {
-        delete this.noDeletable
-        this.choisedListItem = r.doc_id
+        delete sql_app.simpleSQLs[sql_app.simpleSQLselect].noDeletable
+        sql_app.simpleSQLs[sql_app.simpleSQLselect].choisedListItem = r.doc_id
     }
 }
 
 // app.controller("WikiListController", WikiListController)
 class WikiListController extends SqlAbstractController {
-    constructor(dataFactory) {
+    constructor(dataFactory, createDocFactory) {
         super(dataFactory)
         if (!this.data) this.readSql('WikiList')
-        this.wikiConfigData = sql_app.simpleSQLs['WikiList']
         //this.simpleSQLs = sql_app.simpleSQLs // :)
+        this.createDocFactory = createDocFactory
     }
-    wikiConfigData
-    createWikiDoc = () => {
-        let sqlCmdMap = {
-            next_doc_ids: 1,
-            insert_doc: {
-                calc_doc_id: 0,
-                reference: this.wikiConfigData.wikiReference,
-                parent: this.wikiConfigData.wikiFolderId,
-                insert_string: {
-                    value: this.nameNewWikiDoc,
-                },
-            }
-        }
-        console.log(2, this.nameNewWikiDoc, this.wikiConfigData.wikiFolderId, this.wikiConfigData, sqlCmdMap)
-        this.dataFactory.adn_insert.save(sqlCmdMap).$promise.then((map) => {
-            console.log(map)
-        })
-    }
-    createWikiDocDialog = () => this.openedCreateWikiDoc = !this.openedCreateWikiDoc
-    deleteWikiDoc = () => {
-        let ctrl = this
-        console.log(this.choisedListItem, ctrl.wikiConfigData.wikiFolderId)
-        ctrl.noDeletable = []
-        angular.forEach(this.data.list, (li) => {
-            if (li.doc_id == this.choisedListItem) {
-                if (li.parent != ctrl.wikiConfigData.wikiFolderId) {
-                    ctrl.noDeletable.push('Файл в спеціалізованій папці, не видаляється в цьому діалозі')
-                }
-                if (li.cnt_child) {
-                    ctrl.noDeletable.push('Файл не пустий, видаляються тільки пусті файли')
-                }
-                console.log(li.doc_id, li.parent != ctrl.wikiConfigData.wikiFolderId, li, ctrl.noDeletable, ctrl.noDeletable.length)
-            }
-        })
-        if (ctrl.noDeletable.length == 0) {//delete element - empty wiki doc
-            this.dataFactory.adn_delete.save({ delete_doc: { doc_id: this.choisedListItem, } }).$promise.then((map) => {
-                console.log(map)
-            })
-        }
-    }
-
+    createDocFactory
 }
 app.controller("WikiListController", WikiListController)
 
@@ -494,6 +510,8 @@ class SqlController extends SqlAbstractController {
         super(dataFactory)
         this.simpleSQLs = sql_app.simpleSQLs
         this.simpleSQLselect = 'SQL_from_DB'
+        this.simpleSQLselect = 'WikiList'
+        this.choisedListItem = 0
         if (!this.data) this.readSql(this.simpleSQLselect)
         this.tut = 'tutorial links'
     }

@@ -2,24 +2,24 @@
     |
     <span class="am-b"> docMenu: </span>
     <span class="w3-dropdown-click">
-        <span class="w3-btn w3-border w3-padding-small" data-ng:click="ctrl.createWikiDocDialog()">
+        <span class="w3-btn w3-border w3-padding-small" data-ng:click="ctrl.createDocFactory.createDocDialog()">
             <i class="fab fa-wikipedia-w"></i>
             <i class="far fa-file"></i>
         </span>
-        <div class="w3-dropdown-content w3-card w3-leftbar" data-ng:class="{'w3-show':ctrl.openedCreateWikiDoc}"
+        <div class="w3-dropdown-content w3-card w3-leftbar" data-ng:class="{'w3-show':ctrl.createDocFactory.openedDocDialog}"
             style="min-width: 22em;">
             <div class="w3-blue-gray w3-tiny am-b">Створити новий Wiki документ
-                <a href="" class="w3-right w3-btn w3-padding-small" data-ng:click="ctrl.createWikiDocDialog()"><i
+                <a href="" class="w3-right w3-btn w3-padding-small" data-ng:click="ctrl.createDocFactory.createDocDialog()"><i
                         class="far fa-window-close"></i></a>
             </div>
             Назва Wiki документу:
-            <textarea data-ng:model="ctrl.nameNewWikiDoc" class="w3-border am-width-100pr w3-medium"></textarea>
-            <button class="w3-btn w3-border" data-ng:click="ctrl.createWikiDoc()">save</button>
+            <textarea data-ng:model="ctrl.createDocFactory.nameNewWikiDoc" class="w3-border am-width-100pr w3-medium"></textarea>
+            <button class="w3-btn w3-border" data-ng:click="ctrl.createDocFactory.createDoc()">save</button>
         </div>
     </span>
 </span>
-<i class="far fa-trash-alt w3-border w3-btn w3-padding-small" data-ng:click="ctrl.deleteWikiDoc()"
-    data-ng:class="{'w3-disabled':!ctrl.choisedListItem}"></i>
+<i class="far fa-trash-alt w3-border w3-btn w3-padding-small" data-ng:click="ctrl.createDocFactory.deleteWikiDoc()"
+    data-ng:class="{'w3-disabled':!ctrl.getChoisedListItem()}"></i>
 <div data-ng:repeat="d in ctrl.noDeletable" class="w3-text-red w3-border">
     {{d}}
 </div>
