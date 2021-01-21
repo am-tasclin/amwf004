@@ -26,6 +26,11 @@ const conf = {
             controller: 'CarePlan002RestController',
             controllerAs: 'ctrlCarePlan',
         },
+        'carePlan005Rest/:doc_id': {
+            templateUrl: 'carePlan001.html',
+            controller: 'CarePlan005Controller',
+            controllerAs: 'ctrlCarePlan',
+        },
         wiki: {
             templateUrl: 'wiki.html',
             controller: 'Wiki001Controller',
@@ -175,6 +180,19 @@ class CarePlan002RestController extends CarePlan000AbstractController {
 }
 app.controller("CarePlan002RestController", CarePlan002RestController)
 
+// app.controller("CarePlan005Controller", CarePlan005Controller)
+class CarePlan005Controller extends AmDocAbstractController {
+    constructor($scope, $routeParams, dataFactory) {
+        super($scope)
+        console.log(d.conf, $routeParams)
+        sql_app.simpleSQLselect = 'FHIR_CarePlan'
+        const configData = sql_app.simpleSQLs[sql_app.simpleSQLselect]
+        d.conf.read_doc_id = $routeParams.doc_id
+        dataFactory.adn_d.get({ doc_id: d.conf.read_doc_id}).$promise.then(this.setDoc);
+    }
+}
+app.controller("CarePlan005Controller", CarePlan005Controller)
+
 // app.controller("CarePlan001Controller", CarePlan001Controller)
 class CarePlan001Controller extends CarePlan000AbstractController {
     constructor($scope, treeFactory) {
@@ -195,16 +213,6 @@ class FirstController extends AmDocAbstractController {
 app.controller("FirstController", FirstController)
 
 sql_app.simpleSQLs = {
-    SQL_from_DB: {
-        c: 'SELECT doc_id, value sql_select FROM doc \n\
-    LEFT JOIN string ON string_id=doc_id \n\
-    WHERE 371327 IN (reference2)'
-    },
-    FHIR_DomainResource: {
-        c: 'SELECT value FHIR_DomainResource, d.* FROM doc d \n\
-    LEFT JOIN string ON string_id=doc_id \n\
-    WHERE 369789 IN (reference)'
-    },
     WikiList: {
         c: 'SELECT doc_id, value, cnt_child, parent FROM doc d \n\
         LEFT JOIN string ON string_id=doc_id \n\
@@ -216,6 +224,28 @@ sql_app.simpleSQLs = {
         wikiReference: 369940,
         wikiFolderId: 371645,
         sqlHtml: { doc_id: '<a href="#!/wiki005Rest/{{r[k]}}">{{r[k]}}</a>', },
+    },
+    FHIR_CarePlan: {
+        c: 'SELECT doc_id, value FHIR_DomainResource, parent FROM doc d \n\
+        LEFT JOIN string ON string_id=doc_id \n\
+        WHERE 372080 IN (reference)',
+        sqlHtml: { doc_id: '<a href="#!/carePlan005Rest/{{r[k]}}">{{r[k]}}</a>', },
+    },
+    FHIR_MethadataResource: {
+        c: 'SELECT s.value FHIR_DomainResource, d.*, r1.value r1value FROM doc d \n\
+        LEFT JOIN string s ON s.string_id=doc_id \n\
+        LEFT JOIN string r1 ON r1.string_id=reference \n\
+        WHERE reference IN (369795)',
+    },
+    FHIR_DomainResource: {
+        c: 'SELECT value FHIR_DomainResource, d.* FROM doc d \n\
+    LEFT JOIN string ON string_id=doc_id \n\
+    WHERE 369789 IN (reference)',
+    },
+    SQL_from_DB: {
+        c: 'SELECT doc_id, value sql_select FROM doc \n\
+    LEFT JOIN string ON string_id=doc_id \n\
+    WHERE 371327 IN (reference2)',
     },
 }
 console.log(1)
@@ -437,11 +467,10 @@ class CreateDocFactory {
 app.factory("createDocFactory", CreateDocFactory)
 
 class CreateDocController {
+    createDocFactory
     constructor(createDocFactory) {
-        console.log(1, this)
         this.createDocFactory = createDocFactory
     }
-    createDocFactory
     getChoisedListItem = () => sql_app.simpleSQLs[sql_app.simpleSQLselect].choisedListItem
 }
 
@@ -510,7 +539,7 @@ class SqlController extends SqlAbstractController {
         super(dataFactory)
         this.simpleSQLs = sql_app.simpleSQLs
         this.simpleSQLselect = 'SQL_from_DB'
-        this.simpleSQLselect = 'WikiList'
+        sql_app.simpleSQLs.simpleSQLselect = this.simpleSQLselect = 'WikiList'
         this.choisedListItem = 0
         if (!this.data) this.readSql(this.simpleSQLselect)
         this.tut = 'tutorial links'

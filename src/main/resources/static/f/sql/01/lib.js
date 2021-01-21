@@ -6,6 +6,11 @@ class AmDocAbstractController {
     constructor($scope) {
         $scope.d = d
     }
+    setDoc = (data) => {
+        console.log(1, data.elMap, data.clList)
+        d.elMap = data.elMap
+        d.clList = data.clList
+    }
 }
 
 // app.factory("treeFactory", TreeFactory)
