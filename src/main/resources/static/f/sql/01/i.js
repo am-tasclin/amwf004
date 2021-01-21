@@ -11,6 +11,11 @@ const conf = {
             controller: 'SqlController',
             controllerAs: 'ctrl',
         },
+        dev: {
+            templateUrl: 'dev.html',
+            controller: 'DevController',
+            controllerAs: 'ctrl',
+        },
         wikiList: {
             templateUrl: 'wikiList.html',
             controller: 'WikiListController',
@@ -80,6 +85,29 @@ d.conf.wiki = {
     }
 }
 
+// app.controller('DevController', DevController)
+class DevController {
+    constructor($scope) {
+        $scope.jsonStringify = (o) => {
+            return JSON.stringify(o, null, 2)
+        }
+        $scope.fhirExamples = {}
+        let MedicationRequest = {
+            medication: 'Бензилпеніцилін',
+        }
+        $scope.fhirExamples.CarePlan = {
+            title: 'CarePlan 1',
+            activity: [
+                {
+                    plannedActivityReference: MedicationRequest,
+                }
+            ]
+        }
+        console.log(1, JSON.stringify($scope.fhirExamples, null, 2))
+    }
+}
+app.controller('DevController', DevController)
+
 const read_wiki_id = 371357
 class Wiki000AbstractController extends AmDocAbstractController {
     constructor($scope) {
@@ -146,9 +174,6 @@ class CarePlan000AbstractController extends AmDocAbstractController {
     constructor($scope) {
         super($scope)
         d.conf.read_doc_id = read_doc_id
-        conf.extraReadIds = [
-            368794, // CarePlan.activity.plannedActivityReference
-        ]
     }
     scope
     init(treeFactory) {
@@ -180,6 +205,9 @@ class CarePlan002RestController extends CarePlan000AbstractController {
 }
 app.controller("CarePlan002RestController", CarePlan002RestController)
 
+conf.extraReadIds = [
+    368794, // CarePlan.activity.plannedActivityReference
+]
 // app.controller("CarePlan005Controller", CarePlan005Controller)
 class CarePlan005Controller extends AmDocAbstractController {
     constructor($scope, $routeParams, dataFactory) {
@@ -188,7 +216,17 @@ class CarePlan005Controller extends AmDocAbstractController {
         sql_app.simpleSQLselect = 'FHIR_CarePlan'
         const configData = sql_app.simpleSQLs[sql_app.simpleSQLselect]
         d.conf.read_doc_id = $routeParams.doc_id
-        dataFactory.adn_d.get({ doc_id: d.conf.read_doc_id}).$promise.then(this.setDoc);
+        let c = this
+        dataFactory.adn_d.get({ doc_id: d.conf.read_doc_id }).$promise.then((data) => {
+            c.setDoc(data)
+            angular.forEach(data.elMap, (el, doc_id) => {
+                if (conf.extraReadIds.indexOf(el.reference) >= 0) {
+                    dataFactory.adn_d.get({ doc_id: el.reference2 }).$promise.then((data) => {
+                        c.addDoc(data)
+                    })
+                }
+            })
+        })
     }
 }
 app.controller("CarePlan005Controller", CarePlan005Controller)
@@ -238,9 +276,10 @@ sql_app.simpleSQLs = {
         WHERE reference IN (369795)',
     },
     FHIR_DomainResource: {
-        c: 'SELECT value FHIR_DomainResource, d.* FROM doc d \n\
-    LEFT JOIN string ON string_id=doc_id \n\
-    WHERE 369789 IN (reference)',
+        c: 'SELECT s.value FHIR_DomainResource, d.*, r1.value FROM doc d \n\
+        LEFT JOIN string s ON s.string_id=doc_id \n\
+        LEFT JOIN string r1 ON r1.string_id=reference \n\
+        WHERE 369789 IN (reference)',
     },
     SQL_from_DB: {
         c: 'SELECT doc_id, value sql_select FROM doc \n\
@@ -248,7 +287,6 @@ sql_app.simpleSQLs = {
     WHERE 371327 IN (reference2)',
     },
 }
-console.log(1)
 
 // app.factory("edTextFactory", EdTextFactory)
 class EdTextFactory {

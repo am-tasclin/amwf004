@@ -4,8 +4,9 @@
             <span class="w3-small">readSql :</span>
             <span class="am-b w3-small">{{ctrl.simpleSQLselect}}</span>
         </button>
-        <div class="w3-dropdown-content w3-card" style="width: 600px;">
-            <pre data-ng:repeat="(k, sql) in ctrl.simpleSQLs" class="w3-hover-shadow  w3-small"
+        <div class="w3-dropdown-content w3-card" style="width: 45em;">
+            <pre data-ng:repeat="(k, sql) in ctrl.simpleSQLs" class="w3-hover-shadow w3-small"
+            data-ng:if="sql.c"
                 data-ng:click="ctrl.readSql(k)">
 <strong>{{k}}</strong>: {{sql.c}}
             </pre>

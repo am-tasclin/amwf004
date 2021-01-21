@@ -17,16 +17,20 @@
 </head>
 
 <body>
-    <div class="w3-container am-max-width-1" >
+    <div class="w3-container am-max-width-1">
         <div data-ng-include="'/f/agumat/01/h.html'" class="am-no-print"></div>
         <div class="w3-hover-shadow am-no-print">
-            <span data-ng-repeat="u in 'sql|carePlan001|carePlan002Rest|wiki|wiki003Rest|wikiList'.split('|')">
+            <span data-ng-repeat="u in 'sql'.split('|')">
                 {{$first?'':'|'}}
                 <a href="#!{{u}}">{{u}}</a>
             </span>
             <span>
-                | <a href="#!wiki005Rest/{{d.conf.read_wiki_id}}">wikiDoc</a> 
-                | <a href="#!carePlan005Rest/{{d.conf.lastReadDocId}}">carePlanDoc</a> 
+                | <a href="#!wiki005Rest/{{d.conf.read_wiki_id}}">wikiDoc</a>
+                | <a href="#!carePlan005Rest/{{d.conf.lastReadDocId}}">carePlanDoc</a>
+            </span>|
+            <span data-ng-repeat="u in '|dev|carePlan001|carePlan002Rest|wiki|wiki003Rest|wikiList'.split('|')">
+                {{$first?'':'|'}}
+                <a href="#!{{u}}">{{u}}</a>
             </span>
         </div>
         <div ng-view></div>
