@@ -24,17 +24,22 @@ const conf = {
         carePlan001: {
             templateUrl: 'carePlan001.html',
             controller: 'CarePlan001Controller',
-            controllerAs: 'ctrlCarePlan',
+            controllerAs: 'ctrl',
         },
         carePlan002Rest: {
             templateUrl: 'carePlan001.html',
             controller: 'CarePlan002RestController',
-            controllerAs: 'ctrlCarePlan',
+            controllerAs: 'ctrl',
+        },
+        'docTree/:doc_id': {
+            templateUrl: 'docTree.html',
+            controller: 'DocTree005Controller',
+            controllerAs: 'ctrl',
         },
         'carePlan005Rest/:doc_id': {
             templateUrl: 'carePlan001.html',
-            controller: 'CarePlan005Controller',
-            controllerAs: 'ctrlCarePlan',
+            controller: 'DocTree005Controller',
+            controllerAs: 'ctrl',
         },
         wiki: {
             templateUrl: 'wiki.html',
@@ -92,6 +97,15 @@ class DevController {
             return JSON.stringify(o, null, 2)
         }
         $scope.fhirExamples = {}
+        let SubstanceDefinition = {
+            name: [{ name: 'бензилпеніцилін' }]
+        }
+        let Substance0 = {
+            code: SubstanceDefinition
+        }
+        let Substance = {
+            code: SubstanceDefinition.name[0].name
+        }
         let MedicationRequest = {
             medication: 'Бензилпеніцилін',
         }
@@ -99,8 +113,14 @@ class DevController {
             title: 'CarePlan 1',
             activity: [
                 {
+                    plannedActivityReference: Substance,
+                },
+                {
+                    plannedActivityReference: Substance0,
+                },
+                {
                     plannedActivityReference: MedicationRequest,
-                }
+                },
             ]
         }
         console.log(1, JSON.stringify($scope.fhirExamples, null, 2))
@@ -208,25 +228,46 @@ app.controller("CarePlan002RestController", CarePlan002RestController)
 conf.extraReadIds = [
     368794, // CarePlan.activity.plannedActivityReference
 ]
-// app.controller("CarePlan005Controller", CarePlan005Controller)
-class CarePlan005Controller extends AmDocAbstractController {
-    constructor($scope, $routeParams, dataFactory) {
+class DocTreeAbstractController extends AmDocAbstractController {
+    constructor($scope, dataFactory) {
         super($scope)
-        console.log(d.conf, $routeParams)
-        sql_app.simpleSQLselect = 'FHIR_CarePlan'
+        console.log(1)
+        this.dataFactory = dataFactory
+    }
+    dataFactory
+    init($routeParams) {
         const configData = sql_app.simpleSQLs[sql_app.simpleSQLselect]
         d.conf.read_doc_id = $routeParams.doc_id
         let c = this
-        dataFactory.adn_d.get({ doc_id: d.conf.read_doc_id }).$promise.then((data) => {
+        c.dataFactory.adn_d.get({ doc_id: d.conf.read_doc_id }).$promise.then((data) => {
             c.setDoc(data)
             angular.forEach(data.elMap, (el, doc_id) => {
                 if (conf.extraReadIds.indexOf(el.reference) >= 0) {
-                    dataFactory.adn_d.get({ doc_id: el.reference2 }).$promise.then((data) => {
+                    c.dataFactory.adn_d.get({ doc_id: el.reference2 }).$promise.then((data) => {
                         c.addDoc(data)
                     })
                 }
             })
         })
+    }
+}
+
+// app.controller("DocTree005Controller", DocTree005Controller)
+class DocTree005Controller extends DocTreeAbstractController {
+    constructor($scope, $routeParams, dataFactory) {
+        super($scope, dataFactory)
+        this.init($routeParams)
+    }
+}
+app.controller("DocTree005Controller", DocTree005Controller)
+
+// app.controller("CarePlan005Controller", CarePlan005Controller)
+class CarePlan005Controller extends DocTreeAbstractController {
+    constructor($scope, $routeParams, dataFactory) {
+        super($scope, dataFactory)
+        console.log(d.conf, $routeParams)
+        sql_app.simpleSQLselect = 'FHIR_CarePlan'
+        this.init($routeParams)
     }
 }
 app.controller("CarePlan005Controller", CarePlan005Controller)
@@ -268,6 +309,21 @@ sql_app.simpleSQLs = {
         LEFT JOIN string ON string_id=doc_id \n\
         WHERE 372080 IN (reference)',
         sqlHtml: { doc_id: '<a href="#!/carePlan005Rest/{{r[k]}}">{{r[k]}}</a>', },
+    },
+    FHIR_Substance: {
+        c: 'SELECT value, d.* FROM doc d, string \n\
+            WHERE reference = 370024 and string_id=reference2',
+        sqlHtml: { doc_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
+    },
+    FHIR_SubstanceDefinition: {
+        c: 'SELECT dn.* FROM doc d LEFT JOIN ( \n\
+            SELECT dp.parent doc_id, value substance_name, string_id sname_id \n\
+            FROM doc dp, doc d,string \n\
+            WHERE dp.doc_id=d.parent AND d.doc_id=string_id AND d.reference=372419 \n\
+            ) dn ON dn.doc_id=d.doc_id \n\
+            WHERE d.reference=372417 \n\
+            ORDER BY doc_id, substance_name',
+        sqlHtml: { doc_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
     },
     FHIR_MethadataResource: {
         c: 'SELECT s.value FHIR_DomainResource, d.*, r1.value r1value FROM doc d \n\
@@ -563,7 +619,8 @@ class SqlAbstractController {
 class WikiListController extends SqlAbstractController {
     constructor(dataFactory, createDocFactory) {
         super(dataFactory)
-        if (!this.data) this.readSql('WikiList')
+        if (!sql_app.simpleSQLselect) sql_app.simpleSQLselect = 'WikiList'
+        if (!this.data) this.readSql(sql_app.simpleSQLselect)
         //this.simpleSQLs = sql_app.simpleSQLs // :)
         this.createDocFactory = createDocFactory
     }
@@ -576,10 +633,14 @@ class SqlController extends SqlAbstractController {
     constructor(dataFactory) {
         super(dataFactory)
         this.simpleSQLs = sql_app.simpleSQLs
-        this.simpleSQLselect = 'SQL_from_DB'
-        sql_app.simpleSQLs.simpleSQLselect = this.simpleSQLselect = 'WikiList'
+        console.log(sql_app.simpleSQLselect)
+        if (!sql_app.simpleSQLselect) {
+            sql_app.simpleSQLselect = 'SQL_from_DB'
+            sql_app.simpleSQLselect = 'WikiList'
+        }
+        console.log(sql_app.simpleSQLselect)
         this.choisedListItem = 0
-        if (!this.data) this.readSql(this.simpleSQLselect)
+        if (!this.data) this.readSql(sql_app.simpleSQLselect)
         this.tut = 'tutorial links'
     }
 }
