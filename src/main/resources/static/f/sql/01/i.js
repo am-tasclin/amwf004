@@ -310,6 +310,14 @@ sql_app.simpleSQLs = {
         WHERE 372080 IN (reference)',
         sqlHtml: { doc_id: '<a href="#!/carePlan005Rest/{{r[k]}}">{{r[k]}}</a>', },
     },
+    FHIR_Quantity: {
+        c:'SELECT i.value value_q, dc.value unit_code, d.*, dc.reference2 unit_code_id FROM doc d \n\
+        LEFT JOIN integer i ON i.integer_id=d.doc_id \n\
+        LEFT JOIN ( SELECT d.*, value FROM doc d,string WHERE reference2=string_id \n\
+        ) dc ON dc.parent=d.doc_id AND dc.reference = 368641 \n\
+        WHERE d.reference=368637 AND d.reference2=368636',
+        sqlHtml: { doc_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
+    },
     FHIR_Substance: {
         c: 'SELECT value, d.* FROM doc d, string \n\
             WHERE reference = 370024 and string_id=reference2',
@@ -642,6 +650,10 @@ class SqlController extends SqlAbstractController {
         this.choisedListItem = 0
         if (!this.data) this.readSql(sql_app.simpleSQLselect)
         this.tut = 'tutorial links'
+    }
+    getSelectSql = ()=>{
+        console.log(2)
+        return sql_app.simpleSQLs[sql_app.simpleSQLselect].c
     }
 }
 app.controller("SqlController", SqlController)
