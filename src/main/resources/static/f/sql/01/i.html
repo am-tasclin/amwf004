@@ -20,11 +20,8 @@
     <div class="w3-container am-max-width-1">
         <div data-ng-include="'/f/agumat/01/h.html'" class="am-no-print"></div>
         <div class="w3-hover-shadow am-no-print">
-            <span data-ng-repeat="u in 'sql'.split('|')">
-                {{$first?'':'|'}}
-                <a href="#!{{u}}">{{u}}</a>
-            </span>
             <span>
+                <a href="#!sql/{{d.conf.simpleSQLselect}}">sql</a>
                 | <a href="#!wiki005Rest/{{d.conf.read_wiki_id}}">wikiDoc</a>
                 | <a href="#!carePlan005Rest/{{d.conf.lastReadDocId}}">carePlanDoc</a>
             </span>|
@@ -33,6 +30,7 @@
                 <a href="#!{{u}}">{{u}}</a>
             </span>
         </div>
+        {{d.conf.simpleSQLselect}}
         <div ng-view></div>
     </div>
 </body>

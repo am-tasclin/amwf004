@@ -11,6 +11,11 @@ const conf = {
             controller: 'SqlController',
             controllerAs: 'ctrl',
         },
+        'sql/:sql': {
+            templateUrl: 'sql1.html',
+            controller: 'SqlController',
+            controllerAs: 'ctrl',
+        },
         dev: {
             templateUrl: 'dev.html',
             controller: 'DevController',
@@ -311,7 +316,7 @@ sql_app.simpleSQLs = {
         sqlHtml: { doc_id: '<a href="#!/carePlan005Rest/{{r[k]}}">{{r[k]}}</a>', },
     },
     FHIR_Quantity: {
-        c:'SELECT i.value value_q, dc.value unit_code, d.*, dc.reference2 unit_code_id FROM doc d \n\
+        c: 'SELECT i.value value_q, dc.value unit_code, d.*, dc.reference2 unit_code_id FROM doc d \n\
         LEFT JOIN integer i ON i.integer_id=d.doc_id \n\
         LEFT JOIN ( SELECT d.*, value FROM doc d,string WHERE reference2=string_id \n\
         ) dc ON dc.parent=d.doc_id AND dc.reference = 368641 \n\
@@ -521,10 +526,7 @@ class CreateDocFactory {
     constructor(dataFactory) {
         let wikiConfigData = sql_app.simpleSQLs['WikiList']
         return {
-            createDocDialog: function () {
-                console.log(1)
-                this.openedDocDialog = !this.openedDocDialog
-            },
+            createDocDialog: function () { this.openedDocDialog = !this.openedDocDialog },
             createDoc: function () {
                 let sqlCmdMap = {
                     next_doc_ids: 1,
@@ -638,20 +640,23 @@ app.controller("WikiListController", WikiListController)
 
 // app.controller("SqlController", SqlController)
 class SqlController extends SqlAbstractController {
-    constructor(dataFactory) {
+    constructor(dataFactory, $routeParams) {
         super(dataFactory)
         this.simpleSQLs = sql_app.simpleSQLs
+        console.log($routeParams)
+        if ($routeParams.sql)
+            d.conf.simpleSQLselect = sql_app.simpleSQLselect = $routeParams.sql
         console.log(sql_app.simpleSQLselect)
         if (!sql_app.simpleSQLselect) {
             sql_app.simpleSQLselect = 'SQL_from_DB'
-            sql_app.simpleSQLselect = 'WikiList'
+            d.conf.simpleSQLselect = sql_app.simpleSQLselect = 'WikiList'
         }
         console.log(sql_app.simpleSQLselect)
         this.choisedListItem = 0
         if (!this.data) this.readSql(sql_app.simpleSQLselect)
         this.tut = 'tutorial links'
     }
-    getSelectSql = ()=>{
+    getSelectSql = () => {
         console.log(2)
         return sql_app.simpleSQLs[sql_app.simpleSQLselect].c
     }
@@ -670,4 +675,3 @@ class RouteProviderConfig {
     }
 }
 app.config(RouteProviderConfig)
-
