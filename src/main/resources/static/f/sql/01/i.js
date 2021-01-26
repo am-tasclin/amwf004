@@ -316,16 +316,15 @@ sql_app.simpleSQLs = {
         sqlHtml: { doc_id: '<a href="#!/carePlan005Rest/{{r[k]}}">{{r[k]}}</a>', },
     },
     FHIR_Quantity: {
-        c: 'SELECT i.value value_q, dc.value unit_code, d.*, dc.reference2 unit_code_id FROM doc d \n\
-        LEFT JOIN integer i ON i.integer_id=d.doc_id \n\
-        LEFT JOIN ( SELECT d.*, value FROM doc d,string WHERE reference2=string_id \n\
-        ) dc ON dc.parent=d.doc_id AND dc.reference = 368641 \n\
-        WHERE d.reference=368637 AND d.reference2=368636',
+        c: sql_app.FHIR_Quantity(),
         sqlHtml: { doc_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
     },
     FHIR_Substance: {
-        c: 'SELECT value, d.* FROM doc d, string \n\
-            WHERE reference = 370024 and string_id=reference2',
+        c: 'SELECT value, d.*, dq.* FROM doc d \n\
+        LEFT JOIN ( SELECT dq.parent dq_parent, value_q, unit_code FROM doc dq, ( \n\
+        :sql_app.FHIR_Quantity \n\
+        ) dqd WHERE dqd.doc_id = dq.reference2 ) dq ON dq_parent=d.doc_id \n\
+        , string WHERE reference = 370024 and string_id=reference2',
         sqlHtml: { doc_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
     },
     FHIR_SubstanceDefinition: {
@@ -611,8 +610,16 @@ class SqlAbstractController {
         let ctrlSql = this
         sql_app.simpleSQLselect = this.simpleSQLselect = sqlN
         sql_app.simpleSQLs[sql_app.simpleSQLselect].choisedListItem = 0
-        console.log(sqlN, sql_app.simpleSQLs[sqlN].c)
-        this.dataFactory.httpGet({ sql: sql_app.simpleSQLs[sqlN].c })
+        let sql = sql_app.simpleSQLs[sqlN].c
+        console.log(sqlN, sql, sql.includes(':sql_app.'))
+        if (sql.includes(':sql_app.')) {
+            let sql_split = sql.split(':sql_app.')
+            let sql_name = sql_split[1].split(' ')[0]
+            console.log(sql_split[1], 1, sql_name, sql_app[sql_name]())
+            sql = sql.replace(':sql_app.' + sql_name, sql_app[sql_name]())
+            console.log(sql)
+        }
+        this.dataFactory.httpGet({ sql: sql })
             .then((dataSqlRequest) => {
                 sql_app.simpleSQLs[sqlN].data = ctrlSql.data = dataSqlRequest
                 console.log(1, dataSqlRequest)
@@ -643,21 +650,17 @@ class SqlController extends SqlAbstractController {
     constructor(dataFactory, $routeParams) {
         super(dataFactory)
         this.simpleSQLs = sql_app.simpleSQLs
-        console.log($routeParams)
         if ($routeParams.sql)
             d.conf.simpleSQLselect = sql_app.simpleSQLselect = $routeParams.sql
-        console.log(sql_app.simpleSQLselect)
         if (!sql_app.simpleSQLselect) {
-            sql_app.simpleSQLselect = 'SQL_from_DB'
+            // sql_app.simpleSQLselect = 'SQL_from_DB'
             d.conf.simpleSQLselect = sql_app.simpleSQLselect = 'WikiList'
         }
-        console.log(sql_app.simpleSQLselect)
         this.choisedListItem = 0
         if (!this.data) this.readSql(sql_app.simpleSQLselect)
         this.tut = 'tutorial links'
     }
     getSelectSql = () => {
-        console.log(2)
         return sql_app.simpleSQLs[sql_app.simpleSQLselect].c
     }
 }

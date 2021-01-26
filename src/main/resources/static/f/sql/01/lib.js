@@ -166,32 +166,41 @@ class DataFactory {
 
 const sql_app = {}
 
-sql_app.replace_params = (sql, data)=>{
-	angular.forEach(sql.split(':'), function (v){
-		var v1 = v.split(' ')[0]
-		.replace(',','')
-		.replace(')','').trim()
-		if(data[v1]){
-			sql = sql.replace(':'+v1, data[v1])
-		}
-	})
-	return sql
+sql_app.replace_params = (sql, data) => {
+    angular.forEach(sql.split(':'), function (v) {
+        var v1 = v.split(' ')[0]
+            .replace(',', '')
+            .replace(')', '').trim()
+        if (data[v1]) {
+            sql = sql.replace(':' + v1, data[v1])
+        }
+    })
+    return sql
 }
 
 
-sql_app.doc_insert_sort = () =>{
-	var sql = "INSERT INTO sort (sort, sort_id) VALUES (:sort, :sort_id)"
-	return sql
+sql_app.doc_insert_sort = () => {
+    var sql = "INSERT INTO sort (sort, sort_id) VALUES (:sort, :sort_id)"
+    return sql
 }
 
-sql_app.doc_update_sort = ()=>{
-	var sql = "UPDATE sort SET sort=:sort WHERE sort_id=:sort_id"
-	return sql
+sql_app.doc_update_sort = () => {
+    var sql = "UPDATE sort SET sort=:sort WHERE sort_id=:sort_id"
+    return sql
+}
+
+sql_app.FHIR_Quantity = () => {
+    let sql = 'SELECT i.value value_q, dc.value unit_code, d.*, dc.reference2 unit_code_id FROM doc d \n\
+    LEFT JOIN integer i ON i.integer_id=d.doc_id \n\
+    LEFT JOIN ( SELECT d.*, value FROM doc d,string WHERE reference2=string_id \n\
+    ) dc ON dc.parent=d.doc_id AND dc.reference = 368641 \n\
+    WHERE d.reference=368637 AND d.reference2=368636'
+    return sql
 }
 
 sql_app.obj_with_i18n = () => {
     //	", s1.value value_1_22, s1.string_id id_1_22, i1.value value_1_23, i1.integer_id id_1_23, f1.value value_1_24, f1.double_id id_1_24 \n" +
-    var sql = "SELECT d1.*, dr1.doctype doctype_r \n\
+    let sql = "SELECT d1.*, dr1.doctype doctype_r \n\
         , s1.value value_1_22, i1.value value_1_23, f1.value value_1_24 \n\
         , ts1.value value_1_25, dt1.value value_1_26 \n\
         , r1.value r1value, r2.value r2value \n\
