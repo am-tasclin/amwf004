@@ -232,6 +232,7 @@ app.controller("CarePlan002RestController", CarePlan002RestController)
 
 conf.extraReadIds = [
     368794, // CarePlan.activity.plannedActivityReference
+    372786, //  Substance.quantity
 ]
 class DocTreeAbstractController extends AmDocAbstractController {
     constructor($scope, dataFactory) {
