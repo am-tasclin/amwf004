@@ -310,11 +310,32 @@ sql_app.simpleSQLs = {
         wikiFolderId: 371645,
         sqlHtml: { doc_id: '<a href="#!/wiki005Rest/{{r[k]}}">{{r[k]}}</a>', },
     },
+    FHIR_PlanDefinition: {
+        c: 'SELECT value, d.* FROM doc d \n\
+        LEFT JOIN string ON string_id=doc_id \n\
+        WHERE reference=368815',
+        sqlHtml: {
+            value: '<a href="#!/docTree/{{r.doc_id}}">{{r[k]}}</a>',
+            doc_id: '<a href="#!/carePlan005Rest/{{r[k]}}">{{r[k]}}</a>',
+        },
+    },
     FHIR_CarePlan: {
         c: 'SELECT doc_id, value FHIR_DomainResource, parent FROM doc d \n\
         LEFT JOIN string ON string_id=doc_id \n\
         WHERE 372080 IN (reference)',
         sqlHtml: { doc_id: '<a href="#!/carePlan005Rest/{{r[k]}}">{{r[k]}}</a>', },
+    },
+    FHIR_Ratio: {
+        c: 'SELECT numerator.doc_id  numerator_id, numerator.reference2 numerator_q \n\
+        , n.value_q n_value_q, n.unit_code n_unit_code --, n.*  \n\
+        , denominator.doc_id denominator_id, denominator.reference2 denominator_q --, denominator.* \n\
+        , dn.value_q dn_value_q, dn.unit_code dn_unit_code --, dn.* \n\
+        FROM doc numerator  \n\
+        LEFT JOIN ( :sql_app.FHIR_Quantity ) n ON n.doc_id= numerator.reference2 \n\
+        LEFT JOIN doc denominator \n\
+        LEFT JOIN ( :sql_app.FHIR_Quantity ) dn ON dn.doc_id= denominator.reference2 \n\
+        ON denominator.parent = numerator.doc_id  \n\
+        where  numerator.reference = 368676',
     },
     FHIR_Quantity: {
         c: sql_app.FHIR_Quantity(),
@@ -568,6 +589,7 @@ class CreateDocFactory {
         }
     }
 }
+
 app.factory("createDocFactory", CreateDocFactory)
 
 class CreateDocController {
@@ -612,13 +634,16 @@ class SqlAbstractController {
         sql_app.simpleSQLselect = this.simpleSQLselect = sqlN
         sql_app.simpleSQLs[sql_app.simpleSQLselect].choisedListItem = 0
         let sql = sql_app.simpleSQLs[sqlN].c
-        console.log(sqlN, sql, sql.includes(':sql_app.'))
+        console.log(sqlN + '::', sql, sql.includes(':sql_app.'))
         if (sql.includes(':sql_app.')) {
             let sql_split = sql.split(':sql_app.')
             let sql_name = sql_split[1].split(' ')[0]
-            console.log(sql_split[1], 1, sql_name, sql_app[sql_name]())
             sql = sql.replace(':sql_app.' + sql_name, sql_app[sql_name]())
-            console.log(sql)
+            if (sql.includes(':sql_app.')) {
+                let sql_split = sql.split(':sql_app.')
+                let sql_name = sql_split[1].split(' ')[0]
+                sql = sql.replace(':sql_app.' + sql_name, sql_app[sql_name]())
+            }
         }
         this.dataFactory.httpGet({ sql: sql })
             .then((dataSqlRequest) => {
