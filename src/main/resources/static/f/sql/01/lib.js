@@ -189,6 +189,14 @@ sql_app.doc_update_sort = () => {
     return sql
 }
 
+sql_app.FHIR_Substance = () => {
+    let sql = 'SELECT value, d.*, dq.* FROM doc d \n\
+    LEFT JOIN ( SELECT dq.parent dq_parent, value_q, unit_code FROM doc dq, \n\
+    (:sql_app.FHIR_Quantity ) dqd WHERE dqd.doc_id = dq.reference2 ) dq ON dq_parent=d.doc_id \n\
+    , string WHERE reference = 370024 and string_id=reference2'
+    return sql
+}
+
 sql_app.FHIR_Quantity = () => {
     let sql = 'SELECT i.value value_q, dc.value unit_code, d.*, dc.reference2 unit_code_id FROM doc d \n\
     LEFT JOIN integer i ON i.integer_id=d.doc_id \n\

@@ -341,12 +341,15 @@ sql_app.simpleSQLs = {
         c: sql_app.FHIR_Quantity(),
         sqlHtml: { doc_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
     },
+    FHIR_Medication: {
+        c:'SELECT d.doc_id medication_id, substance.* FROM doc d \n\
+        LEFT JOIN (SELECT * FROM doc,sort WHERE doc_id=sort_id AND sort=1) item \n\
+        LEFT JOIN (:sql_app.FHIR_Substance ) substance ON substance.doc_id=item.reference2 \n\
+        ON item.parent=d.doc_id \n\
+        WHERE d.reference=369998 and d.reference2=369993',
+    },
     FHIR_Substance: {
-        c: 'SELECT value, d.*, dq.* FROM doc d \n\
-        LEFT JOIN ( SELECT dq.parent dq_parent, value_q, unit_code FROM doc dq, ( \n\
-        :sql_app.FHIR_Quantity \n\
-        ) dqd WHERE dqd.doc_id = dq.reference2 ) dq ON dq_parent=d.doc_id \n\
-        , string WHERE reference = 370024 and string_id=reference2',
+        c: sql_app.FHIR_Substance(),
         sqlHtml: { doc_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
     },
     FHIR_SubstanceDefinition: {
@@ -634,7 +637,7 @@ class SqlAbstractController {
         sql_app.simpleSQLselect = this.simpleSQLselect = sqlN
         sql_app.simpleSQLs[sql_app.simpleSQLselect].choisedListItem = 0
         let sql = sql_app.simpleSQLs[sqlN].c
-        console.log(sqlN + '::', sql, sql.includes(':sql_app.'))
+        console.log(sqlN + '::', sql.includes(':sql_app.'))
         if (sql.includes(':sql_app.')) {
             let sql_split = sql.split(':sql_app.')
             let sql_name = sql_split[1].split(' ')[0]
@@ -645,6 +648,7 @@ class SqlAbstractController {
                 sql = sql.replace(':sql_app.' + sql_name, sql_app[sql_name]())
             }
         }
+        console.log(sql)
         this.dataFactory.httpGet({ sql: sql })
             .then((dataSqlRequest) => {
                 sql_app.simpleSQLs[sqlN].data = ctrlSql.data = dataSqlRequest
