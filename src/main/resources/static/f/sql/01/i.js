@@ -232,7 +232,9 @@ app.controller("CarePlan002RestController", CarePlan002RestController)
 
 conf.extraReadIds = [
     368794, // CarePlan.activity.plannedActivityReference
-    372786, //  Substance.quantity
+    372786, // Substance.quantity
+    368676, // Ratio.numerator
+    368677, // Ratio.denominator
 ]
 class DocTreeAbstractController extends AmDocAbstractController {
     constructor($scope, dataFactory) {
@@ -336,6 +338,7 @@ sql_app.simpleSQLs = {
         LEFT JOIN ( :sql_app.FHIR_Quantity ) dn ON dn.doc_id= denominator.reference2 \n\
         ON denominator.parent = numerator.doc_id  \n\
         where  numerator.reference = 368676',
+        sqlHtml: { numerator_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
     },
     FHIR_Quantity: {
         c: sql_app.FHIR_Quantity(),
@@ -347,6 +350,7 @@ sql_app.simpleSQLs = {
         LEFT JOIN (:sql_app.FHIR_Substance ) substance ON substance.doc_id=item.reference2 \n\
         ON item.parent=d.doc_id \n\
         WHERE d.reference=369998 and d.reference2=369993',
+        sqlHtml: { medication_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
     },
     FHIR_Substance: {
         c: sql_app.FHIR_Substance(),
