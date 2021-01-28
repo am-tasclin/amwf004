@@ -231,10 +231,11 @@ class CarePlan002RestController extends CarePlan000AbstractController {
 app.controller("CarePlan002RestController", CarePlan002RestController)
 
 conf.extraReadIds = [
-    368794, // CarePlan.activity.plannedActivityReference
-    372786, // Substance.quantity
-    368676, // Ratio.numerator
-    368677, // Ratio.denominator
+    368794, // CarePlan.activity.plannedActivityReference[MedicationRequest|...]
+    370001, // Medication.ingredient.item[SimpleQuantity]
+    372786, // Substance.quantity[SimpleQuantity]
+    368676, // Ratio.numerator[Quantity]
+    368677, // Ratio.denominator[Quantity]
 ]
 class DocTreeAbstractController extends AmDocAbstractController {
     constructor($scope, dataFactory) {
@@ -250,11 +251,16 @@ class DocTreeAbstractController extends AmDocAbstractController {
         c.dataFactory.adn_d.get({ doc_id: d.conf.read_doc_id }).$promise.then((data) => {
             c.setDoc(data)
             angular.forEach(data.elMap, (el, doc_id) => {
-                if (conf.extraReadIds.indexOf(el.reference) >= 0) {
+                if (conf.extraReadIds.indexOf(el.reference) >= 0)
                     c.dataFactory.adn_d.get({ doc_id: el.reference2 }).$promise.then((data) => {
                         c.addDoc(data)
+                        angular.forEach(data.elMap, (el, doc_id) => {
+                            if (conf.extraReadIds.indexOf(el.reference) >= 0)
+                                c.dataFactory.adn_d.get({ doc_id: el.reference2 }).$promise.then((data) => {
+                                    c.addDoc(data)
+                                })
+                        })
                     })
-                }
             })
         })
     }
@@ -345,7 +351,7 @@ sql_app.simpleSQLs = {
         sqlHtml: { doc_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
     },
     FHIR_Medication: {
-        c:'SELECT d.doc_id medication_id, substance.* FROM doc d \n\
+        c: 'SELECT d.doc_id medication_id, substance.* FROM doc d \n\
         LEFT JOIN (SELECT * FROM doc,sort WHERE doc_id=sort_id AND sort=1) item \n\
         LEFT JOIN (:sql_app.FHIR_Substance ) substance ON substance.doc_id=item.reference2 \n\
         ON item.parent=d.doc_id \n\
