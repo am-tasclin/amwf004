@@ -233,10 +233,14 @@ app.controller("CarePlan002RestController", CarePlan002RestController)
 conf.extraReadIds = [
     368794, // CarePlan.activity.plannedActivityReference[MedicationRequest|...]
     370001, // Medication.ingredient.item[SimpleQuantity]
+    372808, // Medication.ingredient.strength[Ratio]
     372786, // Substance.quantity[SimpleQuantity]
     368676, // Ratio.numerator[Quantity]
     368677, // Ratio.denominator[Quantity]
+    371469, // Ratio.denominator[Quantity]
 ]
+//370024, //  Substance.code[Quantity]
+
 class DocTreeAbstractController extends AmDocAbstractController {
     constructor($scope, dataFactory) {
         super($scope)
@@ -343,19 +347,20 @@ sql_app.simpleSQLs = {
         LEFT JOIN doc denominator \n\
         LEFT JOIN ( :sql_app.FHIR_Quantity ) dn ON dn.doc_id= denominator.reference2 \n\
         ON denominator.parent = numerator.doc_id  \n\
-        where  numerator.reference = 368676',
+        WHERE  numerator.reference = 368676',
         sqlHtml: { numerator_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
     },
     FHIR_Quantity: {
         c: sql_app.FHIR_Quantity(),
         sqlHtml: { doc_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
     },
+    FHIR_MedicationRequest: {
+        c: 'SELECT d.doc_id medicationrequest_id, medication.* FROM doc d ,(:sql_app.FHIR_Medication ) medication \n\
+        WHERE d.reference=371469 AND medication.medication_id=d.reference2',
+        sqlHtml: { medicationrequest_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
+    },
     FHIR_Medication: {
-        c: 'SELECT d.doc_id medication_id, substance.* FROM doc d \n\
-        LEFT JOIN (SELECT * FROM doc,sort WHERE doc_id=sort_id AND sort=1) item \n\
-        LEFT JOIN (:sql_app.FHIR_Substance ) substance ON substance.doc_id=item.reference2 \n\
-        ON item.parent=d.doc_id \n\
-        WHERE d.reference=369998 and d.reference2=369993',
+        c: sql_app.FHIR_Medication(),
         sqlHtml: { medication_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
     },
     FHIR_Substance: {
@@ -656,6 +661,11 @@ class SqlAbstractController {
                 let sql_split = sql.split(':sql_app.')
                 let sql_name = sql_split[1].split(' ')[0]
                 sql = sql.replace(':sql_app.' + sql_name, sql_app[sql_name]())
+                if (sql.includes(':sql_app.')) {
+                    let sql_split = sql.split(':sql_app.')
+                    let sql_name = sql_split[1].split(' ')[0]
+                    sql = sql.replace(':sql_app.' + sql_name, sql_app[sql_name]())
+                }
             }
         }
         console.log(sql)

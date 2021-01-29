@@ -189,6 +189,15 @@ sql_app.doc_update_sort = () => {
     return sql
 }
 
+sql_app.FHIR_Medication = () => {
+    let sql = 'SELECT d.doc_id medication_id, substance.* FROM doc d \n\
+    LEFT JOIN (SELECT * FROM doc,sort WHERE doc_id=sort_id AND sort=1) item \n\
+    LEFT JOIN (:sql_app.FHIR_Substance ) substance ON substance.doc_id=item.reference2 \n\
+    ON item.parent=d.doc_id \n\
+    WHERE d.reference=369998 and d.reference2=369993'
+    return sql
+}
+
 sql_app.FHIR_Substance = () => {
     let sql = 'SELECT value, d.*, dq.* FROM doc d \n\
     LEFT JOIN ( SELECT dq.parent dq_parent, value_q, unit_code FROM doc dq, \n\
