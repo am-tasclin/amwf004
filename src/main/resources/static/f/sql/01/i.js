@@ -169,8 +169,6 @@ sql_app.simpleSQLs = {
     WHERE 371327 IN (reference2)',
     },
 }
-console.log(2)
-
 
 d.conf.wiki = {
     cl: {//допустимі children елементи для елементів.

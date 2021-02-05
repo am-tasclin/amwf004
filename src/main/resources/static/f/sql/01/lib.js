@@ -190,12 +190,12 @@ sql_app.doc_update_sort = () => {
 }
 
 sql_app.FHIR_Medication_sc = () => {
-    let sql = 'SELECT d.doc_id medication_id, substance.*, item.doc_id item_id, strengthRatio.doc_id strength_id, ratio.* FROM doc d \n\
+    let sql = 'SELECT d.doc_id medication_id, substance.*, item.doc_id item_id, strength.doc_id strength_id, ratio.* FROM doc d \n\
     LEFT JOIN (SELECT * FROM doc,sort WHERE doc_id=sort_id AND sort=1) item \n\
-    LEFT JOIN (:sql_app.FHIR_Substance_code ) substance ON substance.doc_id=item.reference2 \n\
-    LEFT JOIN doc strengthRatio \n\
-    LEFT JOIN (:sql_app.FHIR_Ratio ) ratio ON ratio.numerator_id=strengthRatio.reference2 \n\
-    ON strengthRatio.parent=item.doc_id \n\
+    LEFT JOIN (:sql_app.FHIR_Substance_code ) substance ON substance_id=item.reference2 \n\
+    LEFT JOIN doc strength \n\
+    LEFT JOIN (:sql_app.FHIR_Ratio ) ratio ON ratio.numerator_id=strength.reference2 \n\
+    ON strength.parent=item.doc_id \n\
     ON item.parent=d.doc_id \n\
     WHERE d.reference=369998 and d.reference2=369993'
     return sql
@@ -211,7 +211,7 @@ sql_app.FHIR_Medication_sq = () => {
 }
 
 sql_app.FHIR_Substance_code = () => {
-    let sql = 'SELECT value substance_code, d.* FROM doc d \n\
+    let sql = 'SELECT value substance_code, d.doc_id substance_id FROM doc d \n\
     , string WHERE reference = 370024 and string_id=reference2'
     return sql
 }
