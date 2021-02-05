@@ -1,11 +1,16 @@
 <span class="w3-tiny am-b"> dev.html </span>
-<div class="w3-row w3-border" style="height:80vh;">
+<div class="w3-row w3-border w3-small" style="height:80vh;">
     <div class="w3-half" style="overflow:auto;">
-        text
+        <a href="https://build.fhir.org/datatypes.html#Quantity">quantity</a>
+        <pre class="w3-border-top w3-border-bottom">{{jsonStringify(fhirExamples3)}}
+        </pre>
+        <a href="https://build.fhir.org/substance.html#resource">substance</a>
+        <pre class="w3-border-top w3-border-bottom">{{jsonStringify(fhirExamples2)}}
+        </pre>
     </div>
-    <div class="w3-half w3-small w3-border-left w3-container" style="overflow:auto;">
+    <div class="w3-half w3-border-left w3-container" style="overflow:auto;">
         <a href="https://build.fhir.org/careplan.html#CarePlan">CarePlan</a>
-        <pre class=" w3-border-top w3-border-bottom">{{jsonStringify(fhirExamples)}}
+        <pre class="w3-border-top w3-border-bottom">{{jsonStringify(fhirExamples)}}
         </pre>
         --
     </div>

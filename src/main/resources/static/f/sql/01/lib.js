@@ -189,7 +189,19 @@ sql_app.doc_update_sort = () => {
     return sql
 }
 
-sql_app.FHIR_Medication = () => {
+sql_app.FHIR_Medication_sc = () => {
+    let sql = 'SELECT d.doc_id medication_id, substance.*, item.doc_id item_id, strengthRatio.doc_id strength_id, ratio.* FROM doc d \n\
+    LEFT JOIN (SELECT * FROM doc,sort WHERE doc_id=sort_id AND sort=1) item \n\
+    LEFT JOIN (:sql_app.FHIR_Substance_code ) substance ON substance.doc_id=item.reference2 \n\
+    LEFT JOIN doc strengthRatio \n\
+    LEFT JOIN (:sql_app.FHIR_Ratio ) ratio ON ratio.numerator_id=strengthRatio.reference2 \n\
+    ON strengthRatio.parent=item.doc_id \n\
+    ON item.parent=d.doc_id \n\
+    WHERE d.reference=369998 and d.reference2=369993'
+    return sql
+}
+
+sql_app.FHIR_Medication_sq = () => {
     let sql = 'SELECT d.doc_id medication_id, substance.* FROM doc d \n\
     LEFT JOIN (SELECT * FROM doc,sort WHERE doc_id=sort_id AND sort=1) item \n\
     LEFT JOIN (:sql_app.FHIR_Substance ) substance ON substance.doc_id=item.reference2 \n\
@@ -198,16 +210,36 @@ sql_app.FHIR_Medication = () => {
     return sql
 }
 
+sql_app.FHIR_Substance_code = () => {
+    let sql = 'SELECT value substance_code, d.* FROM doc d \n\
+    , string WHERE reference = 370024 and string_id=reference2'
+    return sql
+}
+
 sql_app.FHIR_Substance = () => {
-    let sql = 'SELECT value, d.*, dq.* FROM doc d \n\
-    LEFT JOIN ( SELECT dq.parent dq_parent, value_q, unit_code FROM doc dq, \n\
+    let sql = 'SELECT value substance_code, d.*, dq.* FROM doc d \n\
+    LEFT JOIN ( SELECT dq.parent dq_parent, quantity_value, quantity_code FROM doc dq, \n\
     (:sql_app.FHIR_Quantity ) dqd WHERE dqd.doc_id = dq.reference2 ) dq ON dq_parent=d.doc_id \n\
     , string WHERE reference = 370024 and string_id=reference2'
     return sql
 }
 
+sql_app.FHIR_Ratio = () => {
+    let sql = 'SELECT numerator.doc_id  numerator_id, numerator.reference2 n_quantity_id \n\
+    , n.quantity_value n_quantity_value, n.quantity_code n_quantity_code --, n.*  \n\
+    , denominator.doc_id denominator_id, denominator.reference2 dn_quantity_id --, denominator.* \n\
+    , dn.quantity_value dn_quantity_value, dn.quantity_code dn_quantity_code --, dn.* \n\
+    FROM doc numerator  \n\
+    LEFT JOIN ( :sql_app.FHIR_Quantity ) n ON n.doc_id= numerator.reference2 \n\
+    LEFT JOIN doc denominator \n\
+    LEFT JOIN ( :sql_app.FHIR_Quantity ) dn ON dn.doc_id= denominator.reference2 \n\
+    ON denominator.parent = numerator.doc_id  \n\
+    WHERE  numerator.reference = 368676'
+    return sql
+}
+
 sql_app.FHIR_Quantity = () => {
-    let sql = 'SELECT i.value value_q, dc.value unit_code, d.*, dc.reference2 unit_code_id FROM doc d \n\
+    let sql = 'SELECT i.value quantity_value, dc.value quantity_code, d.*, dc.reference2 quantity_code_id FROM doc d \n\
     LEFT JOIN integer i ON i.integer_id=d.doc_id \n\
     LEFT JOIN ( SELECT d.*, value FROM doc d,string WHERE reference2=string_id \n\
     ) dc ON dc.parent=d.doc_id AND dc.reference = 368641 \n\

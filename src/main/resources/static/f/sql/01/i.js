@@ -79,6 +79,99 @@ const conf = {
     }
 }
 
+sql_app.simpleSQLs = {
+    WikiList: {
+        c: 'SELECT doc_id, value, cnt_child, parent FROM doc d \n\
+        LEFT JOIN string ON string_id=doc_id \n\
+        LEFT JOIN ( \n\
+            SELECT count(parent) cnt_child, parent child FROM doc GROUP BY parent \n\
+            ) cnt ON cnt.child=d.doc_id \n\
+        WHERE 369940 IN (reference, doc_id, reference2)',
+        newDocMenu: {},
+        wikiReference: 369940,
+        wikiFolderId: 371645,
+        sqlHtml: { doc_id: '<a href="#!/wiki005Rest/{{r[k]}}">{{r[k]}}</a>', },
+    },
+    FHIR_PlanDefinition: {
+        c: 'SELECT value, d.* FROM doc d \n\
+        LEFT JOIN string ON string_id=doc_id \n\
+        WHERE reference=368815',
+        sqlHtml: {
+            value: '<a href="#!/docTree/{{r.doc_id}}">{{r[k]}}</a>',
+            doc_id: '<a href="#!/carePlan005Rest/{{r[k]}}">{{r[k]}}</a>',
+        },
+    },
+    FHIR_CarePlan: {
+        c: 'SELECT doc_id, value FHIR_DomainResource, parent FROM doc d \n\
+        LEFT JOIN string ON string_id=doc_id \n\
+        WHERE 372080 IN (reference)',
+        sqlHtml: { doc_id: '<a href="#!/carePlan005Rest/{{r[k]}}">{{r[k]}}</a>', },
+    },
+    FHIR_Ratio: {
+        c: sql_app.FHIR_Ratio(),
+        sqlHtml: { numerator_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
+    },
+    FHIR_Quantity: {
+        c: sql_app.FHIR_Quantity(),
+        sqlHtml: { doc_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
+    },
+    FHIR_MedicationRequest_sc: {
+        c: 'SELECT d.doc_id medicationrequest_id, medication.* FROM doc d ,(:sql_app.FHIR_Medication_scq ) medication \n\
+        WHERE d.reference=371469 AND medication.medication_id=d.reference2',
+        sqlHtml: { medicationrequest_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
+    },
+    FHIR_MedicationRequest_sq: {
+        c: 'SELECT d.doc_id medicationrequest_id, medication.* FROM doc d ,(:sql_app.FHIR_Medication_sq ) medication \n\
+        WHERE d.reference=371469 AND medication.medication_id=d.reference2',
+        sqlHtml: { medicationrequest_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
+    },
+    FHIR_Medication_sc: {
+        c: sql_app.FHIR_Medication_sc(),
+        sqlHtml: { medication_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
+    },
+    FHIR_Medication_sq: {
+        c: sql_app.FHIR_Medication_sq(),
+        sqlHtml: { medication_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
+    },
+    FHIR_Substance_code: {
+        c: sql_app.FHIR_Substance_code(),
+        sqlHtml: { doc_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
+    },
+    FHIR_Substance: {
+        c: sql_app.FHIR_Substance(),
+        sqlHtml: { doc_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
+    },
+    FHIR_SubstanceDefinition: {
+        c: 'SELECT dn.* FROM doc d LEFT JOIN ( \n\
+            SELECT dp.parent doc_id, value substance_name, string_id sname_id \n\
+            FROM doc dp, doc d,string \n\
+            WHERE dp.doc_id=d.parent AND d.doc_id=string_id AND d.reference=372419 \n\
+            ) dn ON dn.doc_id=d.doc_id \n\
+            WHERE d.reference=372417 \n\
+            ORDER BY doc_id, substance_name',
+        sqlHtml: { doc_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
+    },
+    FHIR_MethadataResource: {
+        c: 'SELECT s.value FHIR_DomainResource, d.*, r1.value r1value FROM doc d \n\
+        LEFT JOIN string s ON s.string_id=doc_id \n\
+        LEFT JOIN string r1 ON r1.string_id=reference \n\
+        WHERE reference IN (369795)',
+    },
+    FHIR_DomainResource: {
+        c: 'SELECT s.value FHIR_DomainResource, d.*, r1.value FROM doc d \n\
+        LEFT JOIN string s ON s.string_id=doc_id \n\
+        LEFT JOIN string r1 ON r1.string_id=reference \n\
+        WHERE 369789 IN (reference)',
+    },
+    SQL_from_DB: {
+        c: 'SELECT doc_id, value sql_select FROM doc \n\
+    LEFT JOIN string ON string_id=doc_id \n\
+    WHERE 371327 IN (reference2)',
+    },
+}
+console.log(2)
+
+
 d.conf.wiki = {
     cl: {//допустимі children елементи для елементів.
         root: ['h1', 'p', 'h2', 'ol'],
@@ -95,6 +188,17 @@ d.conf.wiki = {
     }
 }
 
+conf.extraReadIds = [
+    368794, // CarePlan.activity.plannedActivityReference[MedicationRequest|...]
+    370001, // Medication.ingredient.item[SimpleQuantity]
+    372808, // Medication.ingredient.strength[Ratio]
+    372786, // Substance.quantity[SimpleQuantity]
+    368676, // Ratio.numerator[Quantity]
+    368677, // Ratio.denominator[Quantity]
+    371469, // Ratio.denominator[Quantity]
+]
+//370024, //  Substance.code[Quantity]
+
 // app.controller('DevController', DevController)
 class DevController {
     constructor($scope) {
@@ -105,11 +209,23 @@ class DevController {
         let SubstanceDefinition = {
             name: [{ name: 'бензилпеніцилін' }]
         }
-        let Substance0 = {
-            code: SubstanceDefinition
+        let quantity = {
+            value: 250,
+            unit: 'мг',
         }
         let Substance = {
-            code: SubstanceDefinition.name[0].name
+            //code: SubstanceDefinition.name[0].name,
+            code: 'azithromycin',
+            quantity: quantity,
+        }
+        let Substance0 = {
+            code: SubstanceDefinition,
+        }
+        $scope.fhirExamples3 = {
+            quantity: quantity
+        }
+        $scope.fhirExamples2 = {
+            substance: Substance
         }
         let MedicationRequest = {
             medication: 'Бензилпеніцилін',
@@ -230,17 +346,6 @@ class CarePlan002RestController extends CarePlan000AbstractController {
 }
 app.controller("CarePlan002RestController", CarePlan002RestController)
 
-conf.extraReadIds = [
-    368794, // CarePlan.activity.plannedActivityReference[MedicationRequest|...]
-    370001, // Medication.ingredient.item[SimpleQuantity]
-    372808, // Medication.ingredient.strength[Ratio]
-    372786, // Substance.quantity[SimpleQuantity]
-    368676, // Ratio.numerator[Quantity]
-    368677, // Ratio.denominator[Quantity]
-    371469, // Ratio.denominator[Quantity]
-]
-//370024, //  Substance.code[Quantity]
-
 class DocTreeAbstractController extends AmDocAbstractController {
     constructor($scope, dataFactory) {
         super($scope)
@@ -309,92 +414,6 @@ class FirstController extends AmDocAbstractController {
 }
 app.controller("FirstController", FirstController)
 
-sql_app.simpleSQLs = {
-    WikiList: {
-        c: 'SELECT doc_id, value, cnt_child, parent FROM doc d \n\
-        LEFT JOIN string ON string_id=doc_id \n\
-        LEFT JOIN ( \n\
-            SELECT count(parent) cnt_child, parent child FROM doc GROUP BY parent \n\
-            ) cnt ON cnt.child=d.doc_id \n\
-        WHERE 369940 IN (reference, doc_id, reference2)',
-        newDocMenu: {},
-        wikiReference: 369940,
-        wikiFolderId: 371645,
-        sqlHtml: { doc_id: '<a href="#!/wiki005Rest/{{r[k]}}">{{r[k]}}</a>', },
-    },
-    FHIR_PlanDefinition: {
-        c: 'SELECT value, d.* FROM doc d \n\
-        LEFT JOIN string ON string_id=doc_id \n\
-        WHERE reference=368815',
-        sqlHtml: {
-            value: '<a href="#!/docTree/{{r.doc_id}}">{{r[k]}}</a>',
-            doc_id: '<a href="#!/carePlan005Rest/{{r[k]}}">{{r[k]}}</a>',
-        },
-    },
-    FHIR_CarePlan: {
-        c: 'SELECT doc_id, value FHIR_DomainResource, parent FROM doc d \n\
-        LEFT JOIN string ON string_id=doc_id \n\
-        WHERE 372080 IN (reference)',
-        sqlHtml: { doc_id: '<a href="#!/carePlan005Rest/{{r[k]}}">{{r[k]}}</a>', },
-    },
-    FHIR_Ratio: {
-        c: 'SELECT numerator.doc_id  numerator_id, numerator.reference2 numerator_q \n\
-        , n.value_q n_value_q, n.unit_code n_unit_code --, n.*  \n\
-        , denominator.doc_id denominator_id, denominator.reference2 denominator_q --, denominator.* \n\
-        , dn.value_q dn_value_q, dn.unit_code dn_unit_code --, dn.* \n\
-        FROM doc numerator  \n\
-        LEFT JOIN ( :sql_app.FHIR_Quantity ) n ON n.doc_id= numerator.reference2 \n\
-        LEFT JOIN doc denominator \n\
-        LEFT JOIN ( :sql_app.FHIR_Quantity ) dn ON dn.doc_id= denominator.reference2 \n\
-        ON denominator.parent = numerator.doc_id  \n\
-        WHERE  numerator.reference = 368676',
-        sqlHtml: { numerator_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
-    },
-    FHIR_Quantity: {
-        c: sql_app.FHIR_Quantity(),
-        sqlHtml: { doc_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
-    },
-    FHIR_MedicationRequest: {
-        c: 'SELECT d.doc_id medicationrequest_id, medication.* FROM doc d ,(:sql_app.FHIR_Medication ) medication \n\
-        WHERE d.reference=371469 AND medication.medication_id=d.reference2',
-        sqlHtml: { medicationrequest_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
-    },
-    FHIR_Medication: {
-        c: sql_app.FHIR_Medication(),
-        sqlHtml: { medication_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
-    },
-    FHIR_Substance: {
-        c: sql_app.FHIR_Substance(),
-        sqlHtml: { doc_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
-    },
-    FHIR_SubstanceDefinition: {
-        c: 'SELECT dn.* FROM doc d LEFT JOIN ( \n\
-            SELECT dp.parent doc_id, value substance_name, string_id sname_id \n\
-            FROM doc dp, doc d,string \n\
-            WHERE dp.doc_id=d.parent AND d.doc_id=string_id AND d.reference=372419 \n\
-            ) dn ON dn.doc_id=d.doc_id \n\
-            WHERE d.reference=372417 \n\
-            ORDER BY doc_id, substance_name',
-        sqlHtml: { doc_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
-    },
-    FHIR_MethadataResource: {
-        c: 'SELECT s.value FHIR_DomainResource, d.*, r1.value r1value FROM doc d \n\
-        LEFT JOIN string s ON s.string_id=doc_id \n\
-        LEFT JOIN string r1 ON r1.string_id=reference \n\
-        WHERE reference IN (369795)',
-    },
-    FHIR_DomainResource: {
-        c: 'SELECT s.value FHIR_DomainResource, d.*, r1.value FROM doc d \n\
-        LEFT JOIN string s ON s.string_id=doc_id \n\
-        LEFT JOIN string r1 ON r1.string_id=reference \n\
-        WHERE 369789 IN (reference)',
-    },
-    SQL_from_DB: {
-        c: 'SELECT doc_id, value sql_select FROM doc \n\
-    LEFT JOIN string ON string_id=doc_id \n\
-    WHERE 371327 IN (reference2)',
-    },
-}
 
 // app.factory("edTextFactory", EdTextFactory)
 class EdTextFactory {
@@ -607,7 +626,6 @@ class CreateDocFactory {
         }
     }
 }
-
 app.factory("createDocFactory", CreateDocFactory)
 
 class CreateDocController {
@@ -665,6 +683,16 @@ class SqlAbstractController {
                     let sql_split = sql.split(':sql_app.')
                     let sql_name = sql_split[1].split(' ')[0]
                     sql = sql.replace(':sql_app.' + sql_name, sql_app[sql_name]())
+                    if (sql.includes(':sql_app.')) {
+                        let sql_split = sql.split(':sql_app.')
+                        let sql_name = sql_split[1].split(' ')[0]
+                        sql = sql.replace(':sql_app.' + sql_name, sql_app[sql_name]())
+                        if (sql.includes(':sql_app.')) {
+                            let sql_split = sql.split(':sql_app.')
+                            let sql_name = sql_split[1].split(' ')[0]
+                            sql = sql.replace(':sql_app.' + sql_name, sql_app[sql_name]())
+                        }
+                    }
                 }
             }
         }
