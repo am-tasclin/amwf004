@@ -1,0 +1,15 @@
+<div class="w3-card">
+    ResourceFHIR
+    {{ctrl.singlePageUrl()}}
+    #{{ctrl.singlePageUrl().split('/')}}
+    #{{ctrl.singlePageUrl().split('/').length}}
+    !={{ctrl.singlePageUrl().split('/')[1]}}
+    !!={{ctrl.singlePageLastUrl()}}
+    ={{ctrl.conf.fr[ctrl.singlePageLastUrl()].children}}
+    <span class="w3-hover-shadow"><i title="_>." class="fas fa-ellipsis-v"></i> ></span>
+    <span data-ng-repeat="sr in ctrl.conf.fr[ctrl.singlePageLastUrl()].children">
+        <a href="#!{{ctrl.singlePageUrl()}}/{{sr}}">
+            {{sr}}</a>
+        |
+    </span>
+</div>

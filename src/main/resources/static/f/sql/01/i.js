@@ -219,6 +219,10 @@ class DevController {
         let Substance0 = {
             code: SubstanceDefinition,
         }
+        if (sql_app.simpleSQLs['FHIR_Medication_sc'].data)
+            angular.forEach(sql_app.simpleSQLs['FHIR_Medication_sc'].data.list, (v) => {
+                if (v.medication_id == 372793) $scope.fhirExamples4 = { v: v }
+            })
         $scope.fhirExamples3 = {
             quantity: quantity
         }
@@ -560,6 +564,7 @@ app.directive('amEdText', () => {
             if (d.conf.$routeParams.el_id == s.id) {
                 s.elEdId = s.id
                 c.edTextFactory.initElEdId(s)
+                console.log(1, s)
             }
         },
     }
@@ -577,6 +582,7 @@ class EdTextController {
         }
     }
 }
+app.controller('EdTextController', EdTextController)
 
 class CreateDocFactory {
     constructor(dataFactory) {
@@ -698,7 +704,7 @@ class SqlAbstractController {
         this.dataFactory.httpGet({ sql: sql })
             .then((dataSqlRequest) => {
                 sql_app.simpleSQLs[sqlN].data = ctrlSql.data = dataSqlRequest
-                console.log(1, dataSqlRequest)
+                console.log(2, sqlN, dataSqlRequest)
             })
     }
     getChoisedListItem = () => sql_app.simpleSQLs[sql_app.simpleSQLselect].choisedListItem
@@ -746,6 +752,7 @@ app.controller("SqlController", SqlController)
 class RouteProviderConfig {
     constructor($routeProvider) {
         angular.forEach(conf.singlePagesUrl, (v, k) => {
+            console.log(k, v)
             $routeProvider.when("/" + k, v)
         })
         $routeProvider.otherwise({
