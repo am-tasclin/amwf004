@@ -1,4 +1,3 @@
-console.log(1)
 const conf = {}
 class AbstractController {
     singlePageUrl = () => window.location.href.split('#!')[1]

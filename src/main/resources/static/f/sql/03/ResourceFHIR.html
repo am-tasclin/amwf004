@@ -1,15 +1,16 @@
-<div class="w3-card">
-    ResourceFHIR
-    {{ctrl.singlePageUrl()}}
-    #{{ctrl.singlePageUrl().split('/')}}
-    #{{ctrl.singlePageUrl().split('/').length}}
-    !={{ctrl.singlePageUrl().split('/')[1]}}
-    !!={{ctrl.singlePageLastUrl()}}
-    ={{ctrl.conf.fr[ctrl.singlePageLastUrl()].children}}
-    <span class="w3-hover-shadow"><i title="_>." class="fas fa-ellipsis-v"></i> ></span>
-    <span data-ng-repeat="sr in ctrl.conf.fr[ctrl.singlePageLastUrl()].children">
-        <a href="#!{{ctrl.singlePageUrl()}}/{{sr}}">
-            {{sr}}</a>
-        |
-    </span>
+<div class="w3-card ">
+    <div class="w3-light-gray w3-container">
+        <span class="w3-tiny am-b">ResourceFHIR: </span>
+        <span class="w3-tiny"> {{ctrl.singlePageUrl()}} </span>
+        <span data-ng-if="ctrl.singlePageUrl().split('/').length <= 3">
+            <span class="w3-hover-shadow"><i title="_>." class="fas fa-ellipsis-v"></i>
+                ></span>
+            <span data-ng-repeat="cr in ctrl.conf.fr[ctrl.singlePageLastUrl()].children" class="w3-small">
+                <a href="#!{{ctrl.singlePageUrl()}}/{{cr}}"> {{ctrl.conf.fr[cr].frn}}</a>
+                |
+            </span>
+        </span>
+    </div>
+    <span class="w3-tiny w3-right"> #{{ctrl.singlePageUrl().split('/').length-1}} </span>
+    body
 </div>

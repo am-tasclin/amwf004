@@ -4,7 +4,8 @@ var app = angular.module("app", ['ngRoute', 'ngResource', 'ngSanitize']);
 angular.element(() => angular.bootstrap(document, ['app']))
 conf.fr = {
     cp: {
-        frn: 'CarePlan'
+        frn: 'CarePlan',
+        children: ['mr'],
     },
     mr: {
         frn: 'MedicationRequest',
@@ -12,7 +13,7 @@ conf.fr = {
     },
     mn: {
         frn: 'Medication',
-        children: ['ro', 'qy'],
+        children: ['se','ro', 'qy'],
     },
     se: {
         frn: 'Substance'
@@ -42,17 +43,25 @@ class RouteProviderConfig {
             controller: 'ResourceFHIRController',
             controllerAs: 'ctrl',
         }
+        let kIdREST = (k)=>{
+            let kElId = k + '_:'+k+'_id'
+            console.log(k, kElId)
+            $routeProvider.when("/" + kElId, rpo)
+        }
         angular.forEach(conf.fr, (v, k) => {
             $routeProvider.when("/" + k, rpo)
             angular.forEach(conf.fr[k].children, (k2) => {
                 let k12 = k + '/' + k2
                 console.log(2, k12)
                 $routeProvider.when("/" + k12, rpo)
+                angular.forEach(conf.fr[k2].children, (k3) => {
+                    let k123 = k + '/' + k2 + '/' + k3
+                    console.log(3, k123)
+                    $routeProvider.when("/" + k123, rpo)
+                })
             })
             if (k == 'mn') {
-                let kElId = k + '_:el_id'
-                console.log(k, kElId)
-                $routeProvider.when("/" + kElId, rpo)
+                kIdREST(k)
             }
         })
     }

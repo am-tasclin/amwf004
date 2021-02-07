@@ -19,7 +19,7 @@
 <body>
     <div class="w3-container am-max-width-1">
         <div data-ng-include="'/f/agumat/01/h.html'" class="am-no-print"></div>
-        <div class="w3-hover-shadow am-no-print">
+        <div class="w3-hover-shadow w3-small am-no-print">
             <span data-ng-repeat="(k,v) in conf.fr">
                 <a href="#!/{{k}}" data-ng-class="{'w3-light-gray':ctrl.singlePageUrl().includes(k)}"
                     title="{{k}}:{{v.frn}}">{{v.frn}}</a> 
