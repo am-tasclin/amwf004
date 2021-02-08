@@ -13,12 +13,13 @@
     <script src="/webjars/angular-resource/1.8.2/angular-resource.min.js" type="application/javascript"></script>
     <script src="/webjars/angular-sanitize/1.8.2/angular-sanitize.min.js" type="application/javascript"></script>
     <script src="lib.js" type="application/javascript"></script>
+    <script src="/f/sql/03/sql_app.tableOfFHIR.js" type="application/javascript"></script>
     <script src="i.js" type="application/javascript"></script>
 </head>
 
 <body>
     <div class="w3-container am-max-width-1">
-        <div data-ng-include="'/f/agumat/01/h.html'" class="am-no-print"></div>
+        <div data-ng-include="'h.html'" class="am-no-print"></div>
         <div class="w3-hover-shadow am-no-print">
             <span>
                 <a href="#!sql/{{d.conf.simpleSQLselect}}">sql</a>

@@ -4,80 +4,79 @@ angular.element(() => angular.bootstrap(document, ['app']))
 app.factory("dataFactory", DataFactory)
 app.factory("treeFactory", TreeFactory)
 
-const conf = {
-    singlePagesUrl: {
-        sql: {
-            templateUrl: 'sql1.html',
-            controller: 'SqlController',
-            controllerAs: 'ctrl',
-        },
-        'sql/:sql': {
-            templateUrl: 'sql1.html',
-            controller: 'SqlController',
-            controllerAs: 'ctrl',
-        },
-        dev: {
-            templateUrl: 'dev.html',
-            controller: 'DevController',
-            controllerAs: 'ctrl',
-        },
-        wikiList: {
-            templateUrl: 'wikiList.html',
-            controller: 'WikiListController',
-            controllerAs: 'ctrl',
-        },
-        carePlan001: {
-            templateUrl: 'carePlan001.html',
-            controller: 'CarePlan001Controller',
-            controllerAs: 'ctrl',
-        },
-        carePlan002Rest: {
-            templateUrl: 'carePlan001.html',
-            controller: 'CarePlan002RestController',
-            controllerAs: 'ctrl',
-        },
-        'docTree/:doc_id': {
-            templateUrl: 'docTree.html',
-            controller: 'DocTree005Controller',
-            controllerAs: 'ctrl',
-        },
-        'carePlan005Rest/:doc_id': {
-            templateUrl: 'carePlan001.html',
-            controller: 'DocTree005Controller',
-            controllerAs: 'ctrl',
-        },
-        wiki: {
-            templateUrl: 'wiki.html',
-            controller: 'Wiki001Controller',
-            controllerAs: 'ctrl',
-        },
-        wiki003Rest: {
-            templateUrl: 'wiki.html',
-            controller: 'Wiki003RestController',
-            controllerAs: 'ctrl',
-        },
-        'wiki004Rest/:doc_id': {
-            templateUrl: 'wiki.html',
-            controller: 'Wiki004RestController',
-            controllerAs: 'ctrl',
-        },
-        'wiki005Rest/:doc_id': {
-            templateUrl: 'wiki.html',
-            controller: 'Wiki005RestController',
-            controllerAs: 'ctrl',
-        },
-        'wiki005Rest/:doc_id/:el_id': {
-            templateUrl: 'wiki.html',
-            controller: 'Wiki005RestController',
-            controllerAs: 'ctrl',
-        },
-        'wiki005Rest/:doc_id/:el_id/:crud': {
-            templateUrl: 'wiki.html',
-            controller: 'Wiki005RestController',
-            controllerAs: 'ctrl',
-        },
-    }
+conf.singlePagesUrl = {
+    sql: {
+        templateUrl: 'sql1.html',
+        controller: 'SqlController',
+        controllerAs: 'ctrl',
+    },
+    'sql/:sql': {
+        templateUrl: 'sql1.html',
+        controller: 'SqlController',
+        controllerAs: 'ctrl',
+    },
+    dev: {
+        templateUrl: 'dev.html',
+        controller: 'DevController',
+        controllerAs: 'ctrl',
+    },
+    wikiList: {
+        templateUrl: 'wikiList.html',
+        controller: 'WikiListController',
+        controllerAs: 'ctrl',
+    },
+    carePlan001: {
+        templateUrl: 'carePlan001.html',
+        controller: 'CarePlan001Controller',
+        controllerAs: 'ctrl',
+    },
+    carePlan002Rest: {
+        templateUrl: 'carePlan001.html',
+        controller: 'CarePlan002RestController',
+        controllerAs: 'ctrl',
+    },
+    'docTree/:doc_id': {
+        templateUrl: 'docTree.html',
+        controller: 'DocTree005Controller',
+        controllerAs: 'ctrl',
+    },
+    'carePlan005Rest/:doc_id': {
+        templateUrl: 'carePlan001.html',
+        controller: 'DocTree005Controller',
+        controllerAs: 'ctrl',
+    },
+    wiki: {
+        templateUrl: 'wiki.html',
+        controller: 'Wiki001Controller',
+        controllerAs: 'ctrl',
+    },
+    wiki003Rest: {
+        templateUrl: 'wiki.html',
+        controller: 'Wiki003RestController',
+        controllerAs: 'ctrl',
+    },
+    'wiki004Rest/:doc_id': {
+        templateUrl: 'wiki.html',
+        controller: 'Wiki004RestController',
+        controllerAs: 'ctrl',
+    },
+    'wiki005Rest/:doc_id': {
+        templateUrl: 'wiki.html',
+        controller: 'Wiki005RestController',
+        controllerAs: 'ctrl',
+    },
+    'wiki005Rest/:doc_id/:el_id': {
+        templateUrl: 'wiki.html',
+        controller: 'Wiki005RestController',
+        controllerAs: 'ctrl',
+    },
+    'wiki005Rest/:doc_id/:el_id/:crud': {
+        templateUrl: 'wiki.html',
+        controller: 'Wiki005RestController',
+        controllerAs: 'ctrl',
+    },
 }
+
 
 sql_app.simpleSQLs = {
     WikiList: {
@@ -133,8 +132,8 @@ sql_app.simpleSQLs = {
         c: sql_app.FHIR_Medication_sq(),
         sqlHtml: { medication_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
     },
-    FHIR_Substance_code: {
-        c: sql_app.FHIR_Substance_code(),
+    tableOfFHIR_Substance_code: {
+        c: sql_app.tableOfFHIR_Substance_code(),
         sqlHtml: { doc_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
     },
     FHIR_Substance: {
@@ -752,7 +751,7 @@ app.controller("SqlController", SqlController)
 class RouteProviderConfig {
     constructor($routeProvider) {
         angular.forEach(conf.singlePagesUrl, (v, k) => {
-            console.log(k, v)
+            // console.log(k, v)
             $routeProvider.when("/" + k, v)
         })
         $routeProvider.otherwise({

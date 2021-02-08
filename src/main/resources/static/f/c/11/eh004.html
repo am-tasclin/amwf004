@@ -21,17 +21,17 @@
 
 <body data-ng-click="ctrl.bodyClick()">
 	<div class="w3-container am-max-width-1">
-		<div class="w3-border-bottom">
+		<div class="w3-border-bottom w3-display-container">
 			<div class="w3-right" data-ng-include="'/f/btn-to-login.html'"></div>
 			<span data-ng-repeat="cnf in [{show_title:'no'}]" data-ng-include="'/f/home-link.html'"
 				class="w3-small0 am-b"></span>
-				<!--
+			<!--
 					{{[...ctrl.request.path].reverse().join('/')}}.html?doc2doc={{ctrl.doc2doc_ids.join(',')}}
 				-->
-				<a data-ng-clickStop="ctrl.reload_page()"
-			href="{{ctrl.reverced_page_link()}}"
-			> <span class="am-b w3-small"> {{ctrl.page_title}} </span>
+			<a data-ng-clickStop="ctrl.reload_page()" href="{{ctrl.reverced_page_link()}}"> <span class="am-b w3-small">
+					{{ctrl.page_title}} </span>
 			</a> <i class="fas fa-sliders-h w3-hover-shadow" data-ng-click="ctrl.change_panel()"></i>
+			<span class="w3-display-middle w3-tiny am-b"> meta-data-editor <sub>v.03</sub> </span>
 		</div>
 		<div data-ng-if="ctrl.eMap[ctrl.doc2doc_ids[1]].open_children">
 			<div class="w3-tiny w3-right" data-ng-repeat="ddEl in [ctrl.eMap[ctrl.doc2doc_ids[1]]]">

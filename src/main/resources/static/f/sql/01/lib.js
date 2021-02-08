@@ -1,5 +1,6 @@
 'use strict';
 // data collection
+const conf = {}, sql_app = {}
 const d = { elMap: {}, clList: {}, conf: {} }
 
 class AmDocAbstractController {
@@ -164,8 +165,6 @@ class DataFactory {
     }
 }
 
-const sql_app = {}
-
 sql_app.replace_params = (sql, data) => {
     angular.forEach(sql.split(':'), function (v) {
         var v1 = v.split(' ')[0]
@@ -192,7 +191,7 @@ sql_app.doc_update_sort = () => {
 sql_app.FHIR_Medication_sc = () => {
     let sql = 'SELECT d.doc_id medication_id, substance.*, item.doc_id item_id, strength.doc_id strength_id, ratio.* FROM doc d \n\
     LEFT JOIN (SELECT * FROM doc,sort WHERE doc_id=sort_id AND sort=1) item \n\
-    LEFT JOIN (:sql_app.FHIR_Substance_code ) substance ON substance_id=item.reference2 \n\
+    LEFT JOIN (:sql_app.tableOfFHIR_Substance_code ) substance ON substance_id=item.reference2 \n\
     LEFT JOIN doc strength \n\
     LEFT JOIN (:sql_app.FHIR_Ratio ) ratio ON ratio.numerator_id=strength.reference2 \n\
     ON strength.parent=item.doc_id \n\
@@ -210,11 +209,6 @@ sql_app.FHIR_Medication_sq = () => {
     return sql
 }
 
-sql_app.FHIR_Substance_code = () => {
-    let sql = 'SELECT value substance_code, d.doc_id substance_id FROM doc d \n\
-    , string WHERE reference = 370024 and string_id=reference2'
-    return sql
-}
 
 sql_app.FHIR_Substance = () => {
     let sql = 'SELECT value substance_code, d.*, dq.* FROM doc d \n\

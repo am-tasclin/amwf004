@@ -1,7 +1,8 @@
+--
 <div class="w3-card ">
     <div class="w3-light-gray w3-container">
         <span class="w3-tiny am-b">ResourceFHIR: </span>
-        <span class="w3-tiny"> {{ctrl.singlePageUrl()}} </span>
+        <span class="w3-tiny w3-border-top w3-border-amber"> {{ctrl.singlePageUrl()}}</span>
         <span data-ng-if="ctrl.singlePageUrl().split('/').length <= 3">
             <span class="w3-hover-shadow"><i title="_>." class="fas fa-ellipsis-v"></i>
                 ></span>
@@ -12,5 +13,10 @@
         </span>
     </div>
     <span class="w3-tiny w3-right"> #{{ctrl.singlePageUrl().split('/').length-1}} </span>
-    body
+    ed body
+    <span class="w3-right w3-tiny">
+        <a href="/f/sql/01/i.html#!/sql/{{ctrl.conf.fr[ctrl.singlePageLastUrl()].sql_app}}">
+            sql-tree
+        </a>
+    </span>
 </div>

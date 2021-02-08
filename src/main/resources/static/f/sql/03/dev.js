@@ -1,7 +1,8 @@
-console.log(1)
 'use strict';
 var app = angular.module("app", ['ngRoute', 'ngResource', 'ngSanitize']);
 angular.element(() => angular.bootstrap(document, ['app']))
+app.factory("dataFactory", DataFactory)
+
 conf.fr = {
     cp: {
         frn: 'CarePlan',
@@ -13,24 +14,37 @@ conf.fr = {
     },
     mn: {
         frn: 'Medication',
-        children: ['se','ro', 'qy'],
+        children: ['se', 'ro', 'qy'],
     },
     se: {
-        frn: 'Substance'
+        frn: 'Substance',
+        sql_app: 'tableOfFHIR_Substance_code',
     },
     ro: {
-        frn: 'Ratio'
+        frn: 'Ratio',
+        children: ['qy'],
     },
     qy: {
-        frn: 'Quantity'
+        frn: 'Quantity',
     },
 }
 
 // app.controller("ResourceFHIRController", ResourceFHIRController)
 class ResourceFHIRController extends AbstractController {
-    constructor($scope, $routeParams) {
+    dataFactory
+    constructor($scope, $routeParams, dataFactory) {
         super()
-        console.log(1, this.singlePageUrl(), this.singlePageUrl().split('/'))
+        this.dataFactory = dataFactory
+        let sql
+        if (conf.fr[this.singlePageLastUrl()].sql_app) sql = sql_app[conf.fr[this.singlePageLastUrl()].sql_app]()
+        console.log(this.singlePageUrl(), this.singlePageUrl().split('/').length - 1, this.singlePageLastUrl())
+        if (sql){
+            console.log(sql)
+            this.dataFactory.httpGet({ sql: sql })
+            .then((dataSqlRequest) => {
+                console.log(2, dataSqlRequest)
+            })
+        } 
     }
 }
 app.controller("ResourceFHIRController", ResourceFHIRController)
@@ -43,8 +57,8 @@ class RouteProviderConfig {
             controller: 'ResourceFHIRController',
             controllerAs: 'ctrl',
         }
-        let kIdREST = (k)=>{
-            let kElId = k + '_:'+k+'_id'
+        let kIdREST = (k) => {
+            let kElId = k + '_:' + k + '_id'
             console.log(k, kElId)
             $routeProvider.when("/" + kElId, rpo)
         }
