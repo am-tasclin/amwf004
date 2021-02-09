@@ -1,8 +1,11 @@
 const conf = {}, sql_app = {}
 
+singlePageUrl = () => window.location.href.split('#!')[1]
+singlePageLastUrl = () => singlePageUrl()?singlePageUrl().split('/')[singlePageUrl().split('/').length-1]:''
+
 class AbstractController {
-    singlePageUrl = () => window.location.href.split('#!')[1]
-    singlePageLastUrl = () => this.singlePageUrl()?this.singlePageUrl().split('/')[this.singlePageUrl().split('/').length-1]:''
+    singlePageUrl = singlePageUrl
+    singlePageLastUrl = singlePageLastUrl
     conf = conf
 }
 

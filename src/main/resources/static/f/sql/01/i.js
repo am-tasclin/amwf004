@@ -106,17 +106,16 @@ sql_app.simpleSQLs = {
         WHERE 372080 IN (reference)',
         sqlHtml: { doc_id: '<a href="#!/carePlan005Rest/{{r[k]}}">{{r[k]}}</a>', },
     },
-    FHIR_Ratio: {
-        c: sql_app.FHIR_Ratio(),
+    tableOfFHIR_Ratio: {
+        c: sql_app.tableOfFHIR_Ratio(),
         sqlHtml: { numerator_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
     },
-    FHIR_Quantity: {
-        c: sql_app.FHIR_Quantity(),
+    tableOfFHIR_Quantity: {
+        c: sql_app.tableOfFHIR_Quantity(),
         sqlHtml: { doc_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
     },
     FHIR_MedicationRequest_sc: {
-        c: 'SELECT d.doc_id medicationrequest_id, medication.* FROM doc d ,(:sql_app.FHIR_Medication_scq ) medication \n\
-        WHERE d.reference=371469 AND medication.medication_id=d.reference2',
+        c: sql_app.tableOfFHIR_MedicationRequest_sc(),
         sqlHtml: { medicationrequest_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
     },
     FHIR_MedicationRequest_sq: {
@@ -124,8 +123,8 @@ sql_app.simpleSQLs = {
         WHERE d.reference=371469 AND medication.medication_id=d.reference2',
         sqlHtml: { medicationrequest_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
     },
-    FHIR_Medication_sc: {
-        c: sql_app.FHIR_Medication_sc(),
+    tableOfFHIR_Medication_sc: {
+        c: sql_app.tableOfFHIR_Medication_sc(),
         sqlHtml: { medication_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
     },
     FHIR_Medication_sq: {
@@ -677,6 +676,7 @@ class SqlAbstractController {
         if (sql.includes(':sql_app.')) {
             let sql_split = sql.split(':sql_app.')
             let sql_name = sql_split[1].split(' ')[0]
+            console.log(sql_name)
             sql = sql.replace(':sql_app.' + sql_name, sql_app[sql_name]())
             if (sql.includes(':sql_app.')) {
                 let sql_split = sql.split(':sql_app.')
