@@ -84,7 +84,9 @@ class ResourceFHIRController extends AbstractController {
     }
     keep2back = (r) => {
         let prevUrl = singlePageUrl().replace(singlePageLastUrl(), '')
-        console.log(r, prevUrl, singlePageUrl().split('/').length)
+        conf.fr[singlePage.LastUrlTag()].currEl = r
+        console.log(r, singlePage.LastUrlTag(), conf.fr[singlePage.LastUrlTag()])
+        // console.log(r, prevUrl, singlePageUrl().split('/').length)
         if (singlePageUrl().split('/').length > 2) {
             window.location.href = '#!' + prevUrl
         } else {

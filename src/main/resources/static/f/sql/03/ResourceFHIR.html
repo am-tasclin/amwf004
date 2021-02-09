@@ -6,7 +6,7 @@
         <span data-ng-if="ctrl.singlePageUrl().split('/').length <= 3">
             <span class="w3-hover-shadow"><i title="_>." class="fas fa-ellipsis-v"></i>
                 ></span>
-            <span data-ng-repeat="cr in ctrl.conf.fr[ctrl.singlePageLastUrl()].children" class="w3-small">
+            <span data-ng-repeat="cr in ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].children" class="w3-small">
                 <a href="#!{{ctrl.singlePageUrl()}}/{{cr}}"> {{ctrl.conf.fr[cr].frn}}</a>
                 |
             </span>
@@ -24,7 +24,6 @@
         data-ng-class="{'w3-light-gray':r[ctrl.singlePage.LastUrlIdName()]==ctrl.singlePage.LastUrlId()}">
         <button data-ng-click="ctrl.keep2back(r)" class="w3-btn w3-padding-small "> <i
                 class="far fa-share-square fa-flip-horizontal"></i> </button>
-        {{r[ctrl.singlePage.LastUrlIdName()]==ctrl.singlePage.LastUrlId()}}
         <span data-am:rs:row data-ng-click="ctrl.clickAmRsRow(r)">
             Draft({{$index}})
             <span title="mn:{{r.medication_id}}">
