@@ -24,7 +24,7 @@ conf.fr = {
                 {{r.n_quantity_value}}\n\
                 {{r.n_quantity_code}}\n\
             </span>\n\
-            /\n\
+            / \n\
             <span title="d_qy:{{r.n_quantity_id}}">\n\
                 {{r.dn_quantity_value}}\n\
                 {{r.dn_quantity_code}}\n\
@@ -50,7 +50,7 @@ app.directive('amRsRow', ($compile) => {
     return {
         restrict: 'A',
         link: (s, e) => {
-            let confEl = conf.fr[singlePageLastUrl()]
+            let confEl = conf.fr[singlePage.LastUrlTag()]
             if (confEl.amRsRowHtml) {
                 console.log(s, e, singlePageLastUrl(), confEl.amRsRowHtml.length)
                 e.html(confEl.amRsRowHtml)
@@ -66,9 +66,13 @@ class ResourceFHIRController extends AbstractController {
     constructor($scope, $routeParams, dataFactory) {
         super()
         this.dataFactory = dataFactory
-        console.log(singlePageUrl(), singlePageUrl().split('/').length - 1, singlePageLastUrl())
-        if (conf.fr[singlePageLastUrl()].sql_app) {
-            let sql = sql_app[conf.fr[singlePageLastUrl()].sql_app]()
+        console.log(singlePageUrl()
+            , singlePageUrl().split('/').length - 1
+            , singlePageLastUrl()
+            , singlePage.LastUrlTag()
+            , singlePage.LastUrlIdName())
+        if (conf.fr[singlePage.LastUrlTag()].sql_app) {
+            let sql = sql_app[conf.fr[singlePage.LastUrlTag()].sql_app]()
             if (sql.includes(':sql_app')) sql = sql_app.concatSql(sql)
             // console.log(sql)
             dataFactory.httpGet({ sql: sql })
@@ -79,15 +83,14 @@ class ResourceFHIRController extends AbstractController {
         }
     }
     keep2back = (r) => {
-        let prevUrl = singlePageUrl().replace(singlePageLastUrl(),'')
+        let prevUrl = singlePageUrl().replace(singlePageLastUrl(), '')
         console.log(r, prevUrl, singlePageUrl().split('/').length)
-        if(singlePageUrl().split('/').length>2){
-            window.location.href = '#!'+prevUrl
-        }else{
-            let confEl = conf.fr[singlePageLastUrl()]
-            let goUrl = prevUrl+singlePageLastUrl()+'_'+r[confEl.frn.toLowerCase()+'_id']
-            console.log(1, goUrl, confEl, r[confEl.frn.toLowerCase()+'_id'])
-            window.location.href = '#!'+goUrl
+        if (singlePageUrl().split('/').length > 2) {
+            window.location.href = '#!' + prevUrl
+        } else {
+            let goUrl = prevUrl + singlePage.LastUrlTag() + '_' + r[singlePage.LastUrlIdName()]
+            console.log(1, goUrl, r[singlePage.LastUrlIdName()])
+            window.location.href = '#!' + goUrl
         }
     }
     clickAmRsRow = (r) => {
@@ -121,7 +124,7 @@ class RouteProviderConfig {
                     $routeProvider.when("/" + k123, rpo)
                 })
             })
-            if (k == 'mn'||k == 'mr') {
+            if (k == 'mn' || k == 'mr') {
                 kIdREST(k)
             }
         })

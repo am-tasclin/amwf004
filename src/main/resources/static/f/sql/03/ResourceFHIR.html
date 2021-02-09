@@ -20,9 +20,11 @@
     </span>
 
     <span class="w3-tiny"> seek Re | ed body </span>
-    <div class="w3-hover-shadow" data-ng-repeat="r in dataSqlRequest.list">
+    <div class="w3-hover-shadow" data-ng-repeat="r in dataSqlRequest.list"
+        data-ng-class="{'w3-light-gray':r[ctrl.singlePage.LastUrlIdName()]==ctrl.singlePage.LastUrlId()}">
         <button data-ng-click="ctrl.keep2back(r)" class="w3-btn w3-padding-small "> <i
                 class="far fa-share-square fa-flip-horizontal"></i> </button>
+        {{r[ctrl.singlePage.LastUrlIdName()]==ctrl.singlePage.LastUrlId()}}
         <span data-am:rs:row data-ng-click="ctrl.clickAmRsRow(r)">
             Draft({{$index}})
             <span title="mn:{{r.medication_id}}">
@@ -41,4 +43,5 @@
             </span>
         </span>
     </div>
+    &nbsp;
 </div>
