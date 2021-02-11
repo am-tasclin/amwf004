@@ -1,0 +1,24 @@
+<div data-ng-transclude></div>
+<div data-ng-show="id==elEdId" class="w3-card w3-leftbar">
+    <div class="w3-blue-grey">
+        <a href="#!/wiki005Rest/{{d.conf.read_wiki_id}}" class="w3-right w3-btn w3-padding-small"><i
+                class="far fa-window-close"></i></a>
+        <i class="fas fa-edit"></i>| <i class="fas fa-plus"></i>
+        <span data-ng-include="'wikiElMenu.html'"></span>|
+        <i class="fas fa-minus"></i><i class="fas fa-trash w3-btn w3-padding-small" data-ng:click="ctrl.deleteEndEl(id)"></i>|
+        <i class="fas fa-arrows-alt-v"></i>
+        <i class="fas fa-arrow-up w3-btn w3-padding-small" data-ng:click="ctrl.sortUpElement(id)"></i>
+        <i class="fas fa-arrow-down w3-btn w3-padding-small" data-ng:click="ctrl.sortDownElement(id)"></i>
+        <i class="fas fa-compress-alt w3-btn w3-padding-small"></i>
+        <i class="fas fa-expand-alt w3-btn w3-padding-small"></i>
+    </div>
+    <div>
+        <textarea class="am-width-100pr" data-ng-change="ctrl.edTextFactory.onChange()"
+            data-ng-model="value_1_edit"></textarea>
+    </div>
+    <div>
+        <button class="w3-btn w3-border" data-ng-class="{'w3-disabled':cntChange==0}"
+            data-ng-click="ctrl.edTextFactory.save()">save</button>
+    </div>
+    <div class="w3-tiny w3-right"> {{cntChange}}/{{runSec}} </div>
+</div>

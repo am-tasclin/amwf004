@@ -1,0 +1,19 @@
+{
+    l001: {
+        h: ['PS3.16','DICOM PS3.16 2020e - Content Mapping Resource','DICOM Standards Committee'
+        ],
+        url:'http: //dicom.nema.org/medical/dicom/current/output/chtml/part16/PS3.16.html',
+    },
+    samples: {
+        s001: {
+            h:['CID 29 Acquisition Modality'],
+            url:'http://dicom.nema.org/medical/dicom/current/output/chtml/part16/sect_CID_29.html',
+            note:'Address for CID_29.json document',
+        },
+        s002: {
+            h: ['Breast Imaging Report Templates '
+            ],
+            url:'http: //dicom.nema.org/medical/dicom/current/output/chtml/part16/sect_BreastImagingReportTemplates.html',
+        },
+    }
+}

@@ -1,0 +1,33 @@
+<div data-ng-switch-when="p">
+    <div data-am-ed-text data-el:ed:id="id">
+        <div class="w3-tooltip">
+            <p data-ng-bind-html="markdownInLine(d.elMap[id].value_1_22)"></p>
+            <span data-ng-if="!d.elMap[id].value_1_22"> {{d.elMap[id].r1value}} {{d.elMap[id].doc_id}} </span>
+            <span class="w3-text w3-border w3-card w3-white" style="position:absolute;left:0;bottom: -2em;"
+                data-ng-include="'wikiTootipText.html'"></span>
+        </div>
+    </div>
+</div>
+<div data-ng-switch-when="h2">
+    <div data-am:ed:text data-el:ed:id="id">
+        <h2><span data-ng-include="'h23Wiki.html'"></span></h2>
+    </div>
+</div>
+<div data-ng-switch-when="h3">
+    <div data-am:ed:text data-el:ed:id="id">
+        <h3><span data-ng-include="'h23Wiki.html'"></span></h3>
+    </div>
+</div>
+<ol data-ng-switch-when="ol">
+    <li data-ng-repeat="d in d.clList[id]" data-ng-bind-html="markdownInLine(d.elMap[id].value_1_22)"></li>
+    </li>
+</ol>
+<div data-ng-switch-default>
+    {{id}}
+    {{d.elMap[id].value_1_22}}
+</div>
+<div data-ng-if="'ol|p'.indexOf(d.elMap[id].r1value)<0 && !d.elMap[id].hidedChildren">
+    <div id="_{{id}}" data-ng-repeat="id in d.clList[id]" data-ng-switch="d.elMap[id].r1value"
+        data-ng-include="'elWiki.html'">
+    </div>
+</div>

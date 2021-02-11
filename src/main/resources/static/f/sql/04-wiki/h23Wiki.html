@@ -1,0 +1,10 @@
+<span id="!/wiki005Rest/{{d.conf.read_wiki_id}}/{{id}}" class="w3-tooltip">
+    {{d.elMap[id].value_1_22}}
+    <span data-ng-if="!d.elMap[id].value_1_22"> {{d.elMap[id].r1value}} {{d.elMap[id].doc_id}} </span>
+    <span class="w3-small" data-ng:if="d.elMap[id].hidedChildren"> {{d.clList[id].length}}
+        <i class="fas fa-expand-alt w3-btn w3-padding-small w3-right" data-ng:click="ctrl.hideChildren(id)"></i>
+    </span>
+    <span class="w3-text w3-card w3-white w3-medium" data-ng-include="'wikiTootipText.html'"
+        style="position:absolute;left:0;bottom: -70%;width: 18em;">
+    </span>
+</span>

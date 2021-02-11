@@ -1,0 +1,9 @@
+<div data-ng:repeat="id in [d.conf.read_wiki_id]">
+    <div data-am:ed:text data-el:ed:id="id">
+        <h1><span data-ng-include="'h23Wiki.html'"></span></h1>
+    </div>
+    <div id="_{{id}}" data-ng:repeat="id in d.clList[id]" data-ng:switch="d.elMap[id].r1value"
+        data-ng:include="'elWiki.html'">
+    </div>
+
+</div>
