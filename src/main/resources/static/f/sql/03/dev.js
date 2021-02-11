@@ -17,17 +17,14 @@ conf.fr = {
         frn: 'Medication',
         children: ['se', 'ro', 'qy'],
         sql_app: 'tableOfFHIR_Medication_sc',
-        amRsRowHtml: '<span title="mn:{{r.medication_id}}">\n\
-        {{r.substance_code}}\n\
+        amRsRowHtml: '<span title="mn:{{r.medication_id}}"> {{r.substance_code}}\n\
         <span title="ro:{{r.strength_id}}" data-ng-if="r.strength_id">\n\
             <span title="n_qy:{{r.n_quantity_id}}">\n\
-                {{r.n_quantity_value}}\n\
-                {{r.n_quantity_code}}\n\
+                {{r.n_quantity_value}} {{r.n_quantity_code}}\n\
             </span>\n\
             / \n\
             <span title="d_qy:{{r.n_quantity_id}}">\n\
-                {{r.dn_quantity_value}}\n\
-                {{r.dn_quantity_code}}\n\
+                {{r.dn_quantity_value}} {{r.dn_quantity_code}}\n\
         </span></span></span>',
     },
     se: {
@@ -52,7 +49,7 @@ app.directive('amRsRow', ($compile) => {
         link: (s, e) => {
             let confEl = conf.fr[singlePage.LastUrlTag()]
             if (confEl.amRsRowHtml) {
-                console.log(s, e, singlePageLastUrl(), confEl.amRsRowHtml.length)
+                console.log(s, e, singlePage.LastUrl(), confEl.amRsRowHtml.length)
                 e.html(confEl.amRsRowHtml)
                 $compile(e.contents())(s)
             }
@@ -66,28 +63,47 @@ class ResourceFHIRController extends AbstractController {
     constructor($scope, $routeParams, dataFactory) {
         super()
         this.dataFactory = dataFactory
-        console.log(singlePageUrl()
-            , singlePageUrl().split('/').length - 1
-            , singlePageLastUrl()
+        console.log('--ResourceFHIRController--', singlePage.Url()
+            , singlePage.Url().split('/').length - 1
+            , singlePage.LastUrl()
             , singlePage.LastUrlTag()
             , singlePage.LastUrlIdName())
         if (conf.fr[singlePage.LastUrlTag()].sql_app) {
             let sql = sql_app[conf.fr[singlePage.LastUrlTag()].sql_app]()
             if (sql.includes(':sql_app')) sql = sql_app.concatSql(sql)
             // console.log(sql)
+            //read resource list
             dataFactory.httpGet({ sql: sql })
                 .then((dataSqlRequest) => {
                     $scope.dataSqlRequest = dataSqlRequest
                     console.log(2, dataSqlRequest)
                 })
         }
+        //read url id objects
+        angular.forEach(singlePage.Url().split('/'), (v) => {
+            if (v) {
+                if (v.split('_')[1]) {
+                    let tag = v.split('_')[0], id = v.split('_')[1]
+                    if (!conf.fr[tag].currEl||conf.fr[tag].currEl[singlePage.LastUrlIdName()]!=singlePage.LastUrlId()) {
+                        let sql = sql_app.concatSql(sql_app[conf.fr[tag].sql_app]())
+                        sql = 'SELECT * FROM (' + sql + ') x  WHERE ' + singlePage.LastUrlIdName() + ' = ' + singlePage.LastUrlId()
+                        console.log(1, conf.fr[tag].sql_app, singlePage.LastUrlIdName(), singlePage.LastUrlId(), 1)
+                        dataFactory.httpGet({ sql: sql })
+                            .then((dataSqlRequest) => {
+                                conf.fr[tag].currEl = dataSqlRequest.list[0]
+                                console.log(2, dataSqlRequest, conf.fr[tag].currEl)
+                            })
+                    }
+                }
+            }
+        })
     }
     keep2back = (r) => {
-        let prevUrl = singlePageUrl().replace(singlePageLastUrl(), '')
+        let prevUrl = singlePage.Url().replace(singlePage.LastUrl(), '')
         conf.fr[singlePage.LastUrlTag()].currEl = r
         console.log(r, singlePage.LastUrlTag(), conf.fr[singlePage.LastUrlTag()])
-        // console.log(r, prevUrl, singlePageUrl().split('/').length)
-        if (singlePageUrl().split('/').length > 2) {
+        // console.log(r, prevUrl, singlePage.Url().split('/').length)
+        if (singlePage.Url().split('/').length > 2) {
             window.location.href = '#!' + prevUrl
         } else {
             let goUrl = prevUrl + singlePage.LastUrlTag() + '_' + r[singlePage.LastUrlIdName()]
@@ -98,8 +114,20 @@ class ResourceFHIRController extends AbstractController {
     clickAmRsRow = (r) => {
         console.log(r)
     }
+    rsEdPart = (r, idName)=>{
+        console.log(r, idName)
+    }
 }
 app.controller("ResourceFHIRController", ResourceFHIRController)
+
+// app.controller("FirstController", FirstController)
+class FirstController extends AbstractController {
+    constructor($scope, $route) {
+        super()
+        console.log(singlePage.Url(), Object.keys($route.routes))
+    }
+}
+app.controller("FirstController", FirstController)
 
 // app.config(RouteProviderConfig)
 class RouteProviderConfig {
@@ -109,37 +137,28 @@ class RouteProviderConfig {
             controller: 'ResourceFHIRController',
             controllerAs: 'ctrl',
         }
-        let kIdREST = (k) => {
+        let kIdREST = (pref, k) => {
             let kElId = k + '_:' + k + '_id'
-            console.log(k, kElId)
+            // console.log(k, kElId)
             $routeProvider.when("/" + kElId, rpo)
+            return kElId
         }
-        angular.forEach(conf.fr, (v, k) => {
-            $routeProvider.when("/" + k, rpo)
-            angular.forEach(conf.fr[k].children, (k2) => {
-                let k12 = k + '/' + k2
-                // console.log(2, k12)
+        angular.forEach(conf.fr, (v, k1) => {
+            $routeProvider.when("/" + k1, rpo)
+            let k1Id = kIdREST('', k1)
+            angular.forEach(conf.fr[k1].children, (k2) => {
+                let k12 = k1 + '/' + k2
+                let k12Id = k1Id + '/' + k2
+                //console.log(1, k12, k1Id)
                 $routeProvider.when("/" + k12, rpo)
+                $routeProvider.when("/" + k12Id, rpo)
                 angular.forEach(conf.fr[k2].children, (k3) => {
-                    let k123 = k + '/' + k2 + '/' + k3
-                    console.log(3, k123)
+                    let k123 = k1 + '/' + k2 + '/' + k3
+                    // console.log(3, k123)
                     $routeProvider.when("/" + k123, rpo)
                 })
             })
-            if (k == 'mn' || k == 'mr') {
-                kIdREST(k)
-            }
         })
     }
 }
 app.config(RouteProviderConfig)
-
-// app.controller("FirstController", FirstController)
-class FirstController extends AbstractController {
-    constructor($scope, $route) {
-        super()
-        console.log(1, $route.routes, this.singlePageUrl())
-        $scope.conf = conf
-    }
-}
-app.controller("FirstController", FirstController)

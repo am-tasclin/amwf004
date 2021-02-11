@@ -1,20 +1,18 @@
 const conf = {}, sql_app = {}
 
 singlePage = {}
-singlePageUrl = () => window.location.href.split('#!')[1]
-singlePageLastUrl = () => singlePageUrl() ? singlePageUrl().split('/')[singlePageUrl().split('/').length - 1] : ''
-singlePage.LastUrlTag = () => singlePageLastUrl().split('_')[0]
-singlePage.LastUrlId = () => singlePageLastUrl().split('_')[1]
-singlePage.LastUrlIdName = () => {
-    if(singlePage.LastUrlTag()){
-        return conf.fr[singlePage.LastUrlTag()].frn.toLowerCase() + '_id'
-    }
-}
+singlePage.Url = () => window.location.href.split('#!')[1]
+singlePage.UrlList = () => singlePage.Url().split('/')
+singlePage.FirstUrl = () =>singlePage.Url() ? singlePage.Url().split('/')[1] : '' 
+singlePage.FirstUrlTag = () => singlePage.FirstUrl().split('_')[0]
+singlePage.FirstUrlId = () => singlePage.FirstUrl().split('_')[1]
+singlePage.LastUrl = () => singlePage.Url() ? singlePage.Url().split('/')[singlePage.Url().split('/').length - 1] : ''
+singlePage.LastUrlTag = () => singlePage.LastUrl().split('_')[0]
+singlePage.LastUrlId = () => singlePage.LastUrl().split('_')[1]
+singlePage.LastUrlIdName = () => singlePage.LastUrlTag() ? conf.fr[singlePage.LastUrlTag()].frn.toLowerCase() + '_id' : ''
 
 class AbstractController {
     singlePage = singlePage
-    singlePageUrl = singlePageUrl
-    singlePageLastUrl = singlePageLastUrl
     conf = conf
 }
 

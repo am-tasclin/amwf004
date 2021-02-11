@@ -114,7 +114,7 @@ sql_app.simpleSQLs = {
         c: sql_app.tableOfFHIR_Quantity(),
         sqlHtml: { doc_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
     },
-    FHIR_MedicationRequest_sc: {
+    tableOfFHIR_MedicationRequest_sc: {
         c: sql_app.tableOfFHIR_MedicationRequest_sc(),
         sqlHtml: { medicationrequest_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
     },

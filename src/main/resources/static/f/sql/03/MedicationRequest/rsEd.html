@@ -1,0 +1,14 @@
+<div>
+    <span title="mn:{{r.medication_id}}"> {{r.substance_code}} </span>
+    <span class="w3-hover-shadow" data-ng-click="ctrl.rsEdPart(r, 'strength_id')" title="ro:{{r.strength_id}}"
+        data-ng-if="r.strength_id">
+        <span title="n_qy:{{r.n_quantity_id}}">
+            {{r.n_quantity_value}} {{r.n_quantity_code}}
+        </span>
+        /
+        <span title="d_qy:{{r.n_quantity_id}}">
+            {{r.dn_quantity_value}} {{r.dn_quantity_code}}
+        </span>
+    </span>
+
+</div>

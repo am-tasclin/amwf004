@@ -1,23 +1,35 @@
+<div data-ng-if="ctrl.conf.fr[ctrl.singlePage.FirstUrlTag()].currEl">
+    <div data-ng-repeat="r in [ctrl.conf.fr[ctrl.singlePage.FirstUrlTag()].currEl]"
+        data-ng-include="ctrl.conf.fr[ctrl.singlePage.FirstUrlTag()].frn+'/rsEd.html'">
+    </div>
+    a2
+    {{ctrl.singlePage.FirstUrlTag()}}
+    {{ctrl.conf.fr[ctrl.singlePage.FirstUrlTag()].frn}}
+    -
+    {{ctrl.conf.fr[ctrl.singlePage.FirstUrlTag()].currEl}}
+</div>
 --
 <div class="w3-card ">
     <div class="w3-light-gray w3-container">
         <span class="w3-tiny am-b">ResourceFHIR: </span>
-        <span class="w3-tiny w3-border-top w3-border-amber"> {{ctrl.singlePageUrl()}}</span>
-        <span data-ng-if="ctrl.singlePageUrl().split('/').length <= 3">
+        <span class="w3-tiny w3-border-top w3-border-amber"> {{ctrl.singlePage.Url()}}</span>
+        <span data-ng-if="ctrl.singlePage.Url().split('/').length <= 3">
             <span class="w3-hover-shadow"><i title="_>." class="fas fa-ellipsis-v"></i>
                 ></span>
             <span data-ng-repeat="cr in ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].children" class="w3-small">
-                <a href="#!{{ctrl.singlePageUrl()}}/{{cr}}"> {{ctrl.conf.fr[cr].frn}}</a>
+                <a href="#!{{ctrl.singlePage.Url()}}/{{cr}}"> {{ctrl.conf.fr[cr].frn}}</a>
                 |
             </span>
         </span>
     </div>
-    <span class="w3-tiny w3-right"> #{{ctrl.singlePageUrl().split('/').length-1}} </span>
+    <span class="w3-tiny w3-right"> #{{ctrl.singlePage.Url().split('/').length-1}} </span>
     <span class="w3-right w3-tiny">
-        <a href="/f/sql/01/i.html#!/sql/{{ctrl.conf.fr[ctrl.singlePageLastUrl()].sql_app}}">
+        |
+        <a href="/f/sql/01/i.html#!/sql/{{ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].sql_app}}">
             sql-tree
         </a>
     </span>
+    <span class="w3-right">a1</span>
 
     <span class="w3-tiny"> seek Re | ed body </span>
     <div class="w3-hover-shadow" data-ng-repeat="r in dataSqlRequest.list"
