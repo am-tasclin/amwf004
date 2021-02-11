@@ -173,8 +173,9 @@ d.conf.wiki = {
         root: ['h1', 'p', 'h2', 'ol'],
         h2: ['h3', 'p', 'ol'],
         h3: ['p', 'ol'],
+        ol: ['li'],
     },
-    menu: ['h2', 'h3', 'p', 'ol'],
+    menu: ['h2', 'h3', 'p', 'ol', 'li'],
     ref: {
         h1: 1,
         h2: 371364,
@@ -477,17 +478,22 @@ class EdTextFactory {
                 console.log(id, el)
             },
             wikiItemAddEl: (newTagName, id) => {
+                console.log('i.js 480');
                 let elParent = d.elMap[id]
                 let parentId = elParent.doc_id
                 /**
                  * коррекція parent елемента для нового вузла даних
                  */
-                if ('p|ol'.indexOf(elParent.r1value) >= 0) {//parent елемент кінцевий елемент
+                if ('p|ol|li'.indexOf(elParent.r1value) >= 0) {//parent елемент кінцевий елемент
                     elParent = d.elMap[elParent.parent]
+                    console.log('i.js 488');
                 }
                 if ('h2' == newTagName && 'h2' == elParent.r1value) {
+                    console.log('i.js 491');
                     elParent = d.elMap[elParent.parent]
-                } else if ('h3' == newTagName && 'h3' == elParent.r1value) {
+                } 
+                else if ('h3' == newTagName && 'h3' == elParent.r1value) {
+                    console.log('i.js 495');
                     elParent = d.elMap[elParent.parent]
                 }
                 let sqlCmdMap = {
@@ -499,7 +505,7 @@ class EdTextFactory {
                         insert_string: {},
                     }
                 }
-                console.log(newTagName, d.conf.wiki.ref[newTagName], id, elParent.r1value, elParent, sqlCmdMap)
+                console.log('i.js 515',newTagName, d.conf.wiki.ref[newTagName], id, elParent.r1value, elParent, sqlCmdMap)
                 dataFactory.adn_insert.save(sqlCmdMap).$promise.then((map) => {
                     console.log(1, map)
                 })

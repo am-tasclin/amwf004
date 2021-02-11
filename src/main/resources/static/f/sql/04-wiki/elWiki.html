@@ -19,8 +19,7 @@
     </div>
 </div>
 <ol data-ng-switch-when="ol">
-    <li data-ng-repeat="d in d.clList[id]" data-ng-bind-html="markdownInLine(d.elMap[id].value_1_22)"></li>
-    </li>
+    <li data-ng-repeat="id in d.clList[id]" data-ng-bind-html="markdownInLine(d.elMap[id].value_1_22)"></li>
 </ol>
 <div data-ng-switch-default>
     {{id}}
