@@ -1,14 +1,23 @@
-<div>
-    <span title="mn:{{r.medication_id}}"> {{r.substance_code}} </span>
-    <span class="w3-hover-shadow" data-ng-click="ctrl.rsEdPart(r, 'strength_id')" title="ro:{{r.strength_id}}"
-        data-ng-if="r.strength_id">
-        <span title="n_qy:{{r.n_quantity_id}}">
-            {{r.n_quantity_value}} {{r.n_quantity_code}}
+<!--
+    <span data-ng-repeat="x in [1,2,3,4,5,6,7,8,9]">123456789<b>{{x}}</b></span>123456789
+-->
+<div class="w3-row">
+    <div class="w3-col am-no-print" style="width: 33px;" title="{{r.medicationrequest_id}}"><span
+            class="w3-tiny w3-tag w3-light-gray">mr</span></div>
+    <div class="w3-col" style="width: 7em;"> {{r.substance_code}} </div>
+    <div class="w3-col " style="width: 9em;">
+        <span class="w3-hover-shadow" data-ng-click="ctrl.rsEdPart('mr', 'strength_id', r.strength_id)">
+            <span title="n_qy:{{r.n_quantity_id}}">
+                {{r.n_quantity_value}} {{r.n_quantity_code}}
+            </span>
+            /
+            <span title="d_qy:{{r.n_quantity_id}}">
+                {{r.dn_quantity_value}} {{r.dn_quantity_code}}
+            </span>
         </span>
-        /
-        <span title="d_qy:{{r.n_quantity_id}}">
-            {{r.dn_quantity_value}} {{r.dn_quantity_code}}
-        </span>
-    </span>
-
+        <div class="w3-card" data-ng-if="ctrl.conf.fr.mr.ed_frs_idName=='strength_id'" style="width: 15em;left: -3em; position: relative;">
+            a1
+        </div>
+    </div>
+    <div class="w3-rest">.</div>
 </div>

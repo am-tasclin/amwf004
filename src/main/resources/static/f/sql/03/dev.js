@@ -84,7 +84,7 @@ class ResourceFHIRController extends AbstractController {
             if (v) {
                 if (v.split('_')[1]) {
                     let tag = v.split('_')[0], id = v.split('_')[1]
-                    if (!conf.fr[tag].currEl||conf.fr[tag].currEl[singlePage.LastUrlIdName()]!=singlePage.LastUrlId()) {
+                    if (!conf.fr[tag].currEl || conf.fr[tag].currEl[singlePage.LastUrlIdName()] != singlePage.LastUrlId()) {
                         let sql = sql_app.concatSql(sql_app[conf.fr[tag].sql_app]())
                         sql = 'SELECT * FROM (' + sql + ') x  WHERE ' + singlePage.LastUrlIdName() + ' = ' + singlePage.LastUrlId()
                         console.log(1, conf.fr[tag].sql_app, singlePage.LastUrlIdName(), singlePage.LastUrlId(), 1)
@@ -114,8 +114,12 @@ class ResourceFHIRController extends AbstractController {
     clickAmRsRow = (r) => {
         console.log(r)
     }
-    rsEdPart = (r, idName)=>{
-        console.log(r, idName)
+    rsEdPart = (frs, idName) => {
+        if (conf.fr[frs].ed_frs_idName != idName)
+            conf.fr[frs].ed_frs_idName = idName
+        else
+            delete conf.fr[frs].ed_frs_idName
+        console.log(frs, idName, conf.fr[frs], 1)
     }
 }
 app.controller("ResourceFHIRController", ResourceFHIRController)
