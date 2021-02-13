@@ -4,12 +4,16 @@ singlePage = {}
 singlePage.Url = () => window.location.href.split('#!')[1]
 singlePage.UrlList = () => singlePage.Url().split('/')
 singlePage.FirstUrl = () =>singlePage.Url() ? singlePage.Url().split('/')[1] : '' 
+console.log(singlePage.FirstUrl())
 singlePage.FirstUrlTag = () => singlePage.FirstUrl().split('_')[0]
 singlePage.FirstUrlId = () => singlePage.FirstUrl().split('_')[1]
+singlePage.X_UrlTag = (nr) => singlePage.UrlList()[nr].split('_')[0]
+singlePage.X_UrlId = (nr) => singlePage.UrlList()[nr].split('_')[0]
 singlePage.LastUrl = () => singlePage.Url() ? singlePage.Url().split('/')[singlePage.Url().split('/').length - 1] : ''
 singlePage.LastUrlTag = () => singlePage.LastUrl().split('_')[0]
 singlePage.LastUrlId = () => singlePage.LastUrl().split('_')[1]
 singlePage.LastUrlIdName = () => singlePage.LastUrlTag() ? conf.fr[singlePage.LastUrlTag()].frn.toLowerCase() + '_id' : ''
+singlePage.TagIdName = (tag) => conf.fr[tag].frn.toLowerCase() + '_id'
 
 class AbstractController {
     singlePage = singlePage
