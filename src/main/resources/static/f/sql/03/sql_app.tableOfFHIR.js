@@ -20,7 +20,7 @@ sql_app.tableOfFHIR_MedicationRequest_sc = () => {
 }
 
 sql_app.tableOfFHIR_Medication_sc = () => {
-    let sql = 'SELECT d.doc_id medication_id, substance.*, item.doc_id item_id, strength.doc_id strength_id, ratio.* FROM doc d \n\
+    let sql = 'SELECT d.doc_id medication_id, substance.*, item.doc_id item_id, strength.doc_id strength_ratio_id, ratio.* FROM doc d \n\
     LEFT JOIN (SELECT * FROM doc,sort WHERE doc_id=sort_id AND sort=1) item \n\
     LEFT JOIN (:sql_app.tableOfFHIR_Substance_code ) substance ON substance_id=item.reference2 \n\
     LEFT JOIN doc strength \n\
@@ -31,9 +31,8 @@ sql_app.tableOfFHIR_Medication_sc = () => {
     return sql
 }
 
-
 sql_app.tableOfFHIR_Ratio = () => {
-    let sql = 'SELECT numerator.doc_id  numerator_id, numerator.reference2 n_quantity_id \n\
+    let sql = 'SELECT numerator.doc_id  ratio_id, numerator.doc_id  numerator_id, numerator.reference2 n_quantity_id \n\
     , n.quantity_value n_quantity_value, n.quantity_code n_quantity_code --, n.*  \n\
     , denominator.doc_id denominator_id, denominator.reference2 dn_quantity_id --, denominator.* \n\
     , dn.quantity_value dn_quantity_value, dn.quantity_code dn_quantity_code --, dn.* \n\

@@ -36,6 +36,7 @@ conf.fr = {
         frn: 'Ratio',
         children: ['qy'],
         sql_app: 'tableOfFHIR_Ratio',
+        amRsRowHtml: '{{r.n_quantity_value}} {{r.n_quantity_code}}/{{r.dn_quantity_value}} {{r.dn_quantity_code}}'
     },
     qy: {
         frn: 'Quantity',
@@ -84,12 +85,10 @@ class ResourceFHIRController extends AbstractController {
             if (x_Url && x_Url.split('_')[1]) { //tag with id
                 let tag = x_Url.split('_')[0], tag_id = x_Url.split('_')[1]
                 console.log(x_Url, nr, tag, tag_id, singlePage.TagIdName(tag), 1, singlePage.LastUrlIdName(), singlePage.LastUrlId())
-                // if (!conf.fr[tag].currEl || conf.fr[tag].currEl[singlePage.LastUrlIdName()] != singlePage.LastUrlId()) {
                 if (!conf.fr[tag].currEl || conf.fr[tag].currEl[singlePage.TagIdName(tag)] != tag_id) {
                     let sql = sql_app.concatSql(sql_app[conf.fr[tag].sql_app]())
-                    // sql = 'SELECT * FROM (' + sql + ') x  WHERE ' + singlePage.LastUrlIdName() + ' = ' + singlePage.LastUrlId()
+                    console.log(tag, singlePage.TagIdName(tag), tag_id,)
                     sql = 'SELECT * FROM (' + sql + ') x  WHERE ' + singlePage.TagIdName(tag) + ' = ' + tag_id
-                    // console.log(1, conf.fr[tag].sql_app, singlePage.LastUrlIdName(), singlePage.LastUrlId(), 1)
                     dataFactory.httpGet({ sql: sql })
                         .then((dataSqlRequest) => {
                             conf.fr[tag].currEl = dataSqlRequest.list[0]
@@ -116,10 +115,12 @@ class ResourceFHIRController extends AbstractController {
         console.log(r)
     }
     // відктрити діалог вузла даних і перейти на його singlePage.Url
-    rsEdPart = (r, part) => {
+    rsEdPart = (r, part, prefix) => {
         let frs1 = singlePage.FirstUrlTag()
         let frnPart = conf.fr[part].frn
         let idName = frnPart.toLowerCase() + '_id'
+        // if (prefix) idName = prefix + idName
+        console.log(1, part, frnPart, idName, r[idName])
         let k2 = part + '_' + r[idName]
         if (conf.fr[frs1].ed_frs_idName != idName)
             conf.fr[frs1].ed_frs_idName = idName
@@ -127,9 +128,13 @@ class ResourceFHIRController extends AbstractController {
             delete conf.fr[frs1].ed_frs_idName
         console.log(singlePage.Url(), frs1, idName, conf.fr[frs1], r)
         if (r[idName]) {
-            let newUrl = singlePage.Url() + '/' + k2
-            console.log(frnPart, r[idName], k2, newUrl)
-            window.location.href = '#!' + newUrl
+            if (singlePage.TagPosition(part)) {
+                console.log(frnPart, r[idName], k2, singlePage.TagPosition(part))
+            } else {
+                let newUrl = singlePage.Url() + '/' + k2
+                console.log(frnPart, r[idName], k2, newUrl, singlePage.TagPosition(part))
+                window.location.href = '#!' + newUrl
+            }
         }
     }
 }
@@ -162,16 +167,13 @@ class RouteProviderConfig {
             $routeProvider.when("/" + k1, rpo)
             let k1Id = kIdREST('', k1)
             angular.forEach(conf.fr[k1].children, (k2) => {
-                let k12 = k1 + '/' + k2
-                let k12Tag = k1Id + '/' + k2
-                $routeProvider.when('/' + k12, rpo)
-                $routeProvider.when('/' + k12Tag, rpo)
+                $routeProvider.when('/' + k1 + '/' + k2, rpo)
+                $routeProvider.when('/' + k1Id + '/' + k2, rpo)
                 let k12Id = kIdREST('/' + k1Id, k2)
-                // console.log(2, k12, k1Id, k12Id)
                 angular.forEach(conf.fr[k2].children, (k3) => {
-                    let k123 = k1 + '/' + k2 + '/' + k3
-                    // console.log(3, k123)
-                    $routeProvider.when("/" + k123, rpo)
+                    $routeProvider.when("/" + k1 + '/' + k2 + '/' + k3, rpo)
+                    $routeProvider.when('/' + k1Id + '/' + k12Id + '/' + k3, rpo)
+                    let k123Id = kIdREST('/' + k1Id + '/' + k12Id, k3)
                 })
             })
         })
