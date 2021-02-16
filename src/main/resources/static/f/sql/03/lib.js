@@ -1,6 +1,7 @@
+'use strict';
 const conf = {}, sql_app = {}
 
-singlePage = {}
+let singlePage = {}
 singlePage.Url = () => window.location.href.split('#!')[1]
 singlePage.UrlList = () => singlePage.Url().split('/')
 singlePage.FirstUrl = () =>singlePage.Url() ? singlePage.Url().split('/')[1] : '' 

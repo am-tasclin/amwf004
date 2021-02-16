@@ -410,6 +410,7 @@ app.controller("CarePlan001Controller", CarePlan001Controller)
 class FirstController extends AmDocAbstractController {
     constructor($scope) {
         super($scope)
+        this.singlePage = singlePage
     }
 }
 app.controller("FirstController", FirstController)
@@ -599,6 +600,7 @@ class CreateDocFactory {
                         },
                     }
                 }
+                console.log(111, sqlCmdMap, sqlCmdMap.params,1, sqlCmdMap.params['a.b'])
                 console.log(2, this.nameNewWikiDoc, wikiConfigData.wikiFolderId, wikiConfigData, sqlCmdMap)
                 dataFactory.adn_insert.save(sqlCmdMap).$promise.then((map) => {
                     console.log(map)

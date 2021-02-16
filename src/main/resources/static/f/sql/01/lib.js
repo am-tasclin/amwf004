@@ -3,6 +3,12 @@
 const conf = {}, sql_app = {}
 const d = { elMap: {}, clList: {}, conf: {} }
 
+let singlePage = {}
+singlePage.Url = () => window.location.href.split('#!')[1]
+singlePage.UrlList = () => singlePage.Url().split('/')
+singlePage.LastUrl = () => singlePage.Url() ? singlePage.Url().split('/')[singlePage.Url().split('/').length - 1] : ''
+console.log(1, singlePage.LastUrl())
+
 class AmDocAbstractController {
     constructor($scope) {
         $scope.d = d
