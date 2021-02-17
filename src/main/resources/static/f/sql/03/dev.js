@@ -1,6 +1,9 @@
 'use strict';
 var app = angular.module("app", ['ngRoute', 'ngResource', 'ngSanitize']);
+console.log(1)
+console.log(2, conf.fr)
 angular.element(() => angular.bootstrap(document, ['app']))
+console.log(1)
 app.factory("dataFactory", DataFactory)
 
 app.directive('amRsRow', ($compile) => {
