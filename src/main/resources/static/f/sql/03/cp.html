@@ -15,13 +15,13 @@
     <script src="/webjars/angular-sanitize/1.8.2/angular-sanitize.min.js" type="application/javascript"></script>
     <script src="lib.js" type="application/javascript"></script>
     <script src="sql_app.tableOfFHIR.js" type="application/javascript"></script>
-    <script src="dev.js" type="application/javascript"></script>
     <script src="config-cp.js" type="application/javascript"></script>
+    <script src="dev.js" type="application/javascript"></script>
 </head>
 
 <body>
     <div class="w3-container am-max-width-1">
-        <div data-ng-include="'h.html'" class="am-no-print"></div>
+        <div data-ng-include="'h-cp.html'" class="am-no-print"></div>
         <div class="w3-hover-shadow w3-small  am-no-print">
             <span data-ng-repeat="(k,v) in ctrl.conf.fr">
                 <a href="#!/{{k}}" title="{{k}}:{{v.frn}}" data-ng-class="{

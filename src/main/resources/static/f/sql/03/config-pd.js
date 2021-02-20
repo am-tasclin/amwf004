@@ -1,7 +1,11 @@
 conf.fr = {
     pd: {
         frn: 'PlanDefinition',
-        children: ['cp','mr'],
+        children: ['ad','cp','mr'],
+    },
+    ad: {
+        frn: 'ActivityDefinition',
+        children: ['tk'],
     },
     cp: {
         frn: 'CarePlan',
