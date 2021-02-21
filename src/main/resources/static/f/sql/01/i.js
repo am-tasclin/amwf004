@@ -106,6 +106,14 @@ sql_app.simpleSQLs = {
         WHERE 372080 IN (reference)',
         sqlHtml: { doc_id: '<a href="#!/carePlan005Rest/{{r[k]}}">{{r[k]}}</a>', },
     },
+    tableOfFHIR_Task_inputSqlCmdMap: {
+        c: sql_app.tableOfFHIR_Task_inputSqlCmdMap(),
+        sqlHtml: { task_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
+    },
+    tableOfFHIR_Task_description: {
+        c: sql_app.tableOfFHIR_Task_description(),
+        sqlHtml: { task_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
+    },
     tableOfFHIR_Ratio: {
         c: sql_app.tableOfFHIR_Ratio(),
         sqlHtml: { numerator_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },

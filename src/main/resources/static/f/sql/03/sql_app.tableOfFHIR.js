@@ -1,3 +1,19 @@
+sql_app.tableOfFHIR_Task_inputSqlCmdMap = () => {
+    let sql = 'SELECT * FROM (:sql_app.tableOfFHIR_Task_description ) td \n\
+    LEFT JOIN ( \n\
+        SELECT input.parent input_parent, val.doc_id value_SqlCmdMap_id, value value_SqlCmdMap FROM doc input, doc val \n\
+        LEFT JOIN string ON string_id=val.doc_id \n\
+        WHERE input.doc_id=val.parent \n\
+        AND val.reference=372834 \n\
+        ) inpscm ON input_parent=task_id'
+    return sql
+}
+sql_app.tableOfFHIR_Task_description = () => {
+    let sql = 'SELECT doc_id task_id, value description FROM doc \n\
+    LEFT JOIN string ON string_id=doc_id \n\
+    WHERE reference = 371941'
+    return sql
+}
 sql_app.tableOfFHIR_Substance_code = () => {
     let sql = 'SELECT value substance_code, d.doc_id substance_id FROM doc d \n\
     , string WHERE reference = 370024 and string_id=reference2'
