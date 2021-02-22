@@ -1,3 +1,30 @@
+sql_app.tableOfFHIR_doseQuantity_timingPeriod = () => {
+    let sql = 'SELECT doseQuantity_id dosage_id, dq.*, tp.* FROM (:sql_app.tableOfFHIR_doseQuantity \n\
+        ) dq, (SELECT * FROM doc doseAndRate WHERE doseAndRate.reference=369972) doseAndRate \n\
+        LEFT JOIN doc timing \n\
+        LEFT JOIN (:sql_app.tableOfFHIR_Timing_period \n\
+        ) tp ON tp.period_id=timing.reference2 \n\
+        ON timing.reference=369970 AND timing.parent=doseAndRate.parent \n\
+        WHERE doseAndRate.doc_id=dq_parent'
+    return sql
+}
+sql_app.tableOfFHIR_doseQuantity = () => {
+    let sql = 'SELECT quantity_value, quantity_code, doseQuantity.doc_id doseQuantity_id, doseQuantity.parent dq_parent \n\
+    FROM doc doseQuantity \n\
+    LEFT JOIN (:sql_app.tableOfFHIR_Quantity ) q ON q.doc_id=doseQuantity.reference2 \n\
+    WHERE doseQuantity.reference=369975'
+    return sql
+}
+sql_app.tableOfFHIR_Timing_period = () => {
+    let sql = 'SELECT period.doc_id timing_id,  period.doc_id period_id, pi.value period, pu.value periodUnit \n\
+    FROM doc period \n\
+    LEFT JOIN integer pi ON pi.integer_id=period.doc_id \n\
+    LEFT JOIN doc periodUnit \n\
+    LEFT JOIN string pu ON pu.string_id=periodUnit.reference2 \n\
+    ON periodUnit.parent=period.doc_id AND periodUnit.reference=368863 \n\
+    WHERE period.reference=368861'
+    return sql
+}
 sql_app.tableOfFHIR_Task_inputSqlCmdMap = () => {
     let sql = 'SELECT * FROM (:sql_app.tableOfFHIR_Task_description ) td \n\
     LEFT JOIN ( \n\
@@ -61,7 +88,7 @@ sql_app.tableOfFHIR_Ratio = () => {
     return sql
 }
 
-sql_app.concatSql = (sql)=>{
+sql_app.concatSql = (sql) => {
     if (sql.includes(':sql_app.')) {
         let sql_split = sql.split(':sql_app.')
         let sql_name = sql_split[1].split(' ')[0]

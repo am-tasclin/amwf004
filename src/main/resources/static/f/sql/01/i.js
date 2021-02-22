@@ -106,6 +106,20 @@ sql_app.simpleSQLs = {
         WHERE 372080 IN (reference)',
         sqlHtml: { doc_id: '<a href="#!/carePlan005Rest/{{r[k]}}">{{r[k]}}</a>', },
     },
+    tableOfFHIR_doseQuantity_timingPeriod: {
+        c: sql_app.tableOfFHIR_doseQuantity_timingPeriod(),
+        tree_id:'dosequantity_id',
+        sqlHtml: { dosequantity_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
+    },
+    tableOfFHIR_doseQuantity: {
+        c: sql_app.tableOfFHIR_doseQuantity(),
+        tree_id:'dosequantity_id',
+        sqlHtml: { dosequantity_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
+    },
+    tableOfFHIR_Timing_period: {
+        c: sql_app.tableOfFHIR_Timing_period(),
+        sqlHtml: { period_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
+    },
     tableOfFHIR_Task_inputSqlCmdMap: {
         c: sql_app.tableOfFHIR_Task_inputSqlCmdMap(),
         sqlHtml: { task_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },

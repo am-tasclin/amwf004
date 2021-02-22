@@ -5,8 +5,20 @@ conf.fr = {
     },
     mr: {
         frn: 'MedicationRequest',
-        children: ['mn'],
+        children: ['mn', 'de'],
         sql_app: 'tableOfFHIR_MedicationRequest_sc',
+    },
+    de: {
+        frn: 'Dosage',
+        children: ['tg'],
+        sql_app: 'tableOfFHIR_doseQuantity_timingPeriod',
+        amRsRowHtml: '<span>кожні {{r.quantity_value}} {{r.quantity_code}}</span> \n\
+        <span data-ng-if="r.timing_id">кожні {{r.period}} {{r.periodunit}}</span>',
+    },
+    tg: {
+        frn: 'Timing',
+        sql_app: 'tableOfFHIR_Timing_period',
+        amRsRowHtml: '<span>кожні {{r.period}} {{r.periodunit}}</span>',
     },
     mn: {
         frn: 'Medication',
