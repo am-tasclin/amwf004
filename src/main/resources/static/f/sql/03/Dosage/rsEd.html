@@ -1,0 +1,11 @@
+<div>
+    <span class="w3-tiny w3-tag w3-grey">de</span>
+    <span class="w3-hover-shadow" data-ng-click="ctrl.rsEdPart(r, 'de')">
+        <span>{{r.quantity_value}} {{r.quantity_code}}</span>
+        <span data-ng-if="r.timing_id">кожні {{r.period}} {{r.periodunit}}</span>
+    </span>
+    <div class="w3-card w3-leftbar"
+        data-ng-if="ctrl.singlePage.X_UrlId(ctrl.singlePage.TagPosition('de'))==r.dosage_id">
+        a1
+    </div>
+</div>
