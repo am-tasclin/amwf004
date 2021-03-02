@@ -46,9 +46,11 @@ class ResourceFHIRController extends AbstractController {
                 let tag = x_Url.split('_')[0], tag_id = x_Url.split('_')[1]
                 console.log(x_Url, nr, tag, tag_id, singlePage.TagIdName(tag), 1, singlePage.LastUrlIdName(), singlePage.LastUrlId())
                 if (!conf.fr[tag].currEl || conf.fr[tag].currEl[singlePage.TagIdName(tag)] != tag_id) {
+                    // console.log(tag,conf.fr[tag].sql_app)
                     let sql = sql_app.concatSql(sql_app[conf.fr[tag].sql_app]())
-                    console.log(tag, singlePage.TagIdName(tag), tag_id,)
                     sql = 'SELECT * FROM (' + sql + ') x  WHERE ' + singlePage.TagIdName(tag) + ' = ' + tag_id
+                    console.log(1, tag, singlePage.TagIdName(tag), tag_id)
+                    // console.log(1, tag, singlePage.TagIdName(tag), tag_id, sql)
                     dataFactory.httpGet({ sql: sql })
                         .then((dataSqlRequest) => {
                             conf.fr[tag].currEl = dataSqlRequest.list[0]
@@ -58,6 +60,7 @@ class ResourceFHIRController extends AbstractController {
             }
         })
     }
+
     keep2back = (r) => {
         let prevUrl = singlePage.Url().replace(singlePage.LastUrl(), '')
         conf.fr[singlePage.LastUrlTag()].currEl = r
@@ -74,12 +77,13 @@ class ResourceFHIRController extends AbstractController {
     clickAmRsRow = (r) => {
         console.log(r)
     }
+
     // відктрити діалог вузла даних і перейти на його singlePage.Url
     rsEdPart = (r, part, prefix) => {
         let frs1 = singlePage.FirstUrlTag()
         let frnPart = conf.fr[part].frn
         let idName = frnPart.toLowerCase() + '_id'
-        // if (prefix) idName = prefix + idName
+        if (prefix) idName = prefix + idName
         console.log(1, part, frnPart, idName, r[idName])
         let k2 = part + '_' + r[idName]
         if (conf.fr[frs1].ed_frs_idName != idName)
@@ -92,11 +96,12 @@ class ResourceFHIRController extends AbstractController {
                 console.log(frnPart, r[idName], k2, singlePage.TagPosition(part))
             } else {
                 let newUrl = singlePage.Url() + '/' + k2
-                console.log(frnPart, r[idName], k2, newUrl, singlePage.TagPosition(part))
+                console.log(newUrl, frnPart, r[idName], k2, singlePage.TagPosition(part))
                 window.location.href = '#!' + newUrl
             }
         }
     }
+
 }
 app.controller("ResourceFHIRController", ResourceFHIRController)
 

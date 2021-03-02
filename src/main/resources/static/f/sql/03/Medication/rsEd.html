@@ -10,8 +10,8 @@
             <span title="n_qy:{{r.n_quantity_id}}">
                 {{r.n_quantity_value}} {{r.n_quantity_code}}
             </span>
-            /
-            <span title="d_qy:{{r.n_quantity_id}}">
+            <span title="d_qy:{{r.n_quantity_id}}" data-ng-if="r.denominator_id">
+                /
                 {{r.dn_quantity_value}} {{r.dn_quantity_code}}
             </span>
         </span>

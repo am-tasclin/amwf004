@@ -4,28 +4,24 @@
     <div class="w3-col w3-border-top" style="width: 17em;">
         <span class="w3-hover-shadow" data-ng-click="ctrl.rsEdPart(r, 'mn', 'medication_id', r.medication_id)">
             {{r.substance_code}}
-            {{r.n_quantity_value}} {{r.n_quantity_code}}
-            /
-            {{r.dn_quantity_value}} {{r.dn_quantity_code}}
+            {{r.n_quantity_value}}
+            {{r.n_quantity_code}}<span data-ng-if="r.denominator_id">/{{r.dn_quantity_value}} {{r.dn_quantity_code}}
+            </span>
+        </span>
         </span>
         <div class="w3-card w3-leftbar"
             data-ng-if="ctrl.singlePage.X_UrlId(ctrl.singlePage.TagPosition('mn'))==r.medication_id"
             style="width: 25em;left: -5px; position: relative;">
             <div class="w3-border-bottom w3-small">
-                <div data-ng-repeat="r in [ctrl.conf.fr.mn.currEl]"
-                    data-ng-include="'/f/sql/03/Medication/rsEd.html'"></div>
+                <div data-ng-repeat="r in [ctrl.conf.fr.mn.currEl]" data-ng-include="'/f/sql/03/Medication/rsEd.html'">
+                </div>
             </div>
         </div>
     </div>
-    <div class="w3-col " style="width: 9em;">
-        <span class="w3-hover-shadow" data-ng-click="ctrl.rsEdPart(r, 'ro', 'strength_id', r.strength_id)">
-            <span title="n_qy:{{r.n_quantity_id}}">
-                {{r.n_quantity_value}} {{r.n_quantity_code}}
-            </span>
-            /
-            <span title="d_qy:{{r.n_quantity_id}}">
-                {{r.dn_quantity_value}} {{r.dn_quantity_code}}
-            </span>
+    <div class="w3-col " style="width: 14em;">
+        <span class="w3-hover-shadow" data-ng-click="ctrl.rsEdPart(r, 'de')">
+            <span>{{r.quantity_value}} {{r.quantity_code}}</span>
+            <span data-ng-if="r.timing_id">кожні {{r.period}} {{r.periodunit}}</span>
         </span>
         <div class="w3-card w3-leftbar" data-ng-if="ctrl.conf.fr.mr.ed_frs_idName=='strength_id'"
             style="width: 15em;left: -3em; position: relative;">

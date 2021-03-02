@@ -6,7 +6,7 @@ conf.fr = {
     mr: {
         frn: 'MedicationRequest',
         children: ['mn', 'de'],
-        sql_app: 'tableOfFHIR_MedicationRequest_sc',
+        sql_app: 'tableOfFHIR_MedicationRequest_sc_doseQuantityTimingPeriod',
     },
     de: {
         frn: 'Dosage',

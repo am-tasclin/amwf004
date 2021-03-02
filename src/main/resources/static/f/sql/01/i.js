@@ -108,12 +108,12 @@ sql_app.simpleSQLs = {
     },
     tableOfFHIR_doseQuantity_timingPeriod: {
         c: sql_app.tableOfFHIR_doseQuantity_timingPeriod(),
-        tree_id:'dosequantity_id',
+        tree_id: 'dosequantity_id',
         sqlHtml: { dosequantity_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
     },
     tableOfFHIR_doseQuantity: {
         c: sql_app.tableOfFHIR_doseQuantity(),
-        tree_id:'dosequantity_id',
+        tree_id: 'dosequantity_id',
         sqlHtml: { dosequantity_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
     },
     tableOfFHIR_Timing_period: {
@@ -135,6 +135,10 @@ sql_app.simpleSQLs = {
     tableOfFHIR_Quantity: {
         c: sql_app.tableOfFHIR_Quantity(),
         sqlHtml: { doc_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
+    },
+    tableOfFHIR_MedicationRequest_sc_doseQuantityTimingPeriod: {
+        c: sql_app.tableOfFHIR_MedicationRequest_sc_doseQuantityTimingPeriod(),
+        sqlHtml: { medicationrequest_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
     },
     tableOfFHIR_MedicationRequest_sc: {
         c: sql_app.tableOfFHIR_MedicationRequest_sc(),
@@ -622,7 +626,7 @@ class CreateDocFactory {
                         },
                     }
                 }
-                console.log(111, sqlCmdMap, sqlCmdMap.params,1, sqlCmdMap.params['a.b'])
+                console.log(111, sqlCmdMap, sqlCmdMap.params, 1, sqlCmdMap.params['a.b'])
                 console.log(2, this.nameNewWikiDoc, wikiConfigData.wikiFolderId, wikiConfigData, sqlCmdMap)
                 dataFactory.adn_insert.save(sqlCmdMap).$promise.then((map) => {
                     console.log(map)
@@ -718,6 +722,31 @@ class SqlAbstractController {
                             let sql_split = sql.split(':sql_app.')
                             let sql_name = sql_split[1].split(' ')[0]
                             sql = sql.replace(':sql_app.' + sql_name, sql_app[sql_name]())
+                            if (sql.includes(':sql_app.')) {
+                                let sql_split = sql.split(':sql_app.')
+                                let sql_name = sql_split[1].split(' ')[0]
+                                sql = sql.replace(':sql_app.' + sql_name, sql_app[sql_name]())
+                                if (sql.includes(':sql_app.')) {
+                                    let sql_split = sql.split(':sql_app.')
+                                    let sql_name = sql_split[1].split(' ')[0]
+                                    sql = sql.replace(':sql_app.' + sql_name, sql_app[sql_name]())
+                                    if (sql.includes(':sql_app.')) {
+                                        let sql_split = sql.split(':sql_app.')
+                                        let sql_name = sql_split[1].split(' ')[0]
+                                        sql = sql.replace(':sql_app.' + sql_name, sql_app[sql_name]())
+                                        if (sql.includes(':sql_app.')) {
+                                            let sql_split = sql.split(':sql_app.')
+                                            let sql_name = sql_split[1].split(' ')[0]
+                                            sql = sql.replace(':sql_app.' + sql_name, sql_app[sql_name]())
+                                            if (sql.includes(':sql_app.')) {
+                                                let sql_split = sql.split(':sql_app.')
+                                                let sql_name = sql_split[1].split(' ')[0]
+                                                sql = sql.replace(':sql_app.' + sql_name, sql_app[sql_name]())
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }

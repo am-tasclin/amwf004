@@ -1,11 +1,20 @@
-<div>
-    <span class="w3-tiny w3-tag w3-grey">de</span>
-    <span class="w3-hover-shadow" data-ng-click="ctrl.rsEdPart(r, 'de')">
-        <span>{{r.quantity_value}} {{r.quantity_code}}</span>
-        <span data-ng-if="r.timing_id">кожні {{r.period}} {{r.periodunit}}</span>
-    </span>
-    <div class="w3-card w3-leftbar"
-        data-ng-if="ctrl.singlePage.X_UrlId(ctrl.singlePage.TagPosition('de'))==r.dosage_id">
-        a1
+<div class="w3-row">
+    <div class="w3-col am-no-print" style="width: 36px;" title="{{r.dosage_id}}"><span
+            class="w3-tiny w3-tag w3-grey">de</span></div>
+    <div class="w3-col" style="width: 9em;">
+        <span class="w3-hover-shadow" data-ng-click="ctrl.rsEdPart(r, 'qy')">
+            {{r.quantity_value}} {{r.quantity_code}}</span>
+        <div class="w3-card w3-leftbar"
+            data-ng-if="ctrl.singlePage.X_UrlId(ctrl.singlePage.TagPosition('qy'))==r.quantity_id">
+            a1
+        </div>
+    </div>
+    <div class="w3-col" style="width: 9em;">
+        <span data-ng-if="r.timing_id" class="w3-hover-shadow" data-ng-click="ctrl.rsEdPart(r, 'tg')">кожні {{r.period}}
+            {{r.periodunit}}</span>
+        <div class="w3-card w3-leftbar"
+            data-ng-if="ctrl.singlePage.X_UrlId(ctrl.singlePage.TagPosition('tg'))==r.timing_id">
+            a1
+        </div>
     </div>
 </div>
