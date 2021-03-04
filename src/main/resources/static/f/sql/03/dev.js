@@ -57,6 +57,10 @@ class ResourceFHIRController extends AbstractController {
                             conf.fr[tag].currEl = dataSqlRequest.list[0]
                             console.log(2, tag, dataSqlRequest, conf.fr[tag].currEl)
                         })
+                    angular.forEach(conf.fr[tag].sql_app_children, (k) => {
+                        let sql2 = sql_app.concatSql(sql_app[conf.fr[k].sql_app]())
+                        console.log(123, k, sql_app[conf.fr[k].sql_app]())
+                    })
                 }
             }
         })

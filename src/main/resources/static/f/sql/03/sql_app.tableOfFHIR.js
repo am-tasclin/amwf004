@@ -1,4 +1,10 @@
 'use strict';
+sql_app.tableOfFHIR_CarePlan = () => {
+    let sql = 'SELECT doc_id careplan_id, value FHIR_DomainResource, parent FROM doc d \n\
+    LEFT JOIN string ON string_id=doc_id \n\
+    WHERE 372080 IN (reference)'
+    return sql
+}
 sql_app.tableOfFHIR_doseQuantity_timingPeriod = () => {
     let sql = 'SELECT doseQuantity_id dosage_id, dq.*, tp.* FROM (:sql_app.tableOfFHIR_doseQuantity \n\
         ) dq, (SELECT * FROM doc doseAndRate WHERE doseAndRate.reference=369972) doseAndRate \n\

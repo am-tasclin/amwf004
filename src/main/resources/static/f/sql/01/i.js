@@ -101,10 +101,8 @@ sql_app.simpleSQLs = {
         },
     },
     FHIR_CarePlan: {
-        c: 'SELECT doc_id, value FHIR_DomainResource, parent FROM doc d \n\
-        LEFT JOIN string ON string_id=doc_id \n\
-        WHERE 372080 IN (reference)',
-        sqlHtml: { doc_id: '<a href="#!/carePlan005Rest/{{r[k]}}">{{r[k]}}</a>', },
+        c: sql_app.tableOfFHIR_CarePlan(),
+        sqlHtml: { careplan_id: '<a href="#!/carePlan005Rest/{{r[k]}}">{{r[k]}}</a>', },
     },
     tableOfFHIR_doseQuantity_timingPeriod: {
         c: sql_app.tableOfFHIR_doseQuantity_timingPeriod(),
