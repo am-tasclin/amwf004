@@ -22,9 +22,10 @@
 <body>
     <div class="w3-container am-max-width-1">
         <div data-ng-include="'h-cp.html'" class="am-no-print"></div>
-        <div class="w3-hover-shadow w3-small  am-no-print">
+        <div class="w3-hover-shadow w3-small am-no-print">
             <span data-ng-repeat="(k,v) in ctrl.conf.fr">
-                <a href="#!/{{k}}" title="{{k}}:{{v.frn}}" data-ng-class="{
+                <a href="#!/{{!ctrl.singlePage.TagPosition(k)||(ctrl.singlePage.TagPosition(k)==1&&ctrl.singlePage.UrlList().length==2)
+                    ?k: ctrl.singlePage.X_Url(ctrl.singlePage.TagPosition(k))}}" title="{{k}}:{{v.frn}}" data-ng-class="{
                     'w3-light-gray':ctrl.singlePage.Url().includes(k),
                     'w3-border-bottom w3-border-amber':k==ctrl.singlePage.LastUrl()}">{{v.frn}}</a>
                 {{k!=ctrl.singlePage.LastUrl()&&ctrl.singlePage.Url().includes(k)?'>':'|'}}

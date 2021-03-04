@@ -50,6 +50,7 @@ class ResourceFHIRController extends AbstractController {
                     let sql = sql_app.concatSql(sql_app[conf.fr[tag].sql_app]())
                     sql = 'SELECT * FROM (' + sql + ') x  WHERE ' + singlePage.TagIdName(tag) + ' = ' + tag_id
                     console.log(1, tag, singlePage.TagIdName(tag), tag_id)
+                    console.log(sql)
                     // console.log(1, tag, singlePage.TagIdName(tag), tag_id, sql)
                     dataFactory.httpGet({ sql: sql })
                         .then((dataSqlRequest) => {

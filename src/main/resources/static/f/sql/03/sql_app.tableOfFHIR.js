@@ -1,3 +1,4 @@
+'use strict';
 sql_app.tableOfFHIR_doseQuantity_timingPeriod = () => {
     let sql = 'SELECT doseQuantity_id dosage_id, dq.*, tp.* FROM (:sql_app.tableOfFHIR_doseQuantity \n\
         ) dq, (SELECT * FROM doc doseAndRate WHERE doseAndRate.reference=369972) doseAndRate \n\

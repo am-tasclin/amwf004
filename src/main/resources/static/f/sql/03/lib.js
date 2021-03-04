@@ -7,6 +7,7 @@ singlePage.UrlList = () => singlePage.Url().split('/')
 singlePage.FirstUrl = () =>singlePage.Url() ? singlePage.Url().split('/')[1] : '' 
 singlePage.FirstUrlTag = () => singlePage.FirstUrl().split('_')[0]
 singlePage.FirstUrlId = () => singlePage.FirstUrl().split('_')[1]
+singlePage.X_Url = (nr) => nr? singlePage.UrlList()[nr]:''
 singlePage.X_UrlTag = (nr) => singlePage.UrlList()[nr].split('_')[0]
 singlePage.X_UrlId = (nr) => !nr?0:singlePage.UrlList()[nr].split('_')[1]
 singlePage.LastUrl = () => singlePage.Url() ? singlePage.Url().split('/')[singlePage.Url().split('/').length - 1] : ''

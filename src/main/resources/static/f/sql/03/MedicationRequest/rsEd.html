@@ -2,7 +2,7 @@
     <div class="w3-col am-no-print" style="width: 33px;" title="{{r.medicationrequest_id}}"><span
             class="w3-tiny w3-tag w3-grey">mr</span></div>
     <div class="w3-col w3-border-top" style="width: 17em;">
-        <span class="w3-hover-shadow" data-ng-click="ctrl.rsEdPart(r, 'mn', 'medication_id', r.medication_id)">
+        <span class="w3-hover-shadow" data-ng-click="ctrl.rsEdPart(r, 'mn')">
             {{r.substance_code}}
             {{r.n_quantity_value}}
             {{r.n_quantity_code}}<span data-ng-if="r.denominator_id">/{{r.dn_quantity_value}} {{r.dn_quantity_code}}
@@ -11,7 +11,7 @@
         </span>
         <div class="w3-card w3-leftbar"
             data-ng-if="ctrl.singlePage.X_UrlId(ctrl.singlePage.TagPosition('mn'))==r.medication_id"
-            style="width: 25em;left: -5px; position: relative;">
+            style="width: 26em;left: -5px; position: relative;">
             <div class="w3-border-bottom w3-small">
                 <div data-ng-repeat="r in [ctrl.conf.fr.mn.currEl]" data-ng-include="'/f/sql/03/Medication/rsEd.html'">
                 </div>
