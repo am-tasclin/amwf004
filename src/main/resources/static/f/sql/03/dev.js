@@ -50,16 +50,19 @@ class ResourceFHIRController extends AbstractController {
                     let sql = sql_app.concatSql(sql_app[conf.fr[tag].sql_app]())
                     sql = 'SELECT * FROM (' + sql + ') x  WHERE ' + singlePage.TagIdName(tag) + ' = ' + tag_id
                     console.log(1, tag, singlePage.TagIdName(tag), tag_id)
-                    console.log(sql)
-                    // console.log(1, tag, singlePage.TagIdName(tag), tag_id, sql)
                     dataFactory.httpGet({ sql: sql })
                         .then((dataSqlRequest) => {
                             conf.fr[tag].currEl = dataSqlRequest.list[0]
                             console.log(2, tag, dataSqlRequest, conf.fr[tag].currEl)
                         })
-                    angular.forEach(conf.fr[tag].sql_app_children, (k) => {
-                        let sql2 = sql_app.concatSql(sql_app[conf.fr[k].sql_app]())
-                        console.log(123, k, sql_app[conf.fr[k].sql_app]())
+                    angular.forEach(conf.fr[tag].sql_app_children, (sql_app_child) => {
+                        let sql2 = sql_app[sql_app_child.sql_app]()
+                        sql2 = 'SELECT * FROM ( ' + sql2 + ' ) x WHERE activity_cp = ' + tag_id
+                        dataFactory.httpGet({ sql: sql2 })
+                            .then((dataSqlRequest) => {
+                                console.log(2, tag, dataSqlRequest)
+                                sql_app_child.list = dataSqlRequest.list
+                            })
                     })
                 }
             }

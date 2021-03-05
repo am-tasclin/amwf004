@@ -1,4 +1,8 @@
 <div>
     <span class="w3-small am-b"> План лікування:</span>
     {{r.fhir_domainresource}}
+    <div data-ng-repeat="x in ctrl.conf.fr.cp.sql_app_children[0].list">
+        par_id=
+        {{x.par_id}}
+    </div>
 </div>

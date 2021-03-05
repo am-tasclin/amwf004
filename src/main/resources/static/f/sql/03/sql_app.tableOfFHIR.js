@@ -1,4 +1,10 @@
 'use strict';
+sql_app.tableOfFHIR_CarePlan_plannedActivityReference_mr = () => {
+    let sql = 'SELECT activity.parent activity_cp, activity.doc_id activity_id, par.doc_id par_id, par.reference2 par_r2 \n\
+    FROM doc activity, doc par \n\
+    WHERE par.parent=activity.doc_id AND activity.reference=368789'
+    return sql
+}
 sql_app.tableOfFHIR_CarePlan = () => {
     let sql = 'SELECT doc_id careplan_id, value FHIR_DomainResource, parent FROM doc d \n\
     LEFT JOIN string ON string_id=doc_id \n\

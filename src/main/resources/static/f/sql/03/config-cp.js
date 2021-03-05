@@ -2,7 +2,7 @@ conf.fr = {
     cp: {
         frn: 'CarePlan',
         children: ['mr'],
-        sql_app_children: ['mr'],
+        sql_app_children: [{fr:'mr', sql_app:'tableOfFHIR_CarePlan_plannedActivityReference_mr'}],
         sql_app: 'tableOfFHIR_CarePlan',
         amRsRowHtml: '<span>{{r.fhir_domainresource}}</span>',
     },
