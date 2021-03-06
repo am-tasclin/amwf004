@@ -7,10 +7,12 @@ app.factory("dataFactory", DataFactory)
 app.directive('amRsRow', ($compile) => {
     return {
         restrict: 'A',
-        link: (s, e) => {
-            let confEl = conf.fr[singlePage.LastUrlTag()]
+        link: (s, e, a) => {
+            let tag = a.tag
+            if (!tag) tag = singlePage.LastUrlTag()
+            let confEl = conf.fr[tag]
             if (confEl.amRsRowHtml) {
-                // console.log(s, e, singlePage.LastUrl(), confEl.amRsRowHtml.length)
+                // console.log(tag, s, e, singlePage.LastUrl(), confEl.amRsRowHtml.length)
                 e.html(confEl.amRsRowHtml)
                 $compile(e.contents())(s)
             }
@@ -58,6 +60,7 @@ class ResourceFHIRController extends AbstractController {
                     angular.forEach(conf.fr[tag].sql_app_children, (sql_app_child) => {
                         let sql2 = sql_app[sql_app_child.sql_app]()
                         sql2 = 'SELECT * FROM ( ' + sql2 + ' ) x WHERE activity_cp = ' + tag_id
+                        sql2 = sql_app.concatSql(sql2)
                         dataFactory.httpGet({ sql: sql2 })
                             .then((dataSqlRequest) => {
                                 console.log(2, tag, dataSqlRequest)

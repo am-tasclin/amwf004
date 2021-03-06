@@ -4,21 +4,28 @@ const conf = {}, sql_app = {}
 let singlePage = {}
 singlePage.Url = () => window.location.href.split('#!')[1]
 singlePage.UrlList = () => singlePage.Url().split('/')
-singlePage.FirstUrl = () =>singlePage.Url() ? singlePage.Url().split('/')[1] : '' 
+singlePage.FirstUrl = () => singlePage.Url() ? singlePage.Url().split('/')[1] : ''
 singlePage.FirstUrlTag = () => singlePage.FirstUrl().split('_')[0]
 singlePage.FirstUrlId = () => singlePage.FirstUrl().split('_')[1]
-singlePage.X_Url = (nr) => nr? singlePage.UrlList()[nr]:''
+singlePage.X_Url = (nr) => nr ? singlePage.UrlList()[nr] : ''
 singlePage.X_UrlTag = (nr) => singlePage.UrlList()[nr].split('_')[0]
-singlePage.X_UrlId = (nr) => !nr?0:singlePage.UrlList()[nr].split('_')[1]
+singlePage.X_UrlId = (nr) => !nr ? 0 : singlePage.UrlList()[nr].split('_')[1]
 singlePage.LastUrl = () => singlePage.Url() ? singlePage.Url().split('/')[singlePage.Url().split('/').length - 1] : ''
 singlePage.LastUrlTag = () => singlePage.LastUrl().split('_')[0]
 singlePage.LastUrlId = () => singlePage.LastUrl().split('_')[1]
 singlePage.LastUrlIdName = () => singlePage.LastUrlTag() ? conf.fr[singlePage.LastUrlTag()].frn.toLowerCase() + '_id' : ''
 singlePage.TagIdName = (tag) => conf.fr[tag].frn.toLowerCase() + '_id'
+singlePage.ClickTagHref = (tag, id) => {
+    // console.log(tag, singlePage.Url().includes(tag), singlePage.UrlList(), 1)
+    let newUrl = ''
+    for (let i = 1; i < singlePage.TagPosition(tag); i++) newUrl += '/' + singlePage.X_Url(i)
+    if (!newUrl) newUrl = singlePage.Url() + '/' + tag + '_' + id
+    return newUrl
+}
 singlePage.TagPosition = (tag) => {
     let position
-    angular.forEach(singlePage.UrlList(),(urlPart, p)=>{
-        if(tag==urlPart.split('_')[0]) position=p
+    angular.forEach(singlePage.UrlList(), (urlPart, p) => {
+        if (tag == urlPart.split('_')[0]) position = p
     })
     return position
 }

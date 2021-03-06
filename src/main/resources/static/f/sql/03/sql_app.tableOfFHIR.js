@@ -3,6 +3,8 @@ sql_app.tableOfFHIR_CarePlan_plannedActivityReference_mr = () => {
     let sql = 'SELECT activity.parent activity_cp, activity.doc_id activity_id, par.doc_id par_id, par.reference2 par_r2 \n\
     FROM doc activity, doc par \n\
     WHERE par.parent=activity.doc_id AND activity.reference=368789'
+    sql = 'SELECT * FROM (' + sql + ' ) x \n\
+    LEFT JOIN (:sql_app.tableOfFHIR_MedicationRequest_sc_doseQuantityTimingPeriod ) y ON y.medicationrequest_id=par_r2'
     return sql
 }
 sql_app.tableOfFHIR_CarePlan = () => {
@@ -151,6 +153,16 @@ sql_app.concatSql = (sql) => {
                                                 let sql_split = sql.split(':sql_app.')
                                                 let sql_name = sql_split[1].split(' ')[0]
                                                 sql = sql.replace(':sql_app.' + sql_name, sql_app[sql_name]())
+                                                if (sql.includes(':sql_app.')) {
+                                                    let sql_split = sql.split(':sql_app.')
+                                                    let sql_name = sql_split[1].split(' ')[0]
+                                                    sql = sql.replace(':sql_app.' + sql_name, sql_app[sql_name]())
+                                                    if (sql.includes(':sql_app.')) {
+                                                        let sql_split = sql.split(':sql_app.')
+                                                        let sql_name = sql_split[1].split(' ')[0]
+                                                        sql = sql.replace(':sql_app.' + sql_name, sql_app[sql_name]())
+                                                    }
+                                                }
                                             }
                                         }
                                     }

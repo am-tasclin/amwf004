@@ -1,8 +1,14 @@
 <div>
     <span class="w3-small am-b"> План лікування:</span>
     {{r.fhir_domainresource}}
-    <div data-ng-repeat="x in ctrl.conf.fr.cp.sql_app_children[0].list">
-        par_id=
-        {{x.par_id}}
+    <div data-ng-repeat="sql_app_child in ctrl.conf.fr.cp.sql_app_children">
+        <div data-ng-repeat="r in sql_app_child.list">
+            <a class="w3-hover-shadow am-0u" href="#!{{ctrl.singlePage.ClickTagHref('mr', r.medicationrequest_id)}}"
+                data-am:rs:row data-tag="mr"></a>
+            <div data-ng-if="ctrl.singlePage.X_UrlId(ctrl.singlePage.TagPosition('mr'))==r.medicationrequest_id"
+                class="w3-card w3-leftbar">
+                <div data-ng-include="'/f/sql/03/MedicationRequest/rsEd.html'"></div>
+            </div>
+        </div>
     </div>
 </div>

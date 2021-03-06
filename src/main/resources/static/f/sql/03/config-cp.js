@@ -2,18 +2,22 @@ conf.fr = {
     cp: {
         frn: 'CarePlan',
         children: ['mr'],
-        sql_app_children: [{fr:'mr', sql_app:'tableOfFHIR_CarePlan_plannedActivityReference_mr'}],
         sql_app: 'tableOfFHIR_CarePlan',
+        sql_app_children: [{ fr: 'mr', sql_app: 'tableOfFHIR_CarePlan_plannedActivityReference_mr' }],
         amRsRowHtml: '<span>{{r.fhir_domainresource}}</span>',
     },
     mr: {
         frn: 'MedicationRequest',
         children: ['mn', 'de'],
         sql_app: 'tableOfFHIR_MedicationRequest_sc_doseQuantityTimingPeriod',
+        amRsRowHtml: '<span>{{r.substance_code}} \n\
+        {{r.n_quantity_value}}</span> \n\
+        <span>{{r.quantity_value}} {{r.quantity_code}}</span> \n\
+        <span data-ng-if="r.timing_id">кожні {{r.period}} {{r.periodunit}}</span>',
     },
     de: {
         frn: 'Dosage',
-        children: ['qy','tg'],
+        children: ['qy', 'tg'],
         sql_app: 'tableOfFHIR_doseQuantity_timingPeriod',
         amRsRowHtml: '<span>{{r.quantity_value}} {{r.quantity_code}}</span> \n\
         <span data-ng-if="r.timing_id">кожні {{r.period}} {{r.periodunit}}</span>',
