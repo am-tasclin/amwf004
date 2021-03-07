@@ -2,13 +2,8 @@
     <div class="w3-col am-no-print" style="width: 33px;" title="{{r.medicationrequest_id}}"><span
             class="w3-tiny w3-tag w3-grey">mr</span></div>
     <div class="w3-col w3-border-top" style="width: 17em;">
-        <span class="w3-hover-shadow" data-ng-click="ctrl.rsEdPart(r, 'mn')">
-            {{r.substance_code}}
-            {{r.n_quantity_value}}
-            {{r.n_quantity_code}}<span data-ng-if="r.denominator_id">/{{r.dn_quantity_value}} {{r.dn_quantity_code}}
-            </span>
-        </span>
-        </span>
+        <a class="w3-hover-shadow am-0u" href="#!{{ctrl.singlePage.ClickTagHref('mn', r.medication_id)}}" data-am:rs:row
+            data-tag="mn"></a>
         <div class="w3-card w3-leftbar"
             data-ng-if="ctrl.singlePage.X_UrlId(ctrl.singlePage.TagPosition('mn'))==r.medication_id"
             style="width: 26em;left: -5px; position: relative;">
@@ -19,14 +14,14 @@
         </div>
     </div>
     <div class="w3-col " style="width: 14em;">
-        <span class="w3-hover-shadow" data-ng-click="ctrl.rsEdPart(r, 'de')">
-            <span>{{r.quantity_value}} {{r.quantity_code}}</span>
-            <span data-ng-if="r.timing_id">кожні {{r.period}} {{r.periodunit}}</span>
-        </span>
-        <div class="w3-card w3-leftbar" data-ng-if="ctrl.conf.fr.mr.ed_frs_idName=='strength_id'"
-            style="width: 15em;left: -3em; position: relative;">
+        <a class="w3-hover-shadow am-0u" href="#!{{ctrl.singlePage.ClickTagHref('de', r.dosage_id)}}" data-am:rs:row
+            data-tag="de"></a>
+        <div class="w3-card w3-leftbar" style="width: 15em;left: -3em; position: relative;"
+            data-ng-if="ctrl.singlePage.X_UrlId(ctrl.singlePage.TagPosition('de'))==r.dosage_id">
             a1
             {{r.strength_id}}
+            a2
+            {{r.dosage_id}}
         </div>
     </div>
     <div class="w3-rest">.</div>

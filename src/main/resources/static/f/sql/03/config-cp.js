@@ -32,12 +32,13 @@ conf.fr = {
         children: ['se', 'ro', 'qy'],
         sql_app: 'tableOfFHIR_Medication_sc',
         amRsRowHtml: '<span title="mn:{{r.medication_id}}"> {{r.substance_code}}\n\
-        <span title="ro:{{r.strength_id}}" data-ng-if="r.strength_id">\n\
+        <span title="ro:{{r.strength_id}}" data-ng-if="r.n_quantity_id">\n\
         <span title="n_qy:{{r.n_quantity_id}}">\n\
         {{r.n_quantity_value}} {{r.n_quantity_code}}\n\
-        </span>\n\
+        </span> \n\
+        <span  data-ng-if="r.dn_quantity_id" \n\
+        title="d_qy:{{r.dn_quantity_id}}"> \n\
         / \n\
-        <span title="d_qy:{{r.n_quantity_id}}">\n\
         {{r.dn_quantity_value}} {{r.dn_quantity_code}}\n\
         </span></span></span>',
     },

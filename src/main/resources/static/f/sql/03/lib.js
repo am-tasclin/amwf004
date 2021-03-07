@@ -18,8 +18,16 @@ singlePage.TagIdName = (tag) => conf.fr[tag].frn.toLowerCase() + '_id'
 singlePage.ClickTagHref = (tag, id) => {
     // console.log(tag, singlePage.Url().includes(tag), singlePage.UrlList(), 1)
     let newUrl = ''
-    for (let i = 1; i < singlePage.TagPosition(tag); i++) newUrl += '/' + singlePage.X_Url(i)
-    if (!newUrl) newUrl = singlePage.Url() + '/' + tag + '_' + id
+    if (!singlePage.Url().includes(tag)) angular.forEach(singlePage.UrlList(), (t, i) => {
+        if (t && !newUrl.includes(tag)) {
+            newUrl += '/' + t
+            if (conf.fr[singlePage.X_UrlTag(i)].children.includes(tag)) newUrl += '/' + tag + '_' + id
+        }
+    })
+    else {
+        for (let i = 1; i < singlePage.TagPosition(tag); i++) newUrl += '/' + singlePage.X_Url(i)
+        if (!newUrl) newUrl = singlePage.Url() + '/' + tag + '_' + id
+    }
     return newUrl
 }
 singlePage.TagPosition = (tag) => {

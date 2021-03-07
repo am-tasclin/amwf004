@@ -26,11 +26,7 @@ class ResourceFHIRController extends AbstractController {
     constructor($scope, $routeParams, dataFactory) {
         super()
         this.dataFactory = dataFactory
-        console.log('--ResourceFHIRController--', singlePage.Url()
-            , singlePage.Url().split('/').length - 1
-            , singlePage.LastUrl()
-            , singlePage.LastUrlTag()
-            , singlePage.LastUrlIdName())
+        // console.log('--ResourceFHIRController--', singlePage.Url(), singlePage.Url().split('/').length - 1, singlePage.LastUrl(), singlePage.LastUrlTag(), singlePage.LastUrlIdName())
         if (conf.fr[singlePage.LastUrlTag()].sql_app) {
             let sql = sql_app[conf.fr[singlePage.LastUrlTag()].sql_app]()
             if (sql.includes(':sql_app')) sql = sql_app.concatSql(sql)
