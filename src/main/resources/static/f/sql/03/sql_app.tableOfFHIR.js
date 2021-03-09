@@ -78,8 +78,10 @@ sql_app.tableOfFHIR_MedicationRequest_sc_doseQuantityTimingPeriod = () => {
     return sql
 }
 sql_app.tableOfFHIR_MedicationRequest_sc = () => {
-    let sql = 'SELECT d.doc_id medicationrequest_id, medication.* FROM doc d ,(:sql_app.tableOfFHIR_Medication_sc ) medication \n\
-    WHERE d.reference=371469 AND medication.medication_id=d.reference2'
+    let sql = 'SELECT d.doc_id medicationrequest_id, medication.* FROM doc d \n\
+    LEFT JOIN (:sql_app.tableOfFHIR_Medication_sc ) medication \n\
+    ON medication.medication_id=d.reference2 \n\
+    WHERE d.reference=371469 '
     return sql
 }
 sql_app.tableOfFHIR_Medication_sc = () => {

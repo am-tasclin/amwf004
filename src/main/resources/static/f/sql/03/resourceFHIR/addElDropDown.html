@@ -13,8 +13,8 @@
             <a href="" class="w3-right w3-btn w3-padding-small" data-ng-click="ctrl.conf.NewEl.openedDialog = null"><i
                     class="far fa-window-close"></i></a>
         </div>
-        <div class="w3-border-bottom" data-am:rs:row data-inner:html="amRsRowNewEl"></div>
-        <div data-ng-if="!ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].amRsRowNewEl">
+        <div class="w3-border-bottom" data-am:rs:row data-inner:html="NewEl.amRsRowHtml"></div>
+        <div data-ng-if="!ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].NewEl">
             Назва елементу:
             <textarea data-ng-model="ctrl.NewEl.newElName" class="w3-border am-width-100pr w3-medium"></textarea>
         </div>

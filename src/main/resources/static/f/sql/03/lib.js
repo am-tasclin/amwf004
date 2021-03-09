@@ -56,10 +56,13 @@ class EditFHIResourceFactory {
     dataFactory
     constructor(dataFactory) {
         this.dataFactory = dataFactory
-        console.log(1)
     }
     newEl_save = () =>{
-        console.log(1)
+        let sqlCmdMap = conf.fr[singlePage.LastUrlTag()].NewEl.sqlCmdMap
+        console.log(1, singlePage.LastUrlTag(), sqlCmdMap)
+        this.dataFactory.adn_insert.save(sqlCmdMap).$promise.then((map) => {
+            console.log(map)
+        })
     }
 }
 

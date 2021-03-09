@@ -624,7 +624,7 @@ class CreateDocFactory {
                         },
                     }
                 }
-                console.log(111, sqlCmdMap, sqlCmdMap.params, 1, sqlCmdMap.params['a.b'])
+                console.log(111, sqlCmdMap, sqlCmdMap.params, 1)
                 console.log(2, this.nameNewWikiDoc, wikiConfigData.wikiFolderId, wikiConfigData, sqlCmdMap)
                 dataFactory.adn_insert.save(sqlCmdMap).$promise.then((map) => {
                     console.log(map)
@@ -766,6 +766,7 @@ class SqlAbstractController {
 
 // app.controller("WikiListController", WikiListController)
 class WikiListController extends SqlAbstractController {
+    createDocFactory
     constructor(dataFactory, createDocFactory) {
         super(dataFactory)
         if (!sql_app.simpleSQLselect) sql_app.simpleSQLselect = 'WikiList'
@@ -773,7 +774,6 @@ class WikiListController extends SqlAbstractController {
         //this.simpleSQLs = sql_app.simpleSQLs // :)
         this.createDocFactory = createDocFactory
     }
-    createDocFactory
 }
 app.controller("WikiListController", WikiListController)
 
