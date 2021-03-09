@@ -1,7 +1,6 @@
 'use strict';
-const conf = {}, sql_app = {}
+const conf = {}, sql_app = {}, singlePage = {}
 
-let singlePage = {}
 singlePage.Url = () => window.location.href.split('#!')[1]
 singlePage.UrlList = () => singlePage.Url().split('/')
 singlePage.FirstUrl = () => singlePage.Url() ? singlePage.Url().split('/')[1] : ''
@@ -42,6 +41,28 @@ class AbstractController {
     singlePage = singlePage
     conf = conf
 }
+
+
+conf.NewEl = {}
+conf.NewEl.openDialog = (openedDialogNewEl) => {
+    if (conf.NewEl.openedDialog == openedDialogNewEl)
+        delete conf.NewEl.openedDialog
+    else
+        conf.NewEl.openedDialog = openedDialogNewEl
+}
+
+//app.factory("editFRF", EditFHIResourceFactory)
+class EditFHIResourceFactory {
+    dataFactory
+    constructor(dataFactory) {
+        this.dataFactory = dataFactory
+        console.log(1)
+    }
+    newEl_save = () =>{
+        console.log(1)
+    }
+}
+
 
 // app.factory("dataFactory", DataFactory)
 class DataFactory {

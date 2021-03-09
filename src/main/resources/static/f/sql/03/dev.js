@@ -1,8 +1,8 @@
 'use strict';
 var app = angular.module("app", ['ngRoute', 'ngResource', 'ngSanitize']);
-console.log(2, conf.fr)
 angular.element(() => angular.bootstrap(document, ['app']))
 app.factory("dataFactory", DataFactory)
+app.factory("editFRF", EditFHIResourceFactory)
 
 app.directive('amRsRow', ($compile) => {
     return {
@@ -23,9 +23,11 @@ app.directive('amRsRow', ($compile) => {
 // app.controller("ResourceFHIRController", ResourceFHIRController)
 class ResourceFHIRController extends AbstractController {
     dataFactory
-    constructor($scope, $routeParams, dataFactory) {
+    editFRF
+    constructor($scope, $routeParams, dataFactory, editFRF) {
         super()
         this.dataFactory = dataFactory
+        this.editFRF = editFRF
         // console.log('--ResourceFHIRController--', singlePage.Url(), singlePage.Url().split('/').length - 1, singlePage.LastUrl(), singlePage.LastUrlTag(), singlePage.LastUrlIdName())
         if (conf.fr[singlePage.LastUrlTag()].sql_app) {
             let sql = sql_app[conf.fr[singlePage.LastUrlTag()].sql_app]()
@@ -42,12 +44,10 @@ class ResourceFHIRController extends AbstractController {
         angular.forEach(singlePage.UrlList(), (x_Url, nr) => {
             if (x_Url && x_Url.split('_')[1]) { //tag with id
                 let tag = x_Url.split('_')[0], tag_id = x_Url.split('_')[1]
-                console.log(x_Url, nr, tag, tag_id, singlePage.TagIdName(tag), 1, singlePage.LastUrlIdName(), singlePage.LastUrlId())
                 if (!conf.fr[tag].currEl || conf.fr[tag].currEl[singlePage.TagIdName(tag)] != tag_id) {
                     // console.log(tag,conf.fr[tag].sql_app)
                     let sql = sql_app.concatSql(sql_app[conf.fr[tag].sql_app]())
                     sql = 'SELECT * FROM (' + sql + ') x  WHERE ' + singlePage.TagIdName(tag) + ' = ' + tag_id
-                    console.log(1, tag, singlePage.TagIdName(tag), tag_id)
                     dataFactory.httpGet({ sql: sql })
                         .then((dataSqlRequest) => {
                             conf.fr[tag].currEl = dataSqlRequest.list[0]
