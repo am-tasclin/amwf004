@@ -10,6 +10,7 @@ conf.fr = {
         frn: 'MedicationRequest',
         children: ['mn', 'de'],
         sql_app: 'tableOfFHIR_MedicationRequest_sc_doseQuantityTimingPeriod',
+        amRsRowNewEl:"Призначеня ліків, прив'язка з медикаментом та інструкцією дозування.",
         amRsRowHtml: '<span>{{r.substance_code}} \n\
         {{r.n_quantity_value}}</span> \n\
         <span>{{r.quantity_value}} {{r.quantity_code}}</span> \n\

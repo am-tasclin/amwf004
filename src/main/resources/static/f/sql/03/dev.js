@@ -11,9 +11,11 @@ app.directive('amRsRow', ($compile) => {
             let tag = a.tag
             if (!tag) tag = singlePage.LastUrlTag()
             let confEl = conf.fr[tag]
-            if (confEl.amRsRowHtml) {
-                // console.log(tag, s, e, singlePage.LastUrl(), confEl.amRsRowHtml.length)
-                e.html(confEl.amRsRowHtml)
+            let innerHtml = confEl.amRsRowHtml
+            if (a.innerHtml) innerHtml = confEl[a.innerHtml]
+            if (innerHtml) {
+                // console.log(tag, s, e, a, singlePage.LastUrl(), innerHtml.length, innerHtml)
+                e.html(innerHtml)
                 $compile(e.contents())(s)
             }
         },

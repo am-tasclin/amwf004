@@ -5,6 +5,7 @@
         <i class="fas fa-plus"></i>
         <i class="fas fa-puzzle-piece"></i>
     </button>
+
     <div class="w3-dropdown-content w3-card w3-leftbar" style="min-width: 22em; left: -3em;"
         data-ng-class="{'w3-show':ctrl.conf.NewEl.openedDialog==ctrl.singlePage.LastUrlTag()}">
         <div class="w3-blue-gray w3-tiny am-b">Створити новий елемент:
@@ -12,8 +13,14 @@
             <a href="" class="w3-right w3-btn w3-padding-small" data-ng-click="ctrl.conf.NewEl.openedDialog = null"><i
                     class="far fa-window-close"></i></a>
         </div>
-        Назва елементу:
-        <textarea data-ng-model="ctrl.NewEl.newElName" class="w3-border am-width-100pr w3-medium"></textarea>
+        <div class="w3-border-bottom" data-am:rs:row data-inner:html="amRsRowNewEl"></div>
+        <div data-ng-if="!ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].amRsRowNewEl">
+            Назва елементу:
+            <textarea data-ng-model="ctrl.NewEl.newElName" class="w3-border am-width-100pr w3-medium"></textarea>
+        </div>
         <button class="w3-btn w3-border" data-ng-click="ctrl.editFRF.newEl_save()">save</button>
     </div>
+</span>
+<span class="w3-small">
+    {{ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].frn}}
 </span>

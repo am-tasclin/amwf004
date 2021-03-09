@@ -63,7 +63,6 @@ class EditFHIResourceFactory {
     }
 }
 
-
 // app.factory("dataFactory", DataFactory)
 class DataFactory {
     constructor($http, $q, $resource) {
