@@ -38,7 +38,7 @@ class ResourceFHIRController extends AbstractController {
         if (conf.fr[singlePage.LastUrlTag()].sql_app) {
             let sql = sql_app[conf.fr[singlePage.LastUrlTag()].sql_app]()
             if (sql.includes(':sql_app')) sql = sql_app.concatSql(sql)
-            console.log(sql)
+            // console.log(1, sql)
             //read resource list
             dataFactory.httpGet({ sql: sql })
                 .then((dataSqlRequest) => {

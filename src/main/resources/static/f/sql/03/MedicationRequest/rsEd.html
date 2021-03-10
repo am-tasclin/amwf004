@@ -2,8 +2,11 @@
     <div class="w3-col am-no-print" style="width: 33px;" title="{{r.medicationrequest_id}}"><span
             class="w3-tiny w3-tag w3-grey">mr</span></div>
     <div class="w3-col w3-border-top" style="width: 17em;">
-        <a class="w3-hover-shadow am-0u" href="#!{{ctrl.singlePage.ClickTagHref('mn', r.medication_id)}}" data-am:rs:row
-            data-tag="mn"></a>
+        <a data-ng-if="r.medication_id" class="w3-hover-shadow am-0u"
+            href="#!{{ctrl.singlePage.ClickTagHref('mn', r.medication_id)}}" data-am:rs:row data-tag="mn"></a>
+        <a data-ng-if="!r.medication_id" class="w3-hover-shadow am-0u" href="#!{{ctrl.singlePage.ClickTagHref('mn')}}">
+            + медикамент
+        </a>
         <div class="w3-card w3-leftbar"
             data-ng-if="ctrl.singlePage.X_UrlId(ctrl.singlePage.TagPosition('mn'))==r.medication_id"
             style="width: 26em;left: -5px; position: relative;">
@@ -14,8 +17,10 @@
         </div>
     </div>
     <div class="w3-col " style="width: 14em;">
-        <a class="w3-hover-shadow am-0u" href="#!{{ctrl.singlePage.ClickTagHref('de', r.dosage_id)}}" data-am:rs:row
-            data-tag="de"></a>
+        <a data-ng-if="r.dosage_id" class="w3-hover-shadow am-0u"
+            href="#!{{ctrl.singlePage.ClickTagHref('de', r.dosage_id)}}" data-am:rs:row data-tag="de"></a>
+        <a data-ng-if="!r.dosage_id" class="w3-hover-shadow am-0u" href="#!{{ctrl.singlePage.ClickTagHref('de')}}">+
+            дозування</a>
         <div class="w3-card w3-leftbar" style="width: 15em;left: -3em; position: relative;"
             data-ng-if="ctrl.singlePage.X_UrlId(ctrl.singlePage.TagPosition('de'))==r.dosage_id">
             a1

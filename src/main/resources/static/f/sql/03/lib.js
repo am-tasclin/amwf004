@@ -15,18 +15,14 @@ singlePage.LastUrlId = () => singlePage.LastUrl().split('_')[1]
 singlePage.LastUrlIdName = () => singlePage.LastUrlTag() ? conf.fr[singlePage.LastUrlTag()].frn.toLowerCase() + '_id' : ''
 singlePage.TagIdName = (tag) => conf.fr[tag].frn.toLowerCase() + '_id'
 singlePage.ClickTagHref = (tag, id) => {
-    // console.log(tag, singlePage.Url().includes(tag), singlePage.UrlList(), 1)
-    let newUrl = ''
-    if (!singlePage.Url().includes(tag)) angular.forEach(singlePage.UrlList(), (t, i) => {
-        if (t && !newUrl.includes(tag)) {
-            newUrl += '/' + t
-            if (conf.fr[singlePage.X_UrlTag(i)].children.includes(tag)) newUrl += '/' + tag + '_' + id
-        }
-    })
-    else {
+    let newUrl = '', tagId = tag + (id ? ('_' + id) : '')
+    // console.log(tag, singlePage.Url().includes(tag), singlePage.UrlList(), tagId)
+    if (singlePage.Url().includes(tag))
         for (let i = 1; i < singlePage.TagPosition(tag); i++) newUrl += '/' + singlePage.X_Url(i)
-        if (!newUrl) newUrl = singlePage.Url() + '/' + tag + '_' + id
-    }
+    else angular.forEach(singlePage.UrlList(), (t, i) => {
+        if (t && !newUrl.includes(tag))
+            newUrl += '/' + t + (conf.fr[singlePage.X_UrlTag(i)].children.includes(tag) ? '/' + tagId : '')
+    })
     return newUrl
 }
 singlePage.TagPosition = (tag) => {
@@ -57,7 +53,7 @@ class EditFHIResourceFactory {
     constructor(dataFactory) {
         this.dataFactory = dataFactory
     }
-    newEl_save = () =>{
+    newEl_save = () => {
         let sqlCmdMap = conf.fr[singlePage.LastUrlTag()].NewEl.sqlCmdMap
         console.log(1, singlePage.LastUrlTag(), sqlCmdMap)
         this.dataFactory.adn_insert.save(sqlCmdMap).$promise.then((map) => {

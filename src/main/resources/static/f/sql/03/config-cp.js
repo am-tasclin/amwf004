@@ -16,13 +16,15 @@ conf.fr = {
                 next_doc_ids: 1,
                 insert_doc: {
                     calc_doc_id: 0,
-                    reference: 371469, //[371469] medication {369993:Medication} 
                     parent: 371312, // [371312] дані:369358 {368833:MedicationRequest} 
-                }
+                    reference: 371469, //[371469] medication {369993:Medication} 
+                    insert_doc: {
+                        reference: 369984 //[369984] o[]37 dosageInstruction   Dosage:369967 | 
+                    },
+                },
             }
         },
-        amRsRowHtml: '<span>{{r.substance_code}} \n\
-        {{r.n_quantity_value}}</span> \n\
+        amRsRowHtml: '<span>{{r.substance_code}} {{r.n_quantity_value}}</span> \n\
         <span>{{r.quantity_value}} {{r.quantity_code}}</span> \n\
         <span data-ng-if="r.timing_id">кожні {{r.period}} {{r.periodunit}}</span> \n\
         <span class="w3-tiny" data-ng-if="!r.medication_id">id={{r.medicationrequest_id}}</span>',

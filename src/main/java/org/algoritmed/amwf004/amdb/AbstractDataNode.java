@@ -56,9 +56,18 @@ public class AbstractDataNode extends DbCommon {
         }
         logger.info("idsForAction = " + idsForAction);
         sqlCmdMap.put("idsForAction", idsForAction);
+
         Map<String, Object> map_insert_doc = (Map<String, Object>) sqlCmdMap.get("insert_doc");
-        int calc_doc_id = (int) map_insert_doc.get("calc_doc_id");
-        long doc_id = idsForAction[calc_doc_id];
+        sqlCmdMapTo1Insert(map_insert_doc, idsForAction);
+        logger.info("sqlCmdMap = " + sqlCmdMap);
+    }
+
+    private void sqlCmdMapTo1Insert(Map<String, Object> map_insert_doc, long[] idsForAction) {
+        long doc_id;
+        if (map_insert_doc.containsKey("calc_doc_id"))
+            doc_id = idsForAction[(int) map_insert_doc.get("calc_doc_id")];
+        else
+            doc_id = nextDbId();
         logger.info("doc_id = " + doc_id);
         map_insert_doc.put("doc_id", doc_id);
         String sql_insert_doc = "INSERT INTO doc (doc_id,parent,reference) VALUES (:doc_id,:parent,:reference); ";
@@ -85,7 +94,13 @@ public class AbstractDataNode extends DbCommon {
         String sql_select = env.getProperty("sql_app.SELECT_obj_with_i18n");
         Map<String, Object> el = dbParamJdbcTemplate.queryForMap(sql_select, map_insert_doc);
         map_insert_doc.put("el", el);
-        logger.info("sqlCmdMap = " + sqlCmdMap);
+
+        if (map_insert_doc.containsKey("insert_doc")) {
+            Map<String, Object> map_insert_docInner = (Map<String, Object>) map_insert_doc.get("insert_doc");
+            if (!map_insert_docInner.containsKey("parent"))
+                map_insert_docInner.put("parent", doc_id);
+            sqlCmdMapTo1Insert(map_insert_docInner, idsForAction);
+        }
     }
 
     /**
