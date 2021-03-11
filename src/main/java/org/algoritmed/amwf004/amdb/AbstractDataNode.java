@@ -48,14 +48,17 @@ public class AbstractDataNode extends DbCommon {
 
     @Transactional
     public void sqlCmdMapToSqlInsert(Map<String, Object> sqlCmdMap) {
-        int next_doc_ids = (int) sqlCmdMap.get("next_doc_ids");
-        long[] idsForAction = new long[next_doc_ids];
-        for (int i = 0; i < idsForAction.length; i++) {
-            long l = nextDbId();
-            idsForAction[i] = l;
+        long[] idsForAction = null;
+        if(sqlCmdMap.containsKey("next_doc_ids")){
+            int next_doc_ids = (int) sqlCmdMap.get("next_doc_ids");
+            idsForAction = new long[next_doc_ids];
+            for (int i = 0; i < idsForAction.length; i++) {
+                long l = nextDbId();
+                idsForAction[i] = l;
+            }
+            logger.info("idsForAction = " + idsForAction);
+            sqlCmdMap.put("idsForAction", idsForAction);
         }
-        logger.info("idsForAction = " + idsForAction);
-        sqlCmdMap.put("idsForAction", idsForAction);
 
         Map<String, Object> map_insert_doc = (Map<String, Object>) sqlCmdMap.get("insert_doc");
         sqlCmdMapTo1Insert(map_insert_doc, idsForAction);
@@ -69,11 +72,14 @@ public class AbstractDataNode extends DbCommon {
         else
             doc_id = nextDbId();
         logger.info("doc_id = " + doc_id);
+        logger.info("r2 = " + map_insert_doc.get("reference2"));
+        logger.info("i_d = " + map_insert_doc);
         map_insert_doc.put("doc_id", doc_id);
-        String sql_insert_doc = "INSERT INTO doc (doc_id,parent,reference) VALUES (:doc_id,:parent,:reference); ";
+        String sql_insert_doc = "INSERT INTO doc (doc_id,parent,reference, reference2) VALUES (:doc_id, :parent, :reference, :reference2); ";
         sql_insert_doc = sql_insert_doc.replace(":doc_id", "" + doc_id);
         sql_insert_doc = sql_insert_doc.replace(":parent", "" + map_insert_doc.get("parent"));
-        sql_insert_doc = sql_insert_doc.replace(":reference", "" + map_insert_doc.get("reference"));
+        sql_insert_doc = sql_insert_doc.replace(":reference, ", "" + map_insert_doc.get("reference")+", ");
+        sql_insert_doc = sql_insert_doc.replace(":reference2", "" + map_insert_doc.get("reference2"));
         Map<String, Object> map_insert_string = (Map<String, Object>) map_insert_doc.get("insert_string");
         if (map_insert_string != null) {
             logger.info("insert_string = " + map_insert_string);
@@ -101,6 +107,7 @@ public class AbstractDataNode extends DbCommon {
                 map_insert_docInner.put("parent", doc_id);
             sqlCmdMapTo1Insert(map_insert_docInner, idsForAction);
         }
+
     }
 
     /**

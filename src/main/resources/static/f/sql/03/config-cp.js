@@ -40,6 +40,18 @@ conf.fr = {
         frn: 'Timing',
         sql_app: 'tableOfFHIR_Timing_period',
         amRsRowHtml: '<span>кожні {{r.period}} {{r.periodunit}}</span>',
+        NewEl: {
+            amRsRowHtml: "<b>Терміни</b>, період - цифрове значення та одиниці виміру.",
+            sqlCmdMap: {
+                insert_doc: {
+                    parent: 369933, // [369933]   дані:369358 {368797:Timing} [8]
+                    reference: 368861, // [368861] i23 period 
+                    insert_doc: {
+                        reference: 368863 // [368863] periodUnit   ValueSet/units-of-time:368838 
+                    },
+                },
+            }
+        },
     },
     mn: {
         frn: 'Medication',
@@ -72,7 +84,20 @@ conf.fr = {
     qy: {
         frn: 'Quantity',
         sql_app: 'tableOfFHIR_Quantity',
-        amRsRowHtml: '<span> {{r.quantity_value}} {{r.quantity_code}}</span>',
+        amRsRowHtml: '<span> {{r.quantity_value}} {{r.quantity_code}}</span> <span data-ng-if="!r.quantity_value && !r.quantity_code"> <пусто> </span> ',
+        NewEl: {
+            amRsRowHtml: "Новий <b>численик</b>, цифрове значення та одиниці виміру.",
+            sqlCmdMap: {
+                insert_doc: {
+                    parent: 372039, // [372039] дані:
+                    reference: 368637, //[368637] f24 value 
+                    reference2: 368636, //[368636] Quantity 
+                    insert_doc: {
+                        reference: 368641 // [368641] code 
+                    },
+                },
+            }
+        },
     },
 }
-console.log(1)
+console.log(4)
