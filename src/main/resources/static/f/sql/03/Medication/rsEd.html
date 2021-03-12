@@ -2,8 +2,8 @@
     <div class="w3-col am-no-print" style="width: 36px;" title="{{r.medication_id}}"><span
             class="w3-tiny w3-tag w3-grey">mn</span></div>
     <div class="w3-col" style="width: 11em;">
-        
         <span title="mn:{{r.medication_id}}"> {{r.substance_code}} </span>
+        <span data-ng-if="!r.substance_id"><пусто></span>
     </div>
     <div class="w3-col" style="width: 9em;">
         <span class="w3-hover-shadow" data-ng-click="ctrl.rsEdPart(r, 'ro')"

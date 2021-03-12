@@ -57,29 +57,60 @@ conf.fr = {
         frn: 'Medication',
         children: ['se', 'ro', 'qy'],
         sql_app: 'tableOfFHIR_Medication_sc',
-        NewEl: { amRsRowHtml: "Новий <b>лікувальний засіб</b>." },
         amRsRowHtml: '<span title="mn:{{r.medication_id}}"> {{r.substance_code}}\n\
         <span title="ro:{{r.strength_id}}" data-ng-if="r.n_quantity_id">\n\
-        <span title="n_qy:{{r.n_quantity_id}}">\n\
-        {{r.n_quantity_value}} {{r.n_quantity_code}}\n\
-        </span> \n\
-        <span  data-ng-if="r.dn_quantity_id" \n\
-        title="d_qy:{{r.dn_quantity_id}}"> \n\
-        / \n\
-        {{r.dn_quantity_value}} {{r.dn_quantity_code}}\n\
-        </span></span></span>',
+        <span title="n_qy:{{r.n_quantity_id}}"> {{r.n_quantity_value}} {{r.n_quantity_code}} </span> \n\
+        <span  data-ng-if="r.dn_quantity_id" title="d_qy:{{r.dn_quantity_id}}"> \n\
+        / {{r.dn_quantity_value}} {{r.dn_quantity_code}}\n\
+        </span></span></span><span data-ng-if="!r.substance_id"><пусто></span>',
+        NewEl: {
+            amRsRowHtml: '<b>Медикамент</b> з посиланням на інгрідієнт/и',
+            sqlCmdMap: {
+                insert_doc: {
+                    parent: 370040, //[370040]   дані:369358 {369993:Medication} [7]
+                    reference: 369998, //[369998] o[]37 ingredient   BackboneElement:369784 
+                    reference2: 369993, //[372814] o[]37   ingredient:369998 {369993:Medication}  
+                    insert_doc: {
+                        reference: 370001, //[370001] item   CodeableReference:372172 {370000:} 
+                    },
+                },
+            },
+        },
     },
     se: {
         frn: 'Substance',
         sql_app: 'tableOfFHIR_Substance_code',
         amRsRowHtml: '<span>{{r.substance_code}}</span>',
+        NewEl: {
+            amRsRowHtml: '<b>Субстація</b> по коду з її визначення',
+            sqlCmdMap: {
+                insert_doc: {
+                    parent: 370028, // [370028]   дані:369358 {370000:Substance} [2]
+                    reference: 370024, //[370024] code   CodeableReference:372172 {372417:SubstanceDefinition} 
+                    insert_string: {
+                        value: '',
+                    },
+                },
+            },
+        },
     },
     ro: {
         frn: 'Ratio',
         children: ['qy'],
         sql_app: 'tableOfFHIR_Ratio',
-        NewEl: { amRsRowHtml: "Створити нове <b>співвідношення</b>, величини кількість як чисельник в зв'язку величина кількість як знаменник." },
-        amRsRowHtml: '{{r.n_quantity_value}} {{r.n_quantity_code}}/{{r.dn_quantity_value}} {{r.dn_quantity_code}}'
+        amRsRowHtml: '{{r.n_quantity_value}} {{r.n_quantity_code}}\n\
+        <span data-ng-if="r.denominator_id">/{{r.dn_quantity_value}} {{r.dn_quantity_code}}</span>\n\
+        <span data-ng-if="!r.n_quantity_id"><пусто></span>\n\
+        ',
+        NewEl: {
+            amRsRowHtml: "Створити нове <b>співвідношення</b>, величини кількість як чисельник в зв'язку величина кількість як знаменник.",
+            sqlCmdMap: {
+                insert_doc: {
+                    parent: 372804, // [372804]   дані:369358 {368675:Ratio} [2]
+                    reference: 368676, //[368676] numerator   Quantity:368636 
+                },
+            }
+        },
     },
     qy: {
         frn: 'Quantity',
@@ -96,7 +127,7 @@ conf.fr = {
                         reference: 368641 // [368641] code 
                     },
                 },
-            }
+            },
         },
     },
 }

@@ -38,7 +38,6 @@ class AbstractController {
     conf = conf
 }
 
-
 conf.NewEl = {}
 conf.NewEl.openDialog = (openedDialogNewEl) => {
     if (conf.NewEl.openedDialog == openedDialogNewEl)

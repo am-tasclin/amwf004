@@ -1,0 +1,219 @@
+{
+    "meta": {
+        "code": 200,
+        "url": "http://example.com/resource",
+        "type": "object",
+        "request_id": "req-adasdoijasdojsda"
+    },
+    "data": {
+        "id": "75a5d991-0bf7-476f-b3cf-bec73f044b2e",
+        "author": {
+            "identifier": {
+                "type": {
+                    "coding": [
+                        {
+                            "system": "eHealth/resources",
+                            "code": "employee"
+                        }
+                    ]
+                },
+                "value": "9183a36b-4d45-4244-9339-63d81cd08d9c"
+            }
+        },
+        "care_plan": {
+            "identifier": {
+                "type": {
+                    "coding": [
+                        {
+                            "system": "eHealth/resources",
+                            "code": "care_plan"
+                        }
+                    ]
+                },
+                "value": "9183a36b-4d45-4244-9339-63d81cd08d9c"
+            }
+        },
+        "detail": {
+            "kind": "service_request",
+            "product_reference": {
+                "identifier": {
+                    "type": {
+                        "coding": [
+                            {
+                                "system": "eHealth/resources",
+                                "code": "service"
+                            }
+                        ],
+                        "text": ""
+                    },
+                    "value": "97d57238-ffbe-4335-92ea-28d4de117ea3"
+                }
+            },
+            "reason_code": [
+                {
+                    "coding": [
+                        {
+                            "system": "eHealth/ICD10_AM/condition_codes",
+                            "code": "X85"
+                        }
+                    ]
+                }
+            ],
+            "reason_reference": [
+                {
+                    "identifier": {
+                        "type": {
+                            "coding": [
+                                {
+                                    "system": "eHealth/resources",
+                                    "code": "condition"
+                                }
+                            ]
+                        },
+                        "value": "9183a36b-4d45-4244-9339-63d81cd08d9c"
+                    }
+                }
+            ],
+            "goal": [
+                {
+                    "coding": [
+                        {
+                            "system": "eHealth/care_plan_activity_goals",
+                            "code": "diabetes_treatment"
+                        }
+                    ]
+                }
+            ],
+            "quantity": {
+                "value": 13
+            },
+            "scheduled_timing": {
+                "event": [
+                    "2018-08-02T10:45:16Z"
+                ],
+                "repeat": {
+                    "bounds_duration": {
+                        "value": 10,
+                        "comparator": ">",
+                        "unit": "доба",
+                        "system": "eHealth/ucum/units",
+                        "code": "day"
+                    },
+                    "count": 10,
+                    "count_max": 20,
+                    "duration": 15,
+                    "duration_max": 25,
+                    "duration_unit": "day",
+                    "frequency": 1,
+                    "frequency_max": 4,
+                    "period": 1,
+                    "period_max": 3,
+                    "period_unit": "day",
+                    "day_of_week": [
+                        "mon"
+                    ],
+                    "time_of_day": [
+                        "16:00:00"
+                    ],
+                    "when": [
+                        "WAKE"
+                    ],
+                    "offset": 20
+                },
+                "code": {
+                    "coding": [
+                        {
+                            "system": "TIMING_ABBREVIATION",
+                            "code": "Q4H"
+                        }
+                    ]
+                }
+            },
+            "location": {
+                "identifier": {
+                    "type": {
+                        "coding": [
+                            {
+                                "system": "eHealth/resources",
+                                "code": "division"
+                            }
+                        ]
+                    },
+                    "value": "9183a36b-4d45-4244-9339-63d81cd08d9c"
+                }
+            },
+            "performer": {
+                "identifier": {
+                    "type": {
+                        "coding": [
+                            {
+                                "system": "eHealth/resources",
+                                "code": "employee"
+                            }
+                        ]
+                    },
+                    "value": "9183a36b-4d45-4244-9339-63d81cd08d9c"
+                }
+            },
+            "daily_amount": {
+                "value": 13
+            },
+            "description": "Some activity description",
+            "do_not_perform": false,
+            "program": {
+                "identifier": {
+                    "type": {
+                        "coding": [
+                            {
+                                "system": "eHealth/resources",
+                                "code": "medical_program"
+                            }
+                        ]
+                    },
+                    "value": "9183a36b-4d45-4244-9339-63d81cd08d9c"
+                }
+            },
+            "status": "completed",
+            "status_reason": {
+                "coding": [
+                    {
+                        "system": "eHealth/care_plan_activity_cancel_reasons",
+                        "code": "some code"
+                    }
+                ]
+            },
+            "remaining_quantity": {
+                "value": 12
+            }
+        },
+        "outcome_reference": [
+            {
+                "identifier": {
+                    "type": {
+                        "coding": [
+                            {
+                                "system": "eHealth/resources",
+                                "code": "encounter"
+                            }
+                        ]
+                    },
+                    "value": "9183a36b-4d45-4244-9339-63d81cd08d9c"
+                }
+            }
+        ],
+        "outcome_codeable_concept": [
+            {
+                "coding": [
+                    {
+                        "system": "eHealth/care_plan_activity_outcomes",
+                        "code": "some code"
+                    }
+                ]
+            }
+        ],
+        "inserted_at": "2017-04-20T19:14:13Z",
+        "inserted_by": "e1453f4c-1077-4e85-8c98-c13ffca0063e",
+        "updated_at": "2017-04-20T19:14:13Z",
+        "updated_by": "2922a240-63db-404e-b730-09222bfeb2dd"
+    }
+}
