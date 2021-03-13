@@ -14,9 +14,10 @@
                     class="far fa-window-close"></i></a>
         </div>
         <div class="w3-border-bottom" data-am:rs:row data-inner:html="NewEl.amRsRowHtml"></div>
-        <div data-ng-if="!ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].NewEl">
+        <div data-ng-if="!ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].NewEl 
+            || ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].NewEl.newElName">
             Назва елементу:
-            <textarea data-ng-model="ctrl.NewEl.newElName" class="w3-border am-width-100pr w3-medium"></textarea>
+            <textarea data-ng-model="ctrl.conf.NewEl.newElName" class="w3-border am-width-100pr w3-medium"></textarea>
         </div>
         <button class="w3-btn w3-border" data-ng-click="ctrl.editFRF.newEl_save()">save</button>
     </div>

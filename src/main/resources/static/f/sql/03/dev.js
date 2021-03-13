@@ -8,14 +8,13 @@ app.directive('amRsRow', ($compile) => {
     return {
         restrict: 'A',
         link: (s, e, a) => {
-            let tag = a.tag
+            let tag = a.tag, confEl, innerHtml
             if (!tag) tag = singlePage.LastUrlTag()
-            let confEl = conf.fr[tag]
-            let innerHtml
-            //if (a.innerHtml) innerHtml = confEl[a.innerHtml]
-            if (a.innerHtml) angular.forEach(a.innerHtml.split('.'), (v) => {
-                innerHtml = innerHtml ? innerHtml[v] : confEl[v]
-            })
+            confEl = conf.fr[tag]
+            if (a.innerHtml)
+                angular.forEach(a.innerHtml.split('.'),
+                    (v) => innerHtml = innerHtml ? innerHtml[v] : confEl[v])
+            if (a.innerHtmlRaw) innerHtml = a.innerHtmlRaw
             if (!innerHtml) innerHtml = confEl.amRsRowHtml
             // console.log(tag, s, e, a, singlePage.LastUrl(), innerHtml)
             if (innerHtml) {
@@ -46,6 +45,15 @@ class ResourceFHIRController extends AbstractController {
                     console.log(2, dataSqlRequest)
                 })
         }
+        angular.forEach(conf.fr[singlePage.LastUrlTag()].dates, (v) => {
+            let sql = sql_app[v.sql_app]()
+            console.log(v, sql)
+            dataFactory.httpGet({ sql: sql })
+                .then((dataSqlRequest) => {
+                    v.dataSqlRequest = dataSqlRequest
+                    console.log(2, dataSqlRequest)
+                })
+        })
         //read url id objects
         angular.forEach(singlePage.UrlList(), (x_Url, nr) => {
             if (x_Url && x_Url.split('_')[1]) { //tag with id

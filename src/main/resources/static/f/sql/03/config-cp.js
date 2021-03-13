@@ -1,3 +1,4 @@
+console.log(6)
 conf.fr = {
     cp: {
         frn: 'CarePlan',
@@ -5,6 +6,24 @@ conf.fr = {
         sql_app: 'tableOfFHIR_CarePlan',
         sql_app_children: [{ fr: 'mr', sql_app: 'tableOfFHIR_CarePlan_plannedActivityReference_mr' }],
         amRsRowHtml: '<span>{{r.fhir_domainresource}}</span>',
+        NewEl: {
+            amRsRowHtml: "Новий <b>план лікування</b>, прив'язка з списком активності.",
+            newElName: true,
+            initSqlCmdMap: () => {
+                let sqlCmdMap = conf.fr.cp.NewEl.sqlCmdMap
+                sqlCmdMap.insert_doc.insert_string.value = conf.NewEl.newElName
+            },
+            sqlCmdMap: {
+                insert_doc: {
+                    parent: 369926, //[369926]   дані:369358 {368788:CarePlan} [2]
+                    reference: 372080, //[372080]   title:85066 
+                    insert_string: {},
+                    insert_doc: {
+                        reference: 368789, // ☰ [368789] o[]37 activity 
+                    },
+                },
+            },
+        },
     },
     mr: {
         frn: 'MedicationRequest',
@@ -35,6 +54,18 @@ conf.fr = {
         sql_app: 'tableOfFHIR_doseQuantity_timingPeriod',
         amRsRowHtml: '<span>{{r.quantity_value}} {{r.quantity_code}}</span> \n\
         <span data-ng-if="r.timing_id">кожні {{r.period}} {{r.periodunit}}</span>',
+        NewEl: {
+            amRsRowHtml: "<b>Дозування</b>, численик та термін використання.",
+            sqlCmdMap: {
+                insert_doc: {
+                },
+            },
+        },
+        dates: [{
+            amRsRowHtmlHead: 'Ресурси <b>дозування</b>',
+            sql_app: 'tableOfFHIR_dosageData',
+            amRsRowHtml: '<span>{{r.value}}</span>',
+        },]
     },
     tg: {
         frn: 'Timing',
@@ -131,4 +162,3 @@ conf.fr = {
         },
     },
 }
-console.log(4)

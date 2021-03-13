@@ -1,0 +1,22 @@
+<div class="w3-hover-shadow" data-ng-repeat="r in rList"
+    data-ng-class="{'w3-light-gray':r[ctrl.singlePage.LastUrlIdName()]==ctrl.singlePage.LastUrlId()}">
+    <button data-ng-click="ctrl.keep2back(r)" class="w3-btn w3-padding-small "> <i
+            class="far fa-share-square fa-flip-horizontal"></i> </button>
+    <span data-am:rs:row data-ng-click="ctrl.clickAmRsRow(r)">
+        Draft({{$index}})
+        <span title="mn:{{r.medication_id}}">
+            {{r.substance_code}}
+            <span title="ro:{{r.strength_id}}" data-ng-if="r.strength_id">
+                <span title="n_qy:{{r.n_quantity_id}}">
+                    {{r.n_quantity_value}}
+                    {{r.n_quantity_code}}
+                </span>
+                /
+                <span title="d_qy:{{r.n_quantity_id}}">
+                    {{r.dn_quantity_value}}
+                    {{r.dn_quantity_code}}
+                </span>
+            </span>
+        </span>
+    </span>
+</div>

@@ -26,36 +26,32 @@
         </span>
         <span data-ng-include="'resourceFHIR/addElDropDown.html'"></span>
     </div>
-    <span class="w3-right w3-tiny"> #{{ctrl.singlePage.Url().split('/').length-1}} </span>
-    <span class="w3-right w3-tiny">
-        <a href="/f/sql/01/i.html#!/sql/{{ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].sql_app}}">
-            sql-tree
-        </a>
-    </span>
-    <span class="w3-right">-1-|</span>
-
-    <span class="w3-tiny"> seek Re | ed body </span>
-    <div class="w3-hover-shadow" data-ng-repeat="r in dataSqlRequest.list"
-        data-ng-class="{'w3-light-gray':r[ctrl.singlePage.LastUrlIdName()]==ctrl.singlePage.LastUrlId()}">
-        <button data-ng-click="ctrl.keep2back(r)" class="w3-btn w3-padding-small "> <i
-                class="far fa-share-square fa-flip-horizontal"></i> </button>
-        <span data-am:rs:row data-ng-click="ctrl.clickAmRsRow(r)">
-            Draft({{$index}})
-            <span title="mn:{{r.medication_id}}">
-                {{r.substance_code}}
-                <span title="ro:{{r.strength_id}}" data-ng-if="r.strength_id">
-                    <span title="n_qy:{{r.n_quantity_id}}">
-                        {{r.n_quantity_value}}
-                        {{r.n_quantity_code}}
-                    </span>
-                    /
-                    <span title="d_qy:{{r.n_quantity_id}}">
-                        {{r.dn_quantity_value}}
-                        {{r.dn_quantity_code}}
-                    </span>
-                </span>
-            </span>
+    <div class="w3-border-bottom">
+        <span class="w3-right w3-tiny"> #{{ctrl.singlePage.Url().split('/').length-1}} </span>
+        <span class="w3-right w3-tiny">
+            <a href="/f/sql/01/i.html#!/sql/{{ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].sql_app}}">
+                sql-tree
+            </a>
         </span>
+        <span class="w3-right">-1-|</span>
+        <span class="w3-tiny"> seek Re | ed body </span>
+    </div>
+
+    <div class="w3-row" data-ng-if="ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].dates">
+        <div class="w3-half w3-border-right">
+            <div data-ng-repeat="rList in [dataSqlRequest.list]" data-ng-include="'/f/sql/03/amRsRowHtml1.html'"></div>
+        </div>
+        <div class="w3-half w3-container">
+            <div data-ng-repeat="d in ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].dates">
+                <div class="w3-small w3-border-bottom" data-ng-bind-html="d.amRsRowHtmlHead"></div>
+                <div data-ng-repeat="r in d.dataSqlRequest.list" class="w3-hover-shadow">
+                    <span data-am:rs:row data-inner:html:raw="{{d.amRsRowHtml}}"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div data-ng-if="!ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].dates">
+        <div data-ng-repeat="rList in [dataSqlRequest.list]" data-ng-include="'/f/sql/03/amRsRowHtml1.html'"></div>
     </div>
     &nbsp;
 </div>
