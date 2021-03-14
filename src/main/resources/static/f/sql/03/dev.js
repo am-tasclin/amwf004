@@ -95,6 +95,7 @@ class ResourceFHIRController extends AbstractController {
             window.location.href = '#!' + goUrl
         }
     }
+
     clickAmRsRow = (r) => {
         console.log(r)
     }

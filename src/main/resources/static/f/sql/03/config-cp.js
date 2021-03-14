@@ -6,6 +6,29 @@ conf.fr = {
         sql_app: 'tableOfFHIR_CarePlan',
         sql_app_children: [{ fr: 'mr', sql_app: 'tableOfFHIR_CarePlan_plannedActivityReference_mr' }],
         amRsRowHtml: '<span>{{r.fhir_domainresource}}</span>',
+        add: {
+            mr: {
+                newUrl: (map) => {
+                    let newUrl = '/cp_'+conf.fr.cp.currEl.careplan_id+'/mr_'+map.insert_doc.el.doc_id
+                    console.log(map, map.insert_doc.el, newUrl)
+                    return newUrl
+                },
+                initSqlCmdMap: (r) => {
+                    let lastUrlTag = singlePage.LastUrlTag(),
+                        addEl = conf.fr.cp.add[lastUrlTag],
+                        insert_doc = addEl.sqlCmdMap.insert_doc,
+                        activity_id = conf.fr.cp.sql_app_children[0].list[0].activity_id
+                    insert_doc.parent = activity_id
+                    insert_doc.reference2 = r.medicationrequest_id
+                    console.log(1, insert_doc, r)
+                },
+                sqlCmdMap: {
+                    insert_doc: {
+                        reference: 368794, //[368794] plannedActivityReference   reference:371631 {368830:CarePlan.activity.reference} 
+                    },
+                },
+            },
+        },
         NewEl: {
             amRsRowHtml: "Новий <b>план лікування</b>, прив'язка з списком активності.",
             newElName: true,
