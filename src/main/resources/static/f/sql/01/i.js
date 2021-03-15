@@ -104,6 +104,9 @@ sql_app.simpleSQLs = {
         c: sql_app.tableOfFHIR_CarePlan(),
         sqlHtml: { careplan_id: '<a href="#!/carePlan005Rest/{{r[k]}}">{{r[k]}}</a>', },
     },
+    tableOfFHIR_CarePlan_plannedActivityReference_mr: {
+        c: sql_app.tableOfFHIR_CarePlan_plannedActivityReference_mr(),
+    },
     tableOfFHIR_dosageData: {
         c: sql_app.tableOfFHIR_dosageData(),
         tree_id: 'dosage_id',

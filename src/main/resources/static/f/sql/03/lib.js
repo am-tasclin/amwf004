@@ -69,10 +69,12 @@ class EditFHIResourceFactory {
             addEl = forLastObj.add[lastUrlTag]
         // console.log(1, r, lastUrlTag, forLastUrlTag, forLastObj, 2, addEl)
         addEl.initSqlCmdMap(r)
+        console.log(addEl.sqlCmdMap)
         this.dataFactory.adn_insert.save(addEl.sqlCmdMap).$promise.then((map) => {
+            console.log(map)
             // console.log(map, map.insert_doc.el, 1)
-            let newUrl = addEl.newUrl(map)
-            window.location = '#!' + newUrl
+            // let newUrl = addEl.newUrl(map)
+            // window.location = '#!' + newUrl
             // window.location.href = '#!' + newUrl
         })
     }
