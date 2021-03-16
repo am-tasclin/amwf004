@@ -36,11 +36,10 @@ singlePage.ClickTagHref = (tag, id) => {
 }
 singlePage.TagPosition = (tag) => {
     let position
-    angular.forEach(singlePage.UrlList(), (urlPart, p) => {
-        if (tag == urlPart.split('_')[0]) position = p
-    })
+    angular.forEach(singlePage.UrlList(), (urlPart, p) => position = tag == urlPart.split('_')[0] ? p : null)
     return position
 }
+singlePage.TagUrlId = (tag) => singlePage.X_UrlId(singlePage.TagPosition(tag))
 
 class AbstractController {
     singlePage = singlePage
@@ -79,6 +78,9 @@ class EditFHIResourceFactory {
         })
     }
 
+    newEl_save2 = (newEl) => {
+        console.log(newEl)
+    }
     newEl_save = () => {
         let newEl = conf.fr[singlePage.LastUrlTag()].NewEl
         let sqlCmdMap = newEl.sqlCmdMap

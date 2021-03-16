@@ -47,7 +47,6 @@ conf.fr.cp = {
         },
     },
 }
-console.log(7)
 conf.fr.mr = {
     frn: 'MedicationRequest',
     children: ['mn', 'de'],
@@ -83,6 +82,7 @@ conf.fr.mr = {
     <span data-ng-if="r.timing_id">кожні {{r.period}} {{r.periodunit}}</span> \n\
     <span class="w3-tiny" data-ng-if="!r.medication_id">id={{r.medicationrequest_id}}</span>',
 }
+console.log(10)
 conf.fr.de = {
     frn: 'Dosage',
     children: ['qy', 'tg'],
@@ -91,16 +91,40 @@ conf.fr.de = {
     <span data-ng-if="r.timing_id">кожні {{r.period}} {{r.periodunit}}</span>',
     NewEl: {
         amRsRowHtml: "<b>Дозування</b>, численик та термін використання.",
-        sqlCmdMap: {
-            insert_doc: {
-            },
-        },
+        sqlCmdMap: { insert_doc: {}, },
     },
-    dates: [{
-        amRsRowHtmlHead: 'Ресурси <b>дозування</b>',
-        sql_app: 'tableOfFHIR_dosageData',
-        amRsRowHtml: '<span>{{r.value}}</span>',
-    },]
+    dates: {
+        dec: {
+            clickListItem: (r) => {
+                conf.fr.de.dates.dec.clickListItemId = r.dosage_id
+                conf.fr.de.dates.dec.edString = r.value
+                console.log(1, r, conf.fr.de.dates.dec.clickListItemId)
+            },
+            amRsRowHtmlHead: 'Ресурси <b>дозування</b>',
+            sql_app: 'tableOfFHIR_dosageData',
+            UpdateEl: {
+                btn: '<i class="fas fa-wrench"></i>',
+                initOpenDialog: () => {
+                    console.log(1)
+                },
+                amRsRowHtml: 'Змінити назву збірки дозування',
+                edTemplate: 'edString.html',
+                sqlCmdMap: {
+                    update_doc: {},
+                },
+            },
+            NewEl: {
+                btn: '<i class="fas fa-plus"></i>',
+                amRsRowHtml: 'Створити нову збірку дозування',
+                edTemplate: 'edString.html',
+                sqlCmdMap: {
+                    insert_doc: {},
+                },
+            },
+            amRsRowHtml: '<span \n\
+        data-ng-class="{\'w3-leftbar w3-border-blue\':ctrl.conf.fr.de.currEl.dosageandrate_id==r.dosageandrate_id}">{{r.value}}</span>',
+        },
+    }
 }
 conf.fr.tg = {
     frn: 'Timing',

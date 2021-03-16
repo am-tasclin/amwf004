@@ -15,7 +15,9 @@ sql_app.tableOfFHIR_CarePlan = () => {
     return sql
 }
 sql_app.tableOfFHIR_dosageData = () => {
-    let sql = 'SELECT doc_id dosage_id, * FROM  string, doc WHERE doc_id=string_id AND parent = 369981'
+    let sql = 'SELECT d.doc_id dosage_id, s.*, dar.doc_id dosageandrate_id FROM  string s, doc d \n\
+    LEFT JOIN doc dar ON dar.parent=d.doc_id AND dar.reference=369972 \n\
+    WHERE d.doc_id=string_id AND d.parent = 369981'
     return sql
 }
 sql_app.tableOfFHIR_doseQuantity_timingPeriod = () => {
@@ -25,11 +27,11 @@ sql_app.tableOfFHIR_doseQuantity_timingPeriod = () => {
         LEFT JOIN (:sql_app.tableOfFHIR_Timing_period \n\
         ) tp ON tp.period_id=timing.reference2 \n\
         ON timing.reference=369970 AND timing.parent=doseAndRate.parent \n\
-        WHERE doseAndRate.doc_id=dq_parent'
+        WHERE doseAndRate.doc_id=dosageandrate_id'
     return sql
 }
 sql_app.tableOfFHIR_doseQuantity = () => {
-    let sql = 'SELECT quantity_value, quantity_code, quantity_id, doseQuantity.doc_id doseQuantity_id, doseQuantity.parent dq_parent \n\
+    let sql = 'SELECT quantity_value, quantity_code, quantity_id, doseQuantity.doc_id doseQuantity_id, doseQuantity.parent dosageandrate_id \n\
     FROM doc doseQuantity \n\
     LEFT JOIN (:sql_app.tableOfFHIR_Quantity ) q ON q.doc_id=doseQuantity.reference2 \n\
     WHERE doseQuantity.reference=369975'

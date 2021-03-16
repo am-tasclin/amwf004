@@ -42,11 +42,8 @@
             <div data-ng-repeat="rList in [dataSqlRequest.list]" data-ng-include="'/f/sql/03/amRsRowHtml1.html'"></div>
         </div>
         <div class="w3-half w3-container">
-            <div data-ng-repeat="d in ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].dates">
-                <div class="w3-small w3-border-bottom" data-ng-bind-html="d.amRsRowHtmlHead"></div>
-                <div data-ng-repeat="r in d.dataSqlRequest.list" class="w3-hover-shadow">
-                    <span data-am:rs:row data-inner:html:raw="{{d.amRsRowHtml}}"></span>
-                </div>
+            <div data-ng-repeat="(key, d) in ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].dates"
+                data-ng-include="'/f/sql/03/confDates/ed.html'">
             </div>
         </div>
     </div>

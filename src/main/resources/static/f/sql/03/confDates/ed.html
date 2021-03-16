@@ -1,0 +1,28 @@
+<div class="w3-small w3-border-bottom">
+    <span class="w3-hover-shadow" data-ng-bind-html="d.amRsRowHtmlHead"></span>
+    <span data-ng-repeat="(k2,d2) in d" data-ng-if="k2.includes('El')">
+        <button class="w3-btn w3-padding-small w3-border" title="{{k2}}"
+            data-ng-click="d.openDialog = d.openDialog==k2?'':k2; d2.initOpenDialog(); ">
+            <span data-ng-if="!d2.btn">{{k2}}</span>
+            <span data-ng-bind-html="d2.btn"></span>
+        </button>
+    </span>
+    <div class="w3-card w3-leftbar" data-ng-if="d[d.openDialog]">
+        <span title="{{d.openDialog}}" class="w3-border-bottom"> &nbsp; <span
+                data-ng-bind-html="d[d.openDialog].btn"></span>
+            &nbsp; </span>
+        <button class="w3-btn w3-padding-small w3-border" data-ng-click="d.openDialog = d.openDialog==key?'':key ">
+            save
+        </button>
+        <div data-ng-bind-html="d[d.openDialog].amRsRowHtml"></div>
+        <div data-ng-if="d[d.openDialog].edTemplate"
+            data-ng-include="'/f/sql/03/confDates/'+d[d.openDialog].edTemplate">
+        </div>
+    </div>
+    <div class="w3-card" data-ng-if="d.openDialog==key"> </div>
+</div>
+<div data-ng-repeat="r in d.dataSqlRequest.list" class="w3-hover-shadow"
+    data-ng-class="{'w3-light-grey':ctrl.conf.fr.de.dates.dec.clickListItemId==r.dosage_id}"
+    data-ng-click="d.clickListItem(r)">
+    <span data-am:rs:row data-inner:html:raw="{{d.amRsRowHtml}}"></span>
+</div>
