@@ -80,7 +80,8 @@ class EditFHIResourceFactory {
 
     newEl_save2 = (e) => {
         if (e.initSqlCmdMap) e.initSqlCmdMap()
-        console.log(1)
+        console.log(e.sqlCmdMap)
+        // if (true) return
         this.dataFactory.adn_insert.save(e.sqlCmdMap).$promise.then((map) => {
             console.log(1, map)
             if (e.afterExeSqlCmdMap)

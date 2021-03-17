@@ -79,8 +79,8 @@ public class AbstractDataNode extends DbCommon {
     private void sqlCmdMapTo1UpdateString(Map<String, Object> map_update_string) {
         logger.info("map_update_string = " + map_update_string);
         String sql_update_string = "UPDATE string SET value = ':value' WHERE string_id = :string_id";
-        sql_update_string = sql_update_string.replace(":value", ""+map_update_string.get("value"));
-        sql_update_string = sql_update_string.replace(":string_id", ""+map_update_string.get("string_id"));
+        sql_update_string = sql_update_string.replace(":value", "" + map_update_string.get("value"));
+        sql_update_string = sql_update_string.replace(":string_id", "" + map_update_string.get("string_id"));
         int update = dbParamJdbcTemplate.update(sql_update_string, map_update_string);
         map_update_string.put("update", update);
     }
@@ -89,14 +89,15 @@ public class AbstractDataNode extends DbCommon {
         logger.info("map_update_doc = " + map_update_doc);
         String sql_update_doc = "UPDATE doc SET ";
         String sql_update_doc_set = "";
-        String[] doc_att = {"reference", "reference2", "doctype"};
+        String[] doc_att = { "reference", "reference2", "doctype" };
         for (String att : doc_att) {
-            if(map_update_doc.containsKey(att)){
-                if(sql_update_doc_set.length()>0) sql_update_doc_set += ", ";
-                sql_update_doc_set += att + " = '"+ map_update_doc.get(att) +"'";
+            if (map_update_doc.containsKey(att)) {
+                if (sql_update_doc_set.length() > 0)
+                    sql_update_doc_set += ", ";
+                sql_update_doc_set += att + " = '" + map_update_doc.get(att) + "'";
             }
         }
-        sql_update_doc += sql_update_doc_set + " WHERE doc_id = "+map_update_doc.get("doc_id");
+        sql_update_doc += sql_update_doc_set + " WHERE doc_id = " + map_update_doc.get("doc_id");
         logger.info("sql_update_doc = " + sql_update_doc);
         int update = dbParamJdbcTemplate.update(sql_update_doc, map_update_doc);
         map_update_doc.put("update", update);
@@ -143,6 +144,15 @@ public class AbstractDataNode extends DbCommon {
             if (!map_insert_docInner.containsKey("parent"))
                 map_insert_docInner.put("parent", doc_id);
             sqlCmdMapTo1Insert(map_insert_docInner, idsForAction);
+        }
+        if (map_insert_doc.containsKey("read_this_doc")) {
+            Map<String, Object> map_read_this_doc = (Map<String, Object>) map_insert_doc.get("read_this_doc");
+            String sql = (String) map_read_this_doc.get("sql");
+            String doc_id_name = (String) map_read_this_doc.get("doc_id_name");
+            sql = "SELECT * FROM (" + sql + ") x WHERE " + doc_id_name + "=" + doc_id;
+            logger.info("sql = "+sql);
+            Map<String, Object> r = dbJdbcTemplate.queryForList(sql).get(0);
+            map_read_this_doc.put("r", r);
         }
 
     }

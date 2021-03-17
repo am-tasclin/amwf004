@@ -120,7 +120,7 @@ conf.fr.de = {
                     })
                 },
                 afterExeSqlCmdMap: (map) => {
-                    if(map.update_string.update==1){
+                    if (map.update_string.update == 1) {
                         conf.fr.de.dates.dec.UpdateEl.li.value = map.update_string.value
                     }
                 },
@@ -130,7 +130,31 @@ conf.fr.de = {
                 amRsRowHtml: 'Створити нову збірку дозування',
                 edTemplate: 'edString.html',
                 sqlCmdMap: {
-                    insert_doc: {},
+                    insert_doc: {
+                        parent: 369981, // [369981]   дані:369358 {369967:Dosage} [2]
+                        reference: 372065, //[372065] text 
+                        insert_string: {},
+                        insert_doc: {
+                            reference: 369972, //[369972] o[]37 doseAndRate 
+                        },
+                        read_this_doc: {
+                            sql_app: 'tableOfFHIR_dosageData',
+                            doc_id_name: 'dosage_id'
+                        },
+                    },
+                },
+                initSqlCmdMap: () => {
+                    conf.fr.de.dates.dec.NewEl.sqlCmdMap.insert_doc.insert_string.value = conf.fr.de.dates.dec.edString
+                    let sql = sql_app[conf.fr.de.dates.dec.NewEl.sqlCmdMap.insert_doc.read_this_doc.sql_app]()
+                    conf.fr.de.dates.dec.NewEl.sqlCmdMap.insert_doc.read_this_doc.sql = sql
+                    console.log(1, sql)
+                    console.log(1, conf.fr.de.dates.dec.NewEl.sqlCmdMap)
+                },
+                afterExeSqlCmdMap: (map) => {
+                    console.log(1, conf.fr.de.dates.dec.dataSqlRequest.list)
+                    console.log(1, map, map.insert_doc.read_this_doc.r)
+                    conf.fr.de.dates.dec.dataSqlRequest.list.unshift(map.insert_doc.read_this_doc.r)
+                    conf.fr.de.dates.dec.clickListItemId = map.insert_doc.read_this_doc.r.dosage_id
                 },
             },
             amRsRowHtml: '<span \n\
