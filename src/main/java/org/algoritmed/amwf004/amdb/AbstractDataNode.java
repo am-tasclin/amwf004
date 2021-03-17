@@ -49,6 +49,7 @@ public class AbstractDataNode extends DbCommon {
     @Transactional
     public void sqlCmdMapToSqlInsert(Map<String, Object> sqlCmdMap) {
         long[] idsForAction = null;
+        logger.info("sqlCmdMap = " + sqlCmdMap);
         if (sqlCmdMap.containsKey("next_doc_ids")) {
             int next_doc_ids = (int) sqlCmdMap.get("next_doc_ids");
             idsForAction = new long[next_doc_ids];
@@ -65,13 +66,26 @@ public class AbstractDataNode extends DbCommon {
             sqlCmdMapTo1Insert(map_insert_doc, idsForAction);
             logger.info("sqlCmdMap = " + sqlCmdMap);
         }
+        if (sqlCmdMap.containsKey("update_string")) {
+            Map<String, Object> map_update_string = (Map<String, Object>) sqlCmdMap.get("update_string");
+            sqlCmdMapTo1UpdateString(map_update_string);
+        }
         if (sqlCmdMap.containsKey("update_doc")) {
             Map<String, Object> map_update_doc = (Map<String, Object>) sqlCmdMap.get("update_doc");
-            sqlCmdMapTo1Update(map_update_doc);
+            sqlCmdMapTo1UpdateDoc(map_update_doc);
         }
     }
 
-    private void sqlCmdMapTo1Update(Map<String, Object> map_update_doc) {
+    private void sqlCmdMapTo1UpdateString(Map<String, Object> map_update_string) {
+        logger.info("map_update_string = " + map_update_string);
+        String sql_update_string = "UPDATE string SET value = ':value' WHERE string_id = :string_id";
+        sql_update_string = sql_update_string.replace(":value", ""+map_update_string.get("value"));
+        sql_update_string = sql_update_string.replace(":string_id", ""+map_update_string.get("string_id"));
+        int update = dbParamJdbcTemplate.update(sql_update_string, map_update_string);
+        map_update_string.put("update", update);
+    }
+
+    private void sqlCmdMapTo1UpdateDoc(Map<String, Object> map_update_doc) {
         logger.info("map_update_doc = " + map_update_doc);
         String sql_update_doc = "UPDATE doc SET ";
         String sql_update_doc_set = "";
@@ -86,7 +100,6 @@ public class AbstractDataNode extends DbCommon {
         logger.info("sql_update_doc = " + sql_update_doc);
         int update = dbParamJdbcTemplate.update(sql_update_doc, map_update_doc);
         map_update_doc.put("update", update);
-        
     }
 
     private void sqlCmdMapTo1Insert(Map<String, Object> map_insert_doc, long[] idsForAction) {

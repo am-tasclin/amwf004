@@ -11,9 +11,8 @@
         <span title="{{d.openDialog}}" class="w3-border-bottom"> &nbsp; <span
                 data-ng-bind-html="d[d.openDialog].btn"></span>
             &nbsp; </span>
-        <button class="w3-btn w3-padding-small w3-border" data-ng-click="d.openDialog = d.openDialog==key?'':key ">
-            save
-        </button>
+        <button class="w3-btn w3-padding-small w3-border"
+            data-ng-click="ctrl.editFRF.newEl_save2(d[d.openDialog])">save</button>
         <div data-ng-bind-html="d[d.openDialog].amRsRowHtml"></div>
         <div data-ng-if="d[d.openDialog].edTemplate"
             data-ng-include="'/f/sql/03/confDates/'+d[d.openDialog].edTemplate">
@@ -22,7 +21,7 @@
     <div class="w3-card" data-ng-if="d.openDialog==key"> </div>
 </div>
 <div data-ng-repeat="r in d.dataSqlRequest.list" class="w3-hover-shadow"
-    data-ng-class="{'w3-light-grey':ctrl.conf.fr.de.dates.dec.clickListItemId==r.dosage_id}"
+    data-ng-class="{'w3-light-grey':ctrl.conf.fr.de.dates.dec.clickListItemId == r.dosage_id}"
     data-ng-click="d.clickListItem(r)">
     <span data-am:rs:row data-inner:html:raw="{{d.amRsRowHtml}}"></span>
 </div>

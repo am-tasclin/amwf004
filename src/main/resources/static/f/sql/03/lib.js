@@ -78,15 +78,21 @@ class EditFHIResourceFactory {
         })
     }
 
-    newEl_save2 = (newEl) => {
-        console.log(newEl)
+    newEl_save2 = (e) => {
+        if (e.initSqlCmdMap) e.initSqlCmdMap()
+        console.log(1)
+        this.dataFactory.adn_insert.save(e.sqlCmdMap).$promise.then((map) => {
+            console.log(1, map)
+            if (e.afterExeSqlCmdMap)
+                e.afterExeSqlCmdMap(map)
+        })
     }
+
     newEl_save = () => {
         let newEl = conf.fr[singlePage.LastUrlTag()].NewEl
-        let sqlCmdMap = newEl.sqlCmdMap
         if (newEl.initSqlCmdMap) newEl.initSqlCmdMap()
-        console.log(2, singlePage.LastUrlTag(), sqlCmdMap)
-        this.dataFactory.adn_insert.save(sqlCmdMap).$promise.then((map) => {
+        console.log(2, singlePage.LastUrlTag(), newEl.sqlCmdMap)
+        this.dataFactory.adn_insert.save(newEl.sqlCmdMap).$promise.then((map) => {
             console.log(map)
         })
     }

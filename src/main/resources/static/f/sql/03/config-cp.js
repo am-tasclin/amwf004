@@ -109,8 +109,20 @@ conf.fr.de = {
                 },
                 amRsRowHtml: 'Змінити назву збірки дозування',
                 edTemplate: 'edString.html',
-                sqlCmdMap: {
-                    update_doc: {},
+                sqlCmdMap: { update_string: {} },
+                initSqlCmdMap: () => {
+                    conf.fr.de.dates.dec.UpdateEl.sqlCmdMap.update_string.value = conf.fr.de.dates.dec.edString
+                    angular.forEach(conf.fr.de.dates.dec.dataSqlRequest.list, (li) => {
+                        if (li.dosage_id == conf.fr.de.dates.dec.clickListItemId) {
+                            conf.fr.de.dates.dec.UpdateEl.sqlCmdMap.update_string.string_id = li.string_id
+                            conf.fr.de.dates.dec.UpdateEl.li = li
+                        }
+                    })
+                },
+                afterExeSqlCmdMap: (map) => {
+                    if(map.update_string.update==1){
+                        conf.fr.de.dates.dec.UpdateEl.li.value = map.update_string.value
+                    }
                 },
             },
             NewEl: {
