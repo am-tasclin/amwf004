@@ -154,7 +154,6 @@ public class AbstractDataNode extends DbCommon {
             Map<String, Object> r = dbJdbcTemplate.queryForList(sql).get(0);
             map_read_this_doc.put("r", r);
         }
-
     }
 
     /**

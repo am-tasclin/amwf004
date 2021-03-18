@@ -91,14 +91,30 @@ conf.fr.de = {
     <span data-ng-if="r.timing_id">кожні {{r.period}} {{r.periodunit}}</span>',
     NewEl: {
         amRsRowHtml: "<b>Дозування</b>, численик та термін використання.",
-        sqlCmdMap: { insert_doc: {}, },
+        sqlCmdMap: {
+            insert_doc: {
+                reference: 369975, // [369975] doseQuantity   Quantity:368636 
+            },
+        },
+        initSqlCmdMap: () => {
+            console.log(1, conf.fr.de.dates.dec.clickListItemId, conf.fr.de.dates.dec.UpdateEl.li)
+            console.log(1, conf.fr.de.NewEl.sqlCmdMap)
+            conf.fr.de.NewEl.sqlCmdMap.insert_doc.parent //o[]37   doseAndRate:369972 
+                = conf.fr.de.dates.dec.UpdateEl.li.dosageandrate_id
+        },
+        afterExeSqlCmdMap: (map) => {
+            console.log(1)
+        },
     },
     dates: {
         dec: {
             clickListItem: (r) => {
-                conf.fr.de.dates.dec.clickListItemId = r.dosage_id
                 conf.fr.de.dates.dec.edString = r.value
-                console.log(1, r, conf.fr.de.dates.dec.clickListItemId)
+                conf.fr.de.dates.dec.clickListItemId = r.dosage_id
+                angular.forEach(conf.fr.de.dates.dec.dataSqlRequest.list, (li) => {
+                    if (li.dosage_id == conf.fr.de.dates.dec.clickListItemId)
+                        conf.fr.de.dates.dec.UpdateEl.li = li
+                })
             },
             amRsRowHtmlHead: 'Ресурси <b>дозування</b>',
             sql_app: 'tableOfFHIR_dosageData',
@@ -112,12 +128,7 @@ conf.fr.de = {
                 sqlCmdMap: { update_string: {} },
                 initSqlCmdMap: () => {
                     conf.fr.de.dates.dec.UpdateEl.sqlCmdMap.update_string.value = conf.fr.de.dates.dec.edString
-                    angular.forEach(conf.fr.de.dates.dec.dataSqlRequest.list, (li) => {
-                        if (li.dosage_id == conf.fr.de.dates.dec.clickListItemId) {
-                            conf.fr.de.dates.dec.UpdateEl.sqlCmdMap.update_string.string_id = li.string_id
-                            conf.fr.de.dates.dec.UpdateEl.li = li
-                        }
-                    })
+                    conf.fr.de.dates.dec.UpdateEl.sqlCmdMap.update_string.string_id = conf.fr.de.dates.dec.UpdateEl.li.string_id
                 },
                 afterExeSqlCmdMap: (map) => {
                     if (map.update_string.update == 1) {

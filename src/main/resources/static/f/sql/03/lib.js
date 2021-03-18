@@ -84,8 +84,7 @@ class EditFHIResourceFactory {
         // if (true) return
         this.dataFactory.adn_insert.save(e.sqlCmdMap).$promise.then((map) => {
             console.log(1, map)
-            if (e.afterExeSqlCmdMap)
-                e.afterExeSqlCmdMap(map)
+            if (e.afterExeSqlCmdMap) e.afterExeSqlCmdMap(map)
         })
     }
 
@@ -94,7 +93,8 @@ class EditFHIResourceFactory {
         if (newEl.initSqlCmdMap) newEl.initSqlCmdMap()
         console.log(2, singlePage.LastUrlTag(), newEl.sqlCmdMap)
         this.dataFactory.adn_insert.save(newEl.sqlCmdMap).$promise.then((map) => {
-            console.log(map)
+            console.log(map,1)
+            if (newEl.afterExeSqlCmdMap) newEl.afterExeSqlCmdMap(map)
         })
     }
 }
