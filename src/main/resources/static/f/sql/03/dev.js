@@ -101,7 +101,10 @@ class ResourceFHIRController extends AbstractController {
     }
 
     // відктрити діалог вузла даних і перейти на його singlePage.Url
-    rsEdPart = (r, part, prefix) => {
+    rsEdPart = (r, part) => {
+        console.log(r, part)
+    }
+    rsEdPart2 = (r, part, prefix) => {
         let frs1 = singlePage.FirstUrlTag()
         let frnPart = conf.fr[part].frn
         let idName = frnPart.toLowerCase() + '_id'

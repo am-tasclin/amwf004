@@ -8,10 +8,6 @@ singlePage.FirstUrl = () => singlePage.Url() ? singlePage.Url().split('/')[1] : 
 singlePage.FirstUrlTag = () => singlePage.FirstUrl().split('_')[0]
 singlePage.FirstUrlId = () => singlePage.FirstUrl().split('_')[1]
 
-singlePage.X_Url = (nr) => nr ? singlePage.UrlList()[nr] : ''
-singlePage.X_UrlTag = (nr) => singlePage.UrlList()[nr].split('_')[0]
-singlePage.X_UrlId = (nr) => !nr ? 0 : singlePage.UrlList()[nr].split('_')[1]
-
 singlePage.ForLastUrl = () => singlePage.Url() ? singlePage.Url().split('/')[singlePage.Url().split('/').length - 2] : ''
 singlePage.ForLastUrlTag = () => singlePage.ForLastUrl().split('_')[0]
 singlePage.ForLastUrlId = () => singlePage.ForLastUrl().split('_')[1]
@@ -22,7 +18,14 @@ singlePage.LastUrlId = () => singlePage.LastUrl().split('_')[1]
 
 singlePage.LastUrlIdName = () => singlePage.LastUrlTag() ? conf.fr[singlePage.LastUrlTag()].frn.toLowerCase() + '_id' : ''
 
+singlePage.X_Url = (nr) => nr ? singlePage.UrlList()[nr] : ''
+singlePage.X_UrlTag = (nr) => singlePage.UrlList()[nr].split('_')[0]
+singlePage.X_UrlId = (nr) => nr && singlePage.UrlList().length > nr ? singlePage.UrlList()[nr].split('_')[1] : null//0
+
+singlePage.TagPosition = (tag) => singlePage.Url().includes(tag) ? singlePage.Url().split('/' + tag)[0].split('/').length : null
+singlePage.TagUrlId = (tag) => singlePage.X_UrlId(singlePage.TagPosition(tag))
 singlePage.TagIdName = (tag) => conf.fr[tag].frn.toLowerCase() + '_id'
+
 singlePage.ClickTagHref = (tag, id) => {
     let newUrl = '', tagId = tag + (id ? ('_' + id) : '')
     // console.log(tag, singlePage.Url().includes(tag), singlePage.UrlList(), tagId)
@@ -34,12 +37,14 @@ singlePage.ClickTagHref = (tag, id) => {
     })
     return newUrl
 }
-singlePage.TagPosition = (tag) => {
-    let position
-    angular.forEach(singlePage.UrlList(), (urlPart, p) => position = tag == urlPart.split('_')[0] ? p : null)
-    return position
+singlePage.LinkUp = (fromTag, toTag, r) => {
+    let fromTagId = '/' + fromTag + (r[conf.fr[fromTag].frn.toLowerCase() + '_id'] ? ('_' + r[conf.fr[fromTag].frn.toLowerCase() + '_id']) : '')
+    let linkUp = singlePage.Url().split(fromTagId)[0] + fromTagId
+        + '/' + toTag + (r[conf.fr[toTag].frn.toLowerCase() + '_id'] ? ('_' + r[conf.fr[toTag].frn.toLowerCase() + '_id']) : '')
+    if (singlePage.Url().includes(linkUp)) linkUp = fromTagId
+    return linkUp
 }
-singlePage.TagUrlId = (tag) => singlePage.X_UrlId(singlePage.TagPosition(tag))
+
 
 class AbstractController {
     singlePage = singlePage
@@ -93,7 +98,7 @@ class EditFHIResourceFactory {
         if (newEl.initSqlCmdMap) newEl.initSqlCmdMap()
         console.log(2, singlePage.LastUrlTag(), newEl.sqlCmdMap)
         this.dataFactory.adn_insert.save(newEl.sqlCmdMap).$promise.then((map) => {
-            console.log(map,1)
+            console.log(map, 1)
             if (newEl.afterExeSqlCmdMap) newEl.afterExeSqlCmdMap(map)
         })
     }
