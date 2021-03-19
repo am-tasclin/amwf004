@@ -41,7 +41,7 @@ singlePage.LinkUp = (fromTag, toTag, r) => {
     let fromTagId = '/' + fromTag + (r[conf.fr[fromTag].frn.toLowerCase() + '_id'] ? ('_' + r[conf.fr[fromTag].frn.toLowerCase() + '_id']) : '')
     let linkUp = singlePage.Url().split(fromTagId)[0] + fromTagId
         + '/' + toTag + (r[conf.fr[toTag].frn.toLowerCase() + '_id'] ? ('_' + r[conf.fr[toTag].frn.toLowerCase() + '_id']) : '')
-    if (singlePage.Url().includes(linkUp)) linkUp = fromTagId
+    if (singlePage.Url().includes(linkUp)) linkUp = singlePage.Url().split(fromTagId)[0] + fromTagId
     return linkUp
 }
 
