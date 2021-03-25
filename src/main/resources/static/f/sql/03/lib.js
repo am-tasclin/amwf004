@@ -45,7 +45,6 @@ singlePage.LinkUp = (fromTag, toTag, r) => {
     return linkUp
 }
 
-
 class AbstractController {
     singlePage = singlePage
     conf = conf
