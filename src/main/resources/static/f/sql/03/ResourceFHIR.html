@@ -24,7 +24,9 @@
                 |
             </span>
         </span>
-        <span data-ng-include="'resourceFHIR/addElDropDown.html'"></span>
+        _ <. <span class="w3-small">
+            {{ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].frn}}
+            </span>
     </div>
     <div class="w3-border-bottom">
         <span class="w3-right w3-tiny"> #{{ctrl.singlePage.Url().split('/').length-1}} </span>
@@ -34,7 +36,13 @@
             </a>
         </span>
         <span class="w3-right">-1-|</span>
-        <span class="w3-tiny"> seek Re | ed body </span>
+        <i class="fas fa-search"></i>
+        <span class="w3-tiny"> seek Re |</span>
+        <i class="far fa-paper-plane"></i>
+        <span class="w3-tiny"> usage </span>
+        <span class="w3-tiny"> | ed body </span>
+        >
+        <span data-ng-include="'resourceFHIR/addElDropDown.html'"></span>
     </div>
 
     <div class="w3-row" data-ng-if="ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].dates">
