@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="uk-UA" data-ng-controller="FirstController as ctrl">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>amf-{{ctrl.singlePage.Url().substr(1)}}</title>
+    <link rel="stylesheet" href="/webjars/font-awesome/5.15.1/css/all.min.css">
+    <link rel="stylesheet" href="/f/css/w3.css" type="text/css">
+    <link rel="stylesheet" href="/f/css/am.css" type="text/css">
+    <link rel="shortcut icon" href="/f/img/algoritmed.ico" type="image/x-icon">
+    <script src="/webjars/angular/1.8.2/angular.min.js" type="application/javascript"></script>
+    <script src="/webjars/angular-route/1.8.2/angular-route.min.js" type="application/javascript"></script>
+    <script src="/webjars/angular-resource/1.8.2/angular-resource.min.js" type="application/javascript"></script>
+    <script src="/webjars/angular-sanitize/1.8.2/angular-sanitize.min.js" type="application/javascript"></script>
+    <script src="aed.js" type="application/javascript"></script>
+</head>
+
+<body>
+    <div class="w3-container am-max-width-1">
+        <span class="w3-tiny">
+            ArchiMate
+        </span>
+        <span class="am-b">
+            {{ctrl.xmlDoc.firstChild.getAttribute('name')}}
+        </span>
+        <div>
+            <div data-ng-if="ctrl.xmlDoc.firstChild.children" class="w3-container w3-border-left">
+                <div data-ng-repeat="x in ctrl.xmlDoc.firstChild.children">
+                    <div class="w3-hover-shadow" data-ng-click="ctrl.am2f.clickAmItem(x)">
+                        <span class="w3-tiny am-b">
+                            {{x.localName}}
+                        </span>
+                        {{x.getAttribute('name')}}
+                    </div>
+                    <div data-ng-if="ctrl.conf.openedFolderList.includes(x.id)" class="w3-container w3-border-left"
+                        data-ng-include="'childElements.html'">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

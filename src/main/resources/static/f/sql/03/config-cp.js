@@ -252,6 +252,7 @@ conf.fr.ro = {
 conf.fr.qy = {
     frn: 'Quantity',
     sql_app: 'tableOfFHIR_Quantity',
+    edTemplate:'addEl',
     amRsRowHtml: '<span> {{r.quantity_value}} {{r.quantity_code}}</span> <span data-ng-if="!r.quantity_value && !r.quantity_code"> <пусто> </span> ',
     NewEl: {
         amRsRowHtml: "Новий <b>численик</b>, цифрове значення та одиниці виміру.",
