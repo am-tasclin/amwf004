@@ -1,10 +1,9 @@
 <div data-ng-repeat="x in x.children">
-    <div class="w3-hover-shadow" data-ng-click="ctrl.am2f.clickAmItem(x)">
-        <span class="w3-tiny am-b">
-            {{x.localName}}
-        </span>
-        {{x.getAttribute('name')}}
-    </div>
+    <a href="#!/el_{{x.id}}" data-ng-click="ctrl.am2f.clickAmItem(x)">
+        <div class="w3-hover-shadow" data-ng-class="{'w3-light-gray':ctrl.conf.currentX.id==x.id}">
+            <span class="w3-tiny am-b"> {{x.localName}} </span> {{x.getAttribute('name')}}
+        </div>
+    </a>
     <div data-ng-if="ctrl.conf.openedFolderList.includes(x.id)" class="w3-container w3-border-left"
         data-ng-include="'childElements.html'">
     </div>

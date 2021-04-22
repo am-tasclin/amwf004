@@ -154,7 +154,7 @@ class RouteProviderConfig {
             return kElId
         }
         angular.forEach(conf.fr, (v, k1) => {
-            $routeProvider.when("/" + k1, rpo)
+            $routeProvider.when('/' + k1, rpo)
             let k1Id = kIdREST('', k1)
             angular.forEach(conf.fr[k1].children, (k2) => {
                 $routeProvider.when('/' + k1 + '/' + k2, rpo)
