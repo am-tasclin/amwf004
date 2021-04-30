@@ -1,0 +1,30 @@
+<div>
+  <div class="w3-tiny am-u">
+      Змість view
+  </div>
+    <!--
+        {{ctrl.conf.currentX.id}}
+    -->
+    <div data-ng-repeat="ve in ctrl.conf.currentX.children ">
+        <span class="w3-tiny am-b" title="{{ve.id}}">
+            {{ctrl.conf.elMap[ve.getAttribute('archimateElement')].getAttribute('xsi:type').split(':')[1]}}
+        </span>
+        {{ctrl.conf.elMap[ve.getAttribute('archimateElement')].getAttribute('name')}}
+        <!--
+            <span class="w3-tiny"> {{ve.id}} </span>
+        -->
+        <div class="w3-leftbar w3-border-top w3-container"
+            data-ng-if="ctrl.conf.elMap[ve.getAttribute('archimateElement')].firstElementChild.innerHTML">
+            <span class="w3-tiny am-b">
+                {{ctrl.conf.elMap[ve.getAttribute('archimateElement')].firstElementChild.localName}}:
+            </span>
+            {{ctrl.conf.elMap[ve.getAttribute('archimateElement')].firstElementChild.innerHTML}}
+        </div>
+        <div data-ng-repeat="ve in ve.children" data-ng-if="ve.localName=='child'" class="w3-container">
+            <span class="w3-tiny am-b" title="{{ve.id}}">
+                {{ctrl.conf.elMap[ve.getAttribute('archimateElement')].getAttribute('xsi:type').split(':')[1]}}
+            </span>
+            {{ctrl.conf.elMap[ve.getAttribute('archimateElement')].getAttribute('name')}}
+        </div>
+    </div>
+</div>

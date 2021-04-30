@@ -23,6 +23,10 @@
             <span class="w3-hover-shadow">
                 <span class="w3-tiny"> ArchiMate </span>
                 <span class="am-b"> {{ctrl.xmlDoc.firstChild.getAttribute('name')}} </span>
+                —
+                <span class="w3-tiny">
+                    {{ctrl.xmlDoc.firstChild.id}}/{{ctrl.conf.currentX.id}}
+                </span>
             </span>
         </div>
         <div class="ng-view"></div>

@@ -28,7 +28,9 @@ class FirstController {
         this.conf = conf
         const ctrl = this
         ctrl.singlePage = singlePage
-        $http.get('/f/archimate/regulations-data-model.archimate.xml')
+        let filePath = '/f/archimate/AlgoritmedFHIR-202104.archimate.xml'
+        // let filePath = '/f/archimate/regulations-data-model.archimate.xml'
+        $http.get(filePath)
             .then((response) => {
                 const xmlDoc = parser.parseFromString(response.data, "text/xml")
                 ctrl.xmlDoc = xmlDoc
@@ -76,8 +78,10 @@ const forEachParent = (el, f) => {
 }
 class ElementArchiMateController {
     constructor(am2f) {
+        console.log(singlePage.LastUrlId(), conf.elMap)
         conf.currentX = conf.elMap[singlePage.LastUrlId()]
-        forEachParent(conf.currentX, (x) => conf.openedFolderList.push(x.id))
+        if (conf.currentX)
+            forEachParent(conf.currentX, (x) => conf.openedFolderList.push(x.id))
     }
 }
 app.controller('ElementArchiMateController', ElementArchiMateController)

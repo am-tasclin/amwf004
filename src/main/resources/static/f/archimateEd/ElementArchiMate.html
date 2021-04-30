@@ -1,5 +1,5 @@
 <div class="w3-row">
-    <div class="w3-half w3-border-right">
+    <div class="w3-third w3-border-right">
         <div data-ng-if="ctrl.xmlDoc.firstChild.children" class="w3-container w3-border-left">
             <div data-ng-repeat="xId in ctrl.conf.firstListIds" data-ng-init="x = ctrl.conf.elMap[xId]">
                 <a href="#!/el_{{x.id}}" data-ng-click="ctrl.am2f.clickAmItem(x)">
@@ -13,7 +13,7 @@
             </div>
         </div>
     </div>
-    <div class="w3-half w3-border-left">
+    <div class="w3-twothird w3-border-left">
         <span class="w3-tiny am-b">
             {{ctrl.conf.currentX.getAttribute('xsi:type').split(':')[1]}}
         </span>
@@ -30,7 +30,8 @@
                 ></div>
                 -->
                 <img data-ng-if="ctrl.conf.currentX.id"
-                    src="/f/archimate/html-regulations-data-model/id-31fd40071bca4a548b9948ddce7b8b18/images/{{ctrl.conf.currentX.id}}.png">
+                    src="/f/archimate/html-{{ctrl.xmlDoc.firstChild.getAttribute('name')}}/{{ctrl.xmlDoc.firstChild.id}}/images/{{ctrl.conf.currentX.id}}.png">
+                <div data-ng-include="'viewContent.html'"></div>
             </div>
         </span>
     </div>
