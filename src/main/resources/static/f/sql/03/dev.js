@@ -1,7 +1,7 @@
 'use strict';
 var app = angular.module("app", ['ngRoute', 'ngResource', 'ngSanitize']);
 angular.element(() => angular.bootstrap(document, ['app']))
-app.factory("dataFactory", DataFactory)
+app.factory("dataBeFactory", DataDBexchangeService)
 app.factory("editFRF", EditFHIResourceFactory)
 
 app.directive('amRsRow', ($compile) => {
@@ -25,21 +25,21 @@ app.directive('amRsRow', ($compile) => {
     }
 })
 
-// app.controller("ResourceFHIRController", ResourceFHIRController)
-class ResourceFHIRController extends AbstractController {
-    dataFactory
+// app.controller("InitFHIResourceController", InitFHIResourceController)
+class InitFHIResourceController extends AbstractController {
+    dataBeFactory
     editFRF
-    constructor($scope, $routeParams, dataFactory, editFRF) {
+    constructor($scope, $routeParams, dataBeFactory, editFRF) {
         super()
-        this.dataFactory = dataFactory
+        this.dataBeFactory = dataBeFactory
         this.editFRF = editFRF
-        // console.log('--ResourceFHIRController--', singlePage.Url(), singlePage.Url().split('/').length - 1, singlePage.LastUrl(), singlePage.LastUrlTag(), singlePage.LastUrlIdName())
+        // console.log('--InitFHIResourceController--', singlePage.Url(), singlePage.Url().split('/').length - 1, singlePage.LastUrl(), singlePage.LastUrlTag(), singlePage.LastUrlIdName())
         if (conf.fr[singlePage.LastUrlTag()].sql_app) {
             let sql = sql_app[conf.fr[singlePage.LastUrlTag()].sql_app]()
             if (sql.includes(':sql_app')) sql = sql_app.concatSql(sql)
             // console.log(1, sql)
             //read resource list
-            dataFactory.httpGet({ sql: sql })
+            dataBeFactory.httpGet({ sql: sql })
                 .then((dataSqlRequest) => {
                     $scope.dataSqlRequest = dataSqlRequest
                     console.log(2, dataSqlRequest)
@@ -48,7 +48,7 @@ class ResourceFHIRController extends AbstractController {
         angular.forEach(conf.fr[singlePage.LastUrlTag()].dates, (v) => {
             let sql = sql_app[v.sql_app]()
             console.log(v, sql)
-            dataFactory.httpGet({ sql: sql })
+            dataBeFactory.httpGet({ sql: sql })
                 .then((dataSqlRequest) => {
                     v.dataSqlRequest = dataSqlRequest
                     console.log(2, dataSqlRequest)
@@ -62,7 +62,7 @@ class ResourceFHIRController extends AbstractController {
                     // console.log(tag,conf.fr[tag].sql_app)
                     let sql = sql_app.concatSql(sql_app[conf.fr[tag].sql_app]())
                     sql = 'SELECT * FROM (' + sql + ') x  WHERE ' + singlePage.TagIdName(tag) + ' = ' + tag_id
-                    dataFactory.httpGet({ sql: sql })
+                    dataBeFactory.httpGet({ sql: sql })
                         .then((dataSqlRequest) => {
                             conf.fr[tag].currEl = dataSqlRequest.list[0]
                             console.log(2, tag, dataSqlRequest, conf.fr[tag].currEl)
@@ -71,7 +71,7 @@ class ResourceFHIRController extends AbstractController {
                         let sql2 = sql_app[sql_app_child.sql_app]()
                         sql2 = 'SELECT * FROM ( ' + sql2 + ' ) x WHERE activity_cp = ' + tag_id
                         sql2 = sql_app.concatSql(sql2)
-                        dataFactory.httpGet({ sql: sql2 })
+                        dataBeFactory.httpGet({ sql: sql2 })
                             .then((dataSqlRequest) => {
                                 console.log(2, tag, dataSqlRequest)
                                 sql_app_child.list = dataSqlRequest.list
@@ -128,23 +128,14 @@ class ResourceFHIRController extends AbstractController {
     }
 
 }
-app.controller("ResourceFHIRController", ResourceFHIRController)
-
-// app.controller("FirstController", FirstController)
-class FirstController extends AbstractController {
-    constructor($scope, $route) {
-        super()
-        console.log(singlePage.Url(), Object.keys($route.routes))
-    }
-}
-app.controller("FirstController", FirstController)
+app.controller("InitFHIResourceController", InitFHIResourceController)
 
 // app.config(RouteProviderConfig)
 class RouteProviderConfig {
     constructor($routeProvider) {
         let rpo = {
             templateUrl: 'ResourceFHIR.html',
-            controller: 'ResourceFHIRController',
+            controller: 'InitFHIResourceController',
             controllerAs: 'ctrl',
         }
         let kIdREST = (pref, k) => {
@@ -170,3 +161,12 @@ class RouteProviderConfig {
     }
 }
 app.config(RouteProviderConfig)
+
+// app.controller("InitPageController", InitPageController)
+class InitPageController extends AbstractController {
+    constructor($scope, $route) {
+        super()
+        console.log(singlePage.Url(), Object.keys($route.routes))
+    }
+}
+app.controller("InitPageController", InitPageController)

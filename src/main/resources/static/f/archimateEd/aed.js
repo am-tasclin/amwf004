@@ -1,51 +1,12 @@
 'use strict';
+const singlePage = {}, conf = {}, sql_app = {}
+// lib singlePage
+import('/f/js/lib.singlePage001.js')
 var app = angular.module("app", ['ngRoute', 'ngResource', 'ngSanitize']);
 angular.element(() => angular.bootstrap(document, ['app']))
 const parser = new DOMParser()
-const singlePage = {}, conf = {}, sql_app = {}
 conf.openedFolderList = []
 conf.elMap = {}
-
-// app.controller("FirstController", FirstController)
-const initFirstElMap = (x) => {
-    conf.firstListIds.push(x.id)
-    conf.elMap[x.id] = x
-    initDeepElMap(x)
-}
-const initDeepElMap = (x) => {
-    // if (x.children) 
-    angular.forEach(x.children, (x) => {
-        if (x.id) {
-            conf.elMap[x.id] = x
-            initDeepElMap(x)
-        }
-    })
-}
-class FirstController {
-    am2f
-    constructor($http, am2f) {
-        this.am2f = am2f
-        this.conf = conf
-        const ctrl = this
-        ctrl.singlePage = singlePage
-        let filePath = '/f/archimate/AlgoritmedFHIR-202104.archimate.xml'
-        // let filePath = '/f/archimate/regulations-data-model.archimate.xml'
-        $http.get(filePath)
-            .then((response) => {
-                const xmlDoc = parser.parseFromString(response.data, "text/xml")
-                ctrl.xmlDoc = xmlDoc
-                console.log(xmlDoc.firstChild.getAttribute('name'), xmlDoc.firstChild)
-                conf.firstListIds = []
-                angular.forEach(xmlDoc.firstChild.children, (x) => initFirstElMap(x))
-                let vf = conf.firstListIds.splice(conf.firstListIds.length - 1, 1)
-                conf.firstListIds.splice(0, 0, vf)
-                console.log(conf.firstListIds)
-                console.log(singlePage.Url())
-                console.log(singlePage.LastUrlId())
-            })
-    }
-}
-app.controller("FirstController", FirstController)
 
 //app.factory("am2f", ArchiMateFileFactory)
 class ArchiMateFileFactory {
@@ -69,14 +30,14 @@ class ArchiMateFileFactory {
 }
 app.factory("am2f", ArchiMateFileFactory)
 
-// app.config(ElementArchiMateController)
-const forEachParent = (el, f) => {
+// app.config(InitArchiMateElementController)
+const forEachParent = (el, fLambda) => {
     if (el.parentElement) {
-        f(el.parentElement)
-        forEachParent(el.parentElement, f)
+        fLambda(el.parentElement)
+        forEachParent(el.parentElement, fLambda)
     }
 }
-class ElementArchiMateController {
+class InitArchiMateElementController {
     constructor(am2f) {
         console.log(singlePage.LastUrlId(), conf.elMap)
         conf.currentX = conf.elMap[singlePage.LastUrlId()]
@@ -84,30 +45,24 @@ class ElementArchiMateController {
             forEachParent(conf.currentX, (x) => conf.openedFolderList.push(x.id))
     }
 }
-app.controller('ElementArchiMateController', ElementArchiMateController)
+app.controller('InitArchiMateElementController', InitArchiMateElementController)
 
 // app.config(RouteProviderConfig)
 class RouteProviderConfig {
     constructor($routeProvider) {
         console.log(11)
         $routeProvider
-            .when("/banana", {
-                template: "<h1>Banana</h1><p>Bananas contain around 75% water.</p>"
-            })
-            .when("/tomato", {
-                template: "<h1>Tomato</h1><p>Tomatoes contain around 95% water.</p>"
-            })
             .when("/el_:el_id", {
                 templateUrl: "ElementArchiMate.html",
-                controller: 'ElementArchiMateController',
+                controller: 'InitArchiMateElementController',
             })
             .when("/v_:el_id", {
                 templateUrl: "ElementArchiMate.html",
-                controller: 'ElementArchiMateController',
+                controller: 'InitArchiMateElementController',
             })
             .when("/", {
                 templateUrl: "ElementArchiMate.html",
-                controller: 'ElementArchiMateController',
+                controller: 'InitArchiMateElementController',
             })
             .otherwise({
                 template: "<h1>?</h1><p>Щось невідоме</p>"
@@ -116,9 +71,44 @@ class RouteProviderConfig {
 }
 app.config(RouteProviderConfig)
 
-// lib singlePage
-singlePage.Url = () => window.location.href.split('#!')[1]
+// app.controller("InitPageController", InitPageController)
+const initPageMap = (x) => {
+    conf.firstListIds.push(x.id)
+    conf.elMap[x.id] = x
+    initDeepElMap(x)
+}
+const initDeepElMap = (x) => {
+    // if (x.children) 
+    angular.forEach(x.children, (x) => {
+        if (x.id) {
+            conf.elMap[x.id] = x
+            initDeepElMap(x)
+        }
+    })
+}
+class InitPageController {
+    am2f
+    constructor($http, am2f) {
+        this.am2f = am2f
+        this.conf = conf
+        const ctrl = this
+        ctrl.singlePage = singlePage
+        let filePath = '/f/archimate/AlgoritmedFHIR-202104.archimate.xml'
+        // let filePath = '/f/archimate/regulations-data-model.archimate.xml'
+        $http.get(filePath)
+            .then((response) => {
+                const xmlDoc = parser.parseFromString(response.data, "text/xml")
+                ctrl.xmlDoc = xmlDoc
+                console.log(xmlDoc.firstChild.getAttribute('name'), xmlDoc.firstChild)
+                conf.firstListIds = []
+                angular.forEach(xmlDoc.firstChild.children, (x) => initPageMap(x))
+                let vf = conf.firstListIds.splice(conf.firstListIds.length - 1, 1)
+                conf.firstListIds.splice(0, 0, vf)
+                console.log(conf.firstListIds)
+                console.log(singlePage.Url())
+                console.log(singlePage.LastUrlId())
+            })
+    }
+}
+app.controller("InitPageController", InitPageController)
 
-singlePage.LastUrl = () => singlePage.Url() ? singlePage.Url().split('/')[singlePage.Url().split('/').length - 1] : ''
-singlePage.LastUrlTag = () => singlePage.LastUrl().split('_')[0]
-singlePage.LastUrlId = () => singlePage.LastUrl().split('_')[1]

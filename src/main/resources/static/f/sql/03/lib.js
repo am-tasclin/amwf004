@@ -60,9 +60,9 @@ conf.NewEl.openDialog = (openedDialogNewEl) => {
 
 //app.factory("editFRF", EditFHIResourceFactory)
 class EditFHIResourceFactory {
-    dataFactory
-    constructor(dataFactory) {
-        this.dataFactory = dataFactory
+    dataBeFactory
+    constructor(dataBeFactory) {
+        this.dataBeFactory = dataBeFactory
     }
 
     addEl_save = (r) => {
@@ -73,7 +73,7 @@ class EditFHIResourceFactory {
         // console.log(1, r, lastUrlTag, forLastUrlTag, forLastObj, 2, addEl)
         addEl.initSqlCmdMap(r)
         console.log(addEl.sqlCmdMap)
-        this.dataFactory.adn_insert.save(addEl.sqlCmdMap).$promise.then((map) => {
+        this.dataBeFactory.adn_insert.save(addEl.sqlCmdMap).$promise.then((map) => {
             console.log(map)
             // console.log(map, map.insert_doc.el, 1)
             // let newUrl = addEl.newUrl(map)
@@ -86,7 +86,7 @@ class EditFHIResourceFactory {
         if (e.initSqlCmdMap) e.initSqlCmdMap()
         console.log(e.sqlCmdMap)
         // if (true) return
-        this.dataFactory.adn_insert.save(e.sqlCmdMap).$promise.then((map) => {
+        this.dataBeFactory.adn_insert.save(e.sqlCmdMap).$promise.then((map) => {
             console.log(1, map)
             if (e.afterExeSqlCmdMap) e.afterExeSqlCmdMap(map)
         })
@@ -96,15 +96,15 @@ class EditFHIResourceFactory {
         let newEl = conf.fr[singlePage.LastUrlTag()].NewEl
         if (newEl.initSqlCmdMap) newEl.initSqlCmdMap()
         console.log(2, singlePage.LastUrlTag(), newEl.sqlCmdMap)
-        this.dataFactory.adn_insert.save(newEl.sqlCmdMap).$promise.then((map) => {
+        this.dataBeFactory.adn_insert.save(newEl.sqlCmdMap).$promise.then((map) => {
             console.log(map, 1)
             if (newEl.afterExeSqlCmdMap) newEl.afterExeSqlCmdMap(map)
         })
     }
 }
 
-// app.factory("dataFactory", DataFactory)
-class DataFactory {
+// app.factory("dataDBexchangeService", DataDBexchangeService)
+class DataDBexchangeService {
     constructor($http, $q, $resource) {
         return {
             adn_d: $resource('/r/adn/d/:doc_id', { doc_id: '@doc_id', value: '@value' }),
