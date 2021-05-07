@@ -2,7 +2,7 @@
 var app = angular.module("app", ['ngRoute', 'ngResource', 'ngSanitize']);
 angular.element(() => angular.bootstrap(document, ['app']))
 app.factory("dataBeFactory", DataDBexchangeService)
-app.factory("editFRF", EditFHIResourceFactory)
+app.factory("editFRFactory", EditFHIResourceService)
 
 app.directive('amRsRow', ($compile) => {
     return {
@@ -28,11 +28,11 @@ app.directive('amRsRow', ($compile) => {
 // app.controller("InitFHIResourceController", InitFHIResourceController)
 class InitFHIResourceController extends AbstractController {
     dataBeFactory
-    editFRF
-    constructor($scope, $routeParams, dataBeFactory, editFRF) {
+    editFRFactory
+    constructor($scope, $routeParams, dataBeFactory, editFRFactory) {
         super()
         this.dataBeFactory = dataBeFactory
-        this.editFRF = editFRF
+        this.editFRFactory = editFRFactory
         // console.log('--InitFHIResourceController--', singlePage.Url(), singlePage.Url().split('/').length - 1, singlePage.LastUrl(), singlePage.LastUrlTag(), singlePage.LastUrlIdName())
         if (conf.fr[singlePage.LastUrlTag()].sql_app) {
             let sql = sql_app[conf.fr[singlePage.LastUrlTag()].sql_app]()
@@ -147,7 +147,7 @@ class RouteProviderConfig {
         angular.forEach(conf.fr, (v, k1) => {
             $routeProvider.when('/' + k1, rpo)
             let k1Id = kIdREST('', k1)
-            angular.forEach(conf.fr[k1].children, (k2) => {
+            angular.forEach(conf.fr[k1].children, (k2) => {actory
                 $routeProvider.when('/' + k1 + '/' + k2, rpo)
                 $routeProvider.when('/' + k1Id + '/' + k2, rpo)
                 let k12Id = kIdREST('/' + k1Id, k2)

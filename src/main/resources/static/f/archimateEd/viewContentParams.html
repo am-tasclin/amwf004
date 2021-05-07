@@ -1,0 +1,12 @@
+<div class="w3-leftbar w3-border-top w3-container"
+    data-ng-if="ctrl.conf.elMap[ve.getAttribute('archimateElement')].firstElementChild.innerHTML">
+    <span class="w3-tiny am-b">
+        {{ctrl.conf.elMap[ve.getAttribute('archimateElement')].firstElementChild.localName}}:
+    </span>
+    {{ctrl.conf.elMap[ve.getAttribute('archimateElement')].firstElementChild.innerHTML}}
+</div>
+<div data-ng-repeat="x in ctrl.conf.elMap[ve.getAttribute('archimateElement')].children" class="w3-leftbar w3-container"
+    data-ng-if="x.localName=='property'">
+    <pre style="overflow-x:scroll; margin-top: 0px; margin-bottom: 0px;"
+        class="w3-small"><span class="w3-tiny am-b" title="key of property">{{x.getAttribute('key')}}:</span> {{x.getAttribute('value')}}</pre>
+</div>

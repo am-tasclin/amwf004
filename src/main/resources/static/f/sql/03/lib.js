@@ -58,8 +58,8 @@ conf.NewEl.openDialog = (openedDialogNewEl) => {
         conf.NewEl.openedDialog = openedDialogNewEl
 }
 
-//app.factory("editFRF", EditFHIResourceFactory)
-class EditFHIResourceFactory {
+//app.factory("editFRFactory", EditFHIResourceFactory)
+class EditFHIResourceService {
     dataBeFactory
     constructor(dataBeFactory) {
         this.dataBeFactory = dataBeFactory
