@@ -33,14 +33,20 @@ singlePage.ClickTagHref = (tag, id) => {
         for (let i = 1; i < singlePage.TagPosition(tag); i++) newUrl += '/' + singlePage.X_Url(i)
     else angular.forEach(singlePage.UrlList(), (t, i) => {
         if (t && !newUrl.includes(tag))
-            newUrl += '/' + t + (conf.fr[singlePage.X_UrlTag(i)].children.includes(tag) ? '/' + tagId : '')
+            if (conf.fr[singlePage.X_UrlTag(i)].children)
+                newUrl += '/' + t + (conf.fr[singlePage.X_UrlTag(i)].children.includes(tag) ? '/' + tagId : '')
     })
     return newUrl
 }
 singlePage.LinkUp = (fromTag, toTag, r) => {
-    let fromTagId = '/' + fromTag + (r[conf.fr[fromTag].frn.toLowerCase() + '_id'] ? ('_' + r[conf.fr[fromTag].frn.toLowerCase() + '_id']) : '')
-    let linkUp = singlePage.Url().split(fromTagId)[0] + fromTagId
-        + '/' + toTag + (r[conf.fr[toTag].frn.toLowerCase() + '_id'] ? ('_' + r[conf.fr[toTag].frn.toLowerCase() + '_id']) : '')
+    let fromTagId = '', linkUp = ''
+    if (!fromTag || !conf.fr[fromTag] || !conf.fr[fromTag].frn || !r)
+        console.log('ERROR: ',fromTag, conf.fr[fromTag], r)
+    else {
+        fromTagId = '/' + fromTag + (r[conf.fr[fromTag].frn.toLowerCase() + '_id'] ? ('_' + r[conf.fr[fromTag].frn.toLowerCase() + '_id']) : '')
+        linkUp = singlePage.Url().split(fromTagId)[0] + fromTagId
+            + '/' + toTag + (r[conf.fr[toTag].frn.toLowerCase() + '_id'] ? ('_' + r[conf.fr[toTag].frn.toLowerCase() + '_id']) : '')
+    }
     if (singlePage.Url().includes(linkUp)) linkUp = singlePage.Url().split(fromTagId)[0] + fromTagId
     return linkUp
 }

@@ -15,7 +15,9 @@ app.directive('amRsRow', ($compile) => {
                 angular.forEach(a.innerHtml.split('.'),
                     (v) => innerHtml = innerHtml ? innerHtml[v] : confEl[v])
             if (a.innerHtmlRaw) innerHtml = a.innerHtmlRaw
-            if (!innerHtml) innerHtml = confEl.amRsRowHtml
+            if (!innerHtml)
+                if (confEl)
+                    innerHtml = confEl.amRsRowHtml
             // console.log(tag, s, e, a, singlePage.LastUrl(), innerHtml)
             if (innerHtml) {
                 e.html(innerHtml)
@@ -147,7 +149,7 @@ class RouteProviderConfig {
         angular.forEach(conf.fr, (v, k1) => {
             $routeProvider.when('/' + k1, rpo)
             let k1Id = kIdREST('', k1)
-            angular.forEach(conf.fr[k1].children, (k2) => {actory
+            angular.forEach(conf.fr[k1].children, (k2) => {
                 $routeProvider.when('/' + k1 + '/' + k2, rpo)
                 $routeProvider.when('/' + k1Id + '/' + k2, rpo)
                 let k12Id = kIdREST('/' + k1Id, k2)
@@ -170,3 +172,4 @@ class InitPageController extends AbstractController {
     }
 }
 app.controller("InitPageController", InitPageController)
+console.log(2, InitPageController)
