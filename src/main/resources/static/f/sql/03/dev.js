@@ -35,7 +35,7 @@ class InitFHIResourceController extends AbstractController {
         super()
         this.dataBeFactory = dataBeFactory
         this.editFRFactory = editFRFactory
-        // console.log('--InitFHIResourceController--', singlePage.Url(), singlePage.Url().split('/').length - 1, singlePage.LastUrl(), singlePage.LastUrlTag(), singlePage.LastUrlIdName())
+        console.log('--InitFHIResourceController--', singlePage.Url(), singlePage.Url().split('/').length - 1, singlePage.LastUrl(), singlePage.LastUrlTag(), singlePage.LastUrlIdName())
         if (conf.fr[singlePage.LastUrlTag()].sql_app) {
             let sql = sql_app[conf.fr[singlePage.LastUrlTag()].sql_app]()
             if (sql.includes(':sql_app')) sql = sql_app.concatSql(sql)
@@ -61,9 +61,10 @@ class InitFHIResourceController extends AbstractController {
             if (x_Url && x_Url.split('_')[1]) { //tag with id
                 let tag = x_Url.split('_')[0], tag_id = x_Url.split('_')[1]
                 if (!conf.fr[tag].currEl || conf.fr[tag].currEl[singlePage.TagIdName(tag)] != tag_id) {
-                    // console.log(tag,conf.fr[tag].sql_app)
+                    console.log(conf.fr[tag].sql_app)
                     let sql = sql_app.concatSql(sql_app[conf.fr[tag].sql_app]())
                     sql = 'SELECT * FROM (' + sql + ') x  WHERE ' + singlePage.TagIdName(tag) + ' = ' + tag_id
+                    // console.log(tag,conf.fr[tag].sql_app, sql)
                     dataBeFactory.httpGet({ sql: sql })
                         .then((dataSqlRequest) => {
                             conf.fr[tag].currEl = dataSqlRequest.list[0]

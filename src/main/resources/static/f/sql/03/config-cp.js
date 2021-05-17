@@ -82,10 +82,9 @@ conf.fr.mr = {
     <span data-ng-if="r.timing_id">кожні {{r.period}} {{r.periodunit}}</span> \n\
     <span class="w3-tiny" data-ng-if="!r.medication_id">id={{r.medicationrequest_id}}</span>',
 }
-console.log(10)
 conf.fr.de = {
     frn: 'Dosage',
-    children: ['qy', 'tg'],
+    children: ['qy', 'tg','ro'],
     sql_app: 'tableOfFHIR_doseQuantity_timingPeriod',
     amRsRowHtml: '<span>{{r.quantity_value}} {{r.quantity_code}}</span> \n\
     <span data-ng-if="r.timing_id">кожні {{r.period}} {{r.periodunit}}</span>',

@@ -14,25 +14,23 @@
         </div>
     </div>
     <div class="w3-twothird w3-border-left">
-        <span class="w3-tiny am-b">
-            {{ctrl.conf.currentX.getAttribute('xsi:type').split(':')[1]}}
-        </span>
-        {{ctrl.conf.currentX.getAttribute('name')}}
-        <span data-ng-if="ctrl.conf.currentX">
-            {{ctrl.conf.currentX.id}}
-            <div data-ng-if="ctrl.conf.currentX.getAttribute('xsi:type')=='archimate:ArchimateDiagramModel'">
-                <!--
-                <div
-                style="background-image: url('/f/archimate/html-regulations-data-model/id-31fd40071bca4a548b9948ddce7b8b18/images/id-7f273c2c266447d989cb8f7eebf63852.png');"
-                ></div>
-                <div
-                ng-style="background-image: url('/f/archimate/html-regulations-data-model/id-31fd40071bca4a548b9948ddce7b8b18/images/{{ctrl.conf.currentX.id}}.png');"
-                ></div>
-                -->
-                <img data-ng-if="ctrl.conf.currentX.id"
-                    src="/f/archimate/html-{{ctrl.xmlDoc.firstChild.getAttribute('name')}}/{{ctrl.xmlDoc.firstChild.id}}/images/{{ctrl.conf.currentX.id}}.png">
-                <div data-ng-include="'viewContent.html'"></div>
-            </div>
-        </span>
+        <span class="w3-tiny am-b"> {{ctrl.conf.currentX.getAttribute('xsi:type').split(':')[1]}} </span>
+        <span class="am-u"> {{ctrl.conf.currentX.getAttribute('name')}} </span>
+        <!--
+            <span class="w3-tiny" data-ng-if="ctrl.conf.currentX">
+                {{ctrl.conf.currentX.id}}
+            </span>
+        -->
+        <div data-ng-if="ctrl.conf.currentX.getAttribute('xsi:type')=='archimate:ArchimateDiagramModel'">
+            <!--
+            <div
+            style="background-image: url('/f/archimate/html-regulations-data-model/id-31fd40071bca4a548b9948ddce7b8b18/images/id-7f273c2c266447d989cb8f7eebf63852.png');"
+            ></div>
+            <div
+            ng-style="background-image: url('/f/archimate/html-regulations-data-model/id-31fd40071bca4a548b9948ddce7b8b18/images/{{ctrl.conf.currentX.id}}.png');"
+            ></div>
+            -->
+            <div data-ng-include="'viewContent.html'"></div>
+        </div>
     </div>
 </div>

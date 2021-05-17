@@ -1,5 +1,10 @@
 <div>
-    <div class="w3-tiny w3-border-bottom w3-container">
+    <div class="am-b" data-ng-repeat="ve in ctrl.conf.currentX.children" data-ng-if="ve.localName=='documentation'">
+        {{ve.innerHTML}}
+    </div>
+    <img data-ng-if="ctrl.conf.currentX.id"
+        src="/f/archimate/html-{{ctrl.xmlDoc.firstChild.getAttribute('name')}}/{{ctrl.xmlDoc.firstChild.id}}/images/{{ctrl.conf.currentX.id}}.png">
+    <div class="w3-tiny w3-border-top w3-container">
         Змість view
     </div>
     <!--
