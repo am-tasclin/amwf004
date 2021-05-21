@@ -1,5 +1,9 @@
 'use strict';
 const singlePage = {}, conf = {}, sql_app = {}
+// conf.filePath = 'http://algoritmed.com/archi003/f/AlgoritmedFHIR-202104.archimate.xml'
+conf.filePath = '/f/archimate/AlgoritmedFHIR-202104.archimate.xml'
+// let filePath = '/f/archimate/regulations-data-model.archimate.xml'
+conf.clickTest = (x) => { console.log(x.id)}
 // lib singlePage
 import('/f/js/lib.singlePage001.js')
 var app = angular.module("app", ['ngRoute', 'ngResource', 'ngSanitize']);
@@ -93,21 +97,18 @@ class InitPageController {
         this.conf = conf
         const ctrl = this
         ctrl.singlePage = singlePage
-        let filePath = '/f/archimate/AlgoritmedFHIR-202104.archimate.xml'
-        // let filePath = '/f/archimate/regulations-data-model.archimate.xml'
-        $http.get(filePath)
-            .then((response) => {
-                const xmlDoc = parser.parseFromString(response.data, "text/xml")
-                ctrl.xmlDoc = xmlDoc
-                console.log(xmlDoc.firstChild.getAttribute('name'), xmlDoc.firstChild)
-                conf.firstListIds = []
-                angular.forEach(xmlDoc.firstChild.children, (x) => initPageMap(x))
-                let vf = conf.firstListIds.splice(conf.firstListIds.length - 1, 1)
-                conf.firstListIds.splice(0, 0, vf)
-                console.log(conf.firstListIds)
-                console.log(singlePage.Url())
-                console.log(singlePage.LastUrlId())
-            })
+        $http.get(conf.filePath).then((response) => {
+            const xmlDoc = parser.parseFromString(response.data, "text/xml")
+            ctrl.xmlDoc = xmlDoc
+            console.log(xmlDoc.firstChild.getAttribute('name'), xmlDoc.firstChild)
+            conf.firstListIds = []
+            angular.forEach(xmlDoc.firstChild.children, (x) => initPageMap(x))
+            let vf = conf.firstListIds.splice(conf.firstListIds.length - 1, 1)
+            conf.firstListIds.splice(0, 0, vf)
+            console.log(conf.firstListIds)
+            console.log(singlePage.Url())
+            console.log(singlePage.LastUrlId())
+        })
     }
 }
 app.controller("InitPageController", InitPageController)

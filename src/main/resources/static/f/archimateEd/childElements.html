@@ -2,6 +2,11 @@
     <a href="#!/el_{{x.id}}" data-ng-click="ctrl.am2f.clickAmItem(x)">
         <div class="w3-hover-shadow" data-ng-class="{'w3-light-gray':ctrl.conf.currentX.id==x.id}">
             <span class="w3-tiny am-b"> {{x.localName}} </span> {{x.getAttribute('name')}}
+            <span data-ng-if="x.localName=='child'" class="w3-tiny">
+                x/y/w/h
+                {{x.firstElementChild.getAttribute('x')}}/{{x.firstElementChild.getAttribute('y')
+                }}/{{x.firstElementChild.getAttribute('width')}}/{{x.firstElementChild.getAttribute('height')}}
+            </span>
         </div>
     </a>
     <div data-ng-if="ctrl.conf.openedFolderList.includes(x.id)" class="w3-container w3-border-left"
