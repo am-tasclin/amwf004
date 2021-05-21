@@ -69,11 +69,13 @@ sql_app.tableOfFHIR_Substance_code = () => {
     return sql
 }
 sql_app.tableOfFHIR_Quantity = () => {
-    let sql = 'SELECT i.value quantity_value, dc.value quantity_code, d.*, dc.reference2 quantity_code_id, d.doc_id quantity_id FROM doc d \n\
-    LEFT JOIN integer i ON i.integer_id=d.doc_id \n\
+    let sql = 'SELECT i.value quantity_value, f.value quantity_valuef, quantityCode.value quantity_code, quantityCode.reference2 quantity_code_id, quantityNum.doc_id quantity_id  \n\
+    , quantityNum.* FROM doc quantityNum \n\
+    LEFT JOIN integer i ON i.integer_id=quantityNum.doc_id \n\
+    LEFT JOIN double f ON f.double_id=quantityNum.doc_id \n\
     LEFT JOIN ( SELECT d.*, value FROM doc d,string WHERE reference2=string_id \n\
-    ) dc ON dc.parent=d.doc_id AND dc.reference = 368641 \n\
-    WHERE d.reference=368637 AND d.reference2=368636'
+    ) quantityCode ON quantityCode.parent=quantityNum.doc_id AND quantityCode.reference = 368641 \n\
+    WHERE quantityNum.reference=368637 AND quantityNum.reference2=368636'
     return sql
 }
 sql_app.tableOfFHIR_MedicationRequest_sc_doseQuantityTimingPeriod = () => {
