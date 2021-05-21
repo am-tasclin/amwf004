@@ -2,17 +2,15 @@
     <div class="am-b" data-ng-repeat="ve in ctrl.conf.currentX.children" data-ng-if="ve.localName=='documentation'">
         {{ve.innerHTML}}
     </div>
+    <span class="w3-tiny"> {{ctrl.conf.filePath}} </span>
     <div data-ng-include="'xSvg.html'"></div>
-    {{ctrl.conf.filePath}}
     <!--
     <img data-ng-if="ctrl.conf.currentX.id"
         src="http://algoritmed.com/html-{{ctrl.xmlDoc.firstChild.getAttribute('name')}}/{{ctrl.xmlDoc.firstChild.id}}/images/{{ctrl.conf.currentX.id}}.png">
         <img data-ng-if="ctrl.conf.currentX.id"
         src="/f/archimate/html-{{ctrl.xmlDoc.firstChild.getAttribute('name')}}/{{ctrl.xmlDoc.firstChild.id}}/images/{{ctrl.conf.currentX.id}}.png">
     -->
-    <div class="w3-tiny w3-border-top w3-container">
-        Змість view
-    </div>
+    <div class="w3-tiny w3-border-top w3-container"> Змість view </div>
     <!--
         {{ctrl.conf.currentX.id}}
     -->

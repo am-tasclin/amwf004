@@ -3,7 +3,7 @@ const singlePage = {}, conf = {}, sql_app = {}
 // conf.filePath = 'http://algoritmed.com/archi003/f/AlgoritmedFHIR-202104.archimate.xml'
 conf.filePath = '/f/archimate/AlgoritmedFHIR-202104.archimate.xml'
 // let filePath = '/f/archimate/regulations-data-model.archimate.xml'
-conf.clickTest = (x) => { console.log(x.id)}
+conf.clickTest = (x) => { console.log(x.id) }
 // lib singlePage
 import('/f/js/lib.singlePage001.js')
 var app = angular.module("app", ['ngRoute', 'ngResource', 'ngSanitize']);
@@ -112,4 +112,3 @@ class InitPageController {
     }
 }
 app.controller("InitPageController", InitPageController)
-
