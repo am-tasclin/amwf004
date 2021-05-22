@@ -5,7 +5,7 @@
     <span class="w3-tiny"> {{ctrl.conf.filePath}} </span>
     <div data-ng-include="'xSvg.html'"></div>
     <div class="w3-border" data-ng-if="ctrl.conf.elMap[ctrl.conf.clickEl.id].getAttribute('archimateElement')">
-        <div class="w3-small am-b w3-blue-gray">
+        <div class="w3-small am-b w3-blue-gray w3-center">
             {{ctrl.conf.elMap[
                 ctrl.conf.elMap[ctrl.conf.clickEl.id].getAttribute('archimateElement')
                 ].getAttribute('name')}}
@@ -13,15 +13,17 @@
                         class="far fa-window-close"></i></a>
         </div>
         <span class="w3-small am-b">views:</span>
-        <span data-ng-repeat="x in ctrl.conf.clickEl.views">
-            <a href="#!/el_{{x}}">
-                {{ctrl.conf.elMap[x].getAttribute('name')}}</a>,
+        <span data-ng-repeat="xId in ctrl.conf.clickEl.views">
+            <a href="#!/el_{{xId}}"
+            data-ng-class="{'w3-bottombar':ctrl.conf.currentX.id==xId}"
+            >
+                {{ctrl.conf.elMap[xId].getAttribute('name')}}</a>,
         </span>
     </div>
     <div class="w3-tiny w3-border-top w3-container w3-light-grey">
         Змість view
         |
-        <span data-ng-class="{'w3-topbar':
+        <span data-ng-class="{'w3-bottombar':
             ctrl.conf.elMap[ctrl.conf.clickEl.id].getAttribute('archimateElement')}">
             clickElement
         </span>

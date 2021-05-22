@@ -13,7 +13,6 @@ conf.elMap = {}
 conf.clickSvg = (x) => {
     conf.clickEl = { id: x.id, views: [] }
     conf.clickEl.aElId = conf.elMap[conf.clickEl.id].getAttribute('archimateElement')
-    let xA = []
     angular.forEach(conf.elMap, y => {
         if (y.getAttribute('archimateElement') == conf.clickEl.aElId) {
             conf.clickEl.views.push(y.parentElement.id)
