@@ -1,7 +1,7 @@
 conf.fr = {} //FHIR
 conf.fr.cp = {
     frn: 'CarePlan',
-    children: ['mr'],
+    children: ['mr','gl','on'],
     sql_app: 'tableOfFHIR_CarePlan',
     sql_app_children: [{ fr: 'mr', sql_app: 'tableOfFHIR_CarePlan_plannedActivityReference_mr' }],
     amRsRowHtml: '<span>{{r.fhir_domainresource}}</span>',
@@ -247,6 +247,13 @@ conf.fr.ro = {
             },
         }
     },
+}
+conf.fr.on = {
+    frn: 'Observation',
+}
+conf.fr.gl = {
+    frn: 'Goal',
+    children: ['on'],
 }
 conf.fr.qy = {
     frn: 'Quantity',

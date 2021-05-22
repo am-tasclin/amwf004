@@ -3,14 +3,24 @@ const singlePage = {}, conf = {}, sql_app = {}
 // conf.filePath = 'http://algoritmed.com/archi003/f/AlgoritmedFHIR-202104.archimate.xml'
 conf.filePath = '/f/archimate/AlgoritmedFHIR-202104.archimate.xml'
 // let filePath = '/f/archimate/regulations-data-model.archimate.xml'
-conf.clickTest = (x) => { console.log(x.id) }
 // lib singlePage
-import('/f/js/lib.singlePage001.js')
 var app = angular.module("app", ['ngRoute', 'ngResource', 'ngSanitize']);
 angular.element(() => angular.bootstrap(document, ['app']))
 const parser = new DOMParser()
 conf.openedFolderList = []
 conf.elMap = {}
+
+conf.clickSvg = (x) => {
+    conf.clickEl = { id: x.id, views: [] }
+    conf.clickEl.aElId = conf.elMap[conf.clickEl.id].getAttribute('archimateElement')
+    let xA = []
+    angular.forEach(conf.elMap, y => {
+        if (y.getAttribute('archimateElement') == conf.clickEl.aElId) {
+            conf.clickEl.views.push(y.parentElement.id)
+        }
+    })
+    console.log(conf.clickEl.views)
+}
 
 //app.factory("am2f", ArchiMateFileFactory)
 class ArchiMateFileFactory {
@@ -36,6 +46,7 @@ app.factory("am2f", ArchiMateFileFactory)
 
 // app.config(InitArchiMateElementController)
 const forEachParent = (el, fLambda) => {
+    // fLambda(el)
     if (el.parentElement) {
         fLambda(el.parentElement)
         forEachParent(el.parentElement, fLambda)
@@ -43,10 +54,18 @@ const forEachParent = (el, fLambda) => {
 }
 class InitArchiMateElementController {
     constructor(am2f) {
-        console.log(singlePage.LastUrlId(), conf.elMap)
         conf.currentX = conf.elMap[singlePage.LastUrlId()]
-        if (conf.currentX)
+        console.log(singlePage.LastUrlId(), conf.currentX, conf.clickEl)
+        if (conf.currentX) {
             forEachParent(conf.currentX, (x) => conf.openedFolderList.push(x.id))
+            conf.currentX.yMax = 0
+            angular.forEach(conf.currentX.childNodes, (x) => {
+                if (x && x.localName == 'child')
+                    conf.currentX.yMax = Math.max(conf.currentX.yMax,
+                        1 * x.firstElementChild.getAttribute('y')
+                        + 1 * x.firstElementChild.getAttribute('height'))
+            })
+        }
     }
 }
 app.controller('InitArchiMateElementController', InitArchiMateElementController)
@@ -78,18 +97,11 @@ app.config(RouteProviderConfig)
 // app.controller("InitPageController", InitPageController)
 const initPageMap = (x) => {
     conf.firstListIds.push(x.id)
-    conf.elMap[x.id] = x
-    initDeepElMap(x)
+    initDeepElMap(conf.elMap[x.id] = x)
 }
-const initDeepElMap = (x) => {
-    // if (x.children) 
-    angular.forEach(x.children, (x) => {
-        if (x.id) {
-            conf.elMap[x.id] = x
-            initDeepElMap(x)
-        }
-    })
-}
+const initDeepElMap = (x) =>
+    angular.forEach(x.children, (x) => x.id ? initDeepElMap(conf.elMap[x.id] = x) : null)
+
 class InitPageController {
     am2f
     constructor($http, am2f) {
@@ -100,7 +112,7 @@ class InitPageController {
         $http.get(conf.filePath).then((response) => {
             const xmlDoc = parser.parseFromString(response.data, "text/xml")
             ctrl.xmlDoc = xmlDoc
-            console.log(xmlDoc.firstChild.getAttribute('name'), xmlDoc.firstChild)
+            console.log(xmlDoc.firstChild.getAttribute('name'))
             conf.firstListIds = []
             angular.forEach(xmlDoc.firstChild.children, (x) => initPageMap(x))
             let vf = conf.firstListIds.splice(conf.firstListIds.length - 1, 1)
@@ -112,3 +124,9 @@ class InitPageController {
     }
 }
 app.controller("InitPageController", InitPageController)
+
+singlePage.Url = () => window.location.href.split('#!')[1]
+
+singlePage.LastUrl = () => singlePage.Url() ? singlePage.Url().split('/')[singlePage.Url().split('/').length - 1] : ''
+singlePage.LastUrlTag = () => singlePage.LastUrl().split('_')[0]
+singlePage.LastUrlId = () => singlePage.LastUrl().split('_')[1]

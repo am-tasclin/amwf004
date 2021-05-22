@@ -1,19 +1,15 @@
 <div>
-    <svg width="550" height="450">
-        <!--
-            <image data-ng-if="ctrl.conf.currentX.id"
-            href="http://algoritmed.com/html-{{ctrl.xmlDoc.firstChild.getAttribute('name')}}/{{ctrl.xmlDoc.firstChild.id}}/images/{{ctrl.conf.currentX.id}}.png">
-        </image>
-    -->
+    <svg width="550" height="{{ctrl.conf.currentX.yMax}}">
         <image data-ng-if="ctrl.conf.currentX.id"
             href="/f/archimate/html-{{ctrl.xmlDoc.firstChild.getAttribute('name')}}/{{ctrl.xmlDoc.firstChild.id}}/images/{{ctrl.conf.currentX.id}}.png">
         </image>
-        <rect width="550" height="450" stroke="green" stroke-width="1" fill-opacity="0.0025" />
+        <rect width="550" height="{{ctrl.conf.currentX.yMax}}" stroke="green" stroke-width="1" fill-opacity="0.0025" />
         <rect x="{{x.firstElementChild.getAttribute('x')}}" y="{{x.firstElementChild.getAttribute('y')}}"
             width="{{x.firstElementChild.getAttribute('width')}}"
-            height="{{x.firstElementChild.getAttribute('height')}}" st1roke="green" stroke-width=".1"
+            height="{{x.firstElementChild.getAttribute('height')}}" stroke="green" 
+            stroke-width="{{ctrl.conf.clickEl.aElId==x.getAttribute('archimateElement')?0.5:0.01}}"
             fill-opacity="0.0125" data-ng-repeat="x in ctrl.conf.currentX.children"
-            data-ng-click="ctrl.conf.clickTest(x)" />
+            data-ng-click="ctrl.conf.clickSvg(x)" />
         Sorry, your browser does not support inline SVG.
     </svg>
 </div>
