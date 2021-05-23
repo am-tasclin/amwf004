@@ -122,6 +122,10 @@ sql_app.simpleSQLs = {
         tree_id: 'dosequantity_id',
         sqlHtml: { dosequantity_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
     },
+    tableOfFHIR_Observation_valueQuantity: {
+        c: sql_app.tableOfFHIR_Observation_valueQuantity(),
+        sqlHtml: { observation_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
+    },
     tableOfFHIR_ValueSet_cd: {
         c: sql_app.tableOfFHIR_ValueSet_cd(),
         sqlHtml: { code_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },

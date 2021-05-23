@@ -6,10 +6,17 @@
         <span class="w3-tiny"> {{ctrl.conf.filePath}} </span>
     -->
     <div class="w3-border" data-ng-if="ctrl.conf.elMap[ctrl.conf.clickEl.id].getAttribute('archimateElement')">
-        <div class="w3-small am-b w3-light-grey w3-center">
-            {{ctrl.conf.elMap[
-            ctrl.conf.elMap[ctrl.conf.clickEl.id].getAttribute('archimateElement')
-            ].getAttribute('name')}}
+        <div class="w3-small w3-light-grey w3-center">
+            <span class="w3-tiny">
+                {{ctrl.conf.elMap[
+                ctrl.conf.elMap[ctrl.conf.clickEl.id].getAttribute('archimateElement')
+                ].getAttribute('xsi:type').split(':')[1]}}:
+            </span>
+            <span class="am-b">
+                {{ctrl.conf.elMap[
+                ctrl.conf.elMap[ctrl.conf.clickEl.id].getAttribute('archimateElement')
+                ].getAttribute('name')}}
+            </span>
             <a data-ng-click="ctrl.conf.clickEl=null" href="" class="w3-right"><i class="far fa-window-close"></i></a>
         </div>
         <span class="w3-small am-b">views:</span>
@@ -28,10 +35,15 @@
         </span>
     </div>
     <div data-ng-repeat="ve in ctrl.conf.currentX.children ">
-        <span class="w3-tiny am-b" title="{{ve.id}}">
-            {{ctrl.conf.elMap[ve.getAttribute('archimateElement')].getAttribute('xsi:type').split(':')[1]}}
-        </span>
-        {{ctrl.conf.elMap[ve.getAttribute('archimateElement')].getAttribute('name')}}
+        <div data-ng-class="{'w3-light-grey':ve.id==ctrl.conf.clickEl.id}"
+        class="w3-hover-shadow"
+        data-ng-click="ctrl.conf.clickSvg(ve)"
+        >
+            <span class="w3-tiny am-b" title="{{ve.id}}">
+                {{ctrl.conf.elMap[ve.getAttribute('archimateElement')].getAttribute('xsi:type').split(':')[1]}}
+            </span>
+            {{ctrl.conf.elMap[ve.getAttribute('archimateElement')].getAttribute('name')}}
+        </div>
         <div data-ng-include="'viewContentParams.html'"></div>
         <div data-ng-repeat="ve in ve.children" data-ng-if="ve.localName=='child'" class="w3-container">
             <span class="w3-tiny am-b" title="{{ve.id}}">

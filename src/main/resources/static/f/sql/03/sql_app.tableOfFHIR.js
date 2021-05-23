@@ -37,6 +37,16 @@ sql_app.tableOfFHIR_doseQuantity = () => {
     WHERE doseQuantity.reference=369975'
     return sql
 }
+sql_app.tableOfFHIR_Observation_valueQuantity = () => {
+    let sql = 'SELECT observation.doc_id observation_id, valueset.*, f1.value valueQuantity_f, s3.value vU , valueQuantity.doc_id valueQuantity_id FROM doc observation \n\
+    LEFT JOIN (:sql_app.tableOfFHIR_ValueSet_cd \n\
+    ) valueset ON valueset.code_id=observation.reference2 \n\
+    LEFT JOIN doc  valueQuantity ON  valueQuantity.parent=observation.doc_id \n\
+    LEFT JOIN double  f1 ON f1.double_id=valueQuantity.doc_id \n\
+    left join string s3 ON s3.string_id=valueQuantity.reference2 \n\
+    where observation.reference=368605 and observation.reference2=372972'
+    return sql
+}
 sql_app.tableOfFHIR_ValueSet_cd = () => {
     let sql = 'SELECT s1.value code, code.doc_id code_id, s2.value display, display.doc_id display_id FROM doc code \n\
     LEFT JOIN string s1 ON s1.string_id=code.doc_id \n\
