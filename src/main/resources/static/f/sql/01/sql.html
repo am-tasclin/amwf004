@@ -14,7 +14,7 @@
         </div>
     </span>
     <span data-ng:if="ctrl.simpleSQLs[ctrl.simpleSQLselect].newDocMenu" data-am:create:doc></span>
-    <pre class="w3-tiny w3-border">{{ctrl.getSelectSql()}}</pre>
+    <pre class="w3-tiny w3-border" ng-bind-html="ctrl.sqlAppToLink(ctrl.getSelectSql(), ':sql_app.')"></pre>
     <div style="height:60vh; overflow:auto;" class="w3-border">
         <table>
             <thead class="w3-blue-gray w3-small">

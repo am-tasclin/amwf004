@@ -122,6 +122,10 @@ sql_app.simpleSQLs = {
         tree_id: 'dosequantity_id',
         sqlHtml: { dosequantity_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
     },
+    tableOfFHIR_ValueSet_cd: {
+        c: sql_app.tableOfFHIR_ValueSet_cd(),
+        sqlHtml: { code_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
+    },
     tableOfFHIR_Timing_period: {
         c: sql_app.tableOfFHIR_Timing_period(),
         sqlHtml: { period_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
@@ -799,6 +803,7 @@ class SqlController extends SqlAbstractController {
         this.choisedListItem = 0
         if (!this.data) this.readSql(sql_app.simpleSQLselect)
         this.tut = 'tutorial links'
+        this.sqlAppToLink = conf.sqlAppToLink
     }
     getSelectSql = () => {
         return sql_app.simpleSQLs[sql_app.simpleSQLselect].c
@@ -819,3 +824,13 @@ class RouteProviderConfig {
     }
 }
 app.config(RouteProviderConfig)
+
+conf.highlight =  (text, search) => {
+    if (!text) return
+    if (!search) return text
+    return ('' + text).replace(new RegExp(search, 'gi'), '<span class="w3-yellow">$&</span>')
+}
+conf.sqlAppToLink =  (text) => {
+    if (!text) return
+    return ('' + text).replace(new RegExp(':(sql_app\\.)(\\w+)', 'gi'), ':<b>$1<a href="#!/sql/$2">$2</a></b>')
+}

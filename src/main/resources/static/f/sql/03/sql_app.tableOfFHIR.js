@@ -37,6 +37,14 @@ sql_app.tableOfFHIR_doseQuantity = () => {
     WHERE doseQuantity.reference=369975'
     return sql
 }
+sql_app.tableOfFHIR_ValueSet_cd = () => {
+    let sql = 'SELECT s1.value code, code.doc_id code_id, s2.value display, display.doc_id display_id FROM doc code \n\
+    LEFT JOIN string s1 ON s1.string_id=code.doc_id \n\
+    LEFT JOIN doc display ON display.parent=code.doc_id \n\
+    LEFT JOIN string s2 ON s2.string_id=display.doc_id \n\
+    WHERE code.reference=372051'
+    return sql
+}
 sql_app.tableOfFHIR_Timing_period = () => {
     let sql = 'SELECT period.doc_id timing_id,  period.doc_id period_id, pi.value period, pu.value periodUnit \n\
     FROM doc period \n\

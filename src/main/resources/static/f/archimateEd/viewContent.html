@@ -2,24 +2,23 @@
     <div class="am-b" data-ng-repeat="ve in ctrl.conf.currentX.children" data-ng-if="ve.localName=='documentation'">
         {{ve.innerHTML}}
     </div>
-    <span class="w3-tiny"> {{ctrl.conf.filePath}} </span>
-    <div data-ng-include="'xSvg.html'"></div>
+    <!--
+        <span class="w3-tiny"> {{ctrl.conf.filePath}} </span>
+    -->
     <div class="w3-border" data-ng-if="ctrl.conf.elMap[ctrl.conf.clickEl.id].getAttribute('archimateElement')">
-        <div class="w3-small am-b w3-blue-gray w3-center">
+        <div class="w3-small am-b w3-light-grey w3-center">
             {{ctrl.conf.elMap[
-                ctrl.conf.elMap[ctrl.conf.clickEl.id].getAttribute('archimateElement')
-                ].getAttribute('name')}}
-                <a data-ng-click="ctrl.conf.clickEl=null" href="" class="w3-right"><i
-                        class="far fa-window-close"></i></a>
+            ctrl.conf.elMap[ctrl.conf.clickEl.id].getAttribute('archimateElement')
+            ].getAttribute('name')}}
+            <a data-ng-click="ctrl.conf.clickEl=null" href="" class="w3-right"><i class="far fa-window-close"></i></a>
         </div>
         <span class="w3-small am-b">views:</span>
         <span data-ng-repeat="xId in ctrl.conf.clickEl.views">
-            <a href="#!/el_{{xId}}"
-            data-ng-class="{'w3-bottombar':ctrl.conf.currentX.id==xId}"
-            >
+            <a href="#!/el_{{xId}}" data-ng-class="{'w3-bottombar':ctrl.conf.currentX.id==xId}">
                 {{ctrl.conf.elMap[xId].getAttribute('name')}}</a>,
         </span>
     </div>
+    <div style="margin-top: 7px;" data-ng-include="'xSvg.html'"></div>
     <div class="w3-tiny w3-border-top w3-container w3-light-grey">
         Змість view
         |

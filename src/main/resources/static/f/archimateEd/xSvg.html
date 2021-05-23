@@ -8,7 +8,8 @@
             width="{{x.firstElementChild.getAttribute('width')}}"
             height="{{x.firstElementChild.getAttribute('height')}}" stroke="green" 
             stroke-width="{{ctrl.conf.clickEl.aElId==x.getAttribute('archimateElement')?0.5:0.01}}"
-            fill-opacity="{{ctrl.conf.clickEl.aElId==x.getAttribute('archimateElement')?0.1:0.01}}" data-ng-repeat="x in ctrl.conf.currentX.children"
+            fill-opacity="{{ctrl.conf.clickEl.aElId==x.getAttribute('archimateElement')?0.1:0.01}}" 
+            data-ng-repeat="x in ctrl.conf.currentX.children"
             data-ng-click="ctrl.conf.clickSvg(x)" />
         Sorry, your browser does not support inline SVG.
     </svg>
