@@ -130,6 +130,18 @@ sql_app.simpleSQLs = {
         c: sql_app.tableOfFHIR_ValueSet_cd(),
         sqlHtml: { code_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
     },
+    tableOfFHIR_Observetion_referenceRange: {
+        c: sql_app.tableOfFHIR_Observetion_referenceRange(),
+        sqlHtml: { observation_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
+    },
+    tableOfFHIR_labor_constant: {
+        c: sql_app.tableOfFHIR_labor_constant(),
+        sqlHtml: { val_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
+    },
+    tableOfFHIR_on_referenceRange: {
+        c: sql_app.tableOfFHIR_on_referenceRange(),
+        sqlHtml: { type_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
+    },
     tableOfFHIR_Timing_period: {
         c: sql_app.tableOfFHIR_Timing_period(),
         sqlHtml: { period_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },

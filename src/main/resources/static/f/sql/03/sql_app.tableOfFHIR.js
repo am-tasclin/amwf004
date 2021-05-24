@@ -38,13 +38,13 @@ sql_app.tableOfFHIR_doseQuantity = () => {
     return sql
 }
 sql_app.tableOfFHIR_Observation_valueQuantity = () => {
-    let sql = 'SELECT observation.doc_id observation_id, valueset.*, f1.value valueQuantity_f, s3.value vU , valueQuantity.doc_id valueQuantity_id FROM doc observation \n\
-    LEFT JOIN (:sql_app.tableOfFHIR_ValueSet_cd \n\
-    ) valueset ON valueset.code_id=observation.reference2 \n\
-    LEFT JOIN doc  valueQuantity ON  valueQuantity.parent=observation.doc_id \n\
-    LEFT JOIN double  f1 ON f1.double_id=valueQuantity.doc_id \n\
-    left join string s3 ON s3.string_id=valueQuantity.reference2 \n\
-    where observation.reference=368605 and observation.reference2=372972'
+    let sql = 'SELECT observation.doc_id observation_id, valueset.*, f1.value valueQuantity_f, s3.value vU, valueQuantity.doc_id valueQuantity_id \n\
+    FROM doc observation \n\
+    LEFT JOIN (:sql_app.tableOfFHIR_ValueSet_cd ) valueset ON valueset.code_id=observation.reference2 \n\
+    LEFT JOIN doc valueQuantity ON valueQuantity.parent=observation.doc_id \n\
+    LEFT JOIN double f1 ON f1.double_id=valueQuantity.doc_id \n\
+    LEFT JOIN string s3 ON s3.string_id=valueQuantity.reference2 \n\
+    WHERE observation.reference=368605 AND observation.reference2=372972'
     return sql
 }
 sql_app.tableOfFHIR_ValueSet_cd = () => {
@@ -53,6 +53,40 @@ sql_app.tableOfFHIR_ValueSet_cd = () => {
     LEFT JOIN doc display ON display.parent=code.doc_id \n\
     LEFT JOIN string s2 ON s2.string_id=display.doc_id \n\
     WHERE code.reference=372051'
+    return sql
+}
+sql_app.tableOfFHIR_Observetion_referenceRange = () => {
+    let sql = 'SELECT vscd.*, onrr.*, orr.* FROM ( \n\
+        SELECT observation.doc_id observation_id, observation.reference2 observation_r2, referenceRange.doc_id referenceRange_id \n\
+            FROM doc observation, doc referenceRange \n\
+            WHERE observation.reference=368605 AND observation.reference2=372972 \n\
+            AND observation.doc_id=referenceRange.parent AND referenceRange.reference=372987 \n\
+            ) orr \n\
+            LEFT JOIN (:sql_app.tableOfFHIR_on_referenceRange ) onrr ON onrr.referenceRange_id=orr.referenceRange_id \n\
+            LEFT JOIN (:sql_app.tableOfFHIR_ValueSet_cd ) vscd ON vscd.code_id=orr.observation_r2'
+    return sql
+}
+sql_app.tableOfFHIR_labor_constant = () => {
+    let sql ='SELECT f.value val_f, s.value unit, val_id, unit_id \n\
+    FROM ( SELECT val.doc_id val_id, unit.doc_id unit_id, unit.reference2 unit_r2 \n\
+            FROM doc val, doc unit \n\
+            WHERE val.reference=368637  AND unit.reference=368641 AND val.parent=372980 \n\
+            AND val.doc_id=unit.parent \n\
+            ) vu \n\
+            LEFT JOIN double f ON f.double_id=val_id \n\
+            LEFT JOIN string s ON s.string_id=unit_r2'
+    return sql
+}
+sql_app.tableOfFHIR_on_referenceRange = () => {
+    let sql ='SELECT low.val_f low_val_f, low.unit low_unit, higth.val_f higth_val_f, higth.unit higth_unit, rr.* \n\
+    FROM ( SELECT type.doc_id type_id, type.reference2 type_r2, type.parent referenceRange_id \n\
+        , low.doc_id low_id, low.reference2 low_r2, higth.doc_id higth_id, higth.reference2 higth_r2 \n\
+        FROM doc type, doc low, doc higth \n\
+        WHERE type.reference= 372990 AND low.parent=type.doc_id AND higth.parent=type.doc_id \n\
+        AND low.reference= 372988 AND higth.reference= 372989  \n\
+        ) rr \n\
+        LEFT JOIN (:sql_app.tableOfFHIR_labor_constant ) low  ON low.val_id=low_r2 \n\
+        LEFT JOIN (:sql_app.tableOfFHIR_labor_constant ) higth  ON higth.val_id=higth_r2'
     return sql
 }
 sql_app.tableOfFHIR_Timing_period = () => {
