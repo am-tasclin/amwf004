@@ -242,7 +242,7 @@ conf.fr.ro = {
         amRsRowHtml: "Створити нове <b>співвідношення</b>, величини кількість як чисельник в зв'язку величина кількість як знаменник.",
         sqlCmdMap: {
             insert_doc: {
-                parent: 372804, // [372804]   дані:369358 {368675:Ratio} [2]
+                parent: 372804, // [372804] дані:369358 {368675:Ratio} [2]
                 reference: 368676, //[368676] numerator   Quantity:368636 
             },
         }
@@ -250,6 +250,8 @@ conf.fr.ro = {
 }
 conf.fr.on = {
     frn: 'Observation',
+    sql_app: 'tableOfFHIR_Observation_valueQuantity',
+    amRsRowHtml: "{{r.display}} {{r.valuequantity_f}} {{r.vu}} {{r.referencerange_id?'--referenceRange--':''}}",
 }
 conf.fr.gl = {
     frn: 'Goal',
