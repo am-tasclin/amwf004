@@ -30,11 +30,22 @@ sql_app.tableOfFHIR_doseQuantity_timingPeriod = () => {
         WHERE doseAndRate.doc_id=dosageandrate_id'
     return sql
 }
+sql_app.tableOfFHIR_am001fr_ValueSet_observation_codes = () => {
+    let sql = 'SELECT * FROM doc where reference=372051 and parent = 372971'
+    return sql
+}
 sql_app.tableOfFHIR_doseQuantity = () => {
     let sql = 'SELECT quantity_value, quantity_code, quantity_id, doseQuantity.doc_id doseQuantity_id, doseQuantity.parent dosageandrate_id \n\
     FROM doc doseQuantity \n\
     LEFT JOIN (:sql_app.tableOfFHIR_Quantity ) q ON q.doc_id=doseQuantity.reference2 \n\
     WHERE doseQuantity.reference=369975'
+    return sql
+}
+sql_app.tableOfFHIR_valueQuantity = () => {
+    let sql = 'SELECT f1.value valueQuantity_f, valueQuantity.doc_id valueQuantity_id, comparator, comparator_id,  * FROM doc valueQuantity \n\
+    LEFT JOIN double f1 ON f1.double_id=valueQuantity.doc_id \n\
+    LEFT JOIN (:sql_app.tableOfFHIR_comparator ) comparator ON comparator_parent=valueQuantity.doc_id \n\
+    where valueQuantity.reference=368634'
     return sql
 }
 sql_app.tableOfFHIR_Observation_valueQuantity = () => {
@@ -45,7 +56,8 @@ sql_app.tableOfFHIR_Observation_valueQuantity = () => {
     LEFT JOIN double f1 ON f1.double_id=valueQuantity.doc_id \n\
     LEFT JOIN string s3 ON s3.string_id=valueQuantity.reference2 \n\
     LEFT JOIN doc referenceRange ON observation.doc_id=referenceRange.parent AND referenceRange.reference=372987 \n\
-    WHERE observation.reference=368605 AND observation.reference2=372972'
+    WHERE observation.reference=368605 AND observation.reference2 \n\
+    IN (SELECT doc_id FROM (:sql_app.tableOfFHIR_am001fr_ValueSet_observation_codes )x)'
     return sql
 }
 sql_app.tableOfFHIR_ValueSet_cd = () => {
@@ -119,6 +131,12 @@ sql_app.tableOfFHIR_Task_description = () => {
 sql_app.tableOfFHIR_Substance_code = () => {
     let sql = 'SELECT value substance_code, d.doc_id substance_id FROM doc d \n\
     , string WHERE reference = 370024 and string_id=reference2'
+    return sql
+}
+sql_app.tableOfFHIR_comparator = () => {
+    let sql = 'SELECT value comparator, doc_id comparator_id, parent comparator_parent FROM doc comparator \n\
+    LEFT JOIN string s1 ON s1.string_id=comparator.reference2 \n\
+    WHERE comparator.reference= 368638 '
     return sql
 }
 sql_app.tableOfFHIR_Quantity = () => {
