@@ -30,6 +30,12 @@ sql_app.tableOfFHIR_doseQuantity_timingPeriod = () => {
         WHERE doseAndRate.doc_id=dosageandrate_id'
     return sql
 }
+sql_app.tableOfFHIR_am001fr_Goal = () => {
+    let sql = 'select goal.doc_id goal_id, s.value g_text, * from doc goal \n\
+    left join string s on s.string_id = goal.doc_id \n\
+    where goal.reference =372927'
+    return sql
+}
 sql_app.tableOfFHIR_am001fr_ValueSet_observation_codes = () => {
     let sql = 'SELECT * FROM doc where reference=372051 and parent = 372971'
     return sql

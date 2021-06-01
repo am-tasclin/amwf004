@@ -167,7 +167,10 @@ sql_app.simpleSQLs = {
         c: sql_app.tableOfFHIR_Ratio(),
         sqlHtml: { numerator_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
     },
-
+    tableOfFHIR_am001fr_Goal: {
+        c: sql_app.tableOfFHIR_am001fr_Goal(),
+        sqlHtml: { doc_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
+    },
     tableOfFHIR_valueQuantity: {
         c: sql_app.tableOfFHIR_valueQuantity(),
         sqlHtml: { valuequantity_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },

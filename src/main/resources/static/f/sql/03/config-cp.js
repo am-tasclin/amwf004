@@ -255,6 +255,8 @@ conf.fr.on = {
 }
 conf.fr.gl = {
     frn: 'Goal',
+    sql_app: 'tableOfFHIR_am001fr_Goal',
+    amRsRowHtml: "{{r.g_text}} ",
     children: ['on'],
 }
 conf.fr.qy = {
