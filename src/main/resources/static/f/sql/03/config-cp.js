@@ -250,8 +250,8 @@ conf.fr.ro = {
 }
 conf.fr.on = {
     frn: 'Observation',
-    sql_app: 'tableOfFHIR_Observation_valueQuantity',
-    amRsRowHtml: "{{r.display}} {{r.valuequantity_f}} {{r.vu}} {{r.referencerange_id?'--referenceRange--':''}}",
+    sql_app: 'tableOfFHIR_Observation_valueQuantity002',
+    amRsRowHtml: "{{r.display}} {{r.comparator}} {{r.valuequantity_f}}  {{r.vu}} {{r.referencerange_id?'--referenceRange--':''}}",
 }
 conf.fr.gl = {
     frn: 'Goal',

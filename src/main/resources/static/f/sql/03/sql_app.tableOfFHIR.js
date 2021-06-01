@@ -42,16 +42,27 @@ sql_app.tableOfFHIR_doseQuantity = () => {
     return sql
 }
 sql_app.tableOfFHIR_valueQuantity = () => {
-    let sql = 'SELECT f1.value valueQuantity_f, valueQuantity.doc_id valueQuantity_id, comparator, comparator_id,  * FROM doc valueQuantity \n\
+    let sql = 'SELECT f1.value valueQuantity_f, s3.value vU, valueQuantity.doc_id valueQuantity_id, comparator, comparator_id, valueQuantity.parent valueQuantity_parent \n\
+    FROM doc valueQuantity \n\
     LEFT JOIN double f1 ON f1.double_id=valueQuantity.doc_id \n\
+    LEFT JOIN string s3 ON s3.string_id=valueQuantity.reference2 \n\
     LEFT JOIN (:sql_app.tableOfFHIR_comparator ) comparator ON comparator_parent=valueQuantity.doc_id \n\
     where valueQuantity.reference=368634'
     return sql
 }
+sql_app.tableOfFHIR_Observation_valueQuantity002 = () => {
+    let sql = 'SELECT observation.doc_id observation_id, valuesetObName.*, valueQuantity.*, referenceRange.doc_id referenceRange_id FROM doc observation \n\
+    LEFT JOIN (:sql_app.tableOfFHIR_ValueSet_cd ) valuesetObName ON valuesetObName.code_id=observation.reference2 \n\
+    LEFT JOIN (:sql_app.tableOfFHIR_valueQuantity ) valueQuantity ON valuequantity_parent=observation.doc_id \n\
+    LEFT JOIN doc referenceRange ON observation.doc_id=referenceRange.parent AND referenceRange.reference=372987 \n\
+    WHERE observation.reference=368605 AND observation.reference2 \n\
+    IN (SELECT doc_id FROM (:sql_app.tableOfFHIR_am001fr_ValueSet_observation_codes )x)'
+    return sql
+}
 sql_app.tableOfFHIR_Observation_valueQuantity = () => {
-    let sql = 'SELECT observation.doc_id observation_id, valueset.*, f1.value valueQuantity_f, s3.value vU, valueQuantity.doc_id valueQuantity_id, referenceRange.doc_id referenceRange_id \n\
+    let sql = 'SELECT observation.doc_id observation_id, valuesetObName.*, f1.value valueQuantity_f, s3.value vU, valueQuantity.doc_id valueQuantity_id, referenceRange.doc_id referenceRange_id \n\
     FROM doc observation \n\
-    LEFT JOIN (:sql_app.tableOfFHIR_ValueSet_cd ) valueset ON valueset.code_id=observation.reference2 \n\
+    LEFT JOIN (:sql_app.tableOfFHIR_ValueSet_cd ) valuesetObName ON valuesetObName.code_id=observation.reference2 \n\
     LEFT JOIN doc valueQuantity ON valueQuantity.parent=observation.doc_id \n\
     LEFT JOIN double f1 ON f1.double_id=valueQuantity.doc_id \n\
     LEFT JOIN string s3 ON s3.string_id=valueQuantity.reference2 \n\

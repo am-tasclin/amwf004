@@ -127,6 +127,10 @@ sql_app.simpleSQLs = {
         tree_id: 'dosequantity_id',
         sqlHtml: { dosequantity_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
     },
+    tableOfFHIR_Observation_valueQuantity002: {
+        c: sql_app.tableOfFHIR_Observation_valueQuantity002(),
+        sqlHtml: { observation_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
+    },
     tableOfFHIR_Observation_valueQuantity: {
         c: sql_app.tableOfFHIR_Observation_valueQuantity(),
         sqlHtml: { observation_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
@@ -163,7 +167,7 @@ sql_app.simpleSQLs = {
         c: sql_app.tableOfFHIR_Ratio(),
         sqlHtml: { numerator_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
     },
-    
+
     tableOfFHIR_valueQuantity: {
         c: sql_app.tableOfFHIR_valueQuantity(),
         sqlHtml: { valuequantity_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
