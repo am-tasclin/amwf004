@@ -30,13 +30,31 @@ sql_app.tableOfFHIR_doseQuantity_timingPeriod = () => {
         WHERE doseAndRate.doc_id=dosageandrate_id'
     return sql
 }
-sql_app.tableOfFHIR_am001fr_Goal = () => {
-    let sql = 'select goal.doc_id goal_id, s.value g_text, * from doc goal \n\
-    left join string s on s.string_id = goal.doc_id \n\
-    where goal.reference =372927'
+sql_app.tableOfFHIR_Goal001 = () => {
+    let sql = 'SELECT goal.doc_id goal_id, s.value g_text, ou.* \n\
+	FROM doc goal \n\
+    LEFT JOIN string s ON s.string_id = goal.doc_id \n\
+    LEFT JOIN (:sql_app.tableOfFHIR_observationUse ) ou ON observation_use_parent = goal.doc_id \n\
+    WHERE goal.reference =372927'
     return sql
 }
-sql_app.tableOfFHIR_am001fr_ValueSet_observation_codes = () => {
+sql_app.tableOfFHIR_observationUse = () => {
+    let sql = 'select d.parent observation_use_parent, observation.* \n\
+    FROM doc d , (:sql_app.tableOfFHIR_Observation_valueQuantity002 ) observation \n\
+    WHERE observation_id=d.reference2 '
+    return sql
+}
+sql_app.tableOfFHIR_CarePlan_Goal = () => {
+    let sql = 'SELECT * FROM (:sql_app.tableOfFHIR_CarePlan_Goal_id ) goalId \n\
+    LEFT JOIN (:sql_app.tableOfFHIR_Goal001 ) goal ON goal.goal_id = goalId.goal_id'
+    return sql
+}
+sql_app.tableOfFHIR_CarePlan_Goal_id = () => {
+    let sql = 'SELECT cpgoal.parent careplan_id, goal.reference2 goal_id \n\
+    FROM doc cpgoal, doc goal WHERE goal.parent=cpgoal.doc_id and cpgoal.reference=373017'
+    return sql
+}
+sql_app.tableOfFHIR_ValueSet_observation_codes = () => {
     let sql = 'SELECT * FROM doc where reference=372051 and parent = 372971'
     return sql
 }
@@ -62,7 +80,7 @@ sql_app.tableOfFHIR_Observation_valueQuantity002 = () => {
     LEFT JOIN (:sql_app.tableOfFHIR_valueQuantity ) valueQuantity ON valuequantity_parent=observation.doc_id \n\
     LEFT JOIN doc referenceRange ON observation.doc_id=referenceRange.parent AND referenceRange.reference=372987 \n\
     WHERE observation.reference=368605 AND observation.reference2 \n\
-    IN (SELECT doc_id FROM (:sql_app.tableOfFHIR_am001fr_ValueSet_observation_codes )x)'
+    IN (SELECT doc_id FROM (:sql_app.tableOfFHIR_ValueSet_observation_codes )x)'
     return sql
 }
 sql_app.tableOfFHIR_Observation_valueQuantity = () => {
@@ -74,7 +92,7 @@ sql_app.tableOfFHIR_Observation_valueQuantity = () => {
     LEFT JOIN string s3 ON s3.string_id=valueQuantity.reference2 \n\
     LEFT JOIN doc referenceRange ON observation.doc_id=referenceRange.parent AND referenceRange.reference=372987 \n\
     WHERE observation.reference=368605 AND observation.reference2 \n\
-    IN (SELECT doc_id FROM (:sql_app.tableOfFHIR_am001fr_ValueSet_observation_codes )x)'
+    IN (SELECT doc_id FROM (:sql_app.tableOfFHIR_ValueSet_observation_codes )x)'
     return sql
 }
 sql_app.tableOfFHIR_ValueSet_cd = () => {

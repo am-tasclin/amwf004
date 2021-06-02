@@ -65,14 +65,14 @@ class InitFHIResourceController extends AbstractController {
                     let sql = sql_app.concatSql(sql_app[conf.fr[tag].sql_app]())
                     sql = 'SELECT * FROM (' + sql + ') x  WHERE ' + singlePage.TagIdName(tag) + ' = ' + tag_id
                     // console.log(tag,conf.fr[tag].sql_app, sql)
-                    dataBeFactory.httpGet({ sql: sql })
-                        .then((dataSqlRequest) => {
-                            conf.fr[tag].currEl = dataSqlRequest.list[0]
-                            console.log(2, tag, dataSqlRequest, conf.fr[tag].currEl)
-                        })
+                    dataBeFactory.httpGet({ sql: sql }).then((dataSqlRequest) => {
+                        conf.fr[tag].currEl = dataSqlRequest.list[0]
+                        console.log(2, tag, dataSqlRequest, conf.fr[tag].currEl)
+                    })
                     angular.forEach(conf.fr[tag].sql_app_children, (sql_app_child) => {
                         let sql2 = sql_app[sql_app_child.sql_app]()
-                        sql2 = 'SELECT * FROM ( ' + sql2 + ' ) x WHERE activity_cp = ' + tag_id
+                        console.log(sql_app_child, sql_app_child.connect_param)
+                        sql2 = 'SELECT * FROM ( ' + sql2 + ' ) x WHERE ' + sql_app_child.connect_param + ' = ' + tag_id
                         sql2 = sql_app.concatSql(sql2)
                         dataBeFactory.httpGet({ sql: sql2 })
                             .then((dataSqlRequest) => {

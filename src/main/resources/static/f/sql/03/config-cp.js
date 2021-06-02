@@ -1,9 +1,12 @@
 conf.fr = {} //FHIR
 conf.fr.cp = {
     frn: 'CarePlan',
-    children: ['mr','gl','on'],
+    children: ['mr', 'gl', 'on'],
     sql_app: 'tableOfFHIR_CarePlan',
-    sql_app_children: [{ fr: 'mr', sql_app: 'tableOfFHIR_CarePlan_plannedActivityReference_mr' }],
+    sql_app_children: [
+        { fr: 'mr', connect_param:'activity_cp', sql_app: 'tableOfFHIR_CarePlan_plannedActivityReference_mr' },
+        { fr: 'mr', connect_param:'careplan_id', sql_app: 'tableOfFHIR_CarePlan_Goal' },
+    ],
     amRsRowHtml: '<span>{{r.fhir_domainresource}}</span>',
     add: {
         mr: {
@@ -84,7 +87,7 @@ conf.fr.mr = {
 }
 conf.fr.de = {
     frn: 'Dosage',
-    children: ['qy', 'tg','ro'],
+    children: ['qy', 'tg', 'ro'],
     sql_app: 'tableOfFHIR_doseQuantity_timingPeriod',
     amRsRowHtml: '<span>{{r.quantity_value}} {{r.quantity_code}}</span> \n\
     <span data-ng-if="r.timing_id">кожні {{r.period}} {{r.periodunit}}</span>',
@@ -255,14 +258,14 @@ conf.fr.on = {
 }
 conf.fr.gl = {
     frn: 'Goal',
-    sql_app: 'tableOfFHIR_am001fr_Goal',
-    amRsRowHtml: "{{r.g_text}} ",
+    sql_app: 'tableOfFHIR_Goal001',
+    amRsRowHtml: "{{r.g_text}} {{r.code}} {{r.comparator}} {{r.valuequantity_f}}",
     children: ['on'],
 }
 conf.fr.qy = {
     frn: 'Quantity',
     sql_app: 'tableOfFHIR_Quantity',
-    edTemplate:'addEl',
+    edTemplate: 'addEl',
     amRsRowHtml: '<span> {{r.quantity_value}} {{r.quantity_code}}</span> <span data-ng-if="!r.quantity_value && !r.quantity_code"> <пусто> </span> ',
     NewEl: {
         amRsRowHtml: "Новий <b>численик</b>, цифрове значення та одиниці виміру.",

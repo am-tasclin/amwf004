@@ -100,7 +100,7 @@ sql_app.simpleSQLs = {
             doc_id: '<a href="#!/carePlan005Rest/{{r[k]}}">{{r[k]}}</a>',
         },
     },
-    FHIR_CarePlan: {
+    tableOfFHIR_CarePlan: {
         c: sql_app.tableOfFHIR_CarePlan(),
         sqlHtml: { careplan_id: '<a href="#!/carePlan005Rest/{{r[k]}}">{{r[k]}}</a>', },
     },
@@ -117,8 +117,8 @@ sql_app.simpleSQLs = {
         tree_id: 'dosequantity_id',
         sqlHtml: { dosequantity_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
     },
-    tableOfFHIR_am001fr_ValueSet_observation_codes: {
-        c: sql_app.tableOfFHIR_am001fr_ValueSet_observation_codes(),
+    tableOfFHIR_ValueSet_observation_codes: {
+        c: sql_app.tableOfFHIR_ValueSet_observation_codes(),
         tree_id: 'doc_id',
         sqlHtml: { doc_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
     },
@@ -167,9 +167,21 @@ sql_app.simpleSQLs = {
         c: sql_app.tableOfFHIR_Ratio(),
         sqlHtml: { numerator_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
     },
-    tableOfFHIR_am001fr_Goal: {
-        c: sql_app.tableOfFHIR_am001fr_Goal(),
-        sqlHtml: { doc_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
+    tableOfFHIR_observationUse: {
+        c: sql_app.tableOfFHIR_observationUse(),
+        sqlHtml: { goal_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
+    },
+    tableOfFHIR_CarePlan_Goal: {
+        c: sql_app.tableOfFHIR_CarePlan_Goal(),
+        sqlHtml: { goal_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
+    },
+    tableOfFHIR_CarePlan_Goal_id: {
+        c: sql_app.tableOfFHIR_CarePlan_Goal_id(),
+        sqlHtml: { goal_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
+    },
+    tableOfFHIR_Goal001: {
+        c: sql_app.tableOfFHIR_Goal001(),
+        sqlHtml: { goal_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
     },
     tableOfFHIR_valueQuantity: {
         c: sql_app.tableOfFHIR_valueQuantity(),
@@ -789,6 +801,11 @@ class SqlAbstractController {
                                                 let sql_split = sql.split(':sql_app.')
                                                 let sql_name = sql_split[1].split(' ')[0]
                                                 sql = sql.replace(':sql_app.' + sql_name, sql_app[sql_name]())
+                                                if (sql.includes(':sql_app.')) {
+                                                    let sql_split = sql.split(':sql_app.')
+                                                    let sql_name = sql_split[1].split(' ')[0]
+                                                    sql = sql.replace(':sql_app.' + sql_name, sql_app[sql_name]())
+                                                }
                                             }
                                         }
                                     }
@@ -862,12 +879,12 @@ class RouteProviderConfig {
 }
 app.config(RouteProviderConfig)
 
-conf.highlight =  (text, search) => {
+conf.highlight = (text, search) => {
     if (!text) return
     if (!search) return text
     return ('' + text).replace(new RegExp(search, 'gi'), '<span class="w3-yellow">$&</span>')
 }
-conf.sqlAppToLink =  (text) => {
+conf.sqlAppToLink = (text) => {
     if (!text) return
     return ('' + text).replace(new RegExp(':(sql_app\\.)(\\w+)', 'gi'), ':<b>$1<a href="#!/sql/$2">$2</a></b>')
 }
