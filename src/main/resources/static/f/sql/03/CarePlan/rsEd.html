@@ -3,12 +3,16 @@
     {{r.fhir_domainresource}}
     <div data-ng-repeat="sql_app_child in ctrl.conf.fr.cp.sql_app_children">
         <div data-ng-repeat="r in sql_app_child.list">
-            <a class="w3-hover-shadow am-0u" href="#!{{ctrl.singlePage.ClickTagHref('mr', r.medicationrequest_id)}}"
-                data-am:rs:row data-tag="mr"></a>
-            <div 
-            data-ng-if="ctrl.singlePage.X_UrlId(ctrl.singlePage.TagPosition('mr'))==r.medicationrequest_id"
-                class="w3-card w3-leftbar">
-                <div data-ng-include="'/f/sql/03/MedicationRequest/rsEd.html'"></div>
+            <span class="w3-tiny w3-grey">{{sql_app_child.fr}}-{{
+                r[ctrl.conf.fr[sql_app_child.fr].frn.toLowerCase()+'_id']}}
+            </span>&nbsp;
+            <a class="w3-hover-shadow am-0u" href="#!{{ctrl.singlePage.ClickTagHref(sql_app_child.fr
+                    , r[ctrl.conf.fr[sql_app_child.fr].frn.toLowerCase()+'_id'])}}" data-am:rs:row
+                data-tag="{{sql_app_child.fr}}"></a>
+            <div data-ng-if="ctrl.singlePage.TagPosition(sql_app_child.fr) 
+            && ctrl.singlePage.X_UrlId(ctrl.singlePage.TagPosition(sql_app_child.fr))
+            ==r[ctrl.conf.fr[sql_app_child.fr].frn.toLowerCase()+'_id']" class="w3-card w3-leftbar">
+                <div data-ng-include="'/f/sql/03/'+ctrl.conf.fr[sql_app_child.fr].frn+'/rsEd.html'"></div>
             </div>
         </div>
     </div>

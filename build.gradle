@@ -30,7 +30,8 @@ dependencies {
 	runtimeOnly 'org.webjars.npm:angular-messages:1.8.2'
 	runtimeOnly 'org.webjars.npm:angular-sanitize:1.8.2'
 	runtimeOnly 'org.webjars.npm:angular-material:1.2.1'
-	runtimeOnly 'org.webjars:font-awesome:5.15.1'
+	runtimeOnly 'org.webjars:font-awesome:5.15.2'
+	// runtimeOnly 'org.webjars:font-awesome:5.15.1'
 	
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
