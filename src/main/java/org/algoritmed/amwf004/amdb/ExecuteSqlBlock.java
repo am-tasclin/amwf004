@@ -173,6 +173,14 @@ public class ExecuteSqlBlock extends DbCommon {
 		}
 	}
 
+	public Map<String, Object> getDocbodyjson(Long doc_id) {
+		String sql = "SELECT docbody FROM docbody WHERE docbody_id=" + doc_id;
+		Map<String, Object> docbodyMap = dbJdbcTemplate.queryForMap(sql);
+		String docbodyStr = (String) docbodyMap.get("docbody");
+		Map<String, Object> docbodyStr2Map = stringToMap(docbodyStr);
+		return docbodyStr2Map;
+	}
+
 	protected void read_select(Map<String, Object> data, String sql_command, Integer i) {
 		String nr = null == i ? "" : ("" + i);
 		// System.err.println(sql_command);

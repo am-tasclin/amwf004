@@ -4,6 +4,22 @@ angular.element(() => angular.bootstrap(document, ['app']))
 app.factory("dataBeFactory", DataDBexchangeService)
 app.factory("editFRFactory", EditFHIResourceService)
 
+conf.showDocJson = () => {
+    let docOfPageFr = conf.fr[singlePage.FirstUrlTag()]
+    let docOfPage = docOfPageFr.currEl
+    angular.forEach(docOfPageFr.sql_app_children, (v) => {
+        if (!docOfPage.children) docOfPage.children = {}
+        docOfPage.children[v.fr] = v.list
+        let el = conf.fr[v.fr]
+        angular.forEach(el.sql_app_children001, (v, k) => {
+            console.log(k, v.list)
+            docOfPage.children[k] = v.list
+        })
+    })
+    console.log(singlePage.FirstUrlTag(), docOfPage, JSON.stringify(docOfPage, null, 1))
+    return 1
+}
+
 app.directive('amRsRow', ($compile) => {
     return {
         restrict: 'A',
