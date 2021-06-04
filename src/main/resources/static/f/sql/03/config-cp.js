@@ -4,8 +4,8 @@ conf.fr.cp = {
     children: ['mr', 'gl', 'on'],
     sql_app: 'tableOfFHIR_CarePlan',
     sql_app_children: [
-        { fr: 'mr', connect_param:'activity_cp', sql_app: 'tableOfFHIR_CarePlan_plannedActivityReference_mr' },
-        { fr: 'gl', connect_param:'careplan_id', sql_app: 'tableOfFHIR_CarePlan_Goal' },
+        { fr: 'mr', connect_param: 'activity_cp', sql_app: 'tableOfFHIR_CarePlan_plannedActivityReference_mr' },
+        { fr: 'gl', connect_param: 'careplan_id', sql_app: 'tableOfFHIR_CarePlan_Goal' },
     ],
     amRsRowHtml: '<span>{{r.fhir_domainresource}}</span>',
     add: {
@@ -260,6 +260,12 @@ conf.fr.gl = {
     frn: 'Goal',
     sql_app: 'tableOfFHIR_Goal001',
     amRsRowHtml: "{{r.g_text}} {{r.code}} {{r.comparator}} {{r.valuequantity_f}}",
+    sql_app_children001: {
+        gl7tt: {
+            connect_param: 'goal_id',
+            sql_app: 'tableOfFHIR_Goal_target_measure_dueDuration'
+        },
+    },
     children: ['on'],
 }
 conf.fr.qy = {

@@ -39,7 +39,7 @@ sql_app.tableOfFHIR_Goal001 = () => {
     return sql
 }
 sql_app.tableOfFHIR_observationUse = () => {
-    let sql = 'select d.parent observation_use_parent, observation.* \n\
+    let sql = 'SELECT d.parent observation_use_parent, observation.* \n\
     FROM doc d , (:sql_app.tableOfFHIR_Observation_valueQuantity002 ) observation \n\
     WHERE observation_id=d.reference2 '
     return sql
@@ -47,6 +47,29 @@ sql_app.tableOfFHIR_observationUse = () => {
 sql_app.tableOfFHIR_CarePlan_Goal = () => {
     let sql = 'SELECT * FROM (:sql_app.tableOfFHIR_CarePlan_Goal_id ) goalId \n\
     LEFT JOIN (:sql_app.tableOfFHIR_Goal001 ) goal ON goal.goal_id = goalId.goal_id'
+    return sql
+}
+sql_app.tableOfFHIR_Goal_target_measure = () => {
+    let sql = 'SELECT gl7tt.parent goal_id, gl7tt7ms.doc_id measure_id, valuesetObName.* \n\
+    FROM doc gl7tt, doc gl7tt7ms \n\
+    LEFT JOIN (:sql_app.tableOfFHIR_ValueSet_cd ) valuesetObName ON valuesetObName.code_id=gl7tt7ms.reference2 \n\
+    WHERE gl7tt.reference =372950 AND gl7tt7ms.parent = gl7tt.doc_id'
+    return sql
+}
+sql_app.tableOfFHIR_Goal_target_measure_dueDuration = () => {
+    let sql = 'SELECT gl7tt.parent goal_id, gl7tt7ms.doc_id measure_id, valuesetObName.*, Goal_dueDuration.* \n\
+    FROM doc gl7tt, doc gl7tt7ms \n\
+    LEFT JOIN (:sql_app.tableOfFHIR_ValueSet_cd ) valuesetObName ON valuesetObName.code_id=gl7tt7ms.reference2 \n\
+    LEFT JOIN (:sql_app.tableOfFHIR_Goal_dueDuration ) Goal_dueDuration ON Goal_dueDuration.dueduration_parent=gl7tt7ms.doc_id \n\
+    WHERE gl7tt.reference =372950 AND gl7tt7ms.parent = gl7tt.doc_id'
+    return sql
+}
+
+sql_app.tableOfFHIR_Goal_dueDuration = () => {
+    let sql = 'select dueDuration.doc_id dueDuration_id, dueDuration.parent dueDuration_parent, duration.* \n\
+    from doc  dueDuration \n\
+    LEFT JOIN (:sql_app.tableOfFHIR_Duration ) duration ON duration.duration_id = dueDuration.reference2 \n\
+    where  dueDuration.reference =373032'
     return sql
 }
 sql_app.tableOfFHIR_CarePlan_Goal_id = () => {
@@ -115,7 +138,7 @@ sql_app.tableOfFHIR_Observetion_referenceRange = () => {
     return sql
 }
 sql_app.tableOfFHIR_labor_constant = () => {
-    let sql ='SELECT f.value val_f, s.value unit, val_id, unit_id \n\
+    let sql = 'SELECT f.value val_f, s.value unit, val_id, unit_id \n\
     FROM ( SELECT val.doc_id val_id, unit.doc_id unit_id, unit.reference2 unit_r2 \n\
             FROM doc val, doc unit \n\
             WHERE val.reference=368637  AND unit.reference=368641 AND val.parent=372980 \n\
@@ -126,7 +149,7 @@ sql_app.tableOfFHIR_labor_constant = () => {
     return sql
 }
 sql_app.tableOfFHIR_on_referenceRange = () => {
-    let sql ='SELECT low.val_f low_val_f, low.unit low_unit, higth.val_f higth_val_f, higth.unit higth_unit, rr.* \n\
+    let sql = 'SELECT low.val_f low_val_f, low.unit low_unit, higth.val_f higth_val_f, higth.unit higth_unit, rr.* \n\
     FROM ( SELECT type.doc_id type_id, type.reference2 type_r2, type.parent referenceRange_id \n\
         , low.doc_id low_id, low.reference2 low_r2, higth.doc_id higth_id, higth.reference2 higth_r2 \n\
         FROM doc type, doc low, doc higth \n\
@@ -212,6 +235,15 @@ sql_app.tableOfFHIR_Medication_sc = () => {
     return sql
 }
 
+sql_app.tableOfFHIR_Duration = () => {
+    let sql = 'select s.value duration_s, s2.value unit, duration.doc_id duration_id, durationunit.reference2 unit_id, durationunit.doc_id durationunit_id \n\
+    FROM doc durationunit \n\
+    left join string s2 on s2.string_id =durationunit.reference2 \n\
+    , doc duration \n\
+    left join string s on s.string_id =duration.doc_id \n\
+    where duration.reference = 373042 and durationunit.parent = duration.doc_id '
+    return sql
+}
 sql_app.tableOfFHIR_Ratio = () => {
     let sql = 'SELECT n.quantity_value n_quantity_value, n.quantity_code n_quantity_code  \n\
     , numerator.doc_id  ratio_id, numerator.doc_id  numerator_id, numerator.reference2 n_quantity_id --, n.*  \n\

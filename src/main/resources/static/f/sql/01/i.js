@@ -163,6 +163,10 @@ sql_app.simpleSQLs = {
         c: sql_app.tableOfFHIR_Task_description(),
         sqlHtml: { task_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
     },
+    tableOfFHIR_Duration: {
+        c: sql_app.tableOfFHIR_Duration(),
+        sqlHtml: { duration_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
+    },
     tableOfFHIR_Ratio: {
         c: sql_app.tableOfFHIR_Ratio(),
         sqlHtml: { numerator_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
@@ -175,9 +179,21 @@ sql_app.simpleSQLs = {
         c: sql_app.tableOfFHIR_CarePlan_Goal(),
         sqlHtml: { goal_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
     },
+    tableOfFHIR_Goal_dueDuration: {
+        c: sql_app.tableOfFHIR_Goal_dueDuration(),
+        sqlHtml: { dueduration_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
+    },
     tableOfFHIR_CarePlan_Goal_id: {
         c: sql_app.tableOfFHIR_CarePlan_Goal_id(),
         sqlHtml: { goal_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
+    },
+    tableOfFHIR_Goal_target_measure: {
+        c: sql_app.tableOfFHIR_Goal_target_measure(),
+        sqlHtml: { measure_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
+    },
+    tableOfFHIR_Goal_target_measure_dueDuration: {
+        c: sql_app.tableOfFHIR_Goal_target_measure_dueDuration(),
+        sqlHtml: { measure_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
     },
     tableOfFHIR_Goal001: {
         c: sql_app.tableOfFHIR_Goal001(),

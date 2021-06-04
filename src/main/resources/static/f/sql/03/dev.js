@@ -57,6 +57,7 @@ class InitFHIResourceController extends AbstractController {
                 })
         })
         //read url id objects
+        console.log(singlePage.UrlList())
         angular.forEach(singlePage.UrlList(), (x_Url, nr) => {
             if (x_Url && x_Url.split('_')[1]) { //tag with id
                 let tag = x_Url.split('_')[0], tag_id = x_Url.split('_')[1]
@@ -69,16 +70,25 @@ class InitFHIResourceController extends AbstractController {
                         conf.fr[tag].currEl = dataSqlRequest.list[0]
                         console.log(2, tag, dataSqlRequest, conf.fr[tag].currEl)
                     })
+                    angular.forEach(conf.fr[tag].sql_app_children001, (sql_app_child, k) => {
+                        let sql2 = sql_app[sql_app_child.sql_app]()
+                        sql2 = sql_app.concatSql(sql2)
+                        sql2 = 'SELECT * FROM ( ' + sql2 + ' ) x WHERE ' + sql_app_child.connect_param + ' = ' + tag_id
+                        console.log(tag, tag_id, k, sql_app_child, sql2)
+                        dataBeFactory.httpGet({ sql: sql2 }).then((dataSqlRequest) => {
+                            sql_app_child.list = dataSqlRequest.list
+                            console.log(sql_app_child)
+                        })
+                    })
                     angular.forEach(conf.fr[tag].sql_app_children, (sql_app_child) => {
                         let sql2 = sql_app[sql_app_child.sql_app]()
                         console.log(sql_app_child, sql_app_child.connect_param)
                         sql2 = 'SELECT * FROM ( ' + sql2 + ' ) x WHERE ' + sql_app_child.connect_param + ' = ' + tag_id
                         sql2 = sql_app.concatSql(sql2)
-                        dataBeFactory.httpGet({ sql: sql2 })
-                            .then((dataSqlRequest) => {
-                                console.log(2, tag, dataSqlRequest)
-                                sql_app_child.list = dataSqlRequest.list
-                            })
+                        dataBeFactory.httpGet({ sql: sql2 }).then((dataSqlRequest) => {
+                            console.log(2, tag, dataSqlRequest)
+                            sql_app_child.list = dataSqlRequest.list
+                        })
                     })
                 }
             }

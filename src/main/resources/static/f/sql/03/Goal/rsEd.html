@@ -1,3 +1,14 @@
 <div>
-    Hello Goal!
+    <div> <span class="w3-small am-b"> Мета: </span> {{r.g_text}} </div>
+    {{r.code}} {{r.comparator}} {{r.valuequantity_f}}
+    <div data-ng-repeat="(k,sql_app_child) in ctrl.conf.fr.gl.sql_app_children001">
+        <span class="w3-tiny am-b">Вимірювання:</span>
+        <div data-ng-repeat="r in sql_app_child.list">
+            <span title="{{r.display}}"> {{r.code}} </span>
+            {{r.duration_s}} {{r.unit}}
+            <!--
+                <div> {{r}} </div>
+            -->
+        </div>
+    </div>
 </div>
