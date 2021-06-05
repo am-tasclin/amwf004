@@ -21,7 +21,30 @@
         <a href="/" class="w3-btn w3-border w3-padding-small w3-tiny am-b w3-round">↑</a>
         Hi 04usecp
     </div>
-    <div class="w3-container">
-        --
+    <div class="w3-container ">
+        -- {{ctrl.conf.fr.cp.docbody.fhir_domainresource}}
+        <div class="w3-container w3-border-left">
+            <div class="" data-ng-repeat="(k,v) in ctrl.conf.fr.cp.docbody.children">
+                <div class="" data-ng-repeat="r in v" data-ng-if="r.parent_careplan">
+                    <span class="w3-tiny w3-grey">
+                        {{k}}-{{r[ctrl.conf.fr[k].frn.toLowerCase()+'_id']}} </span>&nbsp;
+                    <span data-am:rs:row data-tag="{{k}}"></span>
+                    <div class="w3-container w3-border-left">
+                        <div class="" data-ng-repeat="(k1,v1) in ctrl.conf.fr[k].sql_app_children001">
+                            <div class="" data-ng-repeat="r in ctrl.conf.fr.cp.docbody.children[k1]"
+                                d11ata-ng-if="r.parent_careplan">
+                                <span class="w3-tiny w3-grey">
+                                    {{k1}}-{{r[ctrl.conf.fr[k].sql_app_children001[k1].id_name]}}
+                                    {{ctrl.conf.fr[k].sql_app_children001[k1].id_name.split('_')[0]}}
+                                </span>&nbsp;
+                                <span class="w3-tiny am-b">Вимірювання:</span>
+                                <span title="{{r.display}}"> {{r.code}} </span>
+                                {{r.duration_s}} {{r.unit}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </body>

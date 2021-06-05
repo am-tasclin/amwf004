@@ -1,6 +1,6 @@
 'use strict';
 sql_app.tableOfFHIR_CarePlan_plannedActivityReference_mr = () => {
-    let sql = 'SELECT activity.parent activity_cp, activity.doc_id activity_id, par.doc_id par_id, par.reference2 par_r2 \n\
+    let sql = 'SELECT activity.parent parent_careplan, activity.doc_id activity_id, par.doc_id par_id, par.reference2 par_r2 \n\
     FROM doc activity, doc par \n\
     WHERE par.parent=activity.doc_id AND activity.reference=368789'
     sql = 'SELECT * FROM (' + sql + ' ) x \n\
@@ -35,7 +35,7 @@ sql_app.tableOfFHIR_Goal001 = () => {
 	FROM doc goal \n\
     LEFT JOIN string s ON s.string_id = goal.doc_id \n\
     LEFT JOIN (:sql_app.tableOfFHIR_observationUse ) ou ON observation_use_parent = goal.doc_id \n\
-    WHERE goal.reference =372927'
+    WHERE goal.reference =372927 AND goal.reference2=372925'
     return sql
 }
 sql_app.tableOfFHIR_observationUse = () => {
@@ -50,14 +50,14 @@ sql_app.tableOfFHIR_CarePlan_Goal = () => {
     return sql
 }
 sql_app.tableOfFHIR_Goal_target_measure = () => {
-    let sql = 'SELECT gl7tt.parent goal_id, gl7tt7ms.doc_id measure_id, valuesetObName.* \n\
+    let sql = 'SELECT gl7tt.parent parent_goal, gl7tt7ms.doc_id measure_id, valuesetObName.* \n\
     FROM doc gl7tt, doc gl7tt7ms \n\
     LEFT JOIN (:sql_app.tableOfFHIR_ValueSet_cd ) valuesetObName ON valuesetObName.code_id=gl7tt7ms.reference2 \n\
     WHERE gl7tt.reference =372950 AND gl7tt7ms.parent = gl7tt.doc_id'
     return sql
 }
 sql_app.tableOfFHIR_Goal_target_measure_dueDuration = () => {
-    let sql = 'SELECT gl7tt.parent goal_id, gl7tt7ms.doc_id measure_id, valuesetObName.*, Goal_dueDuration.* \n\
+    let sql = 'SELECT gl7tt.parent parent_goal, gl7tt7ms.doc_id measure_id, valuesetObName.*, Goal_dueDuration.* \n\
     FROM doc gl7tt, doc gl7tt7ms \n\
     LEFT JOIN (:sql_app.tableOfFHIR_ValueSet_cd ) valuesetObName ON valuesetObName.code_id=gl7tt7ms.reference2 \n\
     LEFT JOIN (:sql_app.tableOfFHIR_Goal_dueDuration ) Goal_dueDuration ON Goal_dueDuration.dueduration_parent=gl7tt7ms.doc_id \n\
@@ -73,7 +73,7 @@ sql_app.tableOfFHIR_Goal_dueDuration = () => {
     return sql
 }
 sql_app.tableOfFHIR_CarePlan_Goal_id = () => {
-    let sql = 'SELECT cpgoal.parent careplan_id, goal.reference2 goal_id \n\
+    let sql = 'SELECT cpgoal.parent parent_careplan, goal.reference2 goal_id \n\
     FROM doc cpgoal, doc goal WHERE goal.parent=cpgoal.doc_id and cpgoal.reference=373017'
     return sql
 }

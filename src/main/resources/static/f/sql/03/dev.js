@@ -16,6 +16,11 @@ conf.showDocJson = () => {
             docOfPage.children[k] = v.list
         })
     })
+    angular.forEach(docOfPageFr.sql_app_children001, (v, k) => {
+        if (!docOfPage.children) docOfPage.children = {}
+        console.log(k, v.list)
+        docOfPage.children[k] = v.list
+    })
     console.log(singlePage.FirstUrlTag(), docOfPage, JSON.stringify(docOfPage, null, 1))
     return 1
 }
