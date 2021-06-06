@@ -84,7 +84,8 @@ conf.fr.mr = {
     amRsRowHtml: '<span>{{r.substance_code}} {{r.n_quantity_value}}</span> \n\
     <span>{{r.quantity_value}} {{r.quantity_code}}</span> \n\
     <span data-ng-if="r.timing_id">кожні {{r.period}} {{r.periodunit}}</span> \n\
-    <span class="w3-tiny" data-ng-if="!r.medication_id">id={{r.medicationrequest_id}}</span>',
+    <span class="w3-tiny" data-ng-if="!r.medication_id">id={{r.medicationrequest_id}}</span> \n\
+    {{r.duration_s}} {{r.unit}}',
 }
 conf.fr.de = {
     frn: 'Dosage',

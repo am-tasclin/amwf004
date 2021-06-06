@@ -207,12 +207,14 @@ sql_app.tableOfFHIR_Quantity = () => {
     WHERE quantityNum.reference=368637 AND quantityNum.reference2=368636'
     return sql
 }
+
 sql_app.tableOfFHIR_MedicationRequest_sc_doseQuantityTimingPeriod = () => {
-    let sql = 'SELECT * FROM (:sql_app.tableOfFHIR_MedicationRequest_sc ) x \n\
+    let sql = 'SELECT x.*, dqtp.*, esd.*, di.* FROM (:sql_app.tableOfFHIR_MedicationRequest_sc ) x \n\
     LEFT JOIN (SELECT di_c.parent di_c_p, di.reference di_r, di.reference2 di_r2 \n\
     FROM doc di_c, doc di WHERE di_c.reference=369984 AND di.parent=di_c.doc_id \n\
     ) di ON di_c_p=x.medicationrequest_id \n\
-    LEFT JOIN (:sql_app.tableOfFHIR_doseQuantity_timingPeriod ) dqtp ON dqtp.dosage_id=di_r2'
+    LEFT JOIN (:sql_app.tableOfFHIR_doseQuantity_timingPeriod ) dqtp ON dqtp.dosage_id=di_r2 \n\
+    LEFT JOIN (:sql_app.tableOfFHIR_MedicationRequest_expectedSupplyDuration ) esd ON esd.parent_medicationrequest=medicationrequest_id'
     return sql
 }
 sql_app.tableOfFHIR_MedicationRequest_sc = () => {
@@ -222,7 +224,6 @@ sql_app.tableOfFHIR_MedicationRequest_sc = () => {
     WHERE d.reference=371469 '
     return sql
 }
-console.log(1)
 sql_app.tableOfFHIR_Medication_sc = () => {
     let sql = 'SELECT d.doc_id medication_id, item.doc_id item_id, strength.doc_id strength_ratio_id, substance.*, ratio.* FROM doc d \n\
     LEFT JOIN (SELECT * FROM doc,sort WHERE doc_id=sort_id AND sort=1) item \n\
@@ -234,7 +235,17 @@ sql_app.tableOfFHIR_Medication_sc = () => {
     WHERE d.reference=369998 and d.reference2=369993'
     return sql
 }
-
+sql_app.tableOfFHIR_MedicationRequest_expectedSupplyDuration = () => {
+    let sql = 'select \n\
+    expectedsupplyduration.doc_id expectedsupplyduration_id \n\
+    , duration.* \n\
+    , expectedsupplyduration .parent  parent_medicationRequest \n\
+    , expectedsupplyduration.doc_id duration_id \n\
+    from  doc  expectedSupplyDuration \n\
+    left join (:sql_app.tableOfFHIR_Duration ) duration on duration_id = expectedsupplyduration.reference2 \n\
+    where expectedsupplyduration.reference = 373051'
+    return sql
+}
 sql_app.tableOfFHIR_Duration = () => {
     let sql = 'select s.value duration_s, s2.value unit, duration.doc_id duration_id, durationunit.reference2 unit_id, durationunit.doc_id durationunit_id \n\
     FROM doc durationunit \n\
@@ -311,6 +322,21 @@ sql_app.concatSql = (sql) => {
                                                         let sql_split = sql.split(':sql_app.')
                                                         let sql_name = sql_split[1].split(' ')[0]
                                                         sql = sql.replace(':sql_app.' + sql_name, sql_app[sql_name]())
+                                                        if (sql.includes(':sql_app.')) {
+                                                            let sql_split = sql.split(':sql_app.')
+                                                            let sql_name = sql_split[1].split(' ')[0]
+                                                            sql = sql.replace(':sql_app.' + sql_name, sql_app[sql_name]())
+                                                            if (sql.includes(':sql_app.')) {
+                                                                let sql_split = sql.split(':sql_app.')
+                                                                let sql_name = sql_split[1].split(' ')[0]
+                                                                sql = sql.replace(':sql_app.' + sql_name, sql_app[sql_name]())
+                                                                if (sql.includes(':sql_app.')) {
+                                                                    let sql_split = sql.split(':sql_app.')
+                                                                    let sql_name = sql_split[1].split(' ')[0]
+                                                                    sql = sql.replace(':sql_app.' + sql_name, sql_app[sql_name]())
+                                                                }
+                                                            }
+                                                        }
                                                     }
                                                 }
                                             }
@@ -324,5 +350,6 @@ sql_app.concatSql = (sql) => {
             }
         }
     }
+    console.log(1)
     return sql
 }

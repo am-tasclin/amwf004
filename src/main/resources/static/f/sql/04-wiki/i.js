@@ -352,6 +352,7 @@ class DocTreeAbstractController extends AmDocAbstractController {
         super($scope)
         console.log(1)
         this.dataFactory = dataFactory
+        this.singlePage = singlePage
     }
     dataFactory
     init($routeParams) {

@@ -163,6 +163,10 @@ sql_app.simpleSQLs = {
         c: sql_app.tableOfFHIR_Task_description(),
         sqlHtml: { task_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
     },
+    tableOfFHIR_MedicationRequest_expectedSupplyDuration: {
+        c: sql_app.tableOfFHIR_MedicationRequest_expectedSupplyDuration(),
+        sqlHtml: { expectedsupplyduration_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
+    },
     tableOfFHIR_Duration: {
         c: sql_app.tableOfFHIR_Duration(),
         sqlHtml: { duration_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
@@ -284,7 +288,6 @@ d.conf.wiki = {
         ol: 371367,
     }
 }
-
 conf.extraReadIds = [
     368794, // CarePlan.activity.plannedActivityReference[MedicationRequest|...]
     370001, // Medication.ingredient.item[SimpleQuantity]
@@ -452,6 +455,7 @@ class DocTreeAbstractController extends AmDocAbstractController {
         super($scope)
         console.log(1)
         this.dataFactory = dataFactory
+        this.singlePage = singlePage
     }
     dataFactory
     init($routeParams) {
@@ -821,6 +825,16 @@ class SqlAbstractController {
                                                     let sql_split = sql.split(':sql_app.')
                                                     let sql_name = sql_split[1].split(' ')[0]
                                                     sql = sql.replace(':sql_app.' + sql_name, sql_app[sql_name]())
+                                                    if (sql.includes(':sql_app.')) {
+                                                        let sql_split = sql.split(':sql_app.')
+                                                        let sql_name = sql_split[1].split(' ')[0]
+                                                        sql = sql.replace(':sql_app.' + sql_name, sql_app[sql_name]())
+                                                        if (sql.includes(':sql_app.')) {
+                                                            let sql_split = sql.split(':sql_app.')
+                                                            let sql_name = sql_split[1].split(' ')[0]
+                                                            sql = sql.replace(':sql_app.' + sql_name, sql_app[sql_name]())
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }
