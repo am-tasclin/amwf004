@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="/f/css/am.css" type="text/css">
     <link rel="shortcut icon" href="/f/img/algoritmed.ico" type="image/x-icon">
     <script src="/webjars/angular/1.8.2/angular.min.js" type="application/javascript"></script>
+    <script src="/webjars/angular-i18n/1.8.2/angular-locale_uk-ua.js" type="application/javascript"></script>
     <script src="/webjars/angular-route/1.8.2/angular-route.min.js" type="application/javascript"></script>
     <script src="/webjars/angular-resource/1.8.2/angular-resource.min.js" type="application/javascript"></script>
     <script src="/webjars/angular-sanitize/1.8.2/angular-sanitize.min.js" type="application/javascript"></script>
@@ -30,6 +31,15 @@
                     <span class="w3-tiny w3-grey">
                         {{k}}-{{r[ctrl.conf.fr[k].frn.toLowerCase()+'_id']}} </span>&nbsp;
                     <span data-am:rs:row data-tag="{{k}}"></span>
+                    <div data-ng-if="'mr'==k">
+                        {{r.period}}
+                        {{r.periodunit}}
+                        <span>
+                            Період:
+                            <span data-ng-repeat="mrTs in r.calc_period">{{mrTs|date:'shortTime'
+                                }}|</span>
+                        </span>
+                    </div>
                     <div class="w3-container w3-border-left">
                         <div class="" data-ng-repeat="(k1,v1) in ctrl.conf.fr[k].sql_app_children001">
                             <div class="" data-ng-repeat="r in ctrl.conf.fr.cp.docbody.children[k1]"

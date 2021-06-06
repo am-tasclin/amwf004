@@ -1,6 +1,6 @@
 'use strict';
-const singlePage = {}, conf = {}, sql_app = {}
-var app = angular.module("app", ['ngRoute', 'ngResource', 'ngSanitize']);
+const singlePage = {}, conf = {}, sql_app = {}, calc_fr = {}
+var app = angular.module("app", ['ngRoute', 'ngResource', 'ngSanitize', 'ngLocale']);
 angular.element(() => angular.bootstrap(document, ['app']))
 conf.fr = {}
 conf.fr.cp = {
@@ -10,11 +10,23 @@ conf.fr.gl = {
     frn: 'Goal',
     amRsRowHtml: "{{r.g_text}} {{r.code}} {{r.comparator}} {{r.valuequantity_f}}",
     sql_app_children001: {
-        gl7tt: {id_name:'measure_id'}
+        gl7tt: { id_name: 'measure_id' }
     },
+}
+/**
+ * FHIR MedicationRequest calc
+ */
+calc_fr.mr = {}
+calc_fr.mr.period = (i) => {
+    let startTS = Date.now()
+    let mr = conf.fr.cp.docbody.children.mr[i]
+    let mal = 24 / mr.period
+    // console.log(calc_fr.$filter('date')(startTS, 'short'), mr.period, mr.periodunit, 1)
+    return Array.from(Array(mal).keys()).map((n) => startTS + n * 3600 * 1000 * mr.period)
 }
 
 conf.fr.mr = {
+    calc_fn: calc_fr.mr,
     frn: 'MedicationRequest',
     amRsRowHtml: '<span>{{r.substance_code}} {{r.n_quantity_value}}</span> \n\
     <span>{{r.quantity_value}} {{r.quantity_code}}</span> \n\
@@ -66,12 +78,21 @@ app.factory("p2f", PageFactory)
 // app.controller("InitPageController", InitPageController)
 class InitPageController {
     p2f
-    constructor($http, p2f, dataBeFactory) {
+    constructor($http, p2f, dataBeFactory, $filter) {
         this.conf = conf
+        calc_fr.$filter = $filter
         p2f.hi()
         dataBeFactory.docbodyjson.get({ doc_id: 372844 }).$promise.then((data) => {
-            console.log(data)
             conf.fr.cp.docbody = data
+            console.log('conf.fr.cp.docbody', conf.fr.cp.docbody)
+            angular.forEach(conf.fr.cp.docbody.children.mr, (mr, k) => {
+                let calc_period = calc_fr.mr.period(k)
+                mr.calc_period = calc_period
+                console.log(k, mr.calc_period)
+                angular.forEach(calc_period, (ts) => {
+                    console.log($filter('date')(ts, 'short'))
+                })
+            })
         })
     }
 }
