@@ -1,0 +1,29 @@
+<div>
+    <div class="w3-row w3-border-top w3-tiny am-b">
+        <div class="w3-col w3-right w3-border-left w3-center" data-ng-repeat="d in ctrl.conf.form.dayBlank"
+            style="width:30px">{{d+1}}</div>
+        <div class="w3-col" style="width:16px">гд</div>
+        <div class="w3-rest w3-border-left " style="padding-left: 4px;">
+            <span class="w3-right"> <sup>
+                {{ctrl.conf.startTS|date:'shortDate'}}
+                день</sup> </span>
+            назва
+        </div>
+    </div>
+    <div class="w3-row w3-border-top" data-ng-repeat="hh in ctrl.conf.form.hoursOfDay">
+        <div class="w3-col w3-right w3-border-left w3-center" data-ng-repeat="d in ctrl.conf.form.dayBlank"
+            style="width:30px">
+            <span data-ng-repeat="r in ctrl.conf.form.hourMap[hh==24?0:hh]" data-ng-if="r">
+                {{r.calc_duration_sortDate.includes(ctrl.conf.shortDate(ctrl.conf.startTS+ctrl.conf.form.tsUnit.d()*d))?'-':''}}
+            </span>
+            &nbsp;
+        </div>
+        <div class="w3-col w3-tiny" style="width:16px">{{hh &lt; 10?'0':''}}{{hh}}</div>
+        <div class="w3-rest w3-border-left " style="padding-left: 4px;">
+            
+            <span data-ng-repeat="r in ctrl.conf.form.hourMap[hh==24?0:hh]" data-ng-if="r">
+                <span data-am:rs:row data-tag="mr"></span>
+            </span>
+        </div>
+    </div>
+</div>

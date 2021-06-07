@@ -1,0 +1,33 @@
+<div class="w3-container w3-border-left">
+    <div class="" data-ng-repeat="(k,v) in ctrl.conf.fr.cp.docbody.children">
+        <div class="" data-ng-repeat="r in v" data-ng-if="r.parent_careplan">
+            <span class="w3-tiny w3-grey">
+                {{k}}-{{r[ctrl.conf.fr[k].frn.toLowerCase()+'_id']}} </span>&nbsp;
+            <span data-am:rs:row data-tag="{{k}}"></span>
+            <div data-ng-if="'mr'==k" class="w3-small">
+                <div> {{r.period}} {{r.periodunit}} <span class="am-b w3-tiny"> Період:</span>
+                    <span data-ng-repeat="mrTs in r.calc_period">{{mrTs|date:'shortTime'
+                        }}|</span>
+                </div>
+                <div> {{r.duration_s}} {{r.unit}} <span class="am-b w3-tiny"> Тривалість:</span>
+                    <span data-ng-repeat="mrTs in r.calc_duration">{{mrTs|date:'shortDate'
+                    }}|</span>
+                </div>
+            </div>
+            <div class="w3-container w3-border-left">
+                <div class="" data-ng-repeat="(k1,v1) in ctrl.conf.fr[k].sql_app_children001">
+                    <div class="" data-ng-repeat="r in ctrl.conf.fr.cp.docbody.children[k1]"
+                        d11ata-ng-if="r.parent_careplan">
+                        <span class="w3-tiny w3-grey">
+                            {{k1}}-{{r[ctrl.conf.fr[k].sql_app_children001[k1].id_name]}}
+                            {{ctrl.conf.fr[k].sql_app_children001[k1].id_name.split('_')[0]}}
+                        </span>&nbsp;
+                        <span class="w3-tiny am-b">Вимірювання:</span>
+                        <span title="{{r.display}}"> {{r.code}} </span>
+                        {{r.duration_s}} {{r.unit}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

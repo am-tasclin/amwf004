@@ -20,16 +20,29 @@ conf.fr.gl = {
         gl7tt: { id_name: 'measure_id' }
     },
 }
+conf.form.tsUnit = { s: 1000 }
+conf.form.tsUnit.min = () => conf.form.tsUnit.s * 60
+conf.form.tsUnit.h = () => conf.form.tsUnit.min() * 60
+conf.form.tsUnit.d = () => conf.form.tsUnit.h() * 24
+conf.form.tsUnit.wk = () => conf.form.tsUnit.d() * 7
 /**
  * FHIR MedicationRequest calc
  */
+conf.startTS = Date.now()
+conf.shortDate = (ts) => conf.$filter('date')(ts, 'shortDate')
+conf.startTSaddDayISODate = d => new Date(conf.startTS + d * conf.form.tsUnit.d()).toISOString().split('T')[0]
+conf.TS2ISODate = ts => new Date(ts).toISOString().split('T')[0]
+
 calc_fr.mr = {}
-calc_fr.mr.period = (i) => {
-    let startTS = Date.now()
+calc_fr.mr.duration = i => {
+    let mr = conf.fr.cp.docbody.children.mr[i]
+    let duration = 1 * mr.duration_s
+    return Array.from(Array(duration).keys()).map(n => conf.startTS + n * conf.form.tsUnit[mr.unit]())
+}
+calc_fr.mr.period = i => {
     let mr = conf.fr.cp.docbody.children.mr[i]
     let mal = 24 / mr.period
-    // console.log(calc_fr.$filter('date')(startTS, 'short'), mr.period, mr.periodunit, 1)
-    return Array.from(Array(mal).keys()).map((n) => startTS + n * 3600 * 1000 * mr.period)
+    return Array.from(Array(mal).keys()).map(n => conf.startTS + n * conf.form.tsUnit[mr.periodunit]() * mr.period)
 }
 
 conf.fr.mr = {
@@ -86,22 +99,46 @@ class InitPageController {
     p2f
     constructor($http, p2f, dataBeFactory, $filter) {
         this.conf = conf
-        p2f.hi()
-        dataBeFactory.docbodyjson.get({ doc_id: 372844 }).$promise.then((data) => {
+        this.singlePage = singlePage
+        conf.$filter = $filter
+        dataBeFactory.docbodyjson.get({ doc_id: 372844 }).$promise.then(data => {
             conf.fr.cp.docbody = data
             console.log('conf.fr.cp.docbody', conf.fr.cp.docbody)
             angular.forEach(conf.fr.cp.docbody.children.mr, (mr, k) => {
-                let calc_period = calc_fr.mr.period(k)
-                mr.calc_period = calc_period
+                mr.calc_duration = calc_fr.mr.duration(k)
+                mr.calc_duration_sortDate = calc_fr.mr.duration(k).map(ts => $filter('date')(ts, 'shortDate'))
+                mr.calc_period = calc_fr.mr.period(k)
                 let hourMap = mr.calc_period.map(ts => $filter('date')(ts, 'H'))
                 angular.forEach(hourMap, h => {
-                    if (!conf.form.hourMap[h])
-                        conf.form.hourMap[h] = []
+                    if (!conf.form.hourMap[h]) conf.form.hourMap[h] = []
                     conf.form.hourMap[h].push(mr)
                 })
-                console.log(conf.form.hourMap, 2)
             })
         })
     }
 }
 app.controller("InitPageController", InitPageController)
+// app.config(RouteProviderConfig)
+class RouteProviderConfig {
+    constructor($routeProvider) {
+        $routeProvider
+            .when("/day", {
+                templateUrl: "day.html",
+            })
+            .when("/hour", {
+                templateUrl: "hour.html",
+            })
+            .when("/physician", {
+                templateUrl: "physician.html",
+            })
+            .when("/", {
+                templateUrl: "physician.html",
+            })
+            .otherwise({
+                template: "<h1>?</h1><p>Щось невідоме</p>"
+            })
+    }
+}
+app.config(RouteProviderConfig)
+singlePage.Url = () => window.location.href.split('#!')[1]
+singlePage.LastUrl = () => singlePage.Url() ? singlePage.Url().split('/')[singlePage.Url().split('/').length - 1] : ''

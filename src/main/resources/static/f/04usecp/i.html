@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>e3cp-{{ctrl.singlePage.Url().substr(1)}}</title>
+    <title>e4cp-{{ctrl.singlePage.Url().substr(1)}}</title>
     <link rel="stylesheet" href="/webjars/font-awesome/5.15.2/css/all.min.css">
     <link rel="stylesheet" href="/f/css/w3.css" type="text/css">
     <link rel="stylesheet" href="/f/css/am.css" type="text/css">
@@ -24,58 +24,15 @@
         <- <a href="/f/sql/03/cp.html#!/cp_372844"> create CarePlan</a>
     </div>
     <div class="w3-container am-max-width-1">
+        <div class="w3-border-top w3-border-bottom w3-leftbar" style="padding-left: 4px;">
+            <a href="#!/physician" data-ng-class="{'w3-light-gray':'physician'==ctrl.singlePage.LastUrl()}"> Лікар</a>
+            ->
+            <span class="w3-small am-b"> Медсестра:</span>
+            <a href="#!/day" data-ng-class="{'w3-light-gray':'day'==ctrl.singlePage.LastUrl()}">дні</a> | <a
+            href="#!/hour" data-ng-class="{'w3-light-gray':'hour'==ctrl.singlePage.LastUrl()}">години</a>
+        </div>
         -- {{ctrl.conf.fr.cp.docbody.fhir_domainresource}}
-        <div class="w3-container w3-border-left">
-            <div class="" data-ng-repeat="(k,v) in ctrl.conf.fr.cp.docbody.children">
-                <div class="" data-ng-repeat="r in v" data-ng-if="r.parent_careplan">
-                    <span class="w3-tiny w3-grey">
-                        {{k}}-{{r[ctrl.conf.fr[k].frn.toLowerCase()+'_id']}} </span>&nbsp;
-                    <span data-am:rs:row data-tag="{{k}}"></span>
-                    <div data-ng-if="'mr'==k">
-                        {{r.period}} {{r.periodunit}}
-                        <span> Період:
-                            <span data-ng-repeat="mrTs in r.calc_period">{{mrTs|date:'shortTime'
-                                }}|</span>
-                        </span>
-                    </div>
-                    <div class="w3-container w3-border-left">
-                        <div class="" data-ng-repeat="(k1,v1) in ctrl.conf.fr[k].sql_app_children001">
-                            <div class="" data-ng-repeat="r in ctrl.conf.fr.cp.docbody.children[k1]"
-                                d11ata-ng-if="r.parent_careplan">
-                                <span class="w3-tiny w3-grey">
-                                    {{k1}}-{{r[ctrl.conf.fr[k].sql_app_children001[k1].id_name]}}
-                                    {{ctrl.conf.fr[k].sql_app_children001[k1].id_name.split('_')[0]}}
-                                </span>&nbsp;
-                                <span class="w3-tiny am-b">Вимірювання:</span>
-                                <span title="{{r.display}}"> {{r.code}} </span>
-                                {{r.duration_s}} {{r.unit}}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div>
-            <div class="w3-border-top"> day | hour </div>
-            <div class="w3-row w3-border-top w3-tiny am-b">
-                <div class="w3-col w3-right w3-border-left w3-center" data-ng-repeat="d in ctrl.conf.form.dayBlank"
-                    style="width:30px">{{d+1}}</div>
-                <div class="w3-col" style="width:16px">гд</div>
-                <div class="w3-rest w3-border-left " style="padding-left: 4px;">
-                    <span class="w3-right"> <sup>день</sup> </span>
-                    назва
-                </div>
-            </div>
-            <div class="w3-row w3-border-top" data-ng-repeat="hh in ctrl.conf.form.hoursOfDay">
-                <div class="w3-col w3-right w3-border-left w3-center" data-ng-repeat="d in ctrl.conf.form.dayBlank"
-                    style="width:30px">&nbsp;</div>
-                <div class="w3-col w3-tiny" style="width:16px">{{hh < 10?'0':''}}{{hh}}</div>
-                        <div class="w3-rest w3-border-left " style="padding-left: 4px;">
-                            <span data-ng-repeat="r in ctrl.conf.form.hourMap[hh]" data-ng-if="r">
-                                <span data-am:rs:row data-tag="mr"></span>
-                            </span>
-                        </div>
-                </div>
-            </div>
-        </div>
+        <div class="ng-view"></div>
+        {{ctrl.singlePage.LastUrl().lenght()}}
+    </div>
 </body>
