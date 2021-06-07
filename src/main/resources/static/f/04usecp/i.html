@@ -23,7 +23,7 @@
         Hi 04 <span class="am-b"> usage CarePlan</span>
         <- <a href="/f/sql/03/cp.html#!/cp_372844"> create CarePlan</a>
     </div>
-    <div class="w3-container ">
+    <div class="w3-container am-max-width-1">
         -- {{ctrl.conf.fr.cp.docbody.fhir_domainresource}}
         <div class="w3-container w3-border-left">
             <div class="" data-ng-repeat="(k,v) in ctrl.conf.fr.cp.docbody.children">
@@ -32,10 +32,8 @@
                         {{k}}-{{r[ctrl.conf.fr[k].frn.toLowerCase()+'_id']}} </span>&nbsp;
                     <span data-am:rs:row data-tag="{{k}}"></span>
                     <div data-ng-if="'mr'==k">
-                        {{r.period}}
-                        {{r.periodunit}}
-                        <span>
-                            Період:
+                        {{r.period}} {{r.periodunit}}
+                        <span> Період:
                             <span data-ng-repeat="mrTs in r.calc_period">{{mrTs|date:'shortTime'
                                 }}|</span>
                         </span>
@@ -57,5 +55,27 @@
                 </div>
             </div>
         </div>
-    </div>
+        <div>
+            <div class="w3-border-top"> day | hour </div>
+            <div class="w3-row w3-border-top w3-tiny am-b">
+                <div class="w3-col w3-right w3-border-left w3-center" data-ng-repeat="d in ctrl.conf.form.dayBlank"
+                    style="width:30px">{{d+1}}</div>
+                <div class="w3-col" style="width:16px">гд</div>
+                <div class="w3-rest w3-border-left " style="padding-left: 4px;">
+                    <span class="w3-right"> <sup>день</sup> </span>
+                    назва
+                </div>
+            </div>
+            <div class="w3-row w3-border-top" data-ng-repeat="hh in ctrl.conf.form.hoursOfDay">
+                <div class="w3-col w3-right w3-border-left w3-center" data-ng-repeat="d in ctrl.conf.form.dayBlank"
+                    style="width:30px">&nbsp;</div>
+                <div class="w3-col w3-tiny" style="width:16px">{{hh < 10?'0':''}}{{hh}}</div>
+                        <div class="w3-rest w3-border-left " style="padding-left: 4px;">
+                            <span data-ng-repeat="r in ctrl.conf.form.hourMap[hh]" data-ng-if="r">
+                                <span data-am:rs:row data-tag="mr"></span>
+                            </span>
+                        </div>
+                </div>
+            </div>
+        </div>
 </body>

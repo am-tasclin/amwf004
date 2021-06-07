@@ -2,6 +2,13 @@
 const singlePage = {}, conf = {}, sql_app = {}, calc_fr = {}
 var app = angular.module("app", ['ngRoute', 'ngResource', 'ngSanitize', 'ngLocale']);
 angular.element(() => angular.bootstrap(document, ['app']))
+conf.form = {}
+conf.form.hourMap = {}
+conf.form.startHour = 8
+conf.form.hoursOfDay = Array.from(Array(24).keys()).map(n =>
+    n + conf.form.startHour - (n + conf.form.startHour > 24 ? 24 : 0))
+conf.form.dayForBlank = 10
+conf.form.dayBlank = Array.from(Array(conf.form.dayForBlank).keys()).map(n => n).reverse()
 conf.fr = {}
 conf.fr.cp = {
     frn: 'CarePlan',
@@ -26,7 +33,6 @@ calc_fr.mr.period = (i) => {
 }
 
 conf.fr.mr = {
-    calc_fn: calc_fr.mr,
     frn: 'MedicationRequest',
     amRsRowHtml: '<span>{{r.substance_code}} {{r.n_quantity_value}}</span> \n\
     <span>{{r.quantity_value}} {{r.quantity_code}}</span> \n\
@@ -53,7 +59,7 @@ app.directive('amRsRow', ($compile) => {
             confEl = conf.fr[tag]
             if (a.innerHtml)
                 angular.forEach(a.innerHtml.split('.'),
-                    (v) => innerHtml = innerHtml ? innerHtml[v] : confEl[v])
+                    v => innerHtml = innerHtml ? innerHtml[v] : confEl[v])
             if (a.innerHtmlRaw) innerHtml = a.innerHtmlRaw
             if (!innerHtml)
                 if (confEl)
@@ -80,7 +86,6 @@ class InitPageController {
     p2f
     constructor($http, p2f, dataBeFactory, $filter) {
         this.conf = conf
-        calc_fr.$filter = $filter
         p2f.hi()
         dataBeFactory.docbodyjson.get({ doc_id: 372844 }).$promise.then((data) => {
             conf.fr.cp.docbody = data
@@ -88,10 +93,13 @@ class InitPageController {
             angular.forEach(conf.fr.cp.docbody.children.mr, (mr, k) => {
                 let calc_period = calc_fr.mr.period(k)
                 mr.calc_period = calc_period
-                console.log(k, mr.calc_period)
-                angular.forEach(calc_period, (ts) => {
-                    console.log($filter('date')(ts, 'short'))
+                let hourMap = mr.calc_period.map(ts => $filter('date')(ts, 'H'))
+                angular.forEach(hourMap, h => {
+                    if (!conf.form.hourMap[h])
+                        conf.form.hourMap[h] = []
+                    conf.form.hourMap[h].push(mr)
                 })
+                console.log(conf.form.hourMap, 2)
             })
         })
     }
