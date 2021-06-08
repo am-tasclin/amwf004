@@ -5,8 +5,11 @@ angular.element(() => angular.bootstrap(document, ['app']))
 conf.form = {}
 conf.form.hourMap = {}
 conf.form.startHour = 8
-conf.form.hoursOfDay = Array.from(Array(24).keys()).map(n =>
-    n + conf.form.startHour - (n + conf.form.startHour > 24 ? 24 : 0))
+conf.form.changeDutyHour = 9
+conf.form.hoursOfDay = () => Array.from(Array(24).keys()).map(n =>
+    n + conf.form.startHour - (n + conf.form.startHour > 23 ? 24 : 0))
+conf.form.hoursOfDayR = () => conf.form.hoursOfDay().reverse()
+console.log(1, conf.form.hoursOfDayR)
 conf.form.dayForBlank = 10
 conf.form.dayBlank = Array.from(Array(conf.form.dayForBlank).keys()).map(n => n).reverse()
 conf.fr = {}
@@ -108,8 +111,8 @@ class InitPageController {
                 mr.calc_duration = calc_fr.mr.duration(k)
                 mr.calc_duration_sortDate = calc_fr.mr.duration(k).map(ts => $filter('date')(ts, 'shortDate'))
                 mr.calc_period = calc_fr.mr.period(k)
-                let hourMap = mr.calc_period.map(ts => $filter('date')(ts, 'H'))
-                angular.forEach(hourMap, h => {
+                mr.calc_hours = mr.calc_period.map(ts => $filter('date')(ts, 'H'))
+                angular.forEach(mr.calc_hours, h => {
                     if (!conf.form.hourMap[h]) conf.form.hourMap[h] = []
                     conf.form.hourMap[h].push(mr)
                 })

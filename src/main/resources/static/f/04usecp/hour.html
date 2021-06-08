@@ -1,1 +1,26 @@
-hour.html
+<div>
+    <div class="w3-row w3-border-top w3-tiny am-b">
+        <div class="w3-col w3-right w3-border-left w3-center" data-ng-repeat="hh in ctrl.conf.form.hoursOfDayR()"
+            data-ng-class="{'w3-leftbar':hh==ctrl.conf.form.changeDutyHour}" style="width:22px">
+            {{hh}}
+        </div>
+        <div class="w3-rest w3-border-left " style="padding-left: 4px;">
+            <span class="w3-right"> <sup> гд</sup> </span> назва
+        </div>
+    </div>
+    <div class="w3-row w3-border-top" data-ng-repeat="n in ctrl.conf.form.dayBlank"
+    data-ng-init="nIndex=$index"
+    >
+        <div class="w3-col w3-right w3-border-left w3-center" data-ng-repeat="hh in ctrl.conf.form.hoursOfDayR()"
+            style="width:22px">
+            &nbsp;
+            {{ctrl.conf.fr.cp.docbody.children.mr[nIndex].calc_hours.includes(''+hh)?'-':''}}
+        </div>
+        <div class="w3-rest w3-border-left " style="padding-left: 4px;">
+            <div class="" data-ng-repeat="r in [ctrl.conf.fr.cp.docbody.children.mr[$index]]" data-ng-if="r">
+                <span data-am:rs:row data-tag="mr"></span>
+            </div>
+            {{ctrl.conf.fr.cp.docbody.children.mr[$index]?'':'&nbsp;'}}
+        </div>
+    </div>
+</div>
