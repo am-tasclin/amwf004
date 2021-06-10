@@ -1,4 +1,9 @@
 <div>
+    <a
+    data-ng-click="ctrl.editFRFactory.saveDocBody()"
+    href="#!{{ctrl.singlePage.Url()}}" class="w3-btn w3-padding-small w3-right w3-tiny am-b">
+        Fix for Use
+    </a>
     <span class="w3-small am-b"> План лікування:</span>
     {{r.fhir_domainresource}}
     <div data-ng-repeat="sql_app_child in ctrl.conf.fr.cp.sql_app_children">

@@ -70,6 +70,9 @@ class EditFHIResourceService {
     constructor(dataBeFactory) {
         this.dataBeFactory = dataBeFactory
     }
+    saveDocBody = () => {
+        console.log(1,'fixForUse')
+    }
     addEl_save = (r) => {
         let lastUrlTag = singlePage.LastUrlTag(),
             forLastUrlTag = singlePage.ForLastUrlTag(),
