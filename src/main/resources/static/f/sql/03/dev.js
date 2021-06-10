@@ -24,8 +24,8 @@ conf.showDocJson = () => {
         console.log(k, v.list)
         docOfPage.children[k] = v.list
     })
-    console.log(singlePage.FirstUrlTag(), docOfPage, JSON.stringify(docOfPage, null, 1))
-    return 1
+    // console.log(singlePage.FirstUrlTag(), docOfPage, JSON.stringify(docOfPage, null, 1))
+    return JSON.stringify(docOfPage, null, 1)
 }
 
 app.directive('amRsRow', ($compile) => {

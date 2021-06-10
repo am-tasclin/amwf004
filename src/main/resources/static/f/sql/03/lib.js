@@ -41,7 +41,7 @@ singlePage.ClickTagHref = (tag, id) => {
 singlePage.LinkUp = (fromTag, toTag, r) => {
     let fromTagId = '', linkUp = ''
     if (!fromTag || !conf.fr[fromTag] || !conf.fr[fromTag].frn || !r)
-        console.log('ERROR: ',fromTag, conf.fr[fromTag], r)
+        console.log('ERROR: ', fromTag, conf.fr[fromTag], r)
     else {
         fromTagId = '/' + fromTag + (r[conf.fr[fromTag].frn.toLowerCase() + '_id'] ? ('_' + r[conf.fr[fromTag].frn.toLowerCase() + '_id']) : '')
         linkUp = singlePage.Url().split(fromTagId)[0] + fromTagId
@@ -71,7 +71,14 @@ class EditFHIResourceService {
         this.dataBeFactory = dataBeFactory
     }
     saveDocBody = () => {
-        console.log(1,'fixForUse')
+        let dbJson = conf.showDocJson()
+        let so = {
+            doc_id: 1 * singlePage.FirstUrlId(), dbJson: dbJson
+            , sql: 'UPDATE docbody SET docbody=:dbJson WHERE docbody_id=:doc_id ',
+        }
+        this.dataBeFactory.url_sql_read_db1.save(so).$promise.then((map) => {
+            console.log(map)
+        })
     }
     addEl_save = (r) => {
         let lastUrlTag = singlePage.LastUrlTag(),

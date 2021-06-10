@@ -416,7 +416,6 @@ class FirstController extends AmDocAbstractController {
 }
 app.controller("FirstController", FirstController)
 
-
 // app.factory("edTextFactory", EdTextFactory)
 class EdTextFactory {
     constructor($timeout, $q, dataFactory) {
@@ -469,6 +468,7 @@ class EdTextFactory {
             },
             sortUpElement: (id) => {
                 let so = upDowntElement(id, -1)
+                console.log(so, so.sql, Object.keys(so), so.dataAfterSave)
                 dataFactory.url_sql_read_db1.save(so).$promise.then((map) => {
                     console.log(map)
                 })

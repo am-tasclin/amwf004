@@ -129,3 +129,17 @@ singlePage.Url = () => window.location.href.split('#!')[1]
 singlePage.LastUrl = () => singlePage.Url() ? singlePage.Url().split('/')[singlePage.Url().split('/').length - 1] : ''
 singlePage.LastUrlTag = () => singlePage.LastUrl().split('_')[0]
 singlePage.LastUrlId = () => singlePage.LastUrl().split('_')[1]
+
+var markdownInLine = function (text) {
+    if (!text) return
+    var t2 = ('' + text)
+    var bold = /\u002A\u002A([\wа-яА-Яі\-]+[\s+[\wа-яА-Яі\-]*]*)\u002A\u002A/gmi;
+    //		var bold	= /\u002A\u002A([\wа-яА-Яі\-]+\s*[\wа-яА-Яі\-]*)\u002A\u002A/gmi;
+    var t2 = t2.replace(bold, '<strong>$1</strong>');
+    //		var bold = "\u002A\u002A([\wа-яА-Яі\-]+\s*[\wа-яА-Яі\-]*)\u002A\u002A";
+    //		var t2 = (''+text).replace(new RegExp(bold, 'gi'), '<strong>$1</strong>');
+    var link = /\[([^`]{1,40})\]\(([^`)]*)\)/gmi
+    //			var link	= /\[([^`]*)\]\(([^`)]*)\)/gmi
+    var t2 = t2.replace(link, '<a href="$2">$1</a>');
+    return t2
+}
