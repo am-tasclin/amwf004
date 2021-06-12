@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="uk-UA" data-ng-controller="InitPageController as ctrl">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>amf-{{ctrl.singlePage.Url().substr(1)}}</title>
+    <link rel="stylesheet" href="/webjars/font-awesome/5.15.2/css/all.min.css">
+    <link rel="stylesheet" href="/f/css/w3.css" type="text/css">
+    <link rel="stylesheet" href="/f/css/am.css" type="text/css">
+    <link rel="shortcut icon" href="/f/img/algoritmed.ico" type="image/x-icon">
+    <script src="/webjars/angular/1.8.2/angular.min.js" type="application/javascript"></script>
+    <script src="/webjars/angular-route/1.8.2/angular-route.min.js" type="application/javascript"></script>
+    <script src="/webjars/angular-resource/1.8.2/angular-resource.min.js" type="application/javascript"></script>
+    <script src="/webjars/angular-sanitize/1.8.2/angular-sanitize.min.js" type="application/javascript"></script>
+    <script src="uploadFileAjs.js" type="application/javascript"></script>
+</head>
+
+<body>
+    <div class="w3-container am-max-width-1">
+        <div class="w3-border-bottom">
+            <a href="/" class="w3-btn w3-border w3-padding-small w3-tiny">↑</a>
+            <span class="w3-hover-shadow">
+                <span class="w3-tiny"> UploadFileAjs </span>
+            </span>
+        </div>
+        <div>
+            File to upload:
+            <div><input type="file" name="file" class="w3-btn w3-border" data-ng-files="ctrl.getTheFiles($files)" />
+            </div>
+        </div>
+        <p>
+            <input type="submit" value="Upload" class="w3-btn w3-border" data-ng-click="ctrl.uploadFiles()" />
+        </p>
+        <div data-ng-repeat="f in ctrl.filesData.files" class="w3-container">
+            <a href="{{f}}">
+                {{f}}
+            </a>
+        </div>
+    </div>
+</body>
+
+</html>

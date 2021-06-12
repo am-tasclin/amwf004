@@ -10,9 +10,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,6 +33,19 @@ public class FileUploadController {
 	@Autowired
 	public FileUploadController(StorageService storageService) {
 		this.storageService = storageService;
+	}
+    @GetMapping("/r/storagem")
+	public @ResponseBody ModelMap storageModel() throws IOException {
+		logger.info("\n--39-- / - listUploadedFiles");
+		ModelMap model = new ModelMap();
+		model.addAttribute("files",
+				storageService.loadAll()
+						.map(path -> MvcUriComponentsBuilder
+								.fromMethodName(FileUploadController.class, "serveFile", path.getFileName().toString())
+								.build().toUri().toString())
+						.collect(Collectors.toList()));
+
+		return model;
 	}
     @GetMapping("/r/storage")
 	public String listUploadedFiles(Model model) throws IOException {
@@ -56,9 +71,18 @@ public class FileUploadController {
 				.body(file);
 	}
 
+	@PostMapping("/r/storagem")
+	public ResponseEntity handleFileUploadStorageM(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
+		logger.info("\n--75-- /r/storagem - handleFileUpload POST");
+		storageService.store(file);
+		redirectAttributes.addFlashAttribute("message",
+				"You successfully uploaded " + file.getOriginalFilename() + "!");
+		return ResponseEntity.ok(HttpStatus.OK);
+	}
+
 	@PostMapping("/r/storage")
 	public String handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
-		logger.info("\n--63-- / - handleFileUpload POST");
+		logger.info("\n--63-- /r/storagem - handleFileUpload POST");
 		storageService.store(file);
 		redirectAttributes.addFlashAttribute("message",
 				"You successfully uploaded " + file.getOriginalFilename() + "!");

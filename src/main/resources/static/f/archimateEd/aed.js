@@ -3,7 +3,7 @@ const singlePage = {}, conf = {}, sql_app = {}
 // conf.filePath = 'http://algoritmed.com/archi003/f/AlgoritmedFHIR-202104.archimate.xml'
 // let filePath = '/f/archimate/regulations-data-model.archimate.xml'
 // lib singlePage
-var app = angular.module("app", ['ngRoute', 'ngResource', 'ngSanitize']);
+var app = angular.module("app", ['ngRoute', 'ngResource', 'ngSanitize'])
 angular.element(() => angular.bootstrap(document, ['app']))
 const parser = new DOMParser()
 conf.filePath = '/f/archimate/AlgoritmedFHIR-202104.archimate.xml'
