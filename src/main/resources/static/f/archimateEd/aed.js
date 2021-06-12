@@ -24,6 +24,18 @@ conf.clickSvg = (x) => {
 //app.factory("am2f", ArchiMateFileFactory)
 class ArchiMateFileFactory {
     constructor() { }
+    setEditWiki = (x) => {
+        if(conf.editWikiId==x.id){
+            delete conf.editWikiId
+            delete conf.editWikiText
+            return
+        } 
+        conf.editWikiId = x.id
+        conf.editWikiText = x.firstElementChild.innerHTML
+        console.log(1, x, x.firstElementChild)
+        let x2 = conf.xmlDoc.getElementById(conf.editWikiId)
+        console.log(x2)
+    }
     setXopen = (x) => {
         if (x) {
             console.log(2, x.id)
@@ -94,12 +106,12 @@ class RouteProviderConfig {
 app.config(RouteProviderConfig)
 
 // app.controller("InitPageController", InitPageController)
-const initPageMap = (x) => {
+const initPageMap = x => {
     conf.firstListIds.push(x.id)
     initDeepElMap(conf.elMap[x.id] = x)
 }
-const initDeepElMap = (x) =>
-    angular.forEach(x.children, (x) => x.id ? initDeepElMap(conf.elMap[x.id] = x) : null)
+const initDeepElMap = x =>
+    angular.forEach(x.children, x => x.id ? initDeepElMap(conf.elMap[x.id] = x) : null)
 
 class InitPageController {
     am2f
@@ -108,15 +120,16 @@ class InitPageController {
         this.conf = conf
         const ctrl = this
         ctrl.singlePage = singlePage
+        ctrl.markdownInLine = markdownInLine
         $http.get(conf.filePath).then((response) => {
             const xmlDoc = parser.parseFromString(response.data, "text/xml")
-            ctrl.xmlDoc = xmlDoc
+            conf.xmlDoc = ctrl.xmlDoc = xmlDoc
             console.log(xmlDoc.firstChild.getAttribute('name'))
             conf.firstListIds = []
-            angular.forEach(xmlDoc.firstChild.children, (x) => initPageMap(x))
+            angular.forEach(xmlDoc.firstChild.children, x => initPageMap(x))
+            conf.firstListIds = conf.firstListIds.filter(n => n.length>1)
             let vf = conf.firstListIds.splice(conf.firstListIds.length - 1, 1)
             conf.firstListIds.splice(0, 0, vf)
-            console.log(conf.firstListIds)
             console.log(singlePage.Url())
             console.log(singlePage.LastUrlId())
         })

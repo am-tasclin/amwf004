@@ -1,9 +1,21 @@
 <div class="w3-leftbar w3-border-top w3-container"
     data-ng-if="ctrl.conf.elMap[ve.getAttribute('archimateElement')].firstElementChild.innerHTML">
-    <span class="w3-tiny am-b">
-        {{ctrl.conf.elMap[ve.getAttribute('archimateElement')].firstElementChild.localName}}:
+    <span class="w3-tiny am-b w3-tooltip">
+        {{ctrl.conf.elMap[ve.getAttribute('archimateElement')].firstElementChild.localName
+        }}<span class="w3-text w3-border"><i class="fas fa-ellipsis-v"></i>
+            <a href="#!{{ctrl.singlePage.Url()}}" data-ng-click="ctrl.am2f.setEditWiki(
+                    ctrl.conf.elMap[ve.getAttribute('archimateElement')])"><i class="fas fa-edit"></i>edit</a>
+        </span>:
     </span>
-    {{ctrl.conf.elMap[ve.getAttribute('archimateElement')].firstElementChild.innerHTML}}
+    <span
+        data-ng-bind-html="ctrl.markdownInLine(ctrl.conf.elMap[ve.getAttribute('archimateElement')].firstElementChild.innerHTML)">
+    </span>
+    <div class="w13-container w3-card "
+        data-ng-if="ctrl.conf.elMap[ve.getAttribute('archimateElement')].id==ctrl.conf.editWikiId">
+        a1
+        <textarea class="w3-border am-width-100pr"
+            data-ng-model="ctrl.conf.elMap[ve.getAttribute('archimateElement')].firstElementChild.innerHTML"></textarea>
+    </div>
 </div>
 <div data-ng-repeat="x in ctrl.conf.elMap[ve.getAttribute('archimateElement')].children" class="w3-leftbar w3-container"
     data-ng-if="x.localName=='property'">

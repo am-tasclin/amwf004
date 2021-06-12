@@ -4,9 +4,6 @@ angular.element(() => angular.bootstrap(document, ['app']))
 app.factory("dataBeFactory", DataDBexchangeService)
 app.factory("editFRFactory", EditFHIResourceService)
 
-conf.fixForUse = () => {
-    console.log(1)
-}
 conf.showDocJson = () => {
     let docOfPageFr = conf.fr[singlePage.FirstUrlTag()]
     let docOfPage = docOfPageFr.currEl

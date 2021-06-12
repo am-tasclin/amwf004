@@ -1,9 +1,14 @@
 <div class="w3-row">
     <div class="w3-third w3-border-right">
+        a1
+        {{ctrl.xmlDoc.firstChild.children.length}}
+        {{ctrl.xmlDoc.firstChild.children[ctrl.xmlDoc.firstChild.children.length-2].getAttribute('type')}}
+        a1
         <div data-ng-if="ctrl.xmlDoc.firstChild.children" class="w3-container w3-border-left">
             <div data-ng-repeat="xId in ctrl.conf.firstListIds" data-ng-init="x = ctrl.conf.elMap[xId]">
                 <a href="#!/el_{{x.id}}" data-ng-click="ctrl.am2f.clickAmItem(x)">
                     <div class="w3-hover-shadow" data-ng-class="{'w3-light-gray':ctrl.conf.currentX.id==x.id}">
+                       {{x.getAttribute('type')=='diagrams'}}
                         <span class="w3-tiny am-b">{{x.localName}}</span> {{x.getAttribute('name')}}
                     </div>
                 </a>
