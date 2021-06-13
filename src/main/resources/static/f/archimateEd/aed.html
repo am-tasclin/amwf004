@@ -23,6 +23,9 @@
             <span class="w3-hover-shadow">
                 <span class="w3-tiny"> ArchiMate </span>
                 <span class="am-b"> {{ctrl.xmlDoc.firstChild.getAttribute('name')}} </span>
+                - <a href="/f/archimate/{{ctrl.conf.filePath.split('/').reverse()[0]}}" class="w3-tiny w3-hover-shadow"
+                    target="_blank">
+                    XML</a>
                 <input data-ng-click="ctrl.uploadFiles()" type="submit" value="Upload"
                     class="w3-btn w3-ripple w3-border w3-padding-small w3-small am-b" />
                 —
