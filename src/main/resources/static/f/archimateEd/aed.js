@@ -25,11 +25,11 @@ conf.clickSvg = (x) => {
 class ArchiMateFileFactory {
     constructor() { }
     setEditWiki = (x) => {
-        if(conf.editWikiId==x.id){
+        if (conf.editWikiId == x.id) {
             delete conf.editWikiId
             delete conf.editWikiText
             return
-        } 
+        }
         conf.editWikiId = x.id
         conf.editWikiText = x.firstElementChild.innerHTML
         console.log(1, x, x.firstElementChild)
@@ -113,6 +113,8 @@ const initPageMap = x => {
 const initDeepElMap = x =>
     angular.forEach(x.children, x => x.id ? initDeepElMap(conf.elMap[x.id] = x) : null)
 
+let formData = new FormData()
+
 class InitPageController {
     am2f
     constructor($http, am2f) {
@@ -121,17 +123,29 @@ class InitPageController {
         const ctrl = this
         ctrl.singlePage = singlePage
         ctrl.markdownInLine = markdownInLine
+
+        ctrl.uploadFiles = () => {
+            console.log('add file to formdata', formData)
+            let sXmlDoc = new XMLSerializer().serializeToString(ctrl.xmlDoc)
+            var file = new File([sXmlDoc], conf.filePath.split('/').reverse()[0]);
+            console.log(file)
+            formData.append('file', file)
+            $http({
+                method: 'POST', url: '/r/storagem', headers: { 'Content-Type': undefined },
+                data: formData,
+            }).then(d => console.log(d))
+        }
+
         $http.get(conf.filePath).then((response) => {
             const xmlDoc = parser.parseFromString(response.data, "text/xml")
             conf.xmlDoc = ctrl.xmlDoc = xmlDoc
             console.log(xmlDoc.firstChild.getAttribute('name'))
             conf.firstListIds = []
             angular.forEach(xmlDoc.firstChild.children, x => initPageMap(x))
-            conf.firstListIds = conf.firstListIds.filter(n => n.length>1)
+            conf.firstListIds = conf.firstListIds.filter(n => n.length > 1)
             let vf = conf.firstListIds.splice(conf.firstListIds.length - 1, 1)
             conf.firstListIds.splice(0, 0, vf)
-            console.log(singlePage.Url())
-            console.log(singlePage.LastUrlId())
+            console.log(singlePage.Url(), singlePage.LastUrlId())
         })
     }
 }

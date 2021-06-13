@@ -23,6 +23,8 @@
             <span class="w3-hover-shadow">
                 <span class="w3-tiny"> ArchiMate </span>
                 <span class="am-b"> {{ctrl.xmlDoc.firstChild.getAttribute('name')}} </span>
+                <input data-ng-click="ctrl.uploadFiles()" type="submit" value="Upload"
+                    class="w3-btn w3-ripple w3-border w3-padding-small w3-small am-b" />
                 —
                 <span class="w3-tiny">
                     {{ctrl.xmlDoc.firstChild.id}}/{{ctrl.conf.currentX.id}}
