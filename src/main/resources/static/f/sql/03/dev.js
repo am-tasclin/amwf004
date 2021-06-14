@@ -34,7 +34,7 @@ app.directive('amRsRow', ($compile) => {
             confEl = conf.fr[tag]
             if (a.innerHtml)
                 angular.forEach(a.innerHtml.split('.'),
-                    (v) => innerHtml = innerHtml ? innerHtml[v] : confEl[v])
+                    v => innerHtml = innerHtml ? innerHtml[v] : confEl[v])
             if (a.innerHtmlRaw) innerHtml = a.innerHtmlRaw
             if (!innerHtml)
                 if (confEl)

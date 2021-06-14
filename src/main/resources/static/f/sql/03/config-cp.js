@@ -3,7 +3,7 @@ conf.fr.cp = {
     frn: 'CarePlan',
     children: ['mr', 'gl', 'on'],
     sql_app: 'tableOfFHIR_CarePlan',
-    sql_app_children_frs: ['mr','gl'],
+    sql_app_children_frs: ['mr', 'gl'],
     sql_app_children: [
         { fr: 'mr', connect_param: 'parent_careplan', sql_app: 'tableOfFHIR_CarePlan_plannedActivityReference_mr' },
         { fr: 'gl', connect_param: 'parent_careplan', sql_app: 'tableOfFHIR_CarePlan_Goal' },
@@ -289,3 +289,9 @@ conf.fr.qy = {
         },
     },
 }
+conf.vs = {}//ValueSet
+conf.vs.edEl = {
+    plus:'Створити новий',
+    minus:'Вилучити',
+    wrench:'Редагувати',
+}//EditElement

@@ -70,14 +70,24 @@ class EditFHIResourceService {
     constructor(dataBeFactory) {
         this.dataBeFactory = dataBeFactory
     }
+    deleteEl = () => {
+        let delId = singlePage.LastUrlId()
+        console.log(1, delId)
+    }
     saveDocBody = () => {
         let dbJson = conf.showDocJson()
         let so = {
             doc_id: 1 * singlePage.FirstUrlId(), dbJson: dbJson
             , sql: 'UPDATE docbody SET docbody=:dbJson WHERE docbody_id=:doc_id ',
         }
-        this.dataBeFactory.url_sql_read_db1.save(so).$promise.then((map) => {
-            console.log(map)
+        this.dataBeFactory.url_sql_read_db1.save(so).$promise.then(map => {
+            if (0 == map.update_0) {
+                so.sql = 'INSERT INTO docbody (docbody_id,docbody) VALUES (:doc_id, :dbJson) '
+                console.log(so)
+                this.dataBeFactory.url_sql_read_db1.save(so).$promise.then(map => {
+                    console.log(map)
+                })
+            }
         })
     }
     addEl_save = (r) => {

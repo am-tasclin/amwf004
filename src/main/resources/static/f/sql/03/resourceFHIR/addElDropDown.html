@@ -15,30 +15,55 @@
             title="Створити новий елемент: {{ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].frn}}">
             <i class="fas fa-wrench"></i>
         </button>
+        <button class="w3-btn w3-padding-small w3-border" data-ng-click="ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].openDialog 
+            = ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].openDialog == (ctrl.singlePage.LastUrlTag() + '_minus')
+            ?'':ctrl.singlePage.LastUrlTag() + '_minus' ">
+            <i class=" fas fa-minus"></i>
+        </button>
     </span>
     <div class="w3-card w3-leftbar"
         data-ng-if="ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].openDialog.includes(ctrl.singlePage.LastUrlTag()+'_')"
         data-ng-class="{'w3-show':ctrl.conf.NewEl.openedDialog==ctrl.singlePage.LastUrlTag()}">
+
         <div class="w3-blue-gray w3-tiny am-b">
             <i
                 class="w3-medium w3-border fas fa-{{ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].openDialog.split('_')[1]}}"></i>
             &nbsp;
-            Створити новий елемент:
+            {{ctrl.conf.vs.edEl[ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].openDialog.split('_')[1]]}}
+            елемент:
             {{ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].frn}}
             <a href="" class="w3-right w3-btn w3-padding-small"
                 data-ng-click="ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].openDialog = ''"><i
                     class="far fa-window-close"></i></a>
         </div>
-        <div class="w3-border-bottom" data-am:rs:row data-inner:html="NewEl.amRsRowHtml"></div>
-        <div data-ng-if="!ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].NewEl 
-                || ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].NewEl.newElName">
-            Назва елементу:
-            <textarea data-ng-model="ctrl.conf.NewEl.newElName" class="w3-border am-width-100pr w3-medium"></textarea>
+        <div ng-switch="ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].openDialog.split('_')[1]">
+            <div ng-switch-when="minus">
+                Пошук протипоказів до вилучення Елементу: {{ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].frn}}
+                <div>
+                    <button class="w3-btn w3-border w3-padding-small" data-ng-click="ctrl.editFRFactory.deleteEl()">
+                        <i class=" fas fa-minus"></i>
+                        Видалити</button>
+                </div>
+            </div>
+            <div ng-switch-when="matchValue2">...</div>
+            <div ng-switch-default>
+
+                <div class="w3-border-bottom" data-am:rs:row data-inner:html="NewEl.amRsRowHtml"></div>
+                <div data-ng-if="!ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].NewEl 
+                        || ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].NewEl.newElName">
+                    Назва елементу:
+                    <textarea data-ng-model="ctrl.conf.NewEl.newElName"
+                        class="w3-border am-width-100pr w3-medium"></textarea>
+                </div>
+                <div data-ng-if="d.edTemplate" data-ng-include="'/f/sql/03/'+d.frn+'/'+d.edTemplate+'.html'">
+                </div>
+                <button class="w3-btn w3-border w3-padding-small"
+                    data-ng-click="ctrl.editFRFactory.newEl_save()">save</button>
+                <a href="" class="w3-btn w3-border w3-padding-small"
+                    data-ng-click="ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].openDialog = ''">cances</a>
+
+            </div>
         </div>
-        <div data-ng-if="d.edTemplate" data-ng-include="'/f/sql/03/'+d.frn+'/'+d.edTemplate+'.html'">
-        </div>
-        <button class="w3-btn w3-border w3-padding-small" data-ng-click="ctrl.editFRFactory.newEl_save()">save</button>
-        <a href="" class="w3-btn w3-border w3-padding-small"
-            data-ng-click="ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].openDialog = ''">cances</a>
+
     </div>
 </div>
