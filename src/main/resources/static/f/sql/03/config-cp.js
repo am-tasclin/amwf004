@@ -32,6 +32,9 @@ conf.fr.cp = {
             },
         },
     },
+    del: {
+        mr: { delete_doc: {} },
+    },
     NewEl: {
         amRsRowHtml: "Новий <b>план лікування</b>, прив'язка з списком активності.",
         newElName: true,
@@ -291,7 +294,7 @@ conf.fr.qy = {
 }
 conf.vs = {}//ValueSet
 conf.vs.edEl = {
-    plus:'Створити новий',
-    minus:'Вилучити',
-    wrench:'Редагувати',
+    plus: 'Створити новий',
+    minus: 'Вилучити',
+    wrench: 'Редагувати',
 }//EditElement

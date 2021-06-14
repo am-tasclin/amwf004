@@ -1,6 +1,6 @@
 'use strict';
 sql_app.tableOfFHIR_CarePlan_plannedActivityReference_mr = () => {
-    let sql = 'SELECT activity.parent parent_careplan, activity.doc_id activity_id, par.doc_id par_id, par.reference2 par_r2 \n\
+    let sql = 'SELECT activity.parent parent_careplan, activity.doc_id activity_id, par.doc_id adn_id, par.reference2 par_r2 \n\
     FROM doc activity, doc par \n\
     WHERE par.parent=activity.doc_id AND activity.reference=368789'
     sql = 'SELECT * FROM (' + sql + ' ) x \n\
@@ -73,7 +73,7 @@ sql_app.tableOfFHIR_Goal_dueDuration = () => {
     return sql
 }
 sql_app.tableOfFHIR_CarePlan_Goal_id = () => {
-    let sql = 'SELECT cpgoal.parent parent_careplan, goal.reference2 goal_id \n\
+    let sql = 'SELECT cpgoal.parent parent_careplan, goal.reference2 goal_id, goal.doc_id adn_id \n\
     FROM doc cpgoal, doc goal WHERE goal.parent=cpgoal.doc_id and cpgoal.reference=373017'
     return sql
 }
@@ -350,6 +350,5 @@ sql_app.concatSql = (sql) => {
             }
         }
     }
-    console.log(1)
     return sql
 }

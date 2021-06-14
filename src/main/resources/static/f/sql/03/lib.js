@@ -40,9 +40,9 @@ singlePage.ClickTagHref = (tag, id) => {
 }
 singlePage.LinkUp = (fromTag, toTag, r) => {
     let fromTagId = '', linkUp = ''
-    if (!fromTag || !conf.fr[fromTag] || !conf.fr[fromTag].frn || !r)
-        console.log('ERROR: ', fromTag, conf.fr[fromTag], r)
-    else {
+    if (!fromTag || !conf.fr[fromTag] || !conf.fr[fromTag].frn || !r) {
+        // console.log('ERROR: ', fromTag, conf.fr[fromTag], r)
+    } else {
         fromTagId = '/' + fromTag + (r[conf.fr[fromTag].frn.toLowerCase() + '_id'] ? ('_' + r[conf.fr[fromTag].frn.toLowerCase() + '_id']) : '')
         linkUp = singlePage.Url().split(fromTagId)[0] + fromTagId
             + '/' + toTag + (r[conf.fr[toTag].frn.toLowerCase() + '_id'] ? ('_' + r[conf.fr[toTag].frn.toLowerCase() + '_id']) : '')
@@ -51,10 +51,7 @@ singlePage.LinkUp = (fromTag, toTag, r) => {
     return linkUp
 }
 
-class AbstractController {
-    singlePage = singlePage
-    conf = conf
-}
+class AbstractController { singlePage = singlePage; conf = conf }
 
 conf.NewEl = {}
 conf.NewEl.openDialog = (openedDialogNewEl) => {
@@ -72,7 +69,16 @@ class EditFHIResourceService {
     }
     deleteEl = () => {
         let delId = singlePage.LastUrlId()
-        console.log(1, delId)
+        let delTag = singlePage.LastUrlTag()
+        let nMr = conf.fr.cp.currEl.children[singlePage.LastUrlTag()].filter(mr =>
+            mr[conf.fr[singlePage.LastUrlTag()].frn.toLowerCase() + '_id'] == singlePage.LastUrlId())[0]
+        let delParams = conf.fr[singlePage.ForLastUrlTag()].del[singlePage.LastUrlTag()]
+        let delParamsSqlMap = delParams.delete_doc
+        delParamsSqlMap.doc_id = nMr.adn_id
+        console.log(1, nMr, delParamsSqlMap)
+        this.dataBeFactory.adn_delete.save({ delete_doc: delParamsSqlMap }).$promise.then(map => {
+            console.log(1, map)
+        })
     }
     saveDocBody = () => {
         let dbJson = conf.showDocJson()

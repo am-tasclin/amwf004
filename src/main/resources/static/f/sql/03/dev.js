@@ -4,25 +4,23 @@ angular.element(() => angular.bootstrap(document, ['app']))
 app.factory("dataBeFactory", DataDBexchangeService)
 app.factory("editFRFactory", EditFHIResourceService)
 
-conf.showDocJson = () => {
+conf.buildDocJson = () => {
     let docOfPageFr = conf.fr[singlePage.FirstUrlTag()]
     let docOfPage = docOfPageFr.currEl
-    angular.forEach(docOfPageFr.sql_app_children, (v) => {
-        if (!docOfPage.children) docOfPage.children = {}
+    if (!docOfPage.children) docOfPage.children = {}
+    angular.forEach(docOfPageFr.sql_app_children, v => {
         docOfPage.children[v.fr] = v.list
-        let el = conf.fr[v.fr]
-        angular.forEach(el.sql_app_children001, (v, k) => {
-            console.log(k, v.list)
-            docOfPage.children[k] = v.list
-        })
+        angular.forEach(conf.fr[v.fr].sql_app_children001, (v, k) =>
+            docOfPage.children[k] = v.list)
     })
-    angular.forEach(docOfPageFr.sql_app_children001, (v, k) => {
-        if (!docOfPage.children) docOfPage.children = {}
-        console.log(k, v.list)
-        docOfPage.children[k] = v.list
-    })
-    // console.log(singlePage.FirstUrlTag(), docOfPage, JSON.stringify(docOfPage, null, 1))
-    return JSON.stringify(docOfPage, null, 1)
+    angular.forEach(docOfPageFr.sql_app_children001, (v, k) =>
+        docOfPage.children[k] = v.list)
+}
+
+conf.showDocJson = () => {
+    // conf.buildDocJson()
+    let docOfPageFr = conf.fr[singlePage.FirstUrlTag()]
+    return JSON.stringify(docOfPageFr.currEl, null, 1)
 }
 
 app.directive('amRsRow', ($compile) => {
@@ -63,18 +61,18 @@ class InitFHIResourceController extends AbstractController {
             // console.log(1, sql)
             //read resource list
             dataBeFactory.httpGet({ sql: sql })
-                .then((dataSqlRequest) => {
+                .then(dataSqlRequest => {
                     $scope.dataSqlRequest = dataSqlRequest
-                    console.log(2, dataSqlRequest)
+                    conf.buildDocJson()
                 })
         }
         angular.forEach(conf.fr[singlePage.LastUrlTag()].dates, (v) => {
             let sql = sql_app[v.sql_app]()
             console.log(v, sql)
             dataBeFactory.httpGet({ sql: sql })
-                .then((dataSqlRequest) => {
+                .then(dataSqlRequest => {
                     v.dataSqlRequest = dataSqlRequest
-                    console.log(2, dataSqlRequest)
+                    conf.buildDocJson()
                 })
         })
         //read url id objects
@@ -86,29 +84,28 @@ class InitFHIResourceController extends AbstractController {
                     console.log(conf.fr[tag].sql_app)
                     let sql = sql_app.concatSql(sql_app[conf.fr[tag].sql_app]())
                     sql = 'SELECT * FROM (' + sql + ') x  WHERE ' + singlePage.TagIdName(tag) + ' = ' + tag_id
-                    // console.log(tag,conf.fr[tag].sql_app, sql)
-                    dataBeFactory.httpGet({ sql: sql }).then((dataSqlRequest) => {
+                    dataBeFactory.httpGet({ sql: sql }).then(dataSqlRequest => {
                         conf.fr[tag].currEl = dataSqlRequest.list[0]
-                        console.log(2, tag, dataSqlRequest, conf.fr[tag].currEl)
+                        conf.buildDocJson()
                     })
                     angular.forEach(conf.fr[tag].sql_app_children001, (sql_app_child, k) => {
                         let sql2 = sql_app[sql_app_child.sql_app]()
                         sql2 = sql_app.concatSql(sql2)
                         sql2 = 'SELECT * FROM ( ' + sql2 + ' ) x WHERE ' + sql_app_child.connect_param + ' = ' + tag_id
                         console.log(tag, tag_id, k, sql_app_child, sql2)
-                        dataBeFactory.httpGet({ sql: sql2 }).then((dataSqlRequest) => {
+                        dataBeFactory.httpGet({ sql: sql2 }).then(dataSqlRequest => {
                             sql_app_child.list = dataSqlRequest.list
-                            console.log(sql_app_child)
+                            conf.buildDocJson()
                         })
                     })
-                    angular.forEach(conf.fr[tag].sql_app_children, (sql_app_child) => {
+                    angular.forEach(conf.fr[tag].sql_app_children, sql_app_child => {
                         let sql2 = sql_app[sql_app_child.sql_app]()
                         console.log(sql_app_child, sql_app_child.connect_param)
                         sql2 = 'SELECT * FROM ( ' + sql2 + ' ) x WHERE ' + sql_app_child.connect_param + ' = ' + tag_id
                         sql2 = sql_app.concatSql(sql2)
-                        dataBeFactory.httpGet({ sql: sql2 }).then((dataSqlRequest) => {
-                            console.log(2, tag, dataSqlRequest)
+                        dataBeFactory.httpGet({ sql: sql2 }).then(dataSqlRequest => {
                             sql_app_child.list = dataSqlRequest.list
+                            conf.buildDocJson()
                         })
                     })
                 }
