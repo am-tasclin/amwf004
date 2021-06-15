@@ -10,6 +10,20 @@ conf.fr.cp = {
     ],
     amRsRowHtml: '<span>{{r.fhir_domainresource}}</span>',
     add: {
+        gl: {
+            initSqlCmdMap: (r) => {
+                let sqlCmdMap = conf.fr.cp.add.gl.sqlCmdMap = {}
+                let insert_doc = () => { return { reference2: r.goal_id } }
+                if (conf.fr.cp.currEl.goal_id) {
+                    sqlCmdMap.insert_doc = insert_doc()
+                    sqlCmdMap.insert_doc.parent = conf.fr.cp.currEl.goal_id
+                } else {
+                    sqlCmdMap.insert_doc = { parent: conf.fr.cp.currEl.careplan_id, reference: 373017, }
+                    sqlCmdMap.insert_doc.insert_doc = insert_doc()
+                }
+                console.log(conf.fr.cp.currEl.goal_id, r.goal_id, JSON.stringify(conf.fr.cp.add.gl.sqlCmdMap, null, 2))
+            },
+        },
         mr: {
             newUrl: (map) => {
                 let newUrl = '/cp_' + conf.fr.cp.currEl.careplan_id + '/mr_' + map.insert_doc.el.doc_id

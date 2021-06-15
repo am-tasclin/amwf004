@@ -8,8 +8,9 @@ sql_app.tableOfFHIR_CarePlan_plannedActivityReference_mr = () => {
     return sql
 }
 sql_app.tableOfFHIR_CarePlan = () => {
-    let sql = 'SELECT d.doc_id careplan_id, value FHIR_DomainResource, d.parent, a.doc_id activity_id FROM doc d \n\
+    let sql = 'SELECT d.doc_id careplan_id, value FHIR_DomainResource, d.parent, a.doc_id activity_id, goal.doc_id goal_id FROM doc d \n\
     LEFT JOIN doc a ON a.parent=d.doc_id AND a.reference=368789 \n\
+    LEFT JOIN doc goal ON goal.parent=d.doc_id AND goal.reference=373017 \n\
     LEFT JOIN string ON string_id=d.doc_id \n\
     WHERE 372080 IN (d.reference)'
     return sql

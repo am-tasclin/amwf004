@@ -6,6 +6,7 @@ app.factory("editFRFactory", EditFHIResourceService)
 
 conf.buildDocJson = () => {
     let docOfPageFr = conf.fr[singlePage.FirstUrlTag()]
+    if (!docOfPageFr.currEl) return
     let docOfPage = docOfPageFr.currEl
     if (!docOfPage.children) docOfPage.children = {}
     angular.forEach(docOfPageFr.sql_app_children, v => {

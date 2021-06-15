@@ -100,11 +100,11 @@ class EditFHIResourceService {
         let lastUrlTag = singlePage.LastUrlTag(),
             forLastUrlTag = singlePage.ForLastUrlTag(),
             forLastObj = conf.fr[forLastUrlTag],
-            addEl = forLastObj.add[lastUrlTag]
-        // console.log(1, r, lastUrlTag, forLastUrlTag, forLastObj, 2, addEl)
-        addEl.initSqlCmdMap(r)
-        console.log(addEl.sqlCmdMap)
-        this.dataBeFactory.adn_insert.save(addEl.sqlCmdMap).$promise.then((map) => {
+            confAddEl = forLastObj.add[lastUrlTag]
+        console.log(1, r, lastUrlTag, forLastUrlTag, forLastObj, 2, confAddEl)
+        confAddEl.initSqlCmdMap(r)
+        console.log(confAddEl.sqlCmdMap,1)
+        this.dataBeFactory.adn_insert.save(confAddEl.sqlCmdMap).$promise.then((map) => {
             console.log(map)
             // console.log(map, map.insert_doc.el, 1)
             // let newUrl = addEl.newUrl(map)
