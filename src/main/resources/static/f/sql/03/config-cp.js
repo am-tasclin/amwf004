@@ -48,8 +48,8 @@ conf.fr.cp = {
     },
     delEmptyDoc: {
         cmd: [
-            { delete_doc: {parent:singlePage.FirstUrlId()} },
-            { delete_doc: {doc_id:singlePage.FirstUrlId()} },
+            { delete_doc: { parent: singlePage.FirstUrlId() } },
+            { delete_doc: { doc_id: singlePage.FirstUrlId() } },
         ]
     },
     del: {
@@ -75,6 +75,7 @@ conf.fr.cp = {
         },
     },
 }
+
 conf.fr.mr = {
     frn: 'MedicationRequest',
     children: ['mn', 'de'],
@@ -111,6 +112,7 @@ conf.fr.mr = {
     <span class="w3-tiny" data-ng-if="!r.medication_id">id={{r.medicationrequest_id}}</span> \n\
     {{r.duration_s}} {{r.unit}}',
 }
+
 conf.fr.de = {
     frn: 'Dosage',
     children: ['qy', 'tg', 'ro'],
@@ -201,6 +203,7 @@ conf.fr.de = {
         },
     }
 }
+
 conf.fr.tg = {
     frn: 'Timing',
     sql_app: 'tableOfFHIR_Timing_period',
@@ -294,6 +297,7 @@ conf.fr.gl = {
     },
     children: ['on'],
 }
+
 conf.fr.qy = {
     frn: 'Quantity',
     sql_app: 'tableOfFHIR_Quantity',
@@ -312,7 +316,13 @@ conf.fr.qy = {
             },
         },
     },
+    dates: {
+        unit: {
+            sql_app: 'tableOfFHIR_dosageData',
+        },
+    },
 }
+
 conf.vs = {}//ValueSet
 conf.vs.edEl = {
     plus: 'Створити новий',

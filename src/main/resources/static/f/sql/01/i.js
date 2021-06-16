@@ -135,6 +135,18 @@ sql_app.simpleSQLs = {
         c: sql_app.tableOfFHIR_Observation_valueQuantity(),
         sqlHtml: { observation_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
     },
+    tableOfFHIR_ValueSet_code001: {
+        c: sql_app.tableOfFHIR_ValueSet_code001(),
+        sqlHtml: { code_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
+    },
+    tableOfFHIR_codeInConcept: {
+        c: sql_app.tableOfFHIR_codeInConcept(),
+        sqlHtml: { code_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
+    },
+    tableOfFHIR_ValueSetComposeInclude: {
+        c: sql_app.tableOfFHIR_ValueSetComposeInclude(),
+        sqlHtml: { valueset_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
+    },
     tableOfFHIR_ValueSet_cd: {
         c: sql_app.tableOfFHIR_ValueSet_cd(),
         sqlHtml: { code_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },

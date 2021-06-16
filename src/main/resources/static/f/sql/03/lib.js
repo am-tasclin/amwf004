@@ -70,6 +70,7 @@ class EditFHIResourceService {
     deleteEl = () => {
         let confDocEl = conf.fr[singlePage.FirstUrlTag()],
             docEl = confDocEl.currEl
+        console.log(docEl.children)
         if (0 == Object.values(docEl.children).filter(x => x).map(x => x.length).reduce((s, v) => s + v)) {
             console.log('delete root for doc is empty', singlePage.FirstUrlId(), confDocEl.delEmptyDoc.cmd)
             this.dataBeFactory['adn_delete' + (Array.isArray(confDocEl.delEmptyDoc.cmd) ? 's' : '')]
