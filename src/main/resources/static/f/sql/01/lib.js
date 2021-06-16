@@ -140,6 +140,7 @@ class DataFactory {
             adn_d: $resource('/r/adn/d/:doc_id', { doc_id: '@doc_id', value: '@value' }),
             adn_insert: $resource('/r/adn/insert', { sqlCmdMap: '@sqlCmdMap' }),
             adn_delete: $resource('/r/adn/delete', { sqlCmdMap: '@sqlCmdMap' }),
+            adn_deletes: $resource('/r/adn/deletes', { sqlCmdListMap: '@sqlCmdListMap' }),
             url_sql_read_db1: $resource('/r/url_sql_read_db1', { data: '@data' }),
             url: '/r/url_sql_read_db1',
             httpGet: function (params) {

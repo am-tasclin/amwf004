@@ -68,17 +68,27 @@ class EditFHIResourceService {
         this.dataBeFactory = dataBeFactory
     }
     deleteEl = () => {
-        let delId = singlePage.LastUrlId()
-        let delTag = singlePage.LastUrlTag()
-        let nMr = conf.fr.cp.currEl.children[singlePage.LastUrlTag()].filter(mr =>
-            mr[conf.fr[singlePage.LastUrlTag()].frn.toLowerCase() + '_id'] == singlePage.LastUrlId())[0]
-        let delParams = conf.fr[singlePage.ForLastUrlTag()].del[singlePage.LastUrlTag()]
-        let delParamsSqlMap = delParams.delete_doc
-        delParamsSqlMap.doc_id = nMr.adn_id
-        console.log(1, nMr, delParamsSqlMap)
-        this.dataBeFactory.adn_delete.save({ delete_doc: delParamsSqlMap }).$promise.then(map => {
-            console.log(1, map)
-        })
+        let confDocEl = conf.fr[singlePage.FirstUrlTag()],
+            docEl = confDocEl.currEl
+        if (0 == Object.values(docEl.children).filter(x => x).map(x => x.length).reduce((s, v) => s + v)) {
+            console.log('delete root for doc is empty', singlePage.FirstUrlId(), confDocEl.delEmptyDoc.cmd)
+            this.dataBeFactory['adn_delete' + (Array.isArray(confDocEl.delEmptyDoc.cmd) ? 's' : '')]
+                .save({ sqlCmdListMap: confDocEl.delEmptyDoc.cmd }).$promise.then(map => {
+                    console.log(1, map)
+                })
+        } else if (2 == singlePage.UrlList().length) {
+            console.info('root is not empty and not selected element to delete')
+        } else {
+            console.log(singlePage.LastUrlTag(), docEl.children)
+            let nMr = docEl.children[singlePage.LastUrlTag()].filter(mr =>
+                mr[conf.fr[singlePage.LastUrlTag()].frn.toLowerCase() + '_id'] == singlePage.LastUrlId())[0]
+            let delParams = conf.fr[singlePage.ForLastUrlTag()].del[singlePage.LastUrlTag()]
+            let deleteDocSqlMap = delParams.delete_doc
+            deleteDocSqlMap.doc_id = nMr.adn_id
+            this.dataBeFactory.adn_delete.save({ delete_doc: deleteDocSqlMap }).$promise.then(map => {
+                console.log(1, map)
+            })
+        }
     }
     saveDocBody = () => {
         let dbJson = conf.showDocJson()
@@ -103,7 +113,7 @@ class EditFHIResourceService {
             confAddEl = forLastObj.add[lastUrlTag]
         console.log(1, r, lastUrlTag, forLastUrlTag, forLastObj, 2, confAddEl)
         confAddEl.initSqlCmdMap(r)
-        console.log(confAddEl.sqlCmdMap,1)
+        console.log(confAddEl.sqlCmdMap, 1)
         this.dataBeFactory.adn_insert.save(confAddEl.sqlCmdMap).$promise.then((map) => {
             console.log(map)
             // console.log(map, map.insert_doc.el, 1)
@@ -141,6 +151,7 @@ class DataDBexchangeService {
             adn_d: $resource('/r/adn/d/:doc_id', { doc_id: '@doc_id', value: '@value' }),
             adn_insert: $resource('/r/adn/insert', { sqlCmdMap: '@sqlCmdMap' }),
             adn_delete: $resource('/r/adn/delete', { sqlCmdMap: '@sqlCmdMap' }),
+            adn_deletes: $resource('/r/adn/deletes', { sqlCmdListMap: '@sqlCmdListMap' }),
             url_sql_read_db1: $resource('/r/url_sql_read_db1', { data: '@data' }),
             url: '/r/url_sql_read_db1',
             httpGet: function (params) {

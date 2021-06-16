@@ -34,13 +34,28 @@ public class AbstractDataNode extends DbCommon {
         map.put("update", update);
     }
 
+    // @Transactional
+    public void sqlCmdMapToSqlDeleteList(List<Map<String, Object>> sqlCmdListMap) {
+        for (Map<String,Object> sqlCmdMap : sqlCmdListMap) {
+            logger.info("msg = "+sqlCmdMap);
+            sqlCmdMapToSqlDel(sqlCmdMap);
+        }
+    }
+
     @Transactional
     public void sqlCmdMapToSqlDelete(Map<String, Object> sqlCmdMap) {
+        sqlCmdMapToSqlDel(sqlCmdMap);
+    }
+    
+    private void sqlCmdMapToSqlDel(Map<String, Object> sqlCmdMap) {
         Map<String, Object> map_delete_doc = (Map<String, Object>) sqlCmdMap.get("delete_doc");
-        logger.info("sqlCmdMap = " + sqlCmdMap + " | " + map_delete_doc + " | ");
         logger.info("sqlCmdMap = " + sqlCmdMap + " | " + map_delete_doc + " | " + map_delete_doc.get("doc_id"));
         String sql_delete_doc = "DELETE FROM doc WHERE doc_id=:doc_id; ";
         sql_delete_doc = sql_delete_doc.replace(":doc_id", "" + map_delete_doc.get("doc_id"));
+        if(map_delete_doc.containsKey("parent")){
+            sql_delete_doc = "DELETE FROM doc WHERE parent=:parent; ";
+            sql_delete_doc = sql_delete_doc.replace(":parent", "" + map_delete_doc.get("parent"));
+        }
         logger.info("sqlCmdMap = " + sqlCmdMap + " | " + map_delete_doc + " | " + sql_delete_doc);
         int update = dbParamJdbcTemplate.update(sql_delete_doc, map_delete_doc);
         map_delete_doc.put("update", update);
@@ -166,4 +181,5 @@ public class AbstractDataNode extends DbCommon {
         long nextDbId = dbJdbcTemplate.queryForObject(sql_nextDbId, Integer.class);
         return nextDbId;
     }
+
 }

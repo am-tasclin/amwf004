@@ -26,6 +26,11 @@ public class AbstractDataNodeRest {
     protected static final Logger logger = LoggerFactory.getLogger(AbstractDataNodeRest.class);
     protected @Autowired @Qualifier("db1AbstractDataNode") AbstractDataNode abstractDataNode;
 
+    @PostMapping("deletes")
+    public @ResponseBody Map<String, Object> deleteElementFromSqlCmdList(@RequestBody Map<String, Object> sqlCmdListMap) {
+        abstractDataNode.sqlCmdMapToSqlDeleteList((List<Map<String, Object>>) sqlCmdListMap.get("sqlCmdListMap"));
+        return sqlCmdListMap;
+    }
     @PostMapping("delete")
     public @ResponseBody Map<String, Object> deleteElementFromSqlCmdMap(@RequestBody Map<String, Object> sqlCmdMap) {
         abstractDataNode.sqlCmdMapToSqlDelete(sqlCmdMap);

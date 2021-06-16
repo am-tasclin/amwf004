@@ -46,8 +46,15 @@ conf.fr.cp = {
             },
         },
     },
+    delEmptyDoc: {
+        cmd: [
+            { delete_doc: {parent:singlePage.FirstUrlId()} },
+            { delete_doc: {doc_id:singlePage.FirstUrlId()} },
+        ]
+    },
     del: {
         mr: { delete_doc: {} },
+        gl: { delete_doc: {} },
     },
     NewEl: {
         amRsRowHtml: "Новий <b>план лікування</b>, прив'язка з списком активності.",
