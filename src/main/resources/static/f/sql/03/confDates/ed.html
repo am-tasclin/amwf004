@@ -1,4 +1,5 @@
 <div class="w3-small w3-border-bottom">
+    a22
     <span class="w3-hover-shadow" data-ng-bind-html="d.amRsRowHtmlHead"></span>
     <span data-ng-repeat="(k2,d2) in d" data-ng-if="k2.includes('El')">
         <button class="w3-btn w3-padding-small w3-border" title="{{k2}}"
@@ -20,9 +21,10 @@
     </div>
     <div class="w3-card" data-ng-if="d.openDialog==key"> </div>
 </div>
-a22
-<div data-ng-repeat="r in d.dataSqlRequest.list" class="w3-hover-shadow"
-    data-ng-class="{'w3-light-grey':ctrl.conf.fr.de.dates.dec.clickListItemId == r.dosage_id}"
-    data-ng-click="d.clickListItem(r)">
-    <span data-am:rs:row data-inner:html:raw="{{d.amRsRowHtml}}"></span>
+<div style="height:30vh; overflow:auto;">
+    <div data-ng-repeat="r in d.dataSqlRequest.list" class="w3-hover-shadow" data-ng11-click="d.clickListItem(r)"
+        data-ng-class="{'w3-light-grey':ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].dates.dec.clickListItemId == r[d.clickIdName]}"
+        data-ng-click="ctrl.conf.exe.clickListItem(r, d)">
+        <span data-am:rs:row data-inner:html:raw="{{d.amRsRowHtml}}"></span>
+    </div>
 </div>

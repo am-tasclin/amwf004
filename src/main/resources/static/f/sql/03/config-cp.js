@@ -148,6 +148,10 @@ conf.fr.de = {
             },
             amRsRowHtmlHead: 'Ресурси <b>дозування</b>',
             sql_app: 'tableOfFHIR_dosageData',
+            clickIdName: 'dosage_id',
+            amRsRowHtml: '<span \n\
+            data-ng-class="{\'w3-leftbar w3-border-blue\': \n\
+            ctrl.conf.fr.de.currEl.dosageandrate_id==r.dosageandrate_id}">{{r.value}}</span>',
             UpdateEl: {
                 btn: '<i class="fas fa-wrench"></i>',
                 initOpenDialog: () => {
@@ -198,8 +202,6 @@ conf.fr.de = {
                     conf.fr.de.dates.dec.clickListItemId = map.insert_doc.read_this_doc.r.dosage_id
                 },
             },
-            amRsRowHtml: '<span \n\
-        data-ng-class="{\'w3-leftbar w3-border-blue\':ctrl.conf.fr.de.currEl.dosageandrate_id==r.dosageandrate_id}">{{r.value}}</span>',
         },
     }
 }
@@ -317,8 +319,13 @@ conf.fr.qy = {
         },
     },
     dates: {
-        unit: {
-            sql_app: 'tableOfFHIR_dosageData',
+        dec: {
+            sql_app: 'tableOfFHIR_ValueSet_code001',
+            amRsRowHtml: '<span data-ng-class="{\'w3-leftbar w3-border-blue\': \n\
+            ctrl.conf.fr.qy.currEl.quantity_code_id==r.code_id}">{{r.code_s}}</span>',
+            amRsRowHtmlHead: 'Ресурси <b>одиниці виміру</b>',
+            clickIdName: 'code_id',
+            UpdateEl: {},
         },
     },
 }
@@ -329,3 +336,14 @@ conf.vs.edEl = {
     minus: 'Вилучити',
     wrench: 'Редагувати',
 }//EditElement
+
+conf.exe = {}//execute library
+conf.exe.clickListItem = (r, d) => {
+    let dates = conf.fr[singlePage.LastUrlTag()].dates
+    dates.dec.edString = r.value
+    dates.dec.clickListItemId = r[d.clickIdName]
+    angular.forEach(dates.dec.dataSqlRequest.list, li => {
+        if (li[d.clickIdName] == dates.dec.clickListItemId)
+            dates.dec.UpdateEl.li = li
+    })
+}

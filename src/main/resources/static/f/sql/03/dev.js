@@ -69,7 +69,8 @@ class InitFHIResourceController extends AbstractController {
         }
         angular.forEach(conf.fr[singlePage.LastUrlTag()].dates, (v) => {
             let sql = sql_app[v.sql_app]()
-            console.log(v, sql)
+            if (sql.includes(':sql_app')) sql = sql_app.concatSql(sql)
+            // console.log(v, sql)
             dataBeFactory.httpGet({ sql: sql })
                 .then(dataSqlRequest => {
                     v.dataSqlRequest = dataSqlRequest
