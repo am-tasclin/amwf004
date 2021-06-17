@@ -1,21 +1,24 @@
 <div data-ng-repeat="d in [ctrl.conf.fr[ctrl.singlePage.LastUrlTag()]]">
     <span class="w3-small">
         <i class="fas fa-puzzle-piece"></i>
-        <button class="w3-btn w3-padding-small w3-border" data-ng-click="ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].openDialog 
+        <button class="w3-btn w3-padding-small w3-border"
+            data-ng-class="{'w3-green':'plus'==ctrl.conf.fr.qy.openDialog.split('_')[1]}" data-ng-click="ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].openDialog 
             = ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].openDialog == (ctrl.singlePage.LastUrlTag() + '_plus')
             ?'':ctrl.singlePage.LastUrlTag() + '_plus' "
             d11ata-ng-click="ctrl.conf.NewEl.openDialog(ctrl.singlePage.LastUrlTag())"
             title="Створити новий елемент: {{ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].frn}}">
             <i class="fas fa-plus"></i>
         </button>
-        <button class="w3-btn w3-padding-small w3-border" data-ng-click="ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].openDialog 
+        <button class="w3-btn w3-padding-small w3-border"
+            data-ng-class="{'w3-green':'wrench'==ctrl.conf.fr.qy.openDialog.split('_')[1]}" data-ng-click="ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].openDialog 
             = ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].openDialog == (ctrl.singlePage.LastUrlTag() + '_wrench')
             ?'':ctrl.singlePage.LastUrlTag() + '_wrench' "
             d11ata-ng-click="ctrl.conf.NewEl.openDialog(ctrl.singlePage.LastUrlTag())"
             title="Створити новий елемент: {{ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].frn}}">
             <i class="fas fa-wrench"></i>
         </button>
-        <button class="w3-btn w3-padding-small w3-border" data-ng-click="ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].openDialog 
+        <button class="w3-btn w3-padding-small w3-border"
+            data-ng-class="{'w3-green':'minus'==ctrl.conf.fr.qy.openDialog.split('_')[1]}" data-ng-click="ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].openDialog 
             = ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].openDialog == (ctrl.singlePage.LastUrlTag() + '_minus')
             ?'':ctrl.singlePage.LastUrlTag() + '_minus' ">
             <i class=" fas fa-minus"></i>
@@ -57,8 +60,8 @@
                 </div>
                 <div data-ng-if="d.edTemplate" data-ng-include="'/f/sql/03/'+d.frn+'/'+d.edTemplate+'.html'">
                 </div>
-                <button class="w3-btn w3-border w3-padding-small"
-                    data-ng-click="ctrl.editFRFactory.newEl_save()">save</button>
+                <button class="w3-btn w3-border w3-padding-small" data-n11g-click="ctrl.editFRFactory.newEl_save()"
+                    data-ng-click="ctrl.editFRFactory['save_'+ctrl.conf.fr.qy.openDialog.split('_')[1]]()">save</button>
                 <a href="" class="w3-btn w3-border w3-padding-small"
                     data-ng-click="ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].openDialog = ''">cances</a>
 

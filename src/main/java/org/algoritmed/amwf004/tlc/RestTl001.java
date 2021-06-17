@@ -18,7 +18,6 @@ public class RestTl001 {
 	public String greeting(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
 		model.addAttribute("name", name);
 		HashMap<Object, Object> hashMap = new HashMap<>();
-		
 		return "v/f1";
 	}
 }

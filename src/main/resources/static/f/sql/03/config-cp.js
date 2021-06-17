@@ -1,4 +1,24 @@
 conf.fr = {} //FHIR
+conf.exe = {}//execute library
+conf.exe.delEmptyDocWithParent = () => {
+    let id = singlePage.LastUrlId()
+    console.log(id)
+    let cmd = [
+        { delete_doc: { parent: id } },
+        { delete_doc: { doc_id: id } },
+    ]
+    return cmd
+}
+conf.exe.clickListItem = (r, d) => {
+    let dates = conf.fr[singlePage.LastUrlTag()].dates
+    dates.dec.edString = r.value
+    dates.dec.clickListItemId = r[d.clickIdName]
+    angular.forEach(dates.dec.dataSqlRequest.list, li => {
+        if (li[d.clickIdName] == dates.dec.clickListItemId)
+            dates.dec.UpdateEl.li = li
+    })
+}
+
 conf.fr.cp = {
     frn: 'CarePlan',
     children: ['mr', 'gl', 'on'],
@@ -46,12 +66,7 @@ conf.fr.cp = {
             },
         },
     },
-    delEmptyDoc: {
-        cmd: [
-            { delete_doc: { parent: singlePage.FirstUrlId() } },
-            { delete_doc: { doc_id: singlePage.FirstUrlId() } },
-        ]
-    },
+    delEmptyDoc: conf.exe.delEmptyDocWithParent,
     del: {
         mr: { delete_doc: {} },
         gl: { delete_doc: {} },
@@ -305,19 +320,31 @@ conf.fr.qy = {
     sql_app: 'tableOfFHIR_Quantity',
     edTemplate: 'addEl',
     amRsRowHtml: '<span> {{r.quantity_value}} {{r.quantity_code}}</span> <span data-ng-if="!r.quantity_value && !r.quantity_code"> <пусто> </span> ',
+    save_wrench: {
+        x: 1,
+    },
     NewEl: {
         amRsRowHtml: "Новий <b>численик</b>, цифрове значення та одиниці виміру.",
+        initSqlCmdMap: () => {
+            let sqlCmdMap = conf.fr.qy.NewEl.sqlCmdMap
+            sqlCmdMap.insert_doc.insert_int.value = 1 * conf.fr.qy.qy_value
+            if (conf.fr.qy.currEl.quantity_code_id)
+                sqlCmdMap.insert_doc.insert_doc.reference2 = conf.fr.qy.currEl.quantity_code_id
+            console.log(sqlCmdMap)
+        },
         sqlCmdMap: {
             insert_doc: {
                 parent: 372039, // [372039] дані:
                 reference: 368637, //[368637] f24 value 
                 reference2: 368636, //[368636] Quantity 
+                insert_int: {},
                 insert_doc: {
                     reference: 368641 // [368641] code 
                 },
             },
         },
     },
+    delEmptyDoc: conf.exe.delEmptyDocWithParent,
     dates: {
         dec: {
             sql_app: 'tableOfFHIR_ValueSet_code001',
@@ -337,13 +364,3 @@ conf.vs.edEl = {
     wrench: 'Редагувати',
 }//EditElement
 
-conf.exe = {}//execute library
-conf.exe.clickListItem = (r, d) => {
-    let dates = conf.fr[singlePage.LastUrlTag()].dates
-    dates.dec.edString = r.value
-    dates.dec.clickListItemId = r[d.clickIdName]
-    angular.forEach(dates.dec.dataSqlRequest.list, li => {
-        if (li[d.clickIdName] == dates.dec.clickListItemId)
-            dates.dec.UpdateEl.li = li
-    })
-}

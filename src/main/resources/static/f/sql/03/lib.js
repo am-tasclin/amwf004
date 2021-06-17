@@ -71,13 +71,21 @@ class EditFHIResourceService {
         let confDocEl = conf.fr[singlePage.FirstUrlTag()],
             docEl = confDocEl.currEl
         console.log(docEl.children)
-        if (0 == Object.values(docEl.children).filter(x => x).map(x => x.length).reduce((s, v) => s + v)) {
-            console.log('delete root for doc is empty', singlePage.FirstUrlId(), confDocEl.delEmptyDoc.cmd)
-            this.dataBeFactory['adn_delete' + (Array.isArray(confDocEl.delEmptyDoc.cmd) ? 's' : '')]
-                .save({ sqlCmdListMap: confDocEl.delEmptyDoc.cmd }).$promise.then(map => {
+        console.log(Object.values(docEl.children).filter(x => x).length)
+        console.log(Object.values(docEl.children).filter(x => x).map(x => x.length))
+        let delEmptyRoot = () => {
+            console.log(confDocEl)
+            let delEmptyDocCmd = confDocEl.delEmptyDoc()
+            console.log('delete root for doc is empty', singlePage.FirstUrlId(), delEmptyDocCmd)
+            this.dataBeFactory['adn_delete' + (Array.isArray(delEmptyDocCmd) ? 's' : '')]
+                .save({ sqlCmdListMap: delEmptyDocCmd }).$promise.then(map => {
                     console.log(1, map)
                 })
-        } else if (2 == singlePage.UrlList().length) {
+        }
+
+        if (0 == Object.values(docEl.children).filter(x => x).length) delEmptyRoot()
+        else if (0 == Object.values(docEl.children).filter(x => x).map(x => x.length).reduce((s, v) => s + v)) delEmptyRoot()
+        else if (2 == singlePage.UrlList().length) {
             console.info('root is not empty and not selected element to delete')
         } else {
             console.log(singlePage.LastUrlTag(), docEl.children)
@@ -132,6 +140,15 @@ class EditFHIResourceService {
             console.log(1, map)
             if (e.afterExeSqlCmdMap) e.afterExeSqlCmdMap(map)
         })
+    }
+
+    save_plus = () => {
+        console.log(1)
+    }
+
+    save_wrench = () => {//edit
+        let save_wrench = conf.fr[singlePage.LastUrlTag()].save_wrench
+        console.log(save_wrench, 1)
     }
 
     newEl_save = () => {

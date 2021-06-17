@@ -43,9 +43,9 @@ public class FileSystemStorageService implements StorageService {
             Path destinationFile = this.rootLocation.resolve(Paths.get(file.getOriginalFilename())).normalize()
                     .toAbsolutePath();
             // This is a security check
-            if (!destinationFile.getParent().equals(this.rootLocation.toAbsolutePath())) 
+            if (!destinationFile.getParent().equals(this.rootLocation.toAbsolutePath()))
                 throw new StorageException("Cannot store file outside current directory.");
-            
+
             try (InputStream inputStream = file.getInputStream()) {
                 Files.copy(inputStream, destinationFile, StandardCopyOption.REPLACE_EXISTING);
             }
@@ -58,13 +58,11 @@ public class FileSystemStorageService implements StorageService {
     @Override
     public Stream<Path> loadAll() {
         try {
-			return Files.walk(this.rootLocation, 1)
-				.filter(path -> !path.equals(this.rootLocation))
-				.map(this.rootLocation::relativize);
-		}
-		catch (IOException e) {
-			throw new StorageException("Failed to read stored files", e);
-		}
+            return Files.walk(this.rootLocation, 1).filter(path -> !path.equals(this.rootLocation))
+                    .map(this.rootLocation::relativize);
+        } catch (IOException e) {
+            throw new StorageException("Failed to read stored files", e);
+        }
     }
 
     @Override
@@ -75,20 +73,17 @@ public class FileSystemStorageService implements StorageService {
     @Override
     public Resource loadAsResource(String filename) {
         try {
-			Path file = load(filename);
-			Resource resource = new UrlResource(file.toUri());
-			if (resource.exists() || resource.isReadable()) {
-				return resource;
-			}
-			else {
-				throw new StorageFileNotFoundException(
-						"Could not read file: " + filename);
+            Path file = load(filename);
+            Resource resource = new UrlResource(file.toUri());
+            if (resource.exists() || resource.isReadable()) {
+                return resource;
+            } else {
+                throw new StorageFileNotFoundException("Could not read file: " + filename);
 
-			}
-		}
-		catch (MalformedURLException e) {
-			throw new StorageFileNotFoundException("Could not read file: " + filename, e);
-		}
+            }
+        } catch (MalformedURLException e) {
+            throw new StorageFileNotFoundException("Could not read file: " + filename, e);
+        }
     }
 
     @Override
