@@ -2,71 +2,61 @@
     <span class="w3-small">
         <i class="fas fa-puzzle-piece"></i>
         <button class="w3-btn w3-padding-small w3-border"
-            data-ng-class="{'w3-green':'plus'==ctrl.conf.fr.qy.openDialog.split('_')[1]}" data-ng-click="ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].openDialog 
-            = ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].openDialog == (ctrl.singlePage.LastUrlTag() + '_plus')
-            ?'':ctrl.singlePage.LastUrlTag() + '_plus' "
-            d11ata-ng-click="ctrl.conf.NewEl.openDialog(ctrl.singlePage.LastUrlTag())"
+            data-ng-class="{'w3-green':'plus'==ctrl.conf.openDialogCUD.split('_')[1]}"
+            data-ng-click="ctrl.conf.exe.openDialogCUD('plus')"
             title="Створити новий елемент: {{ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].frn}}">
             <i class="fas fa-plus"></i>
         </button>
         <button class="w3-btn w3-padding-small w3-border"
-            data-ng-class="{'w3-green':'wrench'==ctrl.conf.fr.qy.openDialog.split('_')[1]}" data-ng-click="ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].openDialog 
-            = ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].openDialog == (ctrl.singlePage.LastUrlTag() + '_wrench')
-            ?'':ctrl.singlePage.LastUrlTag() + '_wrench' "
-            d11ata-ng-click="ctrl.conf.NewEl.openDialog(ctrl.singlePage.LastUrlTag())"
-            title="Створити новий елемент: {{ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].frn}}">
+            data-ng-class="{'w3-green':'wrench'==ctrl.conf.openDialogCUD.split('_')[1]}"
+            data-ng-click="ctrl.conf.exe.openDialogCUD('wrench')"
+            title="Редагувати елемент: {{ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].frn}}">
             <i class="fas fa-wrench"></i>
         </button>
         <button class="w3-btn w3-padding-small w3-border"
-            data-ng-class="{'w3-green':'minus'==ctrl.conf.fr.qy.openDialog.split('_')[1]}" data-ng-click="ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].openDialog 
-            = ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].openDialog == (ctrl.singlePage.LastUrlTag() + '_minus')
-            ?'':ctrl.singlePage.LastUrlTag() + '_minus' ">
+            data-ng-class="{'w3-green':'minus'==ctrl.conf.openDialogCUD.split('_')[1]}"
+            data-ng-click="ctrl.conf.exe.openDialogCUD('minus')"
+            title="Вилучити елемент: {{ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].frn}}">
             <i class=" fas fa-minus"></i>
         </button>
     </span>
-    <div class="w3-card w3-leftbar"
-        data-ng-if="ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].openDialog.includes(ctrl.singlePage.LastUrlTag()+'_')"
-        data-ng-class="{'w3-show':ctrl.conf.NewEl.openedDialog==ctrl.singlePage.LastUrlTag()}">
-
+    <div class="w3-card w3-leftbar" data-ng-if="ctrl.conf.openDialogCUD.includes(ctrl.singlePage.LastUrlTag()+'_')">
         <div class="w3-blue-gray w3-tiny am-b">
-            <i
-                class="w3-medium w3-border fas fa-{{ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].openDialog.split('_')[1]}}"></i>
+            <i class="w3-medium w3-border w3-green fas fa-{{ctrl.conf.openDialogCUD.split('_')[1]}}"></i>
             &nbsp;
-            {{ctrl.conf.vs.edEl[ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].openDialog.split('_')[1]]}}
+            {{ctrl.conf.vs.edEl[ctrl.conf.openDialogCUD.split('_')[1]]}}
             елемент:
             {{ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].frn}}
-            <a href="" class="w3-right w3-btn w3-padding-small"
-                data-ng-click="ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].openDialog = ''"><i
+            <a href="" class="w3-right w3-btn w3-padding-small" data-ng-click="ctrl.conf.openDialogCUD = ''"><i
                     class="far fa-window-close"></i></a>
         </div>
-        <div ng-switch="ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].openDialog.split('_')[1]">
+        <div ng-switch="ctrl.conf.openDialogCUD.split('_')[1]">
             <div ng-switch-when="minus">
                 Пошук протипоказів до вилучення Елементу: {{ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].frn}}
                 <div>
                     <button class="w3-btn w3-border w3-padding-small" data-ng-click="ctrl.editFRFactory.deleteEl()">
                         <i class=" fas fa-minus"></i>
                         Видалити</button>
+                    <a href="" class="w3-btn w3-border w3-padding-small"
+                        data-ng-click="ctrl.conf.openDialogCUD = ''">cances</a>
                 </div>
             </div>
             <div ng-switch-when="matchValue2">...</div>
             <div ng-switch-default>
-
                 <div class="w3-border-bottom" data-am:rs:row data-inner:html="NewEl.amRsRowHtml"></div>
                 <div data-ng-if="!ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].NewEl 
                         || ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].NewEl.newElName">
                     Назва елементу:
-                    <textarea data-ng-model="ctrl.conf.NewEl.newElName"
+                    <textarea data-ng-model="ctrl.conf.exe.NewEl.newElName"
                         class="w3-border am-width-100pr w3-medium"></textarea>
                 </div>
                 <div data-ng-if="d.edTemplate" data-ng-include="'/f/sql/03/'+d.frn+'/'+d.edTemplate+'.html'">
                 </div>
                 <button class="w3-btn w3-border w3-padding-small" data-n11g-click="ctrl.editFRFactory.newEl_save()"
-                    data-ng-click="ctrl.editFRFactory['save_'+ctrl.conf.fr.qy.openDialog.split('_')[1]]()">save</button>
+                    data-ng-click="ctrl.editFRFactory['save_'+ctrl.conf.openDialogCUD.split('_')[1]]()">save</button>
                 <a href="" class="w3-btn w3-border w3-padding-small"
-                    data-ng-click="ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].openDialog = ''">cances</a>
-
+                    data-ng-click="ctrl.conf.openDialogCUD = ''">cances</a>
             </div>
         </div>
-
     </div>
 </div>

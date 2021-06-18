@@ -81,6 +81,8 @@ public class AbstractDataNode extends DbCommon {
             sqlCmdMapTo1Insert(map_insert_doc, idsForAction);
             logger.info("sqlCmdMap = " + sqlCmdMap);
         }
+        if (sqlCmdMap.containsKey("update_int")) 
+            sqlCmdMapTo1UpdateInt((Map<String, Object>) sqlCmdMap.get("update_int"));
         if (sqlCmdMap.containsKey("update_string")) {
             Map<String, Object> map_update_string = (Map<String, Object>) sqlCmdMap.get("update_string");
             sqlCmdMapTo1UpdateString(map_update_string);
@@ -89,6 +91,15 @@ public class AbstractDataNode extends DbCommon {
             Map<String, Object> map_update_doc = (Map<String, Object>) sqlCmdMap.get("update_doc");
             sqlCmdMapTo1UpdateDoc(map_update_doc);
         }
+    }
+
+    private void sqlCmdMapTo1UpdateInt(Map<String, Object> map_update) {
+        logger.info("map_update_string = " + map_update);
+        String sql_update = "UPDATE integer SET value = ':value' WHERE integer_id = :integer_id";
+        sql_update = sql_update.replace(":value", "" + map_update.get("value"));
+        sql_update = sql_update.replace(":integer_id", "" + map_update.get("integer_id"));
+        int update = dbParamJdbcTemplate.update(sql_update, map_update);
+        map_update.put("update", update);
     }
 
     private void sqlCmdMapTo1UpdateString(Map<String, Object> map_update_string) {

@@ -1,5 +1,6 @@
 'use strict';
 const singlePage = {}, conf = {}, sql_app = {}
+conf.exe = {}//execute library
 
 singlePage.Url = () => window.location.href.split('#!')[1]
 singlePage.UrlList = () => singlePage.Url().split('/')
@@ -53,12 +54,23 @@ singlePage.LinkUp = (fromTag, toTag, r) => {
 
 class AbstractController { singlePage = singlePage; conf = conf }
 
-conf.NewEl = {}
-conf.NewEl.openDialog = (openedDialogNewEl) => {
-    if (conf.NewEl.openedDialog == openedDialogNewEl)
-        delete conf.NewEl.openedDialog
+conf.exe.NewEl = {}
+conf.exe.getEl = fr => conf.fr[fr]
+
+conf.exe.openDialogCUD = type => {
+    let openDialog = singlePage.LastUrlTag() + '_' + type
+    conf.openDialogCUD = conf.openDialogCUD == openDialog ? '' : openDialog
+    if ('wrench' == conf.openDialogCUD.split('_')[1]) {
+        if (!conf.fr.qy.qy_value)
+            conf.fr.qy.qy_value =
+                conf.fr[singlePage.LastUrlTag()].currEl.quantity_value
+    }
+}
+conf.exe.NewEl.openDialog = (openedDialogNewEl) => {
+    if (conf.exe.NewEl.openedDialog == openedDialogNewEl)
+        delete conf.exe.NewEl.openedDialog
     else
-        conf.NewEl.openedDialog = openedDialogNewEl
+        conf.exe.NewEl.openedDialog = openedDialogNewEl
 }
 
 //app.factory("editFRFactory", EditFHIResourceFactory)
@@ -147,8 +159,13 @@ class EditFHIResourceService {
     }
 
     save_wrench = () => {//edit
-        let save_wrench = conf.fr[singlePage.LastUrlTag()].save_wrench
-        console.log(save_wrench, 1)
+        let confEl = conf.fr[singlePage.LastUrlTag()].save_wrench
+        console.log(confEl, 1)
+        if (confEl.initSqlCmdMap) confEl.initSqlCmdMap()
+        this.dataBeFactory.adn_insert.save(confEl.sqlCmdMap)
+            .$promise.then(map => {
+                console.log(map, 1)
+            })
     }
 
     newEl_save = () => {

@@ -1,5 +1,4 @@
 conf.fr = {} //FHIR
-conf.exe = {}//execute library
 conf.exe.delEmptyDocWithParent = () => {
     let id = singlePage.LastUrlId()
     console.log(id)
@@ -76,7 +75,7 @@ conf.fr.cp = {
         newElName: true,
         initSqlCmdMap: () => {
             let sqlCmdMap = conf.fr.cp.NewEl.sqlCmdMap
-            sqlCmdMap.insert_doc.insert_string.value = conf.NewEl.newElName
+            sqlCmdMap.insert_doc.insert_string.value = conf.exe.NewEl.newElName
         },
         sqlCmdMap: {
             insert_doc: {
@@ -321,7 +320,12 @@ conf.fr.qy = {
     edTemplate: 'addEl',
     amRsRowHtml: '<span> {{r.quantity_value}} {{r.quantity_code}}</span> <span data-ng-if="!r.quantity_value && !r.quantity_code"> <пусто> </span> ',
     save_wrench: {
-        x: 1,
+        initSqlCmdMap: () => {
+            let sqlCmdMap = conf.fr.qy.save_wrench.sqlCmdMap
+            sqlCmdMap.update_int.integer_id = conf.fr.qy.currEl.doc_id
+            sqlCmdMap.update_int.value = conf.fr.qy.qy_value
+        },
+        sqlCmdMap: { update_int: {} }
     },
     NewEl: {
         amRsRowHtml: "Новий <b>численик</b>, цифрове значення та одиниці виміру.",
