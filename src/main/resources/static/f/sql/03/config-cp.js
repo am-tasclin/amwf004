@@ -28,43 +28,6 @@ conf.fr.cp = {
         { fr: 'gl', connect_param: 'parent_careplan', sql_app: 'tableOfFHIR_CarePlan_Goal' },
     ],
     amRsRowHtml: '<span>{{r.fhir_domainresource}}</span>',
-    add: {
-        gl: {
-            initSqlCmdMap: (r) => {
-                let sqlCmdMap = conf.fr.cp.add.gl.sqlCmdMap = {}
-                let insert_doc = () => { return { reference2: r.goal_id } }
-                if (conf.fr.cp.currEl.goal_id) {
-                    sqlCmdMap.insert_doc = insert_doc()
-                    sqlCmdMap.insert_doc.parent = conf.fr.cp.currEl.goal_id
-                } else {
-                    sqlCmdMap.insert_doc = { parent: conf.fr.cp.currEl.careplan_id, reference: 373017, }
-                    sqlCmdMap.insert_doc.insert_doc = insert_doc()
-                }
-                console.log(conf.fr.cp.currEl.goal_id, r.goal_id, JSON.stringify(conf.fr.cp.add.gl.sqlCmdMap, null, 2))
-            },
-        },
-        mr: {
-            newUrl: (map) => {
-                let newUrl = '/cp_' + conf.fr.cp.currEl.careplan_id + '/mr_' + map.insert_doc.el.doc_id
-                console.log(map, map.insert_doc.el, newUrl)
-                return newUrl
-            },
-            initSqlCmdMap: (r) => {
-                let lastUrlTag = singlePage.LastUrlTag(),
-                    addEl = conf.fr.cp.add[lastUrlTag],
-                    insert_doc = addEl.sqlCmdMap.insert_doc,
-                    activity_id = conf.fr.cp.currEl.activity_id
-                insert_doc.parent = activity_id
-                insert_doc.reference2 = r.medicationrequest_id
-                console.log(1, insert_doc, r)
-            },
-            sqlCmdMap: {
-                insert_doc: {
-                    reference: 368794, //[368794] plannedActivityReference   reference:371631 {368830:CarePlan.activity.reference} 
-                },
-            },
-        },
-    },
     delEmptyDoc: conf.exe.delEmptyDocWithParent,
     del: {
         mr: { delete_doc: {} },
@@ -85,6 +48,44 @@ conf.fr.cp = {
                 insert_doc: {
                     reference: 368789, // ☰ [368789] o[]37 activity 
                 },
+            },
+        },
+    },
+}
+
+conf.fr.cp.add = {
+    gl: {
+        initSqlCmdMap: r => {
+            let sqlCmdMap = conf.fr.cp.add.gl.sqlCmdMap = {}
+            let insert_doc = () => { return { reference2: r.goal_id } }
+            if (conf.fr.cp.currEl.goal_id) {
+                sqlCmdMap.insert_doc = insert_doc()
+                sqlCmdMap.insert_doc.parent = conf.fr.cp.currEl.goal_id
+            } else {
+                sqlCmdMap.insert_doc = { parent: conf.fr.cp.currEl.careplan_id, reference: 373017, }
+                sqlCmdMap.insert_doc.insert_doc = insert_doc()
+            }
+            console.log(conf.fr.cp.currEl.goal_id, r.goal_id, JSON.stringify(conf.fr.cp.add.gl.sqlCmdMap, null, 2))
+        },
+    },
+    mr: {
+        newUrl: map => {
+            let newUrl = '/cp_' + conf.fr.cp.currEl.careplan_id + '/mr_' + map.insert_doc.el.doc_id
+            console.log(map, map.insert_doc.el, newUrl)
+            return newUrl
+        },
+        initSqlCmdMap: r => {
+            let lastUrlTag = singlePage.LastUrlTag(),
+                addEl = conf.fr.cp.add[lastUrlTag],
+                insert_doc = addEl.sqlCmdMap.insert_doc,
+                activity_id = conf.fr.cp.currEl.activity_id
+            insert_doc.parent = activity_id
+            insert_doc.reference2 = r.medicationrequest_id
+            console.log(1, insert_doc, r)
+        },
+        sqlCmdMap: {
+            insert_doc: {
+                reference: 368794, //[368794] plannedActivityReference   reference:371631 {368830:CarePlan.activity.reference} 
             },
         },
     },
@@ -209,7 +210,7 @@ conf.fr.de = {
                     console.log(1, sql)
                     console.log(1, conf.fr.de.dates.dec.NewEl.sqlCmdMap)
                 },
-                afterExeSqlCmdMap: (map) => {
+                afterExeSqlCmdMap: map => {
                     console.log(1, conf.fr.de.dates.dec.dataSqlRequest.list)
                     console.log(1, map, map.insert_doc.read_this_doc.r)
                     conf.fr.de.dates.dec.dataSqlRequest.list.unshift(map.insert_doc.read_this_doc.r)
@@ -217,6 +218,20 @@ conf.fr.de = {
                 },
             },
         },
+    }
+}
+
+conf.fr.de.add = {
+    qy: {
+        initSqlCmdMap: r => {
+            console.log(r)
+            let sqlCmdMap = conf.fr.de.add.qy.sqlCmdMap = {
+                update_doc: {
+                    doc_id: conf.fr.de.currEl.dosage_id,
+                    reference2: r.doc_id,
+                }
+            }
+        }
     }
 }
 
@@ -278,6 +293,7 @@ conf.fr.se = {
         },
     },
 }
+
 conf.fr.ro = {
     frn: 'Ratio',
     children: ['qy'],
@@ -296,11 +312,13 @@ conf.fr.ro = {
         }
     },
 }
+
 conf.fr.on = {
     frn: 'Observation',
     sql_app: 'tableOfFHIR_Observation_valueQuantity002',
     amRsRowHtml: "{{r.display}} {{r.comparator}} {{r.valuequantity_f}}  {{r.vu}} {{r.referencerange_id?'--referenceRange--':''}}",
 }
+
 conf.fr.gl = {
     frn: 'Goal',
     sql_app: 'tableOfFHIR_Goal001',

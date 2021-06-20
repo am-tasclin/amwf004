@@ -2,10 +2,8 @@
     data-ng-class="{'w3-light-gray':r[ctrl.singlePage.LastUrlIdName()]==ctrl.singlePage.LastUrlId()}">
     <button data-ng-click="ctrl.keep2back(r)" class="w3-btn w3-padding-small "> <i
             class="far fa-share-square fa-flip-horizontal"></i> </button>
-    <button class="w3-btn w3-padding-small"
-     data-ng-click="ctrl.editFRFactory.addEl_save(r)" 
-     data-ng-if="ctrl.conf.fr[ctrl.singlePage.ForLastUrlTag()]
-        .add[ctrl.singlePage.LastUrlTag()]">
+    <button data-ng-click="ctrl.editFRFactory.addEl_save(r)" class="w3-btn w3-padding-small" data-ng-if="
+    ctrl.conf.fr[ctrl.singlePage.ForLastUrlTag()].add[ctrl.singlePage.LastUrlTag()]">
         <i class="fas fa-plus"></i>
     </button>
     <span data-am:rs:row data-ng-click="ctrl.clickAmRsRow(r)">
