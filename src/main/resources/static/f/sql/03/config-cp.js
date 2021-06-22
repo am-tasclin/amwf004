@@ -222,15 +222,19 @@ conf.fr.de = {
 }
 
 conf.fr.de.add = {
-    qy: {
+    tg: {
         initSqlCmdMap: r => {
-            console.log(r)
-            let sqlCmdMap = conf.fr.de.add.qy.sqlCmdMap = {
-                update_doc: {
-                    doc_id: conf.fr.de.currEl.dosage_id,
-                    reference2: r.doc_id,
-                }
-            }
+            let sqlCmdMap = conf.fr.de.add.tg.sqlCmdMap = {}
+            console.log(r, conf.fr.de.currEl)
+            if (!conf.fr.de.currEl.dosage_timing_id)
+                sqlCmdMap.insert_doc = { parent: conf.fr.de.currEl.doseandrate_p, reference: 369970, reference2: r.timing_id, }
+            else
+                sqlCmdMap.update_doc = { doc_id: conf.fr.de.currEl.dosage_timing_id, reference2: r.timing_id, }
+        },
+    },
+    qy: {
+        initSqlCmdMap: r => conf.fr.de.add.qy.sqlCmdMap = {
+            update_doc: { doc_id: conf.fr.de.currEl.dosage_id, reference2: r.doc_id, }
         }
     }
 }

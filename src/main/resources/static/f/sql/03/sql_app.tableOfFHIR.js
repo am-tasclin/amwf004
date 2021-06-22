@@ -22,13 +22,13 @@ sql_app.tableOfFHIR_dosageData = () => {
     return sql
 }
 sql_app.tableOfFHIR_doseQuantity_timingPeriod = () => {
-    let sql = 'SELECT doseQuantity_id dosage_id, dq.*, tp.* FROM (:sql_app.tableOfFHIR_doseQuantity \n\
+    let sql = 'SELECT doseAndRate.parent doseAndRate_p, doseQuantity_id dosage_id, timing.doc_id dosage_timing_id, dq.*, tp.* FROM (:sql_app.tableOfFHIR_doseQuantity \n\
         ) dq, (SELECT * FROM doc doseAndRate WHERE doseAndRate.reference=369972) doseAndRate \n\
         LEFT JOIN doc timing \n\
         LEFT JOIN (:sql_app.tableOfFHIR_Timing_period \n\
         ) tp ON tp.period_id=timing.reference2 \n\
         ON timing.reference=369970 AND timing.parent=doseAndRate.parent \n\
-        WHERE doseAndRate.doc_id=dosageandrate_id'
+        WHERE doseAndRate.doc_id=dq.dosageandrate_id'
     return sql
 }
 sql_app.tableOfFHIR_Goal001 = () => {
