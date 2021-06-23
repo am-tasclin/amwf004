@@ -224,17 +224,18 @@ conf.fr.de = {
 conf.fr.de.add = {
     tg: {
         initSqlCmdMap: r => {
-            let sqlCmdMap = conf.fr.de.add.tg.sqlCmdMap = {}
-            console.log(r, conf.fr.de.currEl)
-            if (!conf.fr.de.currEl.dosage_timing_id)
-                sqlCmdMap.insert_doc = { parent: conf.fr.de.currEl.doseandrate_p, reference: 369970, reference2: r.timing_id, }
+            let iu_doc, currEl = conf.fr.de.currEl,
+                sqlCmdMap = conf.fr.de.add.tg.sqlCmdMap = {}
+            if (currEl.dosage_timing_id)
+                iu_doc = sqlCmdMap.update_doc = { doc_id: currEl.dosage_timing_id }
             else
-                sqlCmdMap.update_doc = { doc_id: conf.fr.de.currEl.dosage_timing_id, reference2: r.timing_id, }
+                iu_doc = sqlCmdMap.insert_doc = { parent: currEl.doseandrate_p, reference: 369970 }
+            iu_doc.reference2 = r.timing_id
         },
     },
     qy: {
-        initSqlCmdMap: r => conf.fr.de.add.qy.sqlCmdMap = {
-            update_doc: { doc_id: conf.fr.de.currEl.dosage_id, reference2: r.doc_id, }
+        initSqlCmdMap: qy => conf.fr.de.add.qy.sqlCmdMap = {
+            update_doc: { doc_id: conf.fr.de.currEl.dosage_id, reference2: qy.doc_id, }
         }
     }
 }
@@ -256,6 +257,7 @@ conf.fr.tg = {
         }
     },
 }
+
 conf.fr.mn = {
     frn: 'Medication',
     children: ['se', 'ro', 'qy'],
@@ -280,6 +282,7 @@ conf.fr.mn = {
         },
     },
 }
+
 conf.fr.se = {
     frn: 'Substance',
     sql_app: 'tableOfFHIR_Substance_code',
@@ -300,7 +303,7 @@ conf.fr.se = {
 
 conf.fr.ro = {
     frn: 'Ratio',
-    children: ['qy'],
+    children: ['nqy', 'dqy'],
     sql_app: 'tableOfFHIR_Ratio',
     amRsRowHtml: '{{r.n_quantity_value}} {{r.n_quantity_code}}\n\
     <span data-ng-if="r.denominator_id">/{{r.dn_quantity_value}} {{r.dn_quantity_code}}</span>\n\
@@ -314,6 +317,28 @@ conf.fr.ro = {
                 reference: 368676, //[368676] numerator   Quantity:368636 
             },
         }
+    },
+}
+
+conf.fr.ro.add = {
+    nqy: {
+        initSqlCmdMap: qy => conf.fr.ro.add.nqy.sqlCmdMap = {
+            update_doc: {
+                doc_id: conf.fr.ro.currEl.ratio_id,
+                reference2: qy.doc_id,
+            }
+        },
+    },
+    dqy: {
+        initSqlCmdMap: qy => {
+            let iu_doc, currEl = conf.fr.ro.currEl,
+                sqlCmdMap = conf.fr.ro.add.dqy.sqlCmdMap = {}
+            if (currEl.denominator_id)
+                iu_doc = sqlCmdMap.update_doc = { doc_id: currEl.denominator_id, }
+            else
+                iu_doc = sqlCmdMap.insert_doc = { parent: currEl.ratio_id, reference: 368677 }
+            iu_doc.reference2 = qy.quantity_id
+        },
     },
 }
 
@@ -334,6 +359,20 @@ conf.fr.gl = {
         },
     },
     children: ['on'],
+}
+
+conf.fr.dqy = {
+    fr: 'qy',
+    frn: 'quantity',
+    r2: 'dn_quantity_id',
+    sql_app: 'tableOfFHIR_Quantity',
+}
+
+conf.fr.nqy = {
+    fr: 'qy',
+    frn: 'quantity',
+    r2: 'n_quantity_id',
+    sql_app: 'tableOfFHIR_Quantity',
 }
 
 conf.fr.qy = {

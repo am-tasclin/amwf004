@@ -35,10 +35,28 @@ singlePage.ClickTagHref = (tag, id) => {
     else angular.forEach(singlePage.UrlList(), (t, i) => {
         if (t && !newUrl.includes(tag))
             if (conf.fr[singlePage.X_UrlTag(i)].children)
-                newUrl += '/' + t + (conf.fr[singlePage.X_UrlTag(i)].children.includes(tag) ? '/' + tagId : '')
+                newUrl += '/' + t +
+                    (conf.fr[singlePage.X_UrlTag(i)].children.includes(tag) ? '/' + tagId : '')
     })
     return newUrl
 }
+
+singlePage.LinkFromTo = (fromTagName, toTagName) => {
+    let
+        fromCurrEl = conf.fr[fromTagName].currEl,
+        toTagColId = conf.fr[toTagName].r2,
+        toTagId = fromCurrEl[toTagColId] ? ('_' + fromCurrEl[toTagColId]) : '',
+        fromTagId = singlePage.Url().split(fromTagName + '_')[1].split('/')[0],
+        beforeTo = singlePage.Url().split(fromTagName + '_')[0]
+            + fromTagName + '_' + fromTagId,
+        newUrl = beforeTo
+
+    if (!singlePage.Url().includes(toTagName)) //toTag not exist
+        newUrl += '/' + toTagName + toTagId
+
+    return newUrl
+}
+
 singlePage.LinkUp = (fromTag, toTag, r) => {
     let fromTagId = '', linkUp = ''
     if (!fromTag || !conf.fr[fromTag] || !conf.fr[fromTag].frn || !r) {

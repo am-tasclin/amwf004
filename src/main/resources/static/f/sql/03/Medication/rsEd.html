@@ -2,12 +2,18 @@
     <div class="w3-col am-no-print" style="width: 36px;" title="{{r.medication_id}}"><span
             class="w3-tiny w3-tag w3-grey">mn</span></div>
     <div class="w3-col" style="width: 11em;">
-        <span title="mn:{{r.medication_id}}"> {{r.substance_code}} </span>
-        <span data-ng-if="!r.substance_id"><пусто></span>
+        <a class="w3-hover-shadow am-0u" href="#!{{ctrl.singlePage.LinkUp('mn','se',r)}}">
+            <span title="mn:{{r.medication_id}}"> {{r.substance_code}} </span>
+            <span data-ng-if="!r.substance_id"> &lt;пусто> </span>
+        </a>
+        <div class="w3-card w3-leftbar"
+            data-ng-if="ctrl.singlePage.X_UrlId(ctrl.singlePage.TagPosition('se'))==r.substance_id">
+            a1
+        </div>
     </div>
     <div class="w3-col" style="width: 9em;">
-        <span class="w3-hover-shadow" data-ng-click="ctrl.rsEdPart(r, 'ro')"
-            title="ro:{{r.strength_ratio_id}}" data-ng-if="r.strength_ratio_id">
+        <a class="w3-hover-shadow am-0u" href="#!{{ctrl.singlePage.LinkUp('mn','ro',r)}}"
+            title="ro:{{r.strength_ratio_id}}">
             <span title="n_qy:{{r.n_quantity_id}}">
                 {{r.n_quantity_value}} {{r.n_quantity_code}}
             </span>
@@ -15,11 +21,12 @@
                 /
                 {{r.dn_quantity_value}} {{r.dn_quantity_code}}
             </span>
-        </span>
+            <span data-ng-if="!r.strength_ratio_id"> &lt;пусто> </span>
+        </a>
         <div class="w3-card w3-leftbar" style="width: 23em;left: -5em; position: relative;"
             data-ng-if="ctrl.singlePage.X_UrlId(ctrl.singlePage.TagPosition('ro'))==r.ratio_id">
-            <span class="w3-tiny w3-tag w3-grey">ro</span>
-            {{ctrl.singlePage.X_UrlId(ctrl.singlePage.TagPosition('ro'))==r.ratio_id}}
+            <div data-ng-repeat="r in [ctrl.conf.fr.ro.currEl]" data-ng-include="'/f/sql/03/Ratio/rsEd.html'">
+            </div>
         </div>
     </div>
     <div class="w3-rest">.</div>

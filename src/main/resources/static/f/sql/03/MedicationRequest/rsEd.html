@@ -11,7 +11,8 @@
             data-ng-if="ctrl.singlePage.X_UrlId(ctrl.singlePage.TagPosition('mn'))==r.medication_id"
             style="width: 26em;left: -5px; position: relative;">
             <div class="w3-border-bottom w3-small">
-                <div data-ng-repeat="r in [ctrl.conf.fr.mn.currEl]" data-ng-include="'/f/sql/03/Medication/rsEd.html'">
+                <div data-ng-repeat="r in [ctrl.conf.fr.mn.currEl]" 
+                data-ng-include="'/f/sql/03/Medication/rsEd.html'">
                 </div>
             </div>
         </div>
@@ -19,11 +20,13 @@
     <div class="w3-col " style="width: 14em;">
         <a data-ng-if="r.dosage_id" class="w3-hover-shadow am-0u"
             href="#!{{ctrl.singlePage.ClickTagHref('de', r.dosage_id)}}" data-am:rs:row data-tag="de"></a>
-        <a data-ng-if="!r.dosage_id" class="w3-hover-shadow am-0u" href="#!{{ctrl.singlePage.ClickTagHref('de')}}">+
+        <a data-ng-if="!r.dosage_id" class="w3-hover-shadow am-0u" 
+        href="#!{{ctrl.singlePage.ClickTagHref('de')}}">+
             дозування</a>
         <div class="w3-card w3-leftbar" style="width: 22em;left: -3em; position: relative;"
             data-ng-if="ctrl.singlePage.X_UrlId(ctrl.singlePage.TagPosition('de'))==r.dosage_id">
-            <div data-ng-repeat="r in [ctrl.conf.fr.de.currEl]" data-ng-include="'/f/sql/03/Dosage/rsEd.html'">
+            <div data-ng-repeat="r in [ctrl.conf.fr.de.currEl]" 
+            data-ng-include="'/f/sql/03/Dosage/rsEd.html'">
             </div>
         </div>
     </div>

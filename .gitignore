@@ -67,3 +67,6 @@ src/main/resources/static/f/archimateEd/.aed.js.swp
 src/main/resources/static/f/sql/03/.amRsRowHtml1.html.swp
 src/main/resources/static/f/sql/03/.ResourceFHIR.html.swp
 src/main/resources/static/f/sql/03/resourceFHIR/.addElDropDown.html.swp
+src/main/resources/static/f/sql/03/MedicationRequest/.rsEd.html.swp
+src/main/resources/static/f/sql/03/Ratio/.rsEd.html.swp
+src/main/resources/static/f/sql/03/Dosage/.rsEd.html.swp

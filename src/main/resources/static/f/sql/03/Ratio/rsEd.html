@@ -1,3 +1,30 @@
-<div>
-    <span data-am:rs:row></span>
+<div class="w3-row">
+    <div class="w3-col am-no-print" style="width: 36px;" title="{{r.medication_id}}"><span
+            class="w3-tiny w3-tag w3-grey">ro</span></div>
+    <div class="w3-col" style="width: 7em;">
+        <a class="w3-hover-shadow am-0u" href="#!{{ctrl.singlePage.LinkFromTo('ro','nqy')}}"
+        data-ng-class="{'w3-small am-b':ctrl.singlePage.Url().includes('nqy')}"
+        >
+            {{r.n_quantity_value}} {{r.n_quantity_code}}
+            <span data-ng-if="!r[ctrl.conf.fr.nqy.r2]"> &lt;numerator> </span>
+        </a>
+        <div class="w3-card w3-leftbar"
+            data-ng-if="ctrl.singlePage.X_UrlId(ctrl.singlePage.TagPosition('nqy'))==r[ctrl.conf.fr.nqy.r2]">
+            a1
+        </div>
+    </div>
+    <div class="w3-col" style="width: 9em;">
+        <a class="w3-hover-shadow am-0u" href="#!{{ctrl.singlePage.LinkFromTo('ro','dqy')}}"
+        data-ng-class="{'w3-small am-b':ctrl.singlePage.Url().includes('dqy')}"
+        >
+            <span data-ng-if="r.denominator_id">
+                / {{r.dn_quantity_value}} {{r.dn_quantity_code}}
+            </span>
+            <span data-ng-if="!r.denominator_id"> &lt;знаменник> </span>
+        </a>
+        <div class="w3-card w3-leftbar"
+            data-ng-if="ctrl.singlePage.X_UrlId(ctrl.singlePage.TagPosition('dqy'))==r[ctrl.conf.fr.dqy.r2]">
+            a1
+        </div>
+    </div>
 </div>

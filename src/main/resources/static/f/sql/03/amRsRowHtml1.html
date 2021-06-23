@@ -1,11 +1,17 @@
-<div class="w3-hover-shadow" data-ng-repeat="r in rList"
-    data-ng-class="{'w3-light-gray':r[ctrl.singlePage.LastUrlIdName()]==ctrl.singlePage.LastUrlId()}">
+<div class="w3-hover-shadow" data-ng-repeat="r in rList" data-ng-class="{
+        'w3-light-gray':r[ctrl.singlePage.LastUrlIdName()]==ctrl.singlePage.LastUrlId()
+    }">
+
     <button data-ng-click="ctrl.keep2back(r)" class="w3-btn w3-padding-small "> <i
             class="far fa-share-square fa-flip-horizontal"></i> </button>
     <button data-ng-click="ctrl.editFRFactory.addEl_save(r)" class="w3-btn w3-padding-small" data-ng-if="
-    ctrl.conf.fr[ctrl.singlePage.ForLastUrlTag()].add[ctrl.singlePage.LastUrlTag()]">
+        ctrl.conf.fr[ctrl.singlePage.ForLastUrlTag()].add[ctrl.singlePage.LastUrlTag()]">
         <i class="fas fa-plus"></i>
     </button>
+
+    <span data-ng-if="ctrl.singlePage.LastUrlTag().length>2" data-am:rs:row
+        data-inner:html:raw="{{ctrl.conf.fr[ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].fr].amRsRowHtml}}"></span>
+
     <span data-am:rs:row data-ng-click="ctrl.clickAmRsRow(r)">
         Draft({{$index}})
         <span title="mn:{{r.medication_id}}">
