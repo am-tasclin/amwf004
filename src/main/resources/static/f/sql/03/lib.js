@@ -79,9 +79,14 @@ conf.exe.openDialogCUD = type => {
     let openDialog = singlePage.LastUrlTag() + '_' + type
     conf.openDialogCUD = conf.openDialogCUD == openDialog ? '' : openDialog
     if ('wrench' == conf.openDialogCUD.split('_')[1]) {
-        if (!conf.fr.qy.qy_value)
-            conf.fr.qy.qy_value =
-                conf.fr[singlePage.LastUrlTag()].currEl.quantity_value
+        if (!conf.fr.qy.qy_value) {
+            let currEl = conf.fr[singlePage.LastUrlTag()].currEl
+            if (!currEl && conf.fr[singlePage.LastUrlTag()].fr)
+                currEl = conf.fr[conf.fr[singlePage.LastUrlTag()].fr].currEl
+            if (currEl)
+                conf.fr.qy.qy_value =
+                    conf.fr[singlePage.LastUrlTag()].currEl.quantity_value
+        }
     }
 }
 conf.exe.NewEl.openDialog = (openedDialogNewEl) => {
@@ -104,8 +109,8 @@ class EditFHIResourceService {
         console.log(Object.values(docEl.children).filter(x => x).length)
         console.log(Object.values(docEl.children).filter(x => x).map(x => x.length))
         let delEmptyRoot = () => {
-            console.log(confDocEl)
             let delEmptyDocCmd = confDocEl.delEmptyDoc()
+            console.log(confDocEl, delEmptyDocCmd)
             console.log('delete root for doc is empty', singlePage.FirstUrlId(), delEmptyDocCmd)
             this.dataBeFactory['adn_delete' + (Array.isArray(delEmptyDocCmd) ? 's' : '')]
                 .save({ sqlCmdListMap: delEmptyDocCmd }).$promise.then(map => {

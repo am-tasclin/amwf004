@@ -10,6 +10,8 @@ conf.exe.delEmptyDocWithParent = () => {
 }
 conf.exe.clickListItem = (r, d) => {
     let dates = conf.fr[singlePage.LastUrlTag()].dates
+    if (!dates)
+        dates = conf.fr[conf.fr[singlePage.LastUrlTag()].fr].dates
     dates.dec.clickedItem = r
     dates.dec.edString = r.value
     dates.dec.clickListItemId = r[d.clickIdName]
@@ -143,7 +145,6 @@ conf.fr.de = {
             },
         },
         initSqlCmdMap: () => {
-            console.log(1, conf.fr.de.dates.dec.clickListItemId, conf.fr.de.dates.dec.UpdateEl.li)
             console.log(1, conf.fr.de.NewEl.sqlCmdMap)
             conf.fr.de.NewEl.sqlCmdMap.insert_doc.parent //o[]37   doseAndRate:369972 
                 = conf.fr.de.dates.dec.UpdateEl.li.dosageandrate_id
@@ -306,6 +307,7 @@ conf.fr.ro = {
     frn: 'Ratio',
     children: ['nqy', 'dqy'],
     sql_app: 'tableOfFHIR_Ratio',
+    delEmptyDoc: conf.exe.delEmptyDocWithParent,
     amRsRowHtml: '{{r.n_quantity_value}} {{r.n_quantity_code}}\n\
     <span data-ng-if="r.denominator_id">/{{r.dn_quantity_value}} {{r.dn_quantity_code}}</span>\n\
     <span data-ng-if="!r.n_quantity_id"><пусто></span>\n\

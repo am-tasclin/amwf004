@@ -34,6 +34,9 @@
                     class="far fa-window-close"></i></a>
         </div>
         <div ng-switch="ctrl.conf.openDialogCUD.split('_')[1]">
+            <div ng-switch-when="wrench">
+                Редакція ресурса, якщо він незадіяний в використанні і якщо це можливо.
+            </div>
             <div ng-switch-when="minus">
                 Пошук протипоказів до вилучення Елементу: {{ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].frn}}
                 <div>
@@ -47,13 +50,15 @@
             <div ng-switch-when="matchValue2">...</div>
             <div ng-switch-default>
                 <div class="w3-border-bottom" data-am:rs:row data-inner:html="NewEl.amRsRowHtml"></div>
-                <div data-ng-if="!ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].NewEl 
+                <div data-ng-if="(!ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].NewEl && ctrl.singlePage.LastUrlTag().length==2)
                         || ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].NewEl.newElName">
                     Назва елементу:
                     <textarea data-ng-model="ctrl.conf.exe.NewEl.newElName"
                         class="w3-border am-width-100pr w3-medium"></textarea>
                 </div>
-                <div data-ng-if="d.edTemplate" data-ng-include="'/f/sql/03/'+d.frn+'/'+d.edTemplate+'.html'">
+                <div data-ng-if="d.edTemplate" data-ng-include="'/f/sql/03/'+d.frn+'/'+d.edTemplate+'.html'"></div>
+                <div data-ng-repeat="d in [ctrl.conf.fr[d.fr]]"
+                    data-ng-include="'/f/sql/03/'+d.frn+'/'+d.edTemplate+'.html'">
                 </div>
                 <button class="w3-btn w3-border w3-padding-small" data-n11g-click="ctrl.editFRFactory.newEl_save()"
                     data-ng-click="ctrl.editFRFactory['save_'+ctrl.conf.openDialogCUD.split('_')[1]]()">save</button>
