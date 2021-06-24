@@ -51,19 +51,22 @@
         >
         <span data-ng-include="'resourceFHIR/addElDropDown.html'"></span>
     </div>
-    
-    <div class="w3-row" data-ng-if="ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].dates">
+
+    <div class="w3-row" data-ng-if="ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].dates||ctrl.conf.fr[ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].fr].dates">
         <div class="w3-half w3-border-right">
             <div data-ng-repeat="rList in [dataSqlRequest.list]" data-ng-include="'/f/sql/03/amRsRowHtml1.html'"></div>
         </div>
         <div class="w3-half w3-container">
-a11
+            a11
             <div data-ng-repeat="(key, d) in ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].dates"
+                data-ng-include="'/f/sql/03/confDates/ed.html'">
+            </div>
+            <div data-ng-repeat="(key, d) in ctrl.conf.fr[ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].fr].dates"
                 data-ng-include="'/f/sql/03/confDates/ed.html'">
             </div>
         </div>
     </div>
-    <div data-ng-if="!ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].dates">
+    <div data-ng-if="!ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].dates&&!ctrl.conf.fr[ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].fr].dates">
         <div data-ng-repeat="rList in [dataSqlRequest.list]" data-ng-include="'/f/sql/03/amRsRowHtml1.html'"></div>
     </div>
     &nbsp;

@@ -151,74 +151,74 @@ conf.fr.de = {
             console.log(1)
         },
     },
-    dates: {
-        dec: {
-            clickListItem: (r) => {
-                conf.fr.de.dates.dec.edString = r.value
-                conf.fr.de.dates.dec.clickListItemId = r.dosage_id
-                angular.forEach(conf.fr.de.dates.dec.dataSqlRequest.list, (li) => {
-                    if (li.dosage_id == conf.fr.de.dates.dec.clickListItemId)
-                        conf.fr.de.dates.dec.UpdateEl.li = li
-                })
-            },
-            amRsRowHtmlHead: 'Ресурси <b>дозування</b>',
-            sql_app: 'tableOfFHIR_dosageData',
-            clickIdName: 'dosage_id',
-            amRsRowHtml: '<span \n\
+}
+conf.fr.de.dates = {
+    dec: {
+        clickListItem: (r) => {
+            conf.fr.de.dates.dec.edString = r.value
+            conf.fr.de.dates.dec.clickListItemId = r.dosage_id
+            angular.forEach(conf.fr.de.dates.dec.dataSqlRequest.list, (li) => {
+                if (li.dosage_id == conf.fr.de.dates.dec.clickListItemId)
+                    conf.fr.de.dates.dec.UpdateEl.li = li
+            })
+        },
+        amRsRowHtmlHead: 'Ресурси <b>дозування</b>',
+        sql_app: 'tableOfFHIR_dosageData',
+        clickIdName: 'dosage_id',
+        amRsRowHtml: '<span \n\
             data-ng-class="{\'w3-leftbar w3-border-blue\': \n\
             ctrl.conf.fr.de.currEl.dosageandrate_id==r.dosageandrate_id}">{{r.value}}</span>',
-            UpdateEl: {
-                btn: '<i class="fas fa-wrench"></i>',
-                initOpenDialog: () => {
-                    console.log(1)
-                },
-                amRsRowHtml: 'Змінити назву збірки дозування',
-                edTemplate: 'edString.html',
-                sqlCmdMap: { update_string: {} },
-                initSqlCmdMap: () => {
-                    conf.fr.de.dates.dec.UpdateEl.sqlCmdMap.update_string.value = conf.fr.de.dates.dec.edString
-                    conf.fr.de.dates.dec.UpdateEl.sqlCmdMap.update_string.string_id = conf.fr.de.dates.dec.UpdateEl.li.string_id
-                },
-                afterExeSqlCmdMap: (map) => {
-                    if (map.update_string.update == 1) {
-                        conf.fr.de.dates.dec.UpdateEl.li.value = map.update_string.value
-                    }
-                },
+        UpdateEl: {
+            btn: '<i class="fas fa-wrench"></i>',
+            initOpenDialog: () => {
+                console.log(1)
             },
-            NewEl: {
-                btn: '<i class="fas fa-plus"></i>',
-                amRsRowHtml: 'Створити нову збірку дозування',
-                edTemplate: 'edString.html',
-                sqlCmdMap: {
-                    insert_doc: {
-                        parent: 369981, // [369981]   дані:369358 {369967:Dosage} [2]
-                        reference: 372065, //[372065] text 
-                        insert_string: {},
-                        insert_doc: {
-                            reference: 369972, //[369972] o[]37 doseAndRate 
-                        },
-                        read_this_doc: {
-                            sql_app: 'tableOfFHIR_dosageData',
-                            doc_id_name: 'dosage_id'
-                        },
-                    },
-                },
-                initSqlCmdMap: () => {
-                    conf.fr.de.dates.dec.NewEl.sqlCmdMap.insert_doc.insert_string.value = conf.fr.de.dates.dec.edString
-                    let sql = sql_app[conf.fr.de.dates.dec.NewEl.sqlCmdMap.insert_doc.read_this_doc.sql_app]()
-                    conf.fr.de.dates.dec.NewEl.sqlCmdMap.insert_doc.read_this_doc.sql = sql
-                    console.log(1, sql)
-                    console.log(1, conf.fr.de.dates.dec.NewEl.sqlCmdMap)
-                },
-                afterExeSqlCmdMap: map => {
-                    console.log(1, conf.fr.de.dates.dec.dataSqlRequest.list)
-                    console.log(1, map, map.insert_doc.read_this_doc.r)
-                    conf.fr.de.dates.dec.dataSqlRequest.list.unshift(map.insert_doc.read_this_doc.r)
-                    conf.fr.de.dates.dec.clickListItemId = map.insert_doc.read_this_doc.r.dosage_id
-                },
+            amRsRowHtml: 'Змінити назву збірки дозування',
+            edTemplate: 'edString.html',
+            sqlCmdMap: { update_string: {} },
+            initSqlCmdMap: () => {
+                conf.fr.de.dates.dec.UpdateEl.sqlCmdMap.update_string.value = conf.fr.de.dates.dec.edString
+                conf.fr.de.dates.dec.UpdateEl.sqlCmdMap.update_string.string_id = conf.fr.de.dates.dec.UpdateEl.li.string_id
+            },
+            afterExeSqlCmdMap: (map) => {
+                if (map.update_string.update == 1) {
+                    conf.fr.de.dates.dec.UpdateEl.li.value = map.update_string.value
+                }
             },
         },
-    }
+        NewEl: {
+            btn: '<i class="fas fa-plus"></i>',
+            amRsRowHtml: 'Створити нову збірку дозування',
+            edTemplate: 'edString.html',
+            sqlCmdMap: {
+                insert_doc: {
+                    parent: 369981, // [369981]   дані:369358 {369967:Dosage} [2]
+                    reference: 372065, //[372065] text 
+                    insert_string: {},
+                    insert_doc: {
+                        reference: 369972, //[369972] o[]37 doseAndRate 
+                    },
+                    read_this_doc: {
+                        sql_app: 'tableOfFHIR_dosageData',
+                        doc_id_name: 'dosage_id'
+                    },
+                },
+            },
+            initSqlCmdMap: () => {
+                conf.fr.de.dates.dec.NewEl.sqlCmdMap.insert_doc.insert_string.value = conf.fr.de.dates.dec.edString
+                let sql = sql_app[conf.fr.de.dates.dec.NewEl.sqlCmdMap.insert_doc.read_this_doc.sql_app]()
+                conf.fr.de.dates.dec.NewEl.sqlCmdMap.insert_doc.read_this_doc.sql = sql
+                console.log(1, sql)
+                console.log(1, conf.fr.de.dates.dec.NewEl.sqlCmdMap)
+            },
+            afterExeSqlCmdMap: map => {
+                console.log(1, conf.fr.de.dates.dec.dataSqlRequest.list)
+                console.log(1, map, map.insert_doc.read_this_doc.r)
+                conf.fr.de.dates.dec.dataSqlRequest.list.unshift(map.insert_doc.read_this_doc.r)
+                conf.fr.de.dates.dec.clickListItemId = map.insert_doc.read_this_doc.r.dosage_id
+            },
+        },
+    },
 }
 
 conf.fr.de.add = {
@@ -410,15 +410,16 @@ conf.fr.qy = {
         },
     },
     delEmptyDoc: conf.exe.delEmptyDocWithParent,
-    dates: {
-        dec: {
-            sql_app: 'tableOfFHIR_ValueSet_code001',
-            amRsRowHtml: '<span data-ng-class="{\'w3-leftbar w3-border-blue\': \n\
+}
+
+conf.fr.qy.dates = {
+    dec: {
+        sql_app: 'tableOfFHIR_ValueSet_code001',
+        amRsRowHtml: '<span data-ng-class="{\'w3-leftbar w3-border-blue\': \n\
             ctrl.conf.fr.qy.currEl.quantity_code_id==r.code_id}">{{r.code_s}}</span>',
-            amRsRowHtmlHead: 'Ресурси <b>одиниці виміру</b>',
-            clickIdName: 'code_id',
-            UpdateEl: {},
-        },
+        amRsRowHtmlHead: 'Ресурси <b>одиниці виміру</b>',
+        clickIdName: 'code_id',
+        UpdateEl: {},
     },
 }
 

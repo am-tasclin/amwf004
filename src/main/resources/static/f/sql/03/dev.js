@@ -67,7 +67,7 @@ class InitFHIResourceController extends AbstractController {
                     conf.buildDocJson()
                 })
         }
-        angular.forEach(conf.fr[singlePage.LastUrlTag()].dates, (v) => {
+        let readDates = v => {
             let sql = sql_app[v.sql_app]()
             if (sql.includes(':sql_app')) sql = sql_app.concatSql(sql)
             // console.log(v, sql)
@@ -76,7 +76,9 @@ class InitFHIResourceController extends AbstractController {
                     v.dataSqlRequest = dataSqlRequest
                     conf.buildDocJson()
                 })
-        })
+        }
+        angular.forEach(conf.fr[singlePage.LastUrlTag()].dates, readDates )
+        angular.forEach(conf.fr[conf.fr[singlePage.LastUrlTag()].fr].dates, readDates )
         //read url id objects
         console.log(singlePage.UrlList())
         angular.forEach(singlePage.UrlList(), (x_Url, nr) => {

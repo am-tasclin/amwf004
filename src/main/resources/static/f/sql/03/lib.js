@@ -174,6 +174,7 @@ class EditFHIResourceService {
 
     save_plus = () => {
         console.log(1)
+        this.newEl_save()
     }
 
     save_wrench = () => {//edit
