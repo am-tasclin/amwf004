@@ -145,6 +145,7 @@ class EditFHIResourceService {
             }
         })
     }
+
     addEl_save = (r) => {
         let lastUrlTag = singlePage.LastUrlTag(),
             forLastUrlTag = singlePage.ForLastUrlTag(),

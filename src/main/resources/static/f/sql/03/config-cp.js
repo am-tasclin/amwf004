@@ -10,6 +10,7 @@ conf.exe.delEmptyDocWithParent = () => {
 }
 conf.exe.clickListItem = (r, d) => {
     let dates = conf.fr[singlePage.LastUrlTag()].dates
+    dates.dec.clickedItem = r
     dates.dec.edString = r.value
     dates.dec.clickListItemId = r[d.clickIdName]
     angular.forEach(dates.dec.dataSqlRequest.list, li => {
@@ -379,7 +380,7 @@ conf.fr.qy = {
     frn: 'Quantity',
     sql_app: 'tableOfFHIR_Quantity',
     edTemplate: 'addEl',
-    amRsRowHtml: '<span> {{r.quantity_value}} {{r.quantity_code}}</span> <span data-ng-if="!r.quantity_value && !r.quantity_code"> <пусто> </span> ',
+    amRsRowHtml: '<span> {{r.quantity_value}}{{r.quantity_valuef}}  {{r.quantity_code}}</span> <span data-ng-if="!r.quantity_value && !r.quantity_code"> <пусто> </span> ',
     save_wrench: {
         initSqlCmdMap: () => {
             let sqlCmdMap = conf.fr.qy.save_wrench.sqlCmdMap
@@ -393,8 +394,11 @@ conf.fr.qy = {
         initSqlCmdMap: () => {
             let sqlCmdMap = conf.fr.qy.NewEl.sqlCmdMap
             sqlCmdMap.insert_doc.insert_int.value = 1 * conf.fr.qy.qy_value
-            if (conf.fr.qy.currEl.quantity_code_id)
-                sqlCmdMap.insert_doc.insert_doc.reference2 = conf.fr.qy.currEl.quantity_code_id
+            if (conf.fr.qy.dates.dec.clickedItem)
+                sqlCmdMap.insert_doc.insert_doc.reference2 = conf.fr.qy.dates.dec.clickedItem.code_id
+            else if (conf.fr.qy.currEl)
+                if (conf.fr.qy.currEl.quantity_code_id)
+                    sqlCmdMap.insert_doc.insert_doc.reference2 = conf.fr.qy.currEl.quantity_code_id
             console.log(sqlCmdMap)
         },
         sqlCmdMap: {
