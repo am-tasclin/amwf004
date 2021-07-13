@@ -195,6 +195,9 @@ class EditFHIResourceService {
 
     newEl_save = () => {
         let newEl = conf.fr[singlePage.LastUrlTag()].NewEl
+        if (!newEl)
+            newEl = conf.fr[conf.fr[singlePage.LastUrlTag()].fr].NewEl
+        console.log(newEl)
         if (newEl.initSqlCmdMap) newEl.initSqlCmdMap()
         console.log(2, singlePage.LastUrlTag(), newEl.sqlCmdMap)
         this.dataBeFactory.adn_insert.save(newEl.sqlCmdMap).$promise.then((map) => {
