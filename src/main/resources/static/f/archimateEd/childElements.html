@@ -1,4 +1,4 @@
-<div data-ng-repeat="x in x.children">
+<div data-ng-repeat="x in x.children ">
     <a href="#!/el_{{x.id}}" data-ng-click="ctrl.am2f.clickAmItem(x)">
         <div class="w3-hover-shadow" data-ng-class="{'w3-light-gray':ctrl.conf.currentX.id==x.id}">
             <span class="w3-tiny am-b"> {{x.localName}} </span> {{x.getAttribute('name')}}

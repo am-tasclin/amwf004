@@ -21,7 +21,7 @@
         </div>
         <span class="w3-small am-b">views:</span>
         <span data-ng-repeat="xId in ctrl.conf.clickEl.views">
-            <a href="#!/el_{{xId}}" data-ng-class="{'w3-bottombar':ctrl.conf.currentX.id==xId}">
+            <a class="w3-hover-shadow" href="#!/el_{{xId}}" data-ng-class="{'w3-bottombar':ctrl.conf.currentX.id==xId}">
                 {{ctrl.conf.elMap[xId].getAttribute('name')}}</a>,
         </span>
     </div>
@@ -35,10 +35,8 @@
         </span>
     </div>
     <div data-ng-repeat="ve in ctrl.conf.currentX.children ">
-        <div data-ng-class="{'w3-light-grey':ve.id==ctrl.conf.clickEl.id}"
-        class="w3-hover-shadow"
-        data-ng-click="ctrl.conf.clickSvg(ve)"
-        >
+        <div data-ng-class="{'w3-light-grey':ve.id==ctrl.conf.clickEl.id}" class="w3-hover-shadow"
+            data-ng-click="ctrl.conf.clickSvg(ve)">
             <span class="w3-tiny am-b" title="{{ve.id}}">
                 {{ctrl.conf.elMap[ve.getAttribute('archimateElement')].getAttribute('xsi:type').split(':')[1]}}
             </span>

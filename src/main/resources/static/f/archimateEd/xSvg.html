@@ -1,11 +1,11 @@
 <div>
-    <svg width="650" height="{{ctrl.conf.currentX.yMax+20}}">
+    <svg width="800" height="{{ctrl.conf.currentX.yMax+20}}">
         <image data-ng-if="ctrl.conf.currentX.id"
             href="/f/archimate/html-{{ctrl.xmlDoc.firstChild.getAttribute('name')}}/{{ctrl.xmlDoc.firstChild.id}}/images/{{ctrl.conf.currentX.id}}.png">
         </image>
-        <rect width="650" height="{{ctrl.conf.currentX.yMax+20}}" stroke="green" stroke-width="1" fill-opacity="0.0025" />
-        <rect x="{{x.firstElementChild.getAttribute('x')}}" y="{{x.firstElementChild.getAttribute('y')}}"
-            width="{{x.firstElementChild.getAttribute('width')}}"
+        <rect width="800" height="{{ctrl.conf.currentX.yMax+20}}" stroke="green" stroke-width="1" fill-opacity="0.0025" />
+        <rect x="{{x.firstElementChild.getAttribute('x')-2}}" y="{{x.firstElementChild.getAttribute('y')}}"
+            width="{{x.firstElementChild.getAttribute('width')-2}}"
             height="{{x.firstElementChild.getAttribute('height')}}" stroke="green" 
             stroke-width="{{ctrl.conf.clickEl.aElId==x.getAttribute('archimateElement')?0.5:0.01}}"
             fill-opacity="{{ctrl.conf.clickEl.aElId==x.getAttribute('archimateElement')?0.1:0.01}}" 
