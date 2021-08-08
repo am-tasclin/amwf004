@@ -1,4 +1,5 @@
-var app = angular.module('myApp', ['ngSanitize','ngRoute']);
+'use strict'
+var app = angular.module('myApp', ['ngSanitize','ngRoute'])
 var exe_fn = {}
 var sql_app = {}
 var ctrl

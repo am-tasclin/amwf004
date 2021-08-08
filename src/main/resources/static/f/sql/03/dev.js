@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 var app = angular.module("app", ['ngRoute', 'ngResource', 'ngSanitize']);
 angular.element(() => angular.bootstrap(document, ['app']))
 app.factory("dataBeFactory", DataDBexchangeService)
