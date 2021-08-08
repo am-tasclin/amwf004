@@ -11,13 +11,19 @@
     <script src="/webjars/angular-route/1.8.2/angular-route.min.js" type="application/javascript"></script>
     <script src="/webjars/angular-resource/1.8.2/angular-resource.min.js" type="application/javascript"></script>
     <script src="/webjars/angular-sanitize/1.8.2/angular-sanitize.min.js" type="application/javascript"></script>
+    <script src="lib.sql.js" type="application/javascript"></script>
+    <script src="lib.sql002.js" type="application/javascript"></script>
+    <script src="config.sql.js" type="application/javascript"></script>
     <script src="i.js" type="application/javascript"></script>
 </head>
 
 <body class="w3-container">
     <div class="w3-border-bottom am-max-width-1">
-        <a href="/" class="w3-btn w3-border w3-padding-small w3-tiny">↑</a>
+        <a href="/" class="w3-btn w3-border w3-padding-small w3-small">↑</a>
+        <span class="w3-small am-b"> Hi TeSe</span>,
+        {{ctrl.conf.sqlKeyName}}
     </div>
-    Hi
+    <div ng-view></div>
 </body>
+
 </html>

@@ -1,0 +1,14 @@
+<div class="w3-dropdown-hover w3-white ">
+    <span class="w3-btn w3-border w3-padding-small w3-small">
+        SQL
+    </span>
+    <div class="w3-dropdown-content w3-bar-block w3-border">
+        <div data-ng-repeat="sqlKeyName in ctrl.sqlAppKeys()"
+            data-ng-class="{'w3-green':sqlKeyName==ctrl.conf.sqlKeyName}">
+            <a class="w3-hover-shadow am-0u" href="#!/sql/{{sqlKeyName}}"> {{sqlKeyName}} </a>
+        </div>
+    </div>
+</div>
+sql.html
+{{ctrl.conf.sqlKeyName}}
+<div data-ng-include="'sqlTable.html'"></div>
