@@ -16,9 +16,9 @@ class SqlController extends SqlAbstractController {
             })
     }
 
-    sqlAppKeys = () => Object.keys(sql_app)
-
+    
 }
+conf.sqlAppKeys = () => Object.keys(sql_app)
 
 // app.factory("dataFactory", DataFactory)
 class DataFactory {
