@@ -766,7 +766,7 @@ app.directive('amCreateDoc', () => {
     }
 })
 
-app.directive('amSqlHtml', ($compile) => {
+app.directive('amSqlHtml', $compile => {
     return {
         restrict: 'A',
         link: (s, e) => {

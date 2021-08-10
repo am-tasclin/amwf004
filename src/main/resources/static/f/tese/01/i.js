@@ -13,9 +13,23 @@ class InitPageController extends AbstractController {
 // app.controller("InitPageController", InitPageController)
 app.controller("InitPageController", InitPageController)
 
-conf.singlePagesUrl = {}
+app.directive('amSqlHtml', $compile => {
+    return {
+        restrict: 'A',
+        link: (s, e) => {
+            let sqlE = sql_app[conf.sqlKeyName]
+            if (sqlE.sqlHtml) {
+                if (sqlE.sqlHtml[s.k] != null) {
+                    e.html(sqlE.sqlHtml[s.k])
+                    $compile(e.contents())(s)
+                }
+            }
+        },
+    }
+})
 
-angular.forEach(['sql/:sql', 'sql/:sql/:key/:val'], v => {
+conf.singlePagesUrl = {}
+angular.forEach(['sql/:sql', 'sql/:sql/:key/=/:val'], v => {
     conf.singlePagesUrl[v] = {
         templateUrl: 'sql.html',
         controller: 'SqlController',

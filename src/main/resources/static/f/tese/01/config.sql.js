@@ -4,6 +4,7 @@ sql_app.ValueSet_title = {
     sql: 'SELECT value title,  d.* FROM doc d \n\
     LEFT JOIN string ON string_id=doc_id \n\
     WHERE reference=372045',
+    sqlHtml: { doc_id: '<a href="#!/sql/ValueSet_values/valueset_id/=/{{r[k]}}">{{r[k]}}</a>', },
 }
 
 sql_app.ValueSet_values = {
@@ -15,6 +16,7 @@ sql_app.ValueSet_values = {
     WHERE p.doc_id=d.parent AND pp.doc_id=p.parent AND p3.doc_id=pp.parent \n\
     AND p.reference=372049 \n\
     ORDER BY p3.parent',
+    sqlHtml: { valueset_id: '<a href="#!/sql/{{ctrl.conf.sqlKeyName}}/{{k}}/=/{{r[k]}}">{{r[k]}}</a>', },
 }
 
 sql_app.ValueSet_code001 = {

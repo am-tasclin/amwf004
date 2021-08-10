@@ -97,7 +97,9 @@ class SqlAbstractController extends AbstractController {
     getChoisedListItem = () => !sql_app.simpleSQLselect ? '' :
         sql_app.simpleSQLs[sql_app.simpleSQLselect].choisedListItem
     choiseListItem = r => {
-        delete sql_app.simpleSQLs[sql_app.simpleSQLselect].noDeletable
-        sql_app.simpleSQLs[sql_app.simpleSQLselect].choisedListItem = r.doc_id
+        if (sql_app.simpleSQLs) {
+            delete sql_app.simpleSQLs[sql_app.simpleSQLselect].noDeletable
+            sql_app.simpleSQLs[sql_app.simpleSQLselect].choisedListItem = r.doc_id
+        }
     }
 }
