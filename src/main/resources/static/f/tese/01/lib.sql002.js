@@ -7,23 +7,20 @@ class SqlController extends SqlAbstractController {
         super(dataFactory)
         conf.sqlKeyName = $routeParams.sql
         let sql = this.readSql2R(conf.sqlKeyName)
-        console.log(2, 'SqlController', $routeParams, sql)
+        console.log('SqlController \n', Object.keys($routeParams), sql)
         let ctrl = this
         dataFactory.httpGetSql({ sql: sql })
             .then(dataSqlRequest => {
-                console.log(13, dataSqlRequest)
+                console.log('dataSqlRequest :', dataSqlRequest)
                 ctrl.data = dataSqlRequest
             })
     }
-
-    
 }
 conf.sqlAppKeys = () => Object.keys(sql_app)
 
 // app.factory("dataFactory", DataFactory)
 class DataFactory {
     constructor($http, $q, $resource) {
-        console.log(1, 'DataFactory')
         let urlSql = '/r/url_sql_read_db1'
         let dataFactory = {}
         dataFactory.httpGetSql = params => {
@@ -45,10 +42,9 @@ class DataFactory {
 // app.config(RouteProviderConfig)
 class RouteProviderConfig {
     constructor($routeProvider) {
-        console.log(3, 'RouteProviderConfig')
+        console.log('RouteProviderConfig', Object.keys(conf.singlePagesUrl))
         angular.forEach(conf.singlePagesUrl, (v, k) => {
             if (!v.controllerAs) v.controllerAs = 'ctrl'
-            console.log(k, v)
             $routeProvider.when("/" + k, v)
         })
         $routeProvider.otherwise({

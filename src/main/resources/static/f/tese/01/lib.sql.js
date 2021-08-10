@@ -1,6 +1,5 @@
 class AbstractController { singlePage = singlePage; conf = conf }
 
-console.log(0, 'lib.sql')
 class SqlAbstractController extends AbstractController {
     dataFactory
     constructor(dataFactory) {
@@ -8,7 +7,7 @@ class SqlAbstractController extends AbstractController {
         this.dataFactory = dataFactory
     }
     readSql2R = sqlN => {
-        let sql = sql_app[sqlN]()
+        let sql = sql_app[sqlN].sql
         while (sql.includes(':sql_app.')) {
             let sql_name = sql.split(':sql_app.')[1].split(' ')[0]
             let sql_inner = this.readSql2R(sql_name)

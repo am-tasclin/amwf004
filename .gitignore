@@ -64,11 +64,9 @@ src/main/resources/static/f/archimateEd/PlantUML
 src/main/resources/static/f/04usecp/.04usecp.js.swp
 src/main/resources/static/f/04usecp/.physician.html.swp
 src/main/resources/static/f/archimateEd/.aed.js.swp
-src/main/resources/static/f/sql/03/.amRsRowHtml1.html.swp
-src/main/resources/static/f/sql/03/.ResourceFHIR.html.swp
+src/main/resources/static/f/sql/03/*.swp
 src/main/resources/static/f/sql/03/resourceFHIR/.addElDropDown.html.swp
 src/main/resources/static/f/sql/03/MedicationRequest/.rsEd.html.swp
 src/main/resources/static/f/sql/03/Ratio/.rsEd.html.swp
 src/main/resources/static/f/sql/03/Dosage/.rsEd.html.swp
-src/main/resources/static/f/tese/01/.i.js.swp
-src/main/resources/static/f/tese/01/.lib.sql.js.swp
+src/main/resources/static/f/tese/01/*.swp
