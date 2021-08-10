@@ -14,14 +14,12 @@ class InitPageController extends AbstractController {
 app.controller("InitPageController", InitPageController)
 
 conf.singlePagesUrl = {}
-conf.singlePagesUrl['sql/:sql'] = {
-    templateUrl: 'sql.html',
-    controller: 'SqlController',
-}
 
-conf.singlePagesUrl['sql/:sql/:key/:val'] = {
-    templateUrl: 'sql.html',
-    controller: 'SqlController',
-}
+angular.forEach(['sql/:sql', 'sql/:sql/:key/:val'], v => {
+    conf.singlePagesUrl[v] = {
+        templateUrl: 'sql.html',
+        controller: 'SqlController',
+    }
+})
 
 if (conf.singlePagesUrl) app.config(RouteProviderConfig)
