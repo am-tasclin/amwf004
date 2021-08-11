@@ -11,20 +11,32 @@
     <script src="/webjars/angular-route/1.8.2/angular-route.min.js" type="application/javascript"></script>
     <script src="/webjars/angular-resource/1.8.2/angular-resource.min.js" type="application/javascript"></script>
     <script src="/webjars/angular-sanitize/1.8.2/angular-sanitize.min.js" type="application/javascript"></script>
-    <script src="lib.sql.js" type="application/javascript"></script>
     <script src="lib.sql002.js" type="application/javascript"></script>
     <script src="config.sql.js" type="application/javascript"></script>
     <script src="i.js" type="application/javascript"></script>
 </head>
 
-<body class="w3-container">
+<body class="w3-container" data-ng-keydown="[27].includes($event.keyCode) && ctrl.keyDownEsc()">
     <div class="w3-border-bottom am-max-width-1">
         <a href="/" class="w3-btn w3-border w3-padding-small w3-small">↑</a>
         <span class="w3-small am-b">Hi, TeSe</span>,
         <span data-ng-include="'sqlDropdown.html'"></span>
         <span class="w3-small"> {{ctrl.conf.sqlKeyName}} </span>
     </div>
-    <div ng-view></div>
+    <div class="am-max-width-1">
+        <button class="w3-tiny w3-right" data-ng-click="ctrl.keyDownEsc()">test</button>
+    </div>
+
+    <div class="am-max-width-1" data-ng-view></div>
+
+    <div class="w3-modal" data-ng-style="ctrl.conf.modalDisplay">
+        <div class="w3-modal-content w3-container">
+            <span data-ng-click="ctrl.conf.modalDisplay.display=null"
+                class="w3-button w3-display-topright">&times;</span>
+            _
+            <div data-ng-include="ctrl.singlePage.UrlList()[1]+'Modal.html'"></div>
+        </div>
+    </div>
 </body>
 
 </html>

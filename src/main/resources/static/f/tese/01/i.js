@@ -1,39 +1,23 @@
 'use strict'
-var app = angular.module("app", ['ngRoute', 'ngResource', 'ngSanitize'])
-angular.element(() => angular.bootstrap(document, ['app']))
 app.factory("dataFactory", DataFactory)
 app.controller("SqlController", SqlController)
+app.directive('amSqlHtml', AmSqlHtml)
 
+// app.controller("InitPageController", InitPageController)
 class InitPageController extends AbstractController {
     constructor($scope, $route, $routeParams) {
         super()
         this.sqlKeyName = $routeParams.sql
     }
+    keyDownEsc = () => { if (conf.modalDisplay.display == 'block') conf.modalDisplay.display = null }
 }
-// app.controller("InitPageController", InitPageController)
 app.controller("InitPageController", InitPageController)
 
-app.directive('amSqlHtml', $compile => {
-    return {
-        restrict: 'A',
-        link: (s, e) => {
-            let sqlE = sql_app[conf.sqlKeyName]
-            if (sqlE.sqlHtml) {
-                if (sqlE.sqlHtml[s.k] != null) {
-                    e.html(sqlE.sqlHtml[s.k])
-                    $compile(e.contents())(s)
-                }
-            }
-        },
-    }
-})
-
-conf.singlePagesUrl = {}
+console.log(singlePage)
 angular.forEach(['sql/:sql', 'sql/:sql/:key/=/:val'], v => {
-    conf.singlePagesUrl[v] = {
+    singlePage[v] = {
         templateUrl: 'sql.html',
         controller: 'SqlController',
     }
 })
-
-if (conf.singlePagesUrl) app.config(RouteProviderConfig)
+app.config(RouteProviderConfig)
