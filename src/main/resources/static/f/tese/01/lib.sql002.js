@@ -35,7 +35,8 @@ class SqlController extends SqlAbstractController {
         console.log('SqlController \n', Object.keys($routeParams), sql)
         conf.sql = sql
         let ctrl = this
-        dataFactory.httpGetSql({ sql: sql }).then(dataSqlRequest => ctrl.data = dataSqlRequest)
+        dataFactory.httpGetSql({ sql: sql })
+            .then(dataSqlRequest => ctrl.data = dataSqlRequest)
     }
     sql_app = sql_app
 }
@@ -48,8 +49,12 @@ class DataFactory {
     constructor($http, $q, $resource) {
         this.dataFactory.httpGetSql = params => {
             let deferred = $q.defer()
+            params.sql = params.sql + ' LIMIT 50'
             $http.get(this.urlSql, { params: params })
-                .then(response => deferred.resolve(response.data)
+                .then(response => {
+                    deferred.resolve(response.data)
+                    console.log(response.data.list.length)
+                }
                     , response => {
                         console.log(response.status)
                         // deferred.reject(response.status)
@@ -69,9 +74,7 @@ class RouteProviderConfig {
             if (!v.controllerAs) v.controllerAs = 'ctrl'
             $routeProvider.when("/" + k, v)
         })
-        $routeProvider.otherwise({
-            template: "<h1>?</h1><p>Hi API</p>"
-        })
+        $routeProvider.otherwise({ template: "<h1>?</h1><p>Hi API</p>" })
     }
 }
 

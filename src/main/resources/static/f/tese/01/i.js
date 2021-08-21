@@ -13,7 +13,6 @@ class InitPageController extends AbstractController {
 }
 app.controller("InitPageController", InitPageController)
 
-console.log(singlePage)
 angular.forEach(['sql/:sql', 'sql/:sql/:key/=/:val'], v => {
     singlePage[v] = {
         templateUrl: 'sql.html',

@@ -1,4 +1,44 @@
 'use strict'
+sql_app.FHIRs_Group = {
+    name:'Категорії ЦД - пропозиція під ТЗ ',
+    sql:'SELECT d.doc_id group_id, s.value group_name, sp.value datagroup , d.* FROM doc d \n\
+    LEFT JOIN string s ON s.string_id=d.doc_id \n\
+    LEFT JOIN string sp ON sp.string_id=d.parent \n\
+    WHERE d.parent=373337',
+    noShow:['reference2','doctype'],
+}
+sql_app.FHIRs_Resource_Structure = {
+    name:'FHIR Resource Structure',
+    sql:'SELECT * FROM ( \n\
+        SELECT s1.value fr_name, s1r.value fr_type, s1r2.value fr_type2 \n\
+        , d1.doc_id fr_id, d1.reference type_id, d1.reference2 type2_id , d1.parent p \n\
+        FROM sort sd1, doc d1 \n\
+            LEFT JOIN string s1 ON s1.string_id=d1.doc_id \n\
+            LEFT JOIN string s1r ON s1r.string_id=d1.reference \n\
+            LEFT JOIN string s1r2 ON s1r2.string_id=d1.reference2 \n\
+        WHERE  d1.doc_id=sd1.sort_id \n\
+        ORDER BY sort) x',
+        noShow:['p'],
+        sqlHtml: {
+            fr_type:'<a href="#!/sql/FHIRs_Resource_Structure/p/=/{{r.type_id}}"> {{r[k]}} </a>',
+            fr_type2:'<a href="#!/sql/FHIRs_Resource_Structure/p/=/{{r.type2_id}}"> {{r[k]}} </a>',
+        },
+}
+sql_app.FHIRs_in_Folders = {
+    name:'FHIR елементи в папках-модулях',
+    sql: 'SELECT s.value fr_name, d.doc_id fr_id, d.parent folder_id, sf.value folder_name \n\
+    FROM doc f, sort fs, sort ds, doc d \n\
+    LEFT JOIN string s ON s.string_id=d.doc_id \n\
+    LEFT JOIN string sf ON sf.string_id=d.parent \n\
+    WHERE f.parent=369765 AND d.reference !=369358 \n\
+    AND d.parent=f.doc_id AND f.doctype=14 \n\
+    AND fs.sort_id=f.doc_id AND ds.sort_id=d.doc_id AND s.value is not null \n\
+    ORDER BY fs.sort,ds.sort',
+    sqlHtml: {
+        folder_name:'<i class="far fa-folder w3-small"></i> {{r[k]}}',
+        fr_id: '<a href="#!/sql/FHIRs_Resource_Structure/p/=/{{r[k]}}">{{r[k]}}</a>',
+    }
+}
 sql_app.ValueSet_title = {
     name: 'Всі ValueSet в БД задані і зчитані по title полю',
     sql: 'SELECT value title,  d.* FROM doc d \n\

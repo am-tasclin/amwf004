@@ -23,9 +23,11 @@
         <span data-ng-include="'sqlDropdown.html'"></span>
         <span class="w3-small"> {{ctrl.conf.sqlKeyName}} </span>
     </div>
-    <div class="am-max-width-1">
-        <button class="w3-tiny w3-right" data-ng-click="ctrl.keyDownEsc()">test</button>
-    </div>
+    <!--
+        <div class="am-max-width-1">
+            <button class="w3-tiny w3-right" data-ng-click="ctrl.keyDownEsc()">test</button>
+        </div>
+    -->
 
     <div class="am-max-width-1" data-ng-view></div>
 
@@ -33,7 +35,6 @@
         <div class="w3-modal-content w3-container">
             <span data-ng-click="ctrl.conf.modalDisplay.display=null"
                 class="w3-button w3-display-topright">&times;</span>
-            _
             <div data-ng-include="ctrl.singlePage.UrlList()[1]+'Modal.html'"></div>
         </div>
     </div>
