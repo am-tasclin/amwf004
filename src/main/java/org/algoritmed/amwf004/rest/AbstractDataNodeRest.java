@@ -37,8 +37,8 @@ public class AbstractDataNodeRest {
         return sqlCmdMap;
     }
     @PostMapping("insert")
-    public @ResponseBody Map<String, Object> insertElementFromSqlCmdMap(@RequestBody Map<String, Object> sqlCmdMap) {
-        abstractDataNode.sqlCmdMapToSqlInsert(sqlCmdMap);
+    public @ResponseBody Map<String, Object> writeElementFromSqlCmdMap(@RequestBody Map<String, Object> sqlCmdMap) {
+        abstractDataNode.sqlCmdMapToSqlWrite(sqlCmdMap);
         return sqlCmdMap;
     }
 

@@ -13,10 +13,10 @@ class InitPageController extends AbstractController {
 }
 app.controller("InitPageController", InitPageController)
 
-angular.forEach(['sql/:sql', 'sql/:sql/:key/=/:val'], v => {
-    singlePage[v] = {
+angular.forEach(['sql/:sql', 'sql/:sql/:key/=/:val']
+    , v => singlePage[v] = {
         templateUrl: 'sql.html',
         controller: 'SqlController',
     }
-})
+)
 app.config(RouteProviderConfig)

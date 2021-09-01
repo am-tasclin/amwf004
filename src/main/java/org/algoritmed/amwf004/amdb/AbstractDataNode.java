@@ -62,7 +62,7 @@ public class AbstractDataNode extends DbCommon {
     }
 
     @Transactional
-    public void sqlCmdMapToSqlInsert(Map<String, Object> sqlCmdMap) {
+    public void sqlCmdMapToSqlWrite(Map<String, Object> sqlCmdMap) {
         long[] idsForAction = null;
         logger.info("sqlCmdMap = " + sqlCmdMap);
         if (sqlCmdMap.containsKey("next_doc_ids")) {

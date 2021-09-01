@@ -40,7 +40,6 @@ class SqlController extends SqlAbstractController {
     }
     sql_app = sql_app
 }
-conf.sqlAppKeys = () => Object.keys(sql_app)
 
 // app.factory("dataFactory", DataFactory)
 class DataFactory {
@@ -95,4 +94,5 @@ class AmSqlHtml {
 singlePage.Url = () => window.location.href.split('#!')[1]
 singlePage.UrlList = () => singlePage.Url().split('/')
 
+conf.sqlAppKeys = () => Object.keys(sql_app)
 conf.modalDisplay = { display: null }

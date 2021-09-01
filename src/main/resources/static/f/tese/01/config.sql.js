@@ -1,6 +1,6 @@
 'use strict'
 sql_app.FHIRs_Group = {
-    name:'Категорії ЦД - пропозиція під ТЗ ',
+    name:'Категорії ЦД - пропозиція під ТЗ Облік категорії пацієнта',
     sql:'SELECT d.doc_id group_id, s.value group_name, sp.value datagroup , d.* FROM doc d \n\
     LEFT JOIN string s ON s.string_id=d.doc_id \n\
     LEFT JOIN string sp ON sp.string_id=d.parent \n\
