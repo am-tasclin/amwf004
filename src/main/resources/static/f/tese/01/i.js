@@ -15,7 +15,7 @@ app.controller("InitPageController", InitPageController)
 
 angular.forEach(['sql/:sql', 'sql/:sql/:key/=/:val']
     , v => singlePage[v] = {
-        templateUrl: 'sql.html',
+        templateUrl: '/f/tese/01/sql.html',
         controller: 'SqlController',
     }
 )

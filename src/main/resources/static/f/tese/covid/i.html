@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="uk-UA" data-ng-controller="InitPageController as ctrl">
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/webjars/font-awesome/5.15.2/css/all.min.css">
+    <link rel="stylesheet" href="/f/css/w3.css">
+    <link rel="stylesheet" href="/f/css/am.css">
+    <link rel="shortcut icon" href="/f/img/algoritmed.ico" type="image/x-icon">
+    <script src="/webjars/angular/1.8.2/angular.min.js" type="application/javascript"></script>
+    <script src="/webjars/angular-route/1.8.2/angular-route.min.js" type="application/javascript"></script>
+    <script src="/webjars/angular-resource/1.8.2/angular-resource.min.js" type="application/javascript"></script>
+    <script src="/webjars/angular-sanitize/1.8.2/angular-sanitize.min.js" type="application/javascript"></script>
+    <script src="/f/tese/01/lib.sql002.js" type="application/javascript"></script>
+    <script src="config.sql.js" type="application/javascript"></script>
+    <script src="/f/tese/01/i.js" type="application/javascript"></script>
+</head>
+
+<body class="w3-container" data-ng-keydown="[27].includes($event.keyCode) && ctrl.keyDownEsc()">
+    <div class="w3-border-bottom am-max-width-1">
+        <a href="/" class="w3-btn w3-border w3-padding-small w3-small">↑</a>
+        <span class="w3-small am-b">COVID-TeSe</span>,
+        <span data-ng-include="'/f/tese/01/sqlDropdown.html'"></span>
+        <span class="w3-small"> {{ctrl.conf.sqlKeyName}} </span>
+    </div>
+
+    <div class="am-max-width-1" data-ng-view></div>
+
+    <div class="w3-modal" data-ng-style="ctrl.conf.modalDisplay">
+        <div class="w3-modal-content w3-container">
+            <span data-ng-click="ctrl.conf.modalDisplay.display=null"
+                class="w3-button w3-display-topright">&times;</span>
+            <div data-ng-include="'/f/tese/01/'+ctrl.singlePage.UrlList()[1]+'Modal.html'"></div>
+        </div>
+    </div>
+</body>
+
+</html>
