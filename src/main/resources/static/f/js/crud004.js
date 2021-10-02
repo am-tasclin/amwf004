@@ -403,7 +403,8 @@ var initDataModel = function(){
 		var doctype = el.doctype?el.doctype:el.doctype_r?el.doctype_r:22
 		doctype = [14,17].indexOf(el.doctype)>=0?22:doctype
 		var table_name = ctrl.doctype_content_table_name[doctype]
-		console.log(el, doctype, table_name)
+		if(doctype==32) table_name='string'
+		console.log(123, el, doctype, table_name)
 		
 		if(el.value_1_edit != el['value_1_'+doctype]){
 			var so = {doc_id:el.doc_id, value:el.value_1_edit}

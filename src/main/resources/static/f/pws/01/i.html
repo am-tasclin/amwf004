@@ -13,26 +13,24 @@
     <script src="/webjars/angular-sanitize/1.8.2/angular-sanitize.min.js" type="application/javascript"></script>
     <script src="/f/tese/01/lib.sql002.js" type="application/javascript"></script>
     <script src="config.sql.js" type="application/javascript"></script>
-    <script src="/f/tese/01/i.js" type="application/javascript"></script>
+    <script src="i.js" type="application/javascript"></script>
 </head>
 
 <body class="w3-container" data-ng-keydown="[27].includes($event.keyCode) && ctrl.keyDownEsc()">
     <div class="w3-border-bottom am-max-width-1">
         <a href="/" class="w3-btn w3-border w3-padding-small w3-small">↑</a>
-        <span class="w3-small am-b">COVID-TeSe</span>,
-        <span data-ng-include="'/f/tese/01/sqlDropdown.html'"></span>
-        <span class="am-i w3-small"> {{ctrl.conf.sqlKeyName}} </span>
+        <span class="w3-small am-b">Робочий кабінет лікаря</span>&nbsp;⁙
+        <span class="w13-small" data-ng-repeat="m in ctrl.conf.pws.topMenu">
+            <a href="#" class="w3-hover-shadow">
+                {{m}}</a>
+            |
+        </span>
     </div>
-
-    <div class="am-max-width-1" data-ng-view></div>
-
-    <div class="w3-modal" data-ng-style="ctrl.conf.modalDisplay">
-        <div class="w3-modal-content w3-container">
-            <span data-ng-click="ctrl.conf.modalDisplay.display=null"
-                class="w3-button w3-display-topright">&times;</span>
-            <div data-ng-include="'/f/tese/01/'+ctrl.singlePage.UrlList()[1]+'Modal.html'"></div>
-        </div>
+    <div class="w3-border-bottom" style="height:90vh; overflow:auto;">
+        <span class="w3-small am-b">Пацієнт</span>:
     </div>
+    Hi PWS! -
+    <a href="https://cloford.com/resources/charcodes/utf-8_punctuation.htm">
+        ⁂⁋⁝⁞⁚⁙⁜⁕
+    </a>
 </body>
-
-</html>

@@ -7,6 +7,14 @@ sql_app.FHIRs_Group = {
     WHERE d.parent=373337',
     noShow:['reference2','doctype'],
 }
+sql_app.HumanName_family_name = {
+    name:"Ім'я Призвище",
+    sql:'SELECT f.value family_v, n.value name_v, d.doc_id family_id, dn.doc_id name_id FROM doc d \n\
+    LEFT JOIN string f ON d.doc_id=f.string_id \n\
+    LEFT JOIN doc dn ON d.doc_id=dn.parent AND dn.reference=372117 \n\
+    LEFT JOIN string n ON dn.doc_id=n.string_id \n\
+    WHERE d.reference = 372116',
+}
 sql_app.FHIRs_Resource_Structure = {
     name:'FHIR Resource Structure',
     sql:'SELECT * FROM ( \n\
@@ -39,6 +47,7 @@ sql_app.FHIRs_in_Folders = {
         fr_id: '<a href="#!/sql/FHIRs_Resource_Structure/p/=/{{r[k]}}">{{r[k]}}</a>',
     }
 }
+
 sql_app.ValueSet_title = {
     name: 'Всі ValueSet в БД задані і зчитані по title полю',
     sql: 'SELECT value title,  d.* FROM doc d \n\
