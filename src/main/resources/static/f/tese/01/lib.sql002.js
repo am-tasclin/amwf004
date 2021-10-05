@@ -71,6 +71,7 @@ class RouteProviderConfig {
         console.log('RouteProviderConfig', Object.keys(singlePage))
         angular.forEach(singlePage, (v, k) => {
             if (!v.controllerAs) v.controllerAs = 'ctrl'
+            console.log(k, v)
             $routeProvider.when("/" + k, v)
         })
         $routeProvider.otherwise({ template: "<h1>?</h1><p>Hi API</p>" })
@@ -92,6 +93,7 @@ class AmSqlHtml {
 }
 
 singlePage.Url = () => window.location.href.split('#!')[1]
+singlePage.PseudoREST = singlePage.Url
 singlePage.UrlList = () => singlePage.Url().split('/')
 
 conf.sqlAppKeys = () => Object.keys(sql_app)
