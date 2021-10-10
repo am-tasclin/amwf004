@@ -7,6 +7,20 @@ sql_app.FHIRs_Group = {
     WHERE d.parent=373337',
     noShow:['reference2','doctype'],
 }
+sql_app.EpisodeOfCare_Patient = {
+    name:'Епізод',
+    sql:'SELECT ee.doc_id episode_id, ee.reference2 patient_id, tsps.value tsps_v, ps.doc_id tsps_id FROM doc ee \n\
+    LEFT JOIN doc ps \n\
+    LEFT JOIN timestamp tsps ON tsps.timestamp_id=ps.doc_id \n\
+    ON ps.parent=ee.doc_id AND ps.reference2=368679 \n\
+    WHERE ee.reference=368896',
+}
+sql_app.Patient_family_name = {
+    name:'Пацієнти',
+    sql:'SELECT p.doc_id patient_id, hn.* FROM doc p \n\
+    LEFT JOIN (:sql_app.HumanName_family_name ) hn ON hn.family_id = p.reference2  \n\
+    WHERE p.reference=373423',
+}
 sql_app.HumanName_family_name = {
     name:"Ім'я Призвище",
     sql:'SELECT n.value name_v, f.value family_v, d.doc_id family_id, dn.doc_id name_id FROM doc d \n\
@@ -14,6 +28,16 @@ sql_app.HumanName_family_name = {
     LEFT JOIN doc dn ON d.doc_id=dn.parent AND dn.reference=372117 \n\
     LEFT JOIN string n ON dn.doc_id=n.string_id \n\
     WHERE d.reference = 372116',
+}
+
+sql_app.EpisodeOfCare_AndPatient = {
+    name:'Епізод',
+    sql:'SELECT ee.doc_id episode_id, p.*, tsps.value tsps_v, ps.doc_id tsps_id FROM doc ee \n\
+    LEFT JOIN (:sql_app.Patient_family_name ) p ON ee.reference2 = p.patient_id  \n\
+    LEFT JOIN doc ps \n\
+    LEFT JOIN timestamp tsps ON tsps.timestamp_id=ps.doc_id \n\
+    ON ps.parent=ee.doc_id AND ps.reference2=368679 \n\
+    WHERE ee.reference=368896',
 }
 sql_app.FHIRs_Resource_Structure = {
     name:'FHIR Resource Structure',

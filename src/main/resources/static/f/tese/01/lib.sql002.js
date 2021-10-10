@@ -29,6 +29,7 @@ class SqlController extends SqlAbstractController {
     constructor(dataFactory, $routeParams) {
         super(dataFactory)
         conf.sqlKeyName = $routeParams.sql
+        console.log(conf.sqlKeyName)
         let sql = this.readSql2R(conf.sqlKeyName)
         if (Object.keys($routeParams).includes('key'))
             sql = 'SELECT * FROM (' + sql + ') x WHERE ' + $routeParams.key + ' = ' + $routeParams.val
@@ -52,7 +53,7 @@ class DataFactory {
             $http.get(this.urlSql, { params: params })
                 .then(response => {
                     deferred.resolve(response.data)
-                    console.log(response.data.list.length)
+                    console.log(response.data.list.length, '== response.data.list.length')
                 }
                     , response => {
                         console.log(response.status)
@@ -71,7 +72,6 @@ class RouteProviderConfig {
         console.log('RouteProviderConfig', Object.keys(singlePage))
         angular.forEach(singlePage, (v, k) => {
             if (!v.controllerAs) v.controllerAs = 'ctrl'
-            console.log(k, v)
             $routeProvider.when("/" + k, v)
         })
         $routeProvider.otherwise({ template: "<h1>?</h1><p>Hi API</p>" })
@@ -94,6 +94,10 @@ class AmSqlHtml {
 
 singlePage.Url = () => window.location.href.split('#!')[1]
 singlePage.PseudoREST = singlePage.Url
+singlePage.UrlParams = () => singlePage.Url().split('?')[1].split('&')
+singlePage.UrlParamKey = (key) => singlePage.UrlParams().filter(word => word.includes(key + '='))
+singlePage.UrlParamKeyValue = (key) => singlePage.UrlParamKey(key).length > 0 ? singlePage.UrlParamKey(key)[0].split('=')[1] : ''
+
 singlePage.UrlList = () => singlePage.Url().split('/')
 
 conf.sqlAppKeys = () => Object.keys(sql_app)
