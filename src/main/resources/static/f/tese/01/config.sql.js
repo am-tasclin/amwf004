@@ -7,6 +7,18 @@ sql_app.FHIRs_Group = {
     WHERE d.parent=373337',
     noShow:['reference2','doctype'],
 }
+sql_app.ICPC2_ua = {
+    name:'ICPC2 українською',
+    limit:1000,
+    sql:'SELECT d.doc_id icpc2_id, su.value code, sua.value i18n, dua.doc_id ua_ud \n\
+    FROM doc dp, doc d \n\
+    LEFT JOIN string s ON s.string_id=d.doc_id \n\
+    LEFT JOIN string_u su ON su.string_u_id=d.doc_id \n\
+    LEFT JOIN doc dua \n\
+    LEFT JOIN string sua ON sua.string_id=dua.doc_id \n\
+    ON dua.reference=d.doc_id \n\
+    WHERE dp.doc_id=d.parent AND dp.parent=285598 AND dua.parent=285597',
+}
 sql_app.EpisodeOfCare_Patient = {
     name:'Епізод',
     sql:'SELECT ee.doc_id episode_id, ee.reference2 patient_id, tsps.value tsps_v, ps.doc_id tsps_id FROM doc ee \n\

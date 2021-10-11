@@ -47,10 +47,10 @@ public class Db1Rest {
 		// m.put("k", "v");
 		// m.put("sql", sql);
 		// System.out.println(map);
-		// System.out.println(sql);
 		logger.info("\n--57-- /r/url_sql_read_db1" + " SQL = " + sql.length()
 		// + "\n" + data
 		);
+		// System.out.println(sql);
 		List<Map<String, Object>> list = executeSqlBlock.qForList(sql, map);
 		map.put("list", list);
 		return map;

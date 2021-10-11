@@ -8,6 +8,17 @@ sql_app.EpisodeOfCare_Patient = {
     ON ps.parent=ee.doc_id AND ps.reference2=368679 \n\
     WHERE ee.reference=368896',
 }
+sql_app.ICPC2_ua = {
+    name:'ICPC2 українською',
+    sql:'SELECT s.*, su.value code, sua.value i18n, dua.doc_id \n\
+    FROM doc dp, doc d \n\
+    LEFT JOIN string s ON s.string_id=d.doc_id \n\
+    LEFT JOIN string_u su ON su.string_u_id=d.doc_id \n\
+    LEFT JOIN doc dua \n\
+    LEFT JOIN string sua ON sua.string_id=dua.doc_id \n\
+    ON dua.reference=d.doc_id \n\
+    WHERE dp.doc_id=d.parent AND dp.parent=285598 AND dua.parent=285597',
+}
 sql_app.Patient_family_name = {
     name:'Пацієнти',
     sql:'SELECT p.doc_id patient_id, hn.* FROM doc p \n\

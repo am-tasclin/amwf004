@@ -29,12 +29,10 @@ class HistoryProcessController extends SqlAbstractController {
         dataFactory.httpGetSql({ sql: sql })
             .then(dataSqlRequest => {
                 conf.episode = dataSqlRequest
-                console.log(123)
             })
         if (singlePage.UrlParamKeyValue('pt')) {
             console.log('зчитати пацієнта', singlePage.UrlParamKeyValue('pt'))
         }
-
     }
 }
 app.controller("HistoryProcessController", HistoryProcessController)

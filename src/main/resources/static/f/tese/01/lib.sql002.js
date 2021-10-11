@@ -29,14 +29,14 @@ class SqlController extends SqlAbstractController {
     constructor(dataFactory, $routeParams) {
         super(dataFactory)
         conf.sqlKeyName = $routeParams.sql
-        console.log(conf.sqlKeyName)
+        console.log(conf.sqlKeyName, sql_app[conf.sqlKeyName].limit, 111)
         let sql = this.readSql2R(conf.sqlKeyName)
         if (Object.keys($routeParams).includes('key'))
             sql = 'SELECT * FROM (' + sql + ') x WHERE ' + $routeParams.key + ' = ' + $routeParams.val
         console.log('SqlController \n', Object.keys($routeParams), sql)
         conf.sql = sql
         let ctrl = this
-        dataFactory.httpGetSql({ sql: sql })
+        dataFactory.httpGetSql({ sql: sql, limit: sql_app[conf.sqlKeyName].limit })
             .then(dataSqlRequest => ctrl.data = dataSqlRequest)
     }
     sql_app = sql_app
@@ -49,7 +49,10 @@ class DataFactory {
     constructor($http, $q, $resource) {
         this.dataFactory.httpGetSql = params => {
             let deferred = $q.defer()
-            params.sql = params.sql + ' LIMIT 50'
+            let limit = 50
+            if (params.limit)
+                limit = params.limit
+            params.sql = params.sql + ' LIMIT ' + limit
             $http.get(this.urlSql, { params: params })
                 .then(response => {
                     deferred.resolve(response.data)
