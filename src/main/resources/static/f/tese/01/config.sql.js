@@ -24,7 +24,10 @@ sql_app.Encounter_Patient = {
     sql:'SELECT d.doc_id encounter_id, d.reference2 patient_id \n\
     , p.doc_id period_id, tsps.value tsps_v \n\
     , r.doc_id reason_id, c.* \n\
+    , episodeOfCare.doc_id episodeOfCare_id \n\
     FROM doc d \n\
+    LEFT JOIN doc 	episodeOfCare \n\
+    ON 	episodeOfCare.parent=d.doc_id AND episodeOfCare.reference=373446 \n\
     LEFT JOIN doc p \n\
         LEFT JOIN timestamp tsps ON tsps.timestamp_id=p.doc_id \n\
     ON p.parent=d.doc_id AND p.reference=373442 \n\
@@ -32,6 +35,9 @@ sql_app.Encounter_Patient = {
         LEFT JOIN (:sql_app.ICPC2_ua ) c ON c.code_id=r.reference2 \n\
     ON r.parent=d.doc_id AND r.reference=373436 \n\
     WHERE d.reference=373432',
+    sqlHtml: {
+        tsps_v: "{{r.tsps_v | date : 'medium'}}",
+    }
 }
 sql_app.EpisodeOfCare_Patient = {
     name:'Епізод',
