@@ -25,19 +25,22 @@ class HistoryProcessController extends SqlAbstractController {
         console.log('HistoryProcessController')
         if (singlePage.UrlParamKeyValue('pt')) {
             let sqlForOnePatient = 'SELECT * FROM (:sql ) p WHERE patient_id = :patient_id'
-            let sql = this.readSql2R('Patient_family_name')
-            let sql2 = sqlForOnePatient.replace(':sql ', sql)
+
+            let sql2 = sqlForOnePatient.replace(':sql ', this.readSql2R('Patient_family_name'))
                 .replace(':patient_id', singlePage.UrlParamKeyValue('pt'))
-                dataFactory.httpGetSql({ sql: sql2 })
-                .then(dataSqlRequest => { conf.patient = dataSqlRequest.list[0] })
-            sql = this.readSql2R('EpisodeOfCare_Patient')
-            sql2 = sqlForOnePatient.replace(':sql ', sql)
+            dataFactory.httpGetSql({ sql: sql2 })
+                .then(dataSqlRequest => conf.patient = dataSqlRequest.list[0])
+
+            sql2 = sqlForOnePatient.replace(':sql ', this.readSql2R('EpisodeOfCare_Patient'))
+                .replace(':patient_id', singlePage.UrlParamKeyValue('pt'))
+            dataFactory.httpGetSql({ sql: sql2 })
+                .then(dataSqlRequest => conf.episodes = dataSqlRequest.list)
+
+            sql2 = sqlForOnePatient.replace(':sql ', this.readSql2R('Encounter_Patient'))
                 .replace(':patient_id', singlePage.UrlParamKeyValue('pt'))
             console.log(sql2)
             dataFactory.httpGetSql({ sql: sql2 })
-                .then(dataSqlRequest => {
-                    conf.episodes = dataSqlRequest.list
-                })
+                .then(dataSqlRequest => conf.encounters = dataSqlRequest.list)
 
         }
     }
