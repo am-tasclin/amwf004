@@ -23,15 +23,22 @@ class HistoryProcessController extends SqlAbstractController {
         super(dataFactory)
         conf.ctrl = this
         console.log('HistoryProcessController')
-        conf.sqlKeyName = 'EpisodeOfCare_Patient'
-        let sql = this.readSql2R(conf.sqlKeyName)
-        console.log(123321, sql)
-        dataFactory.httpGetSql({ sql: sql })
-            .then(dataSqlRequest => {
-                conf.episode = dataSqlRequest
-            })
         if (singlePage.UrlParamKeyValue('pt')) {
-            console.log('зчитати пацієнта', singlePage.UrlParamKeyValue('pt'))
+            let sqlForOnePatient = 'SELECT * FROM (:sql ) p WHERE patient_id = :patient_id'
+            let sql = this.readSql2R('Patient_family_name')
+            let sql2 = sqlForOnePatient.replace(':sql ', sql)
+                .replace(':patient_id', singlePage.UrlParamKeyValue('pt'))
+                dataFactory.httpGetSql({ sql: sql2 })
+                .then(dataSqlRequest => { conf.patient = dataSqlRequest.list[0] })
+            sql = this.readSql2R('EpisodeOfCare_Patient')
+            sql2 = sqlForOnePatient.replace(':sql ', sql)
+                .replace(':patient_id', singlePage.UrlParamKeyValue('pt'))
+            console.log(sql2)
+            dataFactory.httpGetSql({ sql: sql2 })
+                .then(dataSqlRequest => {
+                    conf.episodes = dataSqlRequest.list
+                })
+
         }
     }
 }

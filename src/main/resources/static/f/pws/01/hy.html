@@ -1,1 +1,11 @@
-hy: 'Історія',
+<div class="w3-small w3-light-grey">
+hy Історія ⁙ епізод > взаємодія > 
+</div>
+<div>
+    <div data-ng-repeat="e in ctrl.conf.episodes">
+        <span class="w3-small">
+            {{e.tsps_v | date : 'mediumDate'}}, {{e.tsps_v | date : 'shortTime'}}
+        </span>
+        
+    </div>
+</div>
