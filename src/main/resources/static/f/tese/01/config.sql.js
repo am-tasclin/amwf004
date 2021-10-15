@@ -23,11 +23,15 @@ sql_app.Encounter_Patient = {
     name:'Взаємодія',
     sql:'SELECT d.doc_id encounter_id, d.reference2 patient_id \n\
     , p.doc_id period_id, tsps.value tsps_v \n\
-    , r.doc_id reason_id, c.* \n\
+    , r.doc_id reason_id, c.code_id reason_code_id, c.code reason_code, c.i18n reason_i18n \n\
+    , dgCondition.doc_id dgCondition_id, cd.code_id dgcondition_code_id, c.code dgcondition_code, c.i18n dgcondition_i18n \n\
     , episodeOfCare.doc_id episodeOfCare_id \n\
     FROM doc d \n\
-    LEFT JOIN doc 	episodeOfCare \n\
-    ON 	episodeOfCare.parent=d.doc_id AND episodeOfCare.reference=373446 \n\
+    LEFT JOIN doc dgCondition \n\
+        LEFT JOIN (:sql_app.ICPC2_ua ) cd ON cd.code_id = dgCondition.reference2 \n\
+    ON dgCondition.parent=d.doc_id AND dgCondition.reference=373444 \n\
+    LEFT JOIN doc episodeOfCare \n\
+    ON episodeOfCare.parent=d.doc_id AND episodeOfCare.reference=373446 \n\
     LEFT JOIN doc p \n\
         LEFT JOIN timestamp tsps ON tsps.timestamp_id=p.doc_id \n\
     ON p.parent=d.doc_id AND p.reference=373442 \n\

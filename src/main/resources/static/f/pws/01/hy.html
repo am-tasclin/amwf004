@@ -3,14 +3,20 @@
 </div>
 <div>
     <div data-ng-repeat="e in ctrl.conf.episodes">
-        <span class="w3-small">
+        <span class="w3-small w3-hover-shadow">
             {{e.tsps_v | date : 'mediumDate'}}, {{e.tsps_v | date : 'shortTime'}}
         </span>
-        <div data-ng-repeat="er in ctrl.conf.encounters">
-            <span class="w3-small">
-                {{e.tsps_v | date : 'shortTime'}}. {{er.tsps_v | date : 'EEE, d'}}
-            </span>
-            {{er.code}}: {{er.i18n}}
+        <div class="w3-container w3-border-left">
+            <div data-ng-repeat="er in ctrl.conf.encounters">
+                <span class="w3-small w3-hover-shadow">
+                    {{e.tsps_v | date : 'shortTime'}}. {{er.tsps_v | date : 'EEE, d'}}
+                </span>
+                {{er.reason_code}}: {{er.reason_i18n}}
+                <div class="w3-container w3-border-left">
+                    <span class="w3-small am-b">Дз:</span>
+                    {{er.dgcondition_code}}: {{er.dgcondition_i18n}}
+                </div>
+            </div>
         </div>
     </div>
 </div>
