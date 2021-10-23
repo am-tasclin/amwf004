@@ -94,7 +94,7 @@ sql_app.simpleSQLs = {
     FHIR_PlanDefinition: {
         c: 'SELECT value, d.* FROM doc d \n\
         LEFT JOIN string ON string_id=doc_id \n\
-        WHERE reference=368815',
+        WHERE reference=371998', //☰ [371998]   name:371997 -  [368815] PlanDefinition
         sqlHtml: {
             value: '<a href="#!/docTree/{{r.doc_id}}">{{r[k]}}</a>',
             doc_id: '<a href="#!/carePlan005Rest/{{r[k]}}">{{r[k]}}</a>',

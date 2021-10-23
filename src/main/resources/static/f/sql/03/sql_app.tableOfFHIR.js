@@ -7,6 +7,12 @@ sql_app.tableOfFHIR_CarePlan_plannedActivityReference_mr = () => {
     LEFT JOIN (:sql_app.tableOfFHIR_MedicationRequest_sc_doseQuantityTimingPeriod ) y ON y.medicationrequest_id=par_r2'
     return sql
 }
+sql_app.FHIR_PlanDefinition = () => {
+    let sql = 'SELECT value, d.* FROM doc d \n\
+    LEFT JOIN string ON string_id=doc_id \n\
+    WHERE reference=371998'
+    return sql
+}
 sql_app.tableOfFHIR_CarePlan = () => {
     let sql = 'SELECT d.doc_id careplan_id, value FHIR_DomainResource, d.parent, a.doc_id activity_id, goal.doc_id goal_id FROM doc d \n\
     LEFT JOIN doc a ON a.parent=d.doc_id AND a.reference=368789 \n\
@@ -134,7 +140,7 @@ sql_app.tableOfFHIR_codeInConcept = () => {
     return sql
 }
 sql_app.tableOfFHIR_ValueSetComposeInclude = () => {
-    let sql ='SELECT vs_s.value valueset_s, valueset.doc_id valueset_id, compose.doc_id compose_id, includes.doc_id include_id \n\
+    let sql = 'SELECT vs_s.value valueset_s, valueset.doc_id valueset_id, compose.doc_id compose_id, includes.doc_id include_id \n\
     FROM doc includes, doc compose, doc valueset \n\
     left join string vs_s ON vs_s.string_id=valueset.doc_id \n\
     WHERE valueset.reference=372045 \n\

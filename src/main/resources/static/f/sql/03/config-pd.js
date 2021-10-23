@@ -1,8 +1,4 @@
 conf.fr = {
-    pd: {
-        frn: 'PlanDefinition',
-        children: ['ad','cp','mr'],
-    },
     ad: {
         frn: 'ActivityDefinition',
         children: ['tk'],
@@ -25,6 +21,13 @@ conf.fr = {
     tk: {
         frn: 'Task',
     },
+}
+
+conf.fr.pd = {
+    frn: 'PlanDefinition',
+    children: ['ad','cp','mr'],
+    sql_app: 'FHIR_PlanDefinition',
+    amRsRowHtml: '<span>{{r.value}}</span>',
 }
 
 console.log(3, conf.fr)
