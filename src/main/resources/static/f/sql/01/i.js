@@ -92,7 +92,7 @@ sql_app.simpleSQLs = {
         sqlHtml: { doc_id: '<a href="#!/wiki005Rest/{{r[k]}}">{{r[k]}}</a>', },
     },
     FHIR_PlanDefinition: {
-        c: 'SELECT value, d.* FROM doc d \n\
+        c: 'SELECT value, d.doc_id plandefinition_id, d.* FROM doc d \n\
         LEFT JOIN string ON string_id=doc_id \n\
         WHERE reference=371998', //☰ [371998]   name:371997 -  [368815] PlanDefinition
         sqlHtml: {

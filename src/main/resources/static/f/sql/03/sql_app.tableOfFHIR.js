@@ -7,10 +7,19 @@ sql_app.tableOfFHIR_CarePlan_plannedActivityReference_mr = () => {
     LEFT JOIN (:sql_app.tableOfFHIR_MedicationRequest_sc_doseQuantityTimingPeriod ) y ON y.medicationrequest_id=par_r2'
     return sql
 }
+
 sql_app.FHIR_PlanDefinition = () => {
-    let sql = 'SELECT value, d.* FROM doc d \n\
+    let sql = 'SELECT value, d.doc_id plandefinition_id, d.* FROM doc d \n\
     LEFT JOIN string ON string_id=doc_id \n\
-    WHERE reference=371998'
+    WHERE reference=371998 AND true'
+    return sql
+}
+
+sql_app.FHIR_PlanDefinition_title = () => {
+    let sql = 'SELECT value action_title, an7te.doc_id title_id, an.parent pd_id FROM doc an, sort s, doc an7te \n\
+    LEFT JOIN string st ON st.string_id=an7te.doc_id \n\
+    WHERE an7te.parent=an.doc_id AND an7te.reference=373452 \n\
+    AND an.reference=369782  AND s.sort_id=an7te.doc_id ORDER BY s.sort'
     return sql
 }
 sql_app.tableOfFHIR_CarePlan = () => {

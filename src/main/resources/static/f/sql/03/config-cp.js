@@ -27,8 +27,8 @@ conf.fr.cp = {
     sql_app: 'tableOfFHIR_CarePlan',
     sql_app_children_frs: ['mr', 'gl'],
     sql_app_children: [
-        { fr: 'mr', connect_param: 'parent_careplan', sql_app: 'tableOfFHIR_CarePlan_plannedActivityReference_mr' },
-        { fr: 'gl', connect_param: 'parent_careplan', sql_app: 'tableOfFHIR_CarePlan_Goal' },
+        { fr: 'mr', connect_param: 'parent_careplan', sql_app: 'tableOfFHIR_CarePlan_plannedActivityReference_mr', },
+        { fr: 'gl', connect_param: 'parent_careplan', sql_app: 'tableOfFHIR_CarePlan_Goal', },
     ],
     amRsRowHtml: '<span>{{r.fhir_domainresource}}</span>',
     delEmptyDoc: conf.exe.delEmptyDocWithParent,
