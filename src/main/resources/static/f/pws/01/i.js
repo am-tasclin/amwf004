@@ -1,6 +1,7 @@
 'use strict'
 app.factory("dataFactory", DataFactory)
 app.directive('amSqlHtml', AmSqlHtml)
+
 conf.pws = {}//Physition Work Station
 conf.pws.topMenu = {
     pl: 'Пацієнт',
@@ -21,7 +22,7 @@ app.controller("InitPageController", InitPageController)
 class HistoryProcessController extends SqlAbstractController {
     constructor(dataFactory, $routeParams) {
         super(dataFactory)
-        conf.ctrl = this
+        // conf.ctrl = this
         console.log('HistoryProcessController')
         if (singlePage.UrlParamKeyValue('pt')) {
             let sqlForOnePatient = 'SELECT * FROM (:sql ) p WHERE patient_id = :patient_id'
@@ -38,11 +39,15 @@ class HistoryProcessController extends SqlAbstractController {
 
             sql2 = sqlForOnePatient.replace(':sql ', this.readSql2R('Encounter_Patient'))
                 .replace(':patient_id', singlePage.UrlParamKeyValue('pt'))
-            console.log(sql2)
             dataFactory.httpGetSql({ sql: sql2 })
                 .then(dataSqlRequest => conf.encounters = dataSqlRequest.list)
-
         }
+    }
+    clicEpisode = (ee) => {
+        console.log(ee)
+    }
+    clicEncounter = (er) => {
+        console.log(er)
     }
 }
 app.controller("HistoryProcessController", HistoryProcessController)
