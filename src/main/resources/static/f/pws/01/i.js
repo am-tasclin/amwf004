@@ -45,9 +45,11 @@ class HistoryProcessController extends SqlAbstractController {
     }
     clicEpisode = (ee) => {
         console.log(ee)
+        conf.clickedElement = ee
     }
     clicEncounter = (er) => {
         console.log(er)
+        conf.clickedElement = er
     }
 }
 app.controller("HistoryProcessController", HistoryProcessController)

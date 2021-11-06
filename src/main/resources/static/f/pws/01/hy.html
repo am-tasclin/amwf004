@@ -1,27 +1,29 @@
 <div class="w3-small w3-light-grey">
-	Історія ⁙ епізод > взаємодія >
+    Історія ⁙
+    <span data-ng-class="{'w3-green':ctrl.conf.clickedElement.episode_id}">епізод</span>
+    >
+    <span data-ng-class="{'w3-green':ctrl.conf.clickedElement.encounter_id}">взаємодія</span>
+    >
 </div>
 
 <div>
-	<div data-ng-repeat="e in ctrl.conf.episodes">
-		<span class="w3-small w3-hover-shadow" data-ng-click="ctrl.clicEpisode(e)">
-			{{e.tsps_v | date : 'mediumDate'}}, {{e.tsps_v | date : 'shortTime'}}
-		</span>
-		<span class="w3-tiny am-i">
-			{{e.dmtitle}}
-		</span>
-		<div class="w3-container w3-border-left">
-			<div data-ng-repeat="er in ctrl.conf.encounters"
-				data-ng-if="e.episode_id==er.episodeofcare_r2">
-				<span class="w3-small w3-hover-shadow" data-ng-click="ctrl.clicEncounter(er)">
-					{{e.tsps_v | date : 'shortTime'}}. {{er.tsps_v | date : 'EEE, d'}}
-				</span>
-				{{er.reason_code}}: {{er.reason_i18n}}
-				<div class="w3-container w3-border-left">
-					<span class="w3-small am-b">Дз:</span>
-					{{er.dgcondition_code}}: {{er.dgcondition_i18n}}
-				</div>
-			</div>
-		</div>
-	</div>
+    <div data-ng-repeat="e in ctrl.conf.episodes">
+        <span class="w3-small w3-hover-shadow" data-ng-click="ctrl.clicEpisode(e)"
+            data-ng-class="{'w3-green':ctrl.conf.clickedElement.episode_id==e.episode_id}">
+            {{e.tsps_v | date : 'mediumDate'}}, {{e.tsps_v | date : 'shortTime'}}
+        </span>
+        <span class="w3-tiny am-i"> {{e.dmtitle}} </span>
+        <div class="w3-container w3-border-left">
+            <div data-ng-repeat="er in ctrl.conf.encounters" data-ng-if="e.episode_id==er.episodeofcare_r2">
+                <span class="am-u w3-small w3-hover-shadow" data-ng-click="ctrl.clicEncounter(er)"
+                    data-ng-class="{'w3-green':ctrl.conf.clickedElement.encounter_id==er.encounter_id}">
+                    {{er.tsps_v | date : 'shortTime'}}{{er.tsps_v | date : ' EEE, d'}}</span>
+                {{er.reason_code}}: {{er.reason_i18n}}
+                <div class="w3-container w3-border-left" data-ng-if="er.dgcondition_id">
+                    <span class="w3-small am-b">Дз:</span>
+                    {{er.dgcondition_code}}: {{er.dgcondition_i18n}}
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
