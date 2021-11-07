@@ -227,6 +227,10 @@ sql_app.simpleSQLs = {
         c: sql_app.tableOfFHIR_Quantity(),
         sqlHtml: { doc_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
     },
+    tableOfFHIR_encounter_MedicationRequest_sc_doseQuantityTimingPeriod: {
+        c: sql_app.tableOfFHIR_encounter_MedicationRequest_sc_doseQuantityTimingPeriod(),
+        sqlHtml: { medicationrequest_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },
+    },
     tableOfFHIR_MedicationRequest_sc_doseQuantityTimingPeriod: {
         c: sql_app.tableOfFHIR_MedicationRequest_sc_doseQuantityTimingPeriod(),
         sqlHtml: { medicationrequest_id: '<a href="#!/docTree/{{r[k]}}">{{r[k]}}</a>', },

@@ -25,24 +25,31 @@ class HistoryProcessController extends SqlAbstractController {
         // conf.ctrl = this
         console.log('HistoryProcessController')
         if (singlePage.UrlParamKeyValue('pt')) {
-            let sqlForOnePatient = 'SELECT * FROM (:sql ) p WHERE patient_id = :patient_id'
 
-            let sql2 = sqlForOnePatient.replace(':sql ', this.readSql2R('Patient_family_name'))
-                .replace(':patient_id', singlePage.UrlParamKeyValue('pt'))
-            dataFactory.httpGetSql({ sql: sql2 })
-                .then(dataSqlRequest => conf.patient = dataSqlRequest.list[0])
+            this.read('Patient_family_name', 'patient')
+            this.read('EpisodeOfCare_Patient', 'episodes')
+            this.read('Encounter_Patient', 'encounters')
+            this.read('encounter_MedicationRequest_sc_doseQuantityTimingPeriod', 'mrEncounter')
 
-            sql2 = sqlForOnePatient.replace(':sql ', this.readSql2R('EpisodeOfCare_Patient'))
-                .replace(':patient_id', singlePage.UrlParamKeyValue('pt'))
-            dataFactory.httpGetSql({ sql: sql2 })
-                .then(dataSqlRequest => conf.episodes = dataSqlRequest.list)
+            // sql2Name = 'Encounter_Patient'
+            // sql2 = this.sqlForOnePatient.replace(':sql ', this.readSql2R(sql2Name))
+            //	 .replace(':patient_id', singlePage.UrlParamKeyValue('pt'))
+            // dataFactory.httpGetSql({ sql: sql2 })
+            //	 .then(dataSqlRequest => conf.encounters = dataSqlRequest.list)
 
-            sql2 = sqlForOnePatient.replace(':sql ', this.readSql2R('Encounter_Patient'))
-                .replace(':patient_id', singlePage.UrlParamKeyValue('pt'))
-            dataFactory.httpGetSql({ sql: sql2 })
-                .then(dataSqlRequest => conf.encounters = dataSqlRequest.list)
         }
     }
+    f1 = (sql2Name) => this.sqlForOnePatient.replace(':sql ', this.readSql2R(sql2Name))
+        .replace(':patient_id', singlePage.UrlParamKeyValue('pt'))
+    read = (sql2Name, confKey) =>
+        this.dataFactory.httpGetSql(
+            {
+                sql: this.sqlForOnePatient.replace(':sql ', this.readSql2R(sql2Name))
+                    .replace(':patient_id', singlePage.UrlParamKeyValue('pt'))
+            }
+        ).then(dataSqlRequest => conf[confKey] = dataSqlRequest.list)
+
+    sqlForOnePatient = 'SELECT * FROM (:sql ) p WHERE patient_id = :patient_id'
     clicEpisode = (ee) => {
         console.log(ee)
         conf.clickedElement = ee
@@ -50,6 +57,12 @@ class HistoryProcessController extends SqlAbstractController {
     clicEncounter = (er) => {
         console.log(er)
         conf.clickedElement = er
+    }
+    clicDiagnose = (er) => {
+        console.log(er.dgcondition_id, er.dgcondition_code_id, er)
+    }
+    clicReason = (er) => {
+        console.log(er.reason_id, er.reason_code_id, er)
     }
 }
 app.controller("HistoryProcessController", HistoryProcessController)

@@ -3,7 +3,11 @@ const singlePage = {}, conf = {}, sql_app = {}
 var app = angular.module("app", ['ngRoute', 'ngResource', 'ngSanitize'])
 angular.element(() => angular.bootstrap(document, ['app']))
 
-class AbstractController { singlePage = singlePage; conf = conf }
+class AbstractController {
+    singlePage = singlePage
+    conf = conf
+    getSql = sql => sql_app[sql]
+}
 
 class SqlAbstractController extends AbstractController {
     dataFactory
@@ -12,6 +16,7 @@ class SqlAbstractController extends AbstractController {
         this.dataFactory = dataFactory
     }
     readSql2R = sqlN => {
+        console.log(sqlN)
         let sql = sql_app[sqlN].sql
         while (sql.includes(':sql_app.')) {
             let sql_name = sql.split(':sql_app.')[1].split(' ')[0]
@@ -33,7 +38,7 @@ class SqlController extends SqlAbstractController {
         let sql = this.readSql2R(conf.sqlKeyName)
         if (Object.keys($routeParams).includes('key'))
             sql = 'SELECT * FROM (' + sql + ') x WHERE ' + $routeParams.key + ' = ' + $routeParams.val
-        console.log('SqlController \n', Object.keys($routeParams), sql)
+        // console.log('SqlController \n', Object.keys($routeParams), sql)
         conf.sql = sql
         let ctrl = this
         dataFactory.httpGetSql({ sql: sql, limit: sql_app[conf.sqlKeyName].limit })
@@ -102,6 +107,9 @@ singlePage.UrlParamKey = (key) => singlePage.UrlParams().filter(word => word.inc
 singlePage.UrlParamKeyValue = (key) => singlePage.UrlParamKey(key).length > 0 ? singlePage.UrlParamKey(key)[0].split('=')[1] : ''
 
 singlePage.UrlList = () => singlePage.Url().split('/')
+
+conf.sqlAppToLink = text =>
+    !text ? '' : ('' + text).replace(new RegExp(':(sql_app\\.)(\\w+)', 'gi'), ':<b>$1<a href="#!/sql/$2">$2</a></b>')
 
 conf.sqlAppKeys = () => Object.keys(sql_app)
 conf.modalDisplay = { display: null }

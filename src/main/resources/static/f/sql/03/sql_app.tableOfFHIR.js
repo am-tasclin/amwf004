@@ -247,6 +247,15 @@ sql_app.tableOfFHIR_Quantity = () => {
     return sql
 }
 
+sql_app.tableOfFHIR_encounter_MedicationRequest_sc_doseQuantityTimingPeriod = () => {
+    let sql = 'SELECT mrer.doc_id mrEncounter_id, mrer.reference2 mrEncounter_r2, er.reference2 basedOn \n\
+    , mr.* FROM doc mrer \n\
+    LEFT JOIN doc er ON er.parent=mrer.doc_id AND er.reference=369777 \n\
+    , (:sql_app.tableOfFHIR_MedicationRequest_sc_doseQuantityTimingPeriod ) mr \n\
+    WHERE mrer.reference = 373464 AND er.reference2 = mr.medicationrequest_id'
+    return sql
+}
+
 sql_app.tableOfFHIR_MedicationRequest_sc_doseQuantityTimingPeriod = () => {
     let sql = 'SELECT x.*, dqtp.*, esd.*, di.* FROM (:sql_app.tableOfFHIR_MedicationRequest_sc ) x \n\
     LEFT JOIN (SELECT di_c.parent di_c_p, di.reference di_r, di.reference2 di_r2 \n\
