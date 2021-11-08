@@ -1,0 +1,12 @@
+<div>
+    <span class="w3-tiny am-b"> План-сценарій: </span>
+    {{r.value}}
+    <div data-ng-repeat="(k,sql_app_child) in ctrl.conf.fr.pd.sql_app_children001">
+        <div data-ng-repeat="r in sql_app_child.list">
+            <span class="w3-tiny w3-grey">{{k}}-{{
+                r[sql_app_child.col_id_name]}}
+            </span>&nbsp;
+            {{r[sql_app_child.col_text_name]}}
+        </div>
+    </div>
+</div>

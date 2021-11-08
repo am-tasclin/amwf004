@@ -49,8 +49,7 @@ app.directive('amRsRow', ($compile) => {
 
 // app.controller("InitFHIResourceController", InitFHIResourceController)
 class InitFHIResourceController extends AbstractController {
-    dataBeFactory
-    editFRFactory
+    dataBeFactory; editFRFactory
     constructor($scope, $routeParams, dataBeFactory, editFRFactory) {
         super()
         this.dataBeFactory = dataBeFactory
@@ -83,9 +82,11 @@ class InitFHIResourceController extends AbstractController {
         angular.forEach(singlePage.UrlList(), (x_Url, nr) => {
             if (x_Url && x_Url.split('_')[1]) { //tag with id
                 let tag = x_Url.split('_')[0], tag_id = x_Url.split('_')[1]
+                console.log(tag)
                 if (!conf.fr[tag].currEl || conf.fr[tag].currEl[singlePage.TagIdName(tag)] != tag_id) {
                     let sql = sql_app.concatSql(sql_app[conf.fr[tag].sql_app]())
                     sql = 'SELECT * FROM (' + sql + ') x  WHERE ' + singlePage.TagIdName(tag) + ' = ' + tag_id
+                    console.log(tag, sql)
                     dataBeFactory.httpGet({ sql: sql }).then(dataSqlRequest => {
                         console.log(dataSqlRequest, 1)
                         conf.fr[tag].currEl = dataSqlRequest.list[0]
@@ -171,6 +172,7 @@ app.controller("InitFHIResourceController", InitFHIResourceController)
 // app.config(RouteProviderConfig)
 class RouteProviderConfig {
     constructor($routeProvider) {
+        console.log('RouteProviderConfig')
         let rpo = {
             templateUrl: 'ResourceFHIR.html',
             controller: 'InitFHIResourceController',

@@ -7,6 +7,12 @@ sql_app.FHIRs_Group = {
 	WHERE d.parent=373337',
 	noShow: ['reference2', 'doctype'],
 }
+sql_app.FHIR_PlanDefinition = {
+	name:'Означення плана',
+	sql:'SELECT value, d.doc_id plandefinition_id, d.* FROM doc d \n\
+	LEFT JOIN string ON string_id=doc_id \n\
+	WHERE reference=371998', //☰ [371998]   name:371997 -  [368815] PlanDefinition
+}
 sql_app.encounter_MedicationRequest_sc_doseQuantityTimingPeriod = {
 	name:'ЕМЗ Взаємодія призначення ліків доза кількість хронометраж період',
 	sql:'SELECT mrer.doc_id mrEncounter_id, mrer.reference2 mrEncounter_r2, mrbn.reference2 basedOn \n\
