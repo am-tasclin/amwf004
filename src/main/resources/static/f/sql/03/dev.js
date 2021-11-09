@@ -86,7 +86,7 @@ class InitFHIResourceController extends AbstractController {
                 if (!conf.fr[tag].currEl || conf.fr[tag].currEl[singlePage.TagIdName(tag)] != tag_id) {
                     let sql = sql_app.concatSql(sql_app[conf.fr[tag].sql_app]())
                     sql = 'SELECT * FROM (' + sql + ') x  WHERE ' + singlePage.TagIdName(tag) + ' = ' + tag_id
-                    console.log(tag, sql)
+                    // console.log(tag, sql)
                     dataBeFactory.httpGet({ sql: sql }).then(dataSqlRequest => {
                         console.log(dataSqlRequest, 1)
                         conf.fr[tag].currEl = dataSqlRequest.list[0]
@@ -206,7 +206,7 @@ app.config(RouteProviderConfig)
 class InitPageController extends AbstractController {
     constructor($scope, $route) {
         super()
-        console.log(singlePage.Url(), Object.keys($route.routes))
+        // console.log(singlePage.Url(), Object.keys($route.routes))
     }
 }
 app.controller("InitPageController", InitPageController)

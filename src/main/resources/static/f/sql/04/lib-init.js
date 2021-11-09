@@ -13,6 +13,40 @@ singlePage.FirstUrl = () => singlePage.Url() ? singlePage.Url().split('/')[1] : 
 singlePage.FirstUrlTag = () => singlePage.FirstUrl().split('_')[0]
 singlePage.FirstUrlId = () => singlePage.FirstUrl().split('_')[1]
 
+singlePage.LastUrl = () => singlePage.Url() ? singlePage.Url().split('/')[singlePage.Url().split('/').length - 1] : ''
+singlePage.LastUrlTag = () => singlePage.LastUrl().split('_')[0]
+singlePage.LastUrlId = () => singlePage.LastUrl().split('_')[1]
+
+singlePage.X_Url = (nr) => nr ? singlePage.UrlList()[nr] : ''
+singlePage.X_UrlTag = (nr) => singlePage.UrlList()[nr].split('_')[0]
+singlePage.X_UrlId = (nr) => nr && singlePage.UrlList().length > nr ? singlePage.UrlList()[nr].split('_')[1] : null//0
+
+singlePage.TagPosition = (tag) => singlePage.Url().includes(tag) ? singlePage.Url().split('/' + tag)[0].split('/').length : null
+
+singlePage.ClickTagHref = (tag, id) => {
+    let newUrl = '', tagId = tag + (id ? ('_' + id) : '')
+    // console.log(tag, singlePage.Url().includes(tag), singlePage.UrlList(), tagId)
+    if (singlePage.Url().includes(tag))
+        for (let i = 1; i < singlePage.TagPosition(tag); i++) newUrl += '/' + singlePage.X_Url(i)
+    else angular.forEach(singlePage.UrlList(), (t, i) => {
+        if (t && !newUrl.includes(tag))
+            if (conf.FHIR[singlePage.X_UrlTag(i)].children)
+                newUrl += '/' + t +
+                    (conf.FHIR[singlePage.X_UrlTag(i)].children.includes(tag) ? '/' + tagId : '')
+    })
+    return newUrl
+}
+
+let readSql2R = sqlN => replaceSql(sql_app[sqlN].sql)
+let replaceSql = sql => {
+    while (sql.includes(':sql_app.')) {
+        let sql_name = sql.split(':sql_app.')[1].split(' ')[0]
+        let sql_inner = readSql2R(sql_name)
+        sql = sql.replace(':sql_app.' + sql_name, sql_inner)
+    }
+    return ''+sql
+}
+
 
 //app.config(RouteProviderConfig)
 class RouteProviderConfig {

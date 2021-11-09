@@ -6,7 +6,7 @@ class InitFHIResourceController extends AbstractController {
         super()
         this.dataBeFactory = dataBeFactory
         this.editFRFactory = editFRFactory
-        console.log(singlePage.Url())
+        // console.log(singlePage.Url())
     }
 }
 

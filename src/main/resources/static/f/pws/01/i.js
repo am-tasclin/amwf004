@@ -39,12 +39,12 @@ class HistoryProcessController extends SqlAbstractController {
 
         }
     }
-    f1 = (sql2Name) => this.sqlForOnePatient.replace(':sql ', this.readSql2R(sql2Name))
+    f1 = (sql2Name) => this.sqlForOnePatient.replace(':sql ', readSql2R(sql2Name))
         .replace(':patient_id', singlePage.UrlParamKeyValue('pt'))
     read = (sql2Name, confKey) =>
         this.dataFactory.httpGetSql(
             {
-                sql: this.sqlForOnePatient.replace(':sql ', this.readSql2R(sql2Name))
+                sql: this.sqlForOnePatient.replace(':sql ', readSql2R(sql2Name))
                     .replace(':patient_id', singlePage.UrlParamKeyValue('pt'))
             }
         ).then(dataSqlRequest => conf[confKey] = dataSqlRequest.list)

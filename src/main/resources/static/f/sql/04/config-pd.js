@@ -1,14 +1,20 @@
 'use strict';
 const conf = {}
 conf.FHIR_app = {}
-conf.FHIR_app.TagIdName = tag => conf.FHIR[tag].frname.toLowerCase() + '_id'
+conf.FHIR_app.TagIdName = tag =>
+    conf.FHIR[tag].frname.toLowerCase() + '_id'
 
 conf.FHIR = {}
 conf.FHIR.pd = {
     frname: 'PlanDefinition',
     children: ['ad', 'cp', 'mr'],
-    controller:'PlanDefinitionController',
-    sqlName:'FHIR_PlanDefinition'
+    controller: 'PlanDefinitionController',
+    sqlName: 'FHIR_PlanDefinition',
+    sql_app_children: {
+        PlanDefinition_action_title:
+            'SELECT * FROM (:sql_app.PlanDefinition_action_title ) x \n\
+            WHERE pd_id=:pd_id'
+    },
 }
 conf.FHIR.ad = {
     frname: 'ActivityDefinition',
@@ -31,4 +37,4 @@ conf.FHIR.qy = {
     frname: 'Quantity',
 }
 
-console.log(conf.FHIR)
+//console.log(conf.FHIR)

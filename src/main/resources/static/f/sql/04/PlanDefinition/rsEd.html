@@ -1,12 +1,10 @@
 <div>
-    <span class="w3-tiny am-b"> План-сценарій: </span>
-    {{r.value}}
-    <div data-ng-repeat="(k,sql_app_child) in ctrl.conf.fr.pd.sql_app_children001">
-        <div data-ng-repeat="r in sql_app_child.list">
-            <span class="w3-tiny w3-grey">{{k}}-{{
-                r[sql_app_child.col_id_name]}}
-            </span>&nbsp;
-            {{r[sql_app_child.col_text_name]}}
-        </div>
+    <span class="w3-tiny am-b"> План-сценарій: </span> {{r.value}}
+    <div data-ng-repeat="an7tl in ctrl.conf.FHIR.pd.currEl.sql_app_children.PlanDefinition_action_title">
+        <span class="w3-tiny w3-grey"> action-{{an7tl.title_id}}</span>
+        <a href="#!{{ctrl.singlePage.ClickTagHref('ad', an7tl.title_id)}}" class="am-0u w3-hover-shadow">{{an7tl.action_title}}</span>
+        <!--
+            <span data-ng-click="ctrl.clickActionTitle(an7tl)" class="w3-hover-shadow">{{an7tl.action_title}}</span>
+        -->
     </div>
 </div>

@@ -77,7 +77,6 @@ conf.singlePagesUrl = {
     },
 }
 
-
 sql_app.simpleSQLs = {
     WikiList: {
         c: 'SELECT doc_id, value, cnt_child, parent FROM doc d \n\

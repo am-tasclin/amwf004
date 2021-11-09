@@ -13,6 +13,14 @@ sql_app.FHIR_PlanDefinition = {
 	LEFT JOIN string ON string_id=doc_id \n\
 	WHERE reference=371998', //☰ [371998]   name:371997 -  [368815] PlanDefinition
 }
+sql_app.PlanDefinition_action_title = {
+	name:'Означення плана активності заголовки',
+	sql:'SELECT value action_title, an7te.doc_id title_id, an.parent pd_id \n\
+	FROM doc an, sort s, doc an7te \n\
+    LEFT JOIN string st ON st.string_id=an7te.doc_id \n\
+    WHERE an7te.parent=an.doc_id AND an7te.reference=373452 \n\
+    AND an.reference=369782 AND s.sort_id=an7te.doc_id ORDER BY s.sort',
+}
 sql_app.encounter_MedicationRequest_sc_doseQuantityTimingPeriod = {
 	name:'ЕМЗ Взаємодія призначення ліків доза кількість хронометраж період',
 	sql:'SELECT mrer.doc_id mrEncounter_id, mrer.reference2 mrEncounter_r2, mrbn.reference2 basedOn \n\

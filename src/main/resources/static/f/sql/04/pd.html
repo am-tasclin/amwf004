@@ -27,17 +27,19 @@
         <a href="/" class="w3-btn w3-border w3-padding-small w3-small">↑</a>
         <span class="w3-tiny am-b" title="v.04 Workflow - Resource-FHIR-editor">Workflow-editor</span>&nbsp;⁙
         <span data-ng-repeat="(k,v) in ctrl.conf.FHIR" class="w3-small">
-            <a href="#!/{{k}}"> {{v.frname}} </a>
+            <a href="#!/{{k}}" data-ng-class="{
+                'w3-light-gray':ctrl.singlePage.Url().includes(k),
+                'w3-border-bottom w3-border-amber':k==ctrl.singlePage.LastUrl()}"> {{v.frname}} </a>
             {{k!=ctrl.singlePage.LastUrl()&&ctrl.singlePage.Url().includes(k)?'>':'|'}}
         </span>
-    </div>
-    <div class="w3-border-bottom" style="height:90vh; overflow:auto;" ng-view></div>
-    ⁙
-    <div class="w3-right">
-        <a class="am-0u" href="/f/wf001/w.html?p=371903">
-            <i class="far fa-circle"></i> <i class="far fa-file"></i> <i class="far fa-square"></i> <i
-                class="fas fa-directions"></i> <i class="fas fa-circle"></i>
-        </a>
+        <div class="w3-border-bottom" style="height:90vh; overflow:auto;" ng-view></div>
+        ⁙
+        <div class="w3-right">
+            <a class="am-0u" href="/f/wf001/w.html?p=371903">
+                <i class="far fa-circle"></i> <i class="far fa-file"></i> <i class="far fa-square"></i> <i
+                    class="fas fa-directions"></i> <i class="fas fa-circle"></i>
+            </a>
+        </div>
     </div>
 </body>
 

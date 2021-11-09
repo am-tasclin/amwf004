@@ -4,26 +4,26 @@ var app = angular.module("app", ['ngRoute', 'ngResource', 'ngSanitize'])
 angular.element(() => angular.bootstrap(document, ['app']))
 
 class AbstractController {
-    singlePage = singlePage
-    conf = conf
+    singlePage = singlePage; conf = conf
     getSql = sql => sql_app[sql]
 }
+
+let readSql2R = sqlN => replaceSql(sql_app[sqlN].sql)
+let replaceSql = sql => {
+    while (sql.includes(':sql_app.')) {
+        let sql_name = sql.split(':sql_app.')[1].split(' ')[0]
+        let sql_inner = readSql2R(sql_name)
+        sql = sql.replace(':sql_app.' + sql_name, sql_inner)
+    }
+    return sql
+}
+
 
 class SqlAbstractController extends AbstractController {
     dataFactory
     constructor(dataFactory) {
         super()
         this.dataFactory = dataFactory
-    }
-    readSql2R = sqlN => {
-        console.log(sqlN)
-        let sql = sql_app[sqlN].sql
-        while (sql.includes(':sql_app.')) {
-            let sql_name = sql.split(':sql_app.')[1].split(' ')[0]
-            let sql_inner = this.readSql2R(sql_name)
-            sql = sql.replace(':sql_app.' + sql_name, sql_inner)
-        }
-        return sql
     }
     getChoisedListItem = () => !sql_app.simpleSQLselect ? '' :
         sql_app.simpleSQLs[sql_app.simpleSQLselect].choisedListItem
@@ -34,8 +34,8 @@ class SqlController extends SqlAbstractController {
     constructor(dataFactory, $routeParams) {
         super(dataFactory)
         conf.sqlKeyName = $routeParams.sql
-        console.log(conf.sqlKeyName, sql_app[conf.sqlKeyName].limit, 111)
-        let sql = this.readSql2R(conf.sqlKeyName)
+        console.log(conf.sqlKeyName, sql_app[conf.sqlKeyName].limit)
+        let sql = readSql2R(conf.sqlKeyName)
         if (Object.keys($routeParams).includes('key'))
             sql = 'SELECT * FROM (' + sql + ') x WHERE ' + $routeParams.key + ' = ' + $routeParams.val
         // console.log('SqlController \n', Object.keys($routeParams), sql)
