@@ -31,8 +31,8 @@
         <span class="w3-small am-b">Пацієнт</span>:
         <span class="am-u1 am-i">
             <span data-ng-if="ctrl.conf.patient">
-                {{ctrl.conf.patient.name_v}},
-                {{ctrl.conf.patient.family_v}}
+                {{ctrl.conf.patient[0].name_v}},
+                {{ctrl.conf.patient[0].family_v}}
             </span>
             {{ctrl.conf.patient?'':"<Ім'я Пацієнта>"}}
         </span>

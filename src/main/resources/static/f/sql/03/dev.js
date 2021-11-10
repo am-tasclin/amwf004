@@ -206,7 +206,7 @@ app.config(RouteProviderConfig)
 class InitPageController extends AbstractController {
     constructor($scope, $route) {
         super()
-        // console.log(singlePage.Url(), Object.keys($route.routes))
+        // console.log(singlePage.Url(), Object.keys($route.routes))// not DELETE
     }
 }
 app.controller("InitPageController", InitPageController)

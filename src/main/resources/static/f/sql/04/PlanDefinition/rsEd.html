@@ -2,9 +2,16 @@
     <span class="w3-tiny am-b"> План-сценарій: </span> {{r.value}}
     <div data-ng-repeat="an7tl in ctrl.conf.FHIR.pd.currEl.sql_app_children.PlanDefinition_action_title">
         <span class="w3-tiny w3-grey"> action-{{an7tl.title_id}}</span>
-        <a href="#!{{ctrl.singlePage.ClickTagHref('ad', an7tl.title_id)}}" class="am-0u w3-hover-shadow">{{an7tl.action_title}}</span>
+        <a href="#!{{ctrl.singlePage.ClickTagHref('ad', an7tl.title_id)}}"
+            class="am-0u w3-hover-shadow">{{an7tl.action_title}}</a>
         <!--
             <span data-ng-click="ctrl.clickActionTitle(an7tl)" class="w3-hover-shadow">{{an7tl.action_title}}</span>
         -->
+        <div class="w3-card w3-leftbar"
+            data-ng-if="an7tl.title_id ==
+            ctrl.singlePage.X_UrlId(ctrl.singlePage.TagPosition(ctrl.conf.FHIR.pd.sql_app_children.PlanDefinition_action_title.frKey))">
+            a1
+            a1
+        </div>
     </div>
 </div>

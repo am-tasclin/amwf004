@@ -12,8 +12,11 @@ conf.FHIR.pd = {
     sqlName: 'FHIR_PlanDefinition',
     sql_app_children: {
         PlanDefinition_action_title:
-            'SELECT * FROM (:sql_app.PlanDefinition_action_title ) x \n\
-            WHERE pd_id=:pd_id'
+        {
+            frKey: 'ad',
+            sql: 'SELECT * FROM (:sql_app.PlanDefinition_action_title ) x \n\
+            WHERE pd_id=:pd_id',
+        },
     },
 }
 conf.FHIR.ad = {

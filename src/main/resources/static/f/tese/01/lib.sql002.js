@@ -15,9 +15,8 @@ let replaceSql = sql => {
         let sql_inner = readSql2R(sql_name)
         sql = sql.replace(':sql_app.' + sql_name, sql_inner)
     }
-    return sql
+    return '' + sql
 }
-
 
 class SqlAbstractController extends AbstractController {
     dataFactory
@@ -49,20 +48,15 @@ class SqlController extends SqlAbstractController {
 
 // app.factory("dataFactory", DataFactory)
 class DataFactory {
-    dataFactory = {}
     urlSql = '/r/url_sql_read_db1'
     constructor($http, $q, $resource) {
-        this.dataFactory.httpGetSql = params => {
+        this.httpGetSql = params => {
             let deferred = $q.defer()
             let limit = 50
-            if (params.limit)
-                limit = params.limit
+            if (params.limit) limit = params.limit
             params.sql = params.sql + ' LIMIT ' + limit
             $http.get(this.urlSql, { params: params })
-                .then(response => {
-                    deferred.resolve(response.data)
-                    console.log(response.data.list.length, '== response.data.list.length')
-                }
+                .then(response => deferred.resolve(response.data)
                     , response => {
                         console.log(response.status)
                         // deferred.reject(response.status)
@@ -70,14 +64,14 @@ class DataFactory {
                     })
             return deferred.promise
         }
-        return this.dataFactory
+        return this
     }
 }
 
 // app.config(RouteProviderConfig)
 class RouteProviderConfig {
     constructor($routeProvider) {
-        console.log('RouteProviderConfig', Object.keys(singlePage))
+        // console.log('RouteProviderConfig', Object.keys(singlePage))
         angular.forEach(singlePage, (v, k) => {
             if (!v.controllerAs) v.controllerAs = 'ctrl'
             $routeProvider.when("/" + k, v)
@@ -102,11 +96,16 @@ class AmSqlHtml {
 
 singlePage.Url = () => window.location.href.split('#!')[1]
 singlePage.PseudoREST = singlePage.Url
-singlePage.UrlParams = () => singlePage.Url().split('?')[1].split('&')
+singlePage.UrlParams = () => singlePage.Url().includes('?')?singlePage.Url().split('?')[1].split('&'):[]
 singlePage.UrlParamKey = (key) => singlePage.UrlParams().filter(word => word.includes(key + '='))
 singlePage.UrlParamKeyValue = (key) => singlePage.UrlParamKey(key).length > 0 ? singlePage.UrlParamKey(key)[0].split('=')[1] : ''
 
 singlePage.UrlList = () => singlePage.Url().split('/')
+
+singlePage.LastUrl = () => singlePage.Url() ? singlePage.Url().split('/')[singlePage.Url().split('/').length - 1] : ''
+singlePage.LastUrlTag = () => singlePage.LastUrl().split('_')[0]
+singlePage.LastUrlId = () => singlePage.LastUrl().split('_')[1]
+
 
 conf.sqlAppToLink = text =>
     !text ? '' : ('' + text).replace(new RegExp(':(sql_app\\.)(\\w+)', 'gi'), ':<b>$1<a href="#!/sql/$2">$2</a></b>')

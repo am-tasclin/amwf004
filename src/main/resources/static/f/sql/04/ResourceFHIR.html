@@ -2,7 +2,7 @@
     <div data-ng-repeat="r in [ctrl.conf.FHIR[ctrl.singlePage.FirstUrlTag()].currEl]"
         data-ng-include="ctrl.conf.FHIR[ctrl.singlePage.FirstUrlTag()].frname+'/rsEd.html'">
     </div>
-    <!--     -->
+    <!-- -->
     <p></p>
 </div>
 <div class="w3-card w3-topbar">
@@ -15,6 +15,10 @@
             <a href="#!{{ctrl.singlePage.Url()}}/{{cr}}"> {{ctrl.conf.FHIR[cr].frname}}</a>
             |
         </span>
+        <a href="/f/c/11/eh004.html?doc2doc={{ctrl.conf.FHIR.pd.currEl.doc_id}},{{ctrl.conf.FHIR.pd.currEl.reference}}"
+            target="_blank" class="w3-btn w3-padding-small w3-right w3-tiny am-b">
+            onto
+        </a>
     </div>
     --
 </div>
