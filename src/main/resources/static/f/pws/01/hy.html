@@ -24,12 +24,17 @@
 				<div class="w3-container w3-border-left w3-hover-shadow" data-ng-if="er.dgcondition_id"
 					data-ng-click="ctrl.clicDiagnose(er)">
 					<span class="w3-small am-b">Дз:</span>
-					{{er.dgcondition_code}}: {{er.dgcondition_i18n}}
+					<a class="w3-hover-shadow"
+						data-ng-class="{'w3-green':er.dgcondition_id==ctrl.singlePage.LastUrlId()}"
+						href="#!{{ctrl.singlePage.UrlOnOff('emr_'+er.dgcondition_id, 2)}}">
+						{{er.dgcondition_code}}: {{er.dgcondition_i18n}}
+					</a>
 				</div>
 				<div data-ng-repeat="mr in ctrl.conf.mrEncounter" data-ng-if="mr.mrencounter_r2==er.encounter_id">
 					<span class="w3-tiny am-b">призначено:</span>
-					<a data-ng-class="{'w3-green':mr.medicationrequest_id==ctrl.singlePage.LastUrlId()}"
-						href="#!{{ctrl.singlePage.UrlOnOff('/emr_'+mr.medicationrequest_id)}}">
+					<a class="w3-hover-shadow"
+						data-ng-class="{'w3-green':mr.medicationrequest_id==ctrl.singlePage.LastUrlId()}"
+						href="#!{{ctrl.singlePage.UrlOnOff('emr_'+mr.medicationrequest_id, 2)}}">
 						{{mr.substance_code}}
 						{{mr.n_quantity_value}}
 						{{mr.n_quantity_code}}
