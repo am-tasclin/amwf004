@@ -102,10 +102,15 @@ singlePage.UrlParamKeyValue = (key) => singlePage.UrlParamKey(key).length > 0 ? 
 
 singlePage.UrlList = () => singlePage.Url().split('/')
 
+singlePage.FirstUrl = () => singlePage.Url() ? singlePage.Url().split('/')[1] : ''
+singlePage.FirstUrlTag = () => singlePage.FirstUrl().split('_')[0]
+singlePage.FirstUrlId = () => singlePage.FirstUrl().split('_')[1]
+
 singlePage.LastUrl = () => singlePage.Url() ? singlePage.Url().split('/')[singlePage.Url().split('/').length - 1] : ''
 singlePage.LastUrlTag = () => singlePage.LastUrl().split('_')[0]
 singlePage.LastUrlId = () => singlePage.LastUrl().split('_')[1]
 
+singlePage.UrlOnOff = s => singlePage.Url().includes(s)?singlePage.Url().replace(s,''):(singlePage.Url()+s)
 
 conf.sqlAppToLink = text =>
     !text ? '' : ('' + text).replace(new RegExp(':(sql_app\\.)(\\w+)', 'gi'), ':<b>$1<a href="#!/sql/$2">$2</a></b>')

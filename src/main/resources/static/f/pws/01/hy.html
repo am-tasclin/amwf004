@@ -28,11 +28,14 @@
 				</div>
 				<div data-ng-repeat="mr in ctrl.conf.mrEncounter" data-ng-if="mr.mrencounter_r2==er.encounter_id">
 					<span class="w3-tiny am-b">призначено:</span>
-					{{mr.substance_code}}
-					{{mr.n_quantity_value}}
-					{{mr.n_quantity_code}}
-					{{mr.dn_quantity_value}}
-					{{mr.dn_quantity_code}}
+					<a data-ng-class="{'w3-green':mr.medicationrequest_id==ctrl.singlePage.LastUrlId()}"
+						href="#!{{ctrl.singlePage.UrlOnOff('/emr_'+mr.medicationrequest_id)}}">
+						{{mr.substance_code}}
+						{{mr.n_quantity_value}}
+						{{mr.n_quantity_code}}
+						{{mr.dn_quantity_value}}
+						{{mr.dn_quantity_code}}
+					</a>
 				</div>
 			</div>
 		</div>

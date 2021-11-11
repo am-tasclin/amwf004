@@ -22,21 +22,31 @@
         <a href="/" class="w3-btn w3-border w3-padding-small w3-small">↑</a>
         <span class="w3-small am-b">Робочий кабінет лікаря</span>&nbsp;⁙
         <span class="w13-small" data-ng-repeat="(k,v) in ctrl.conf.pws.topMenu">
-            <a href="#!/{{k}}" class="w3-hover-shadow" data-ng-class="{'w3-green':ctrl.singlePage.UrlList()[1].includes(k)}">
+            <a href="#!/{{k}}" class="w3-hover-shadow"
+                data-ng-class="{'w3-green':ctrl.singlePage.UrlList()[1].includes(k)}">
                 {{v}}</a>
             >
         </span>
-    </div>
-    <div class="w3-border-bottom" style="height:90vh; overflow:auto;">
-        <span class="w3-small am-b">Пацієнт</span>:
-        <span class="am-u1 am-i">
-            <span data-ng-if="ctrl.conf.patient">
-                {{ctrl.conf.patient[0].name_v}},
-                {{ctrl.conf.patient[0].family_v}}
+        <div class="w3-border-bottom" style="height:90vh; overflow:auto;">
+            <span class="w3-small am-b">Пацієнт</span>:
+            <span class="am-u1 am-i">
+                <span data-ng-if="ctrl.conf.patient">
+                    {{ctrl.conf.patient[0].name_v}},
+                    {{ctrl.conf.patient[0].family_v}}
+                </span>
+                {{ctrl.conf.patient?'':"<Ім'я Пацієнта>"}}
             </span>
-            {{ctrl.conf.patient?'':"<Ім'я Пацієнта>"}}
-        </span>
-        <div class="am-max-width-1" data-ng-view></div>
+            <div class="am-max-width-1" data-ng-view></div>
+            <p></p>
+            <div class="w3-card w3-topbar">
+                <div class="w3-light-gray w3-container">
+                    <span class="w3-tiny am-b">
+                        Ведення <span title="Електроних медичних записів" class="am-u">ЕМЗ</span>:
+                    </span>
+                </div>
+                --
+            </div>
+        </div>
     </div>
     Hi PWS! -
     <a href="https://cloford.com/resources/charcodes/utf-8_punctuation.htm">
