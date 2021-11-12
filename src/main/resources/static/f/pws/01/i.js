@@ -1,6 +1,9 @@
 'use strict'
 app.factory("dataFactory", DataFactory)
-app.directive('amSqlHtml', AmSqlHtml)
+angular.forEach({
+    amSqlHtml: AmSqlHtml,
+    amEmrLink: AmEmrLink,
+}, (v, k) => app.directive(k, v))
 
 conf.pws = {}//Physition Work Station
 conf.pws.topMenu = {
@@ -25,12 +28,12 @@ class HistoryProcessController extends SqlAbstractController {
         super(dataFactory)
         console.log('HistoryProcessController', singlePage.FirstUrlId() || singlePage.UrlParamKeyValue('pt'))
         if (singlePage.FirstUrlId() || singlePage.UrlParamKeyValue('pt')) {
-            if(!conf.patient){
+            if (!conf.patient) {
                 this.read('Patient_family_name', 'patient')
                 this.read('EpisodeOfCare_Patient', 'episodes')
                 this.read('Encounter_Patient', 'encounters')
                 this.read('encounter_MedicationRequest_sc_doseQuantityTimingPeriod', 'mrEncounter')
-            }else{
+            } else {
                 console.log('patient_id = ', conf.patient[0].patient_id)
             }
         }
@@ -64,7 +67,7 @@ class HistoryProcessController extends SqlAbstractController {
 }
 app.controller("HistoryProcessController", HistoryProcessController)
 
-angular.forEach(['hy', 'hy_:pt_id','hy_:pt_id/emr_:emr_id'], element => {
+angular.forEach(['hy', 'hy_:pt_id', 'hy_:pt_id/emr_:emr_id'], element => {
     singlePage[element] = {
         templateUrl: 'hy.html',
         controller: 'HistoryProcessController',

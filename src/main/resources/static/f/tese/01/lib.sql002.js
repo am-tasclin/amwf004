@@ -1,22 +1,20 @@
-const singlePage = {}, conf = {}, sql_app = {}
+// const singlePage = {}, conf = {}, sql_app = {}
+const conf = {}
 
-var app = angular.module("app", ['ngRoute', 'ngResource', 'ngSanitize'])
-angular.element(() => angular.bootstrap(document, ['app']))
+// var app = angular.module("app", ['ngRoute', 'ngResource', 'ngSanitize'])
+// angular.element(() => angular.bootstrap(document, ['app']))
 
-class AbstractController {
-    singlePage = singlePage; conf = conf
-    getSql = sql => sql_app[sql]
-}
+// class AbstractController { singlePage = singlePage; conf = conf; getSql = sql => sql_app[sql] }
 
-let readSql2R = sqlN => replaceSql(sql_app[sqlN].sql)
-let replaceSql = sql => {
-    while (sql.includes(':sql_app.')) {
-        let sql_name = sql.split(':sql_app.')[1].split(' ')[0]
-        let sql_inner = readSql2R(sql_name)
-        sql = sql.replace(':sql_app.' + sql_name, sql_inner)
-    }
-    return '' + sql
-}
+// let readSql2R = sqlN => replaceSql(sql_app[sqlN].sql)
+// let replaceSql = sql => {
+//     while (sql.includes(':sql_app.')) {
+//         let sql_name = sql.split(':sql_app.')[1].split(' ')[0]
+//         let sql_inner = readSql2R(sql_name)
+//         sql = sql.replace(':sql_app.' + sql_name, sql_inner)
+//     }
+//     return '' + sql
+// }
 
 class SqlAbstractController extends AbstractController {
     dataFactory
@@ -80,37 +78,24 @@ class RouteProviderConfig {
     }
 }
 
-class AmSqlHtml {
-    constructor($compile) {
-        this.link = (s, e) => {
-            let sqlE = sql_app[conf.sqlKeyName]
-            if (sqlE.sqlHtml)
-                if (sqlE.sqlHtml[s.k] != null) {
-                    e.html(sqlE.sqlHtml[s.k])
-                    $compile(e.contents())(s)
-                }
-        }
-    }
-    restrict = 'A'
-}
+// singlePage.Url = () => window.location.href.split('#!')[1]
+// singlePage.PseudoREST = singlePage.Url
+// singlePage.UrlList = () => singlePage.Url().split('/')
+// singlePage.PseudoRESTKey = key => singlePage.UrlList().filter(w => w.includes(key))
 
-singlePage.Url = () => window.location.href.split('#!')[1]
-singlePage.PseudoREST = singlePage.Url
 singlePage.UrlParams = () => singlePage.Url().includes('?') ? singlePage.Url().split('?')[1].split('&') : []
 singlePage.UrlParamKey = (key) => singlePage.UrlParams().filter(word => word.includes(key + '='))
 singlePage.UrlParamKeyValue = (key) => singlePage.UrlParamKey(key).length > 0 ? singlePage.UrlParamKey(key)[0].split('=')[1] : ''
 
-singlePage.UrlList = () => singlePage.Url().split('/')
+// singlePage.FirstUrl = () => singlePage.Url() ? singlePage.Url().split('/')[1] : ''
+// singlePage.FirstUrlTag = () => singlePage.FirstUrl().split('_')[0]
+// singlePage.FirstUrlId = () => singlePage.FirstUrl().split('_')[1]
 
-singlePage.FirstUrl = () => singlePage.Url() ? singlePage.Url().split('/')[1] : ''
-singlePage.FirstUrlTag = () => singlePage.FirstUrl().split('_')[0]
-singlePage.FirstUrlId = () => singlePage.FirstUrl().split('_')[1]
+// singlePage.LastUrl = () => singlePage.Url() ? singlePage.Url().split('/')[singlePage.Url().split('/').length - 1] : ''
+// singlePage.LastUrlTag = () => singlePage.LastUrl().split('_')[0]
+// singlePage.LastUrlId = () => singlePage.LastUrl().split('_')[1]
 
-singlePage.LastUrl = () => singlePage.Url() ? singlePage.Url().split('/')[singlePage.Url().split('/').length - 1] : ''
-singlePage.LastUrlTag = () => singlePage.LastUrl().split('_')[0]
-singlePage.LastUrlId = () => singlePage.LastUrl().split('_')[1]
-
-singlePage.UrlOnOff = (s, p) => singlePage.Url().includes(s) ? singlePage.UrlList().slice(0,p).join('/') : singlePage.UrlList().slice(0,p).concat([s]).join('/')
+singlePage.UrlOnOff = (s, p) => singlePage.Url().includes(s) ? singlePage.UrlList().slice(0, p).join('/') : singlePage.UrlList().slice(0, p).concat([s]).join('/')
 // singlePage.UrlOnOff = s => singlePage.Url().includes(s)?singlePage.Url().replace(s,''):(singlePage.Url()+s)
 
 conf.sqlAppToLink = text =>

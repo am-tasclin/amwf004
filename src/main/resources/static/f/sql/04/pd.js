@@ -4,6 +4,7 @@ app.factory("editFRFactory", EditFHIResourceService)
 app.config(RouteProviderConfig)
 app.controller("InitFHIResourceController", InitFHIResourceController)
 app.directive('amSqlHtml', AmSqlHtml)
+app.directive('amEmrLink', AmEmrLink)
 
 // app.controller("PlanDefinitionController", PlanDefinitionController)
 class PlanDefinitionController extends InitFHIResourceController {
