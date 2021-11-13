@@ -2,7 +2,7 @@
 var app = angular.module("app", ['ngRoute', 'ngResource', 'ngSanitize'])
 angular.element(() => angular.bootstrap(document, ['app']))
 const singlePage = {}, sql_app = {}
-class AbstractController { singlePage = singlePage; conf = conf }
+class AbstractController { singlePage = singlePage; conf = conf; getSql = sqlName => sql_app[sqlName] }
 
 singlePage.Url = () => window.location.href.split('#!')[1]
 singlePage.PseudoREST = singlePage.Url
@@ -106,12 +106,18 @@ class AmSqlHtml {
 class AmEmrLink {
     constructor($compile) {
         this.link = (s, e, a) => {
-            let innerHtml = '<a  class="w3-hover-shadow" \n\
-            data-ng-class="{\'w3-green\':' + a.docid + '==ctrl.singlePage.LastUrlId()}" \n\
-            href="#!{{ctrl.singlePage.UrlOnOff(\'emr_' + a.docid + '\', 2)}}" >'
-                + e[0].innerHTML + ' </a>'
-            e.html(innerHtml)
-            $compile(e.contents())(s)
+            let innerHtml
+            if (a.emrid) {
+                innerHtml = '<a  class="w3-hover-shadow am-0u" \n\
+                data-ng-class="{\'w3-green\':' + a.emrid
+                    + '==ctrl.singlePage.LastUrlId()}" \n\
+                href="#!{{ctrl.singlePage.UrlOnOff(\'emr_' + a.emrid + '\', 2)}}" >'
+                    + e[0].innerHTML + ' </a>'
+            }
+            if (innerHtml) {
+                e.html(innerHtml)
+                $compile(e.contents())(s)
+            }
         }
     }
     restrict = 'A'

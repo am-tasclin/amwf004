@@ -1,4 +1,5 @@
 'use strict'
+// let sql_app = {}
 sql_app.FHIRs_Group = {
     name: 'Категорії ЦД - пропозиція під ТЗ Облік категорії пацієнта',
     sql: 'SELECT d.doc_id group_id, s.value group_name, sp.value datagroup , d.* FROM doc d \n\
@@ -59,7 +60,7 @@ sql_app.DoseQuantity = {
 }
 sql_app.MedicationRequest_sc = {
     name:'Призначення ліків субстанція',
-    sql:'SELECT d.doc_id medicationrequest_id, medication.* FROM doc d \n\
+    sql:'SELECT d.doc_id medicationrequest_id, d.reference medicationrequest_r, medication.* FROM doc d \n\
     LEFT JOIN (:sql_app.Medication_sc ) medication \n\
     ON medication.medication_id=d.reference2 \n\
     WHERE d.reference=371469 ',

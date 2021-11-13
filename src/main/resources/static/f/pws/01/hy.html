@@ -18,19 +18,20 @@
 				<span class="am-u w3-small w3-hover-shadow" data-ng-click="ctrl.clicEncounter(er)"
 					data-ng-class="{'w3-green':ctrl.conf.clickedElement.encounter_id==er.encounter_id}">
 					{{er.tsps_v | date : 'shortTime'}}{{er.tsps_v | date : ' EEE, d'}}</span>
-				<span class="w3-hover-shadow" data-ng-click="ctrl.clicReason(er)">
-					{{er.reason_code}}: {{er.reason_i18n}}
-				</span>
-				<div class="w3-container w3-border-left w3-hover-shadow" data-ng-if="er.dgcondition_id"
+
+				<span data-emrid="{{er.reason_id}}" data-p="2" data-am:emr:link>{{er.reason_code}}:
+					{{er.reason_i18n}}</span>
+
+				<div class="w3-container w3-border-left " data-ng-if="er.dgcondition_id"
 					data-ng-click="ctrl.clicDiagnose(er)">
 					<span class="w3-small am-b">Дз:</span>
 
-					<span data-docId="{{er.dgcondition_id}}" data-p="2" data-am:emr:link>{{er.dgcondition_code}}:
+					<span data-emrid="{{er.dgcondition_id}}" data-p="2" data-am:emr:link>{{er.dgcondition_code}}:
 						{{er.dgcondition_i18n}}</span>
 				</div>
 				<div data-ng-repeat="mr in ctrl.conf.mrEncounter" data-ng-if="mr.mrencounter_r2==er.encounter_id">
 					<span class="w3-tiny am-b">призначено:</span>
-					<span data-docId="{{mr.medicationrequest_id}}" data-p="2" data-am:emr:link>
+					<span data-emrid="{{mr.medicationrequest_id}}" data-p="2" data-am:emr:link>
 						{{mr.substance_code}}
 						{{mr.n_quantity_value}}
 						{{mr.n_quantity_code}}

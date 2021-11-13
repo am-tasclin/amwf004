@@ -39,7 +39,10 @@ class SqlController extends SqlAbstractController {
         conf.sql = sql
         let ctrl = this
         dataFactory.httpGetSql({ sql: sql, limit: sql_app[conf.sqlKeyName].limit })
-            .then(dataSqlRequest => ctrl.data = dataSqlRequest)
+            .then(dataSqlRequest => {
+                ctrl.data = dataSqlRequest
+                console.log(ctrl.data)
+            })
     }
     sql_app = sql_app
 }
