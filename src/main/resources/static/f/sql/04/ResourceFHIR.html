@@ -1,0 +1,24 @@
+<div>
+    <div data-ng-repeat="r in [ctrl.conf.FHIR[ctrl.singlePage.FirstUrlTag()].currEl]"
+        data-ng-include="ctrl.conf.FHIR[ctrl.singlePage.FirstUrlTag()].frname+'/rsEd.html'">
+    </div>
+    <!-- -->
+    <p></p>
+</div>
+<div class="w3-card w3-topbar">
+    <div class="w3-light-gray w3-container">
+        <span class="w3-tiny am-b">ResourceFHIR: </span><span class="w3-tiny w3-border-top w3-border-amber">
+            {{ctrl.singlePage.Url()}}</span>&nbsp;<span class="w3-hover-shadow"><i title="_>."
+                class="fas fa-ellipsis-v"></i>
+            ></span>
+        <span data-ng-repeat="cr in ctrl.conf.FHIR[ctrl.singlePage.LastUrlTag()].children" class="w3-small">
+            <a href="#!{{ctrl.singlePage.Url()}}/{{cr}}"> {{ctrl.conf.FHIR[cr].frname}}</a>
+            |
+        </span>
+        <a href="/f/c/11/eh004.html?doc2doc={{ctrl.conf.FHIR.pd.currEl.doc_id}},{{ctrl.conf.FHIR.pd.currEl.reference}}"
+            target="_blank" class="w3-btn w3-padding-small w3-right w3-tiny am-b">
+            onto
+        </a>
+    </div>
+    --
+</div>

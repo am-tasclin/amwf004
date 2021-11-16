@@ -1,6 +1,9 @@
 'use strict'
 app.factory("dataFactory", DataFactory)
-app.directive('amSqlHtml', AmSqlHtml)
+angular.forEach({
+    amSqlHtml: AmSqlHtml,
+    amEmrLink: AmEmrLink,
+}, (v, k) => app.directive(k, v))
 
 conf.pws = {}//Physition Work Station
 conf.pws.topMenu = {
@@ -14,6 +17,7 @@ conf.pws.topMenu = {
 class InitPageController extends AbstractController {
     constructor($scope, $route, $routeParams) {
         super()
+        // console.log(Object.keys($route.routes)) // NOT DELETE
     }
 }
 app.controller("InitPageController", InitPageController)
@@ -22,32 +26,28 @@ app.controller("InitPageController", InitPageController)
 class HistoryProcessController extends SqlAbstractController {
     constructor(dataFactory, $routeParams) {
         super(dataFactory)
-        // conf.ctrl = this
-        console.log('HistoryProcessController')
-        if (singlePage.UrlParamKeyValue('pt')) {
-
-            this.read('Patient_family_name', 'patient')
-            this.read('EpisodeOfCare_Patient', 'episodes')
-            this.read('Encounter_Patient', 'encounters')
-            this.read('encounter_MedicationRequest_sc_doseQuantityTimingPeriod', 'mrEncounter')
-
-            // sql2Name = 'Encounter_Patient'
-            // sql2 = this.sqlForOnePatient.replace(':sql ', this.readSql2R(sql2Name))
-            //	 .replace(':patient_id', singlePage.UrlParamKeyValue('pt'))
-            // dataFactory.httpGetSql({ sql: sql2 })
-            //	 .then(dataSqlRequest => conf.encounters = dataSqlRequest.list)
-
+        console.log('HistoryProcessController', singlePage.FirstUrlId() || singlePage.UrlParamKeyValue('pt'))
+        if (singlePage.FirstUrlId() || singlePage.UrlParamKeyValue('pt')) {
+            if (!conf.patient) {
+                this.read('Patient_family_name', 'patient')
+                this.read('EpisodeOfCare_Patient', 'episodes')
+                this.read('Encounter_Patient', 'encounters')
+                this.read('encounter_MedicationRequest_sc_doseQuantityTimingPeriod', 'mrEncounter')
+            } else {
+                console.log('patient_id = ', conf.patient[0].patient_id)
+            }
         }
     }
-    f1 = (sql2Name) => this.sqlForOnePatient.replace(':sql ', this.readSql2R(sql2Name))
-        .replace(':patient_id', singlePage.UrlParamKeyValue('pt'))
-    read = (sql2Name, confKey) =>
-        this.dataFactory.httpGetSql(
-            {
-                sql: this.sqlForOnePatient.replace(':sql ', this.readSql2R(sql2Name))
-                    .replace(':patient_id', singlePage.UrlParamKeyValue('pt'))
-            }
-        ).then(dataSqlRequest => conf[confKey] = dataSqlRequest.list)
+
+    f1 = (sql2Name) => this.sqlForOnePatient.replace(':sql ', readSql2R(sql2Name))
+        .replace(':patient_id', patient_id)
+
+    read = (sql2Name, confKey) => this.dataFactory.httpGetSql(
+        {
+            sql: this.sqlForOnePatient.replace(':sql ', readSql2R(sql2Name))
+                .replace(':patient_id', singlePage.FirstUrlId() || singlePage.UrlParamKeyValue('pt'))
+        }
+    ).then(dataSqlRequest => conf[confKey] = dataSqlRequest.list)
 
     sqlForOnePatient = 'SELECT * FROM (:sql ) p WHERE patient_id = :patient_id'
     clicEpisode = (ee) => {
@@ -66,16 +66,18 @@ class HistoryProcessController extends SqlAbstractController {
     }
 }
 app.controller("HistoryProcessController", HistoryProcessController)
-singlePage['hy'] = {
-    templateUrl: 'hy.html',
-    controller: 'HistoryProcessController',
-}
+
+angular.forEach(['hy', 'hy_:pt_id', 'hy_:pt_id/emr_:emr_id'], element => {
+    singlePage[element] = {
+        templateUrl: 'hy.html',
+        controller: 'HistoryProcessController',
+    }
+})
 
 // app.controller("EMRProcessController", EMRProcessController)
 class EMRProcessController extends SqlAbstractController {
     constructor(dataFactory, $routeParams) {
         super(dataFactory)
-        conf.ctrl = this
         console.log('EMRProcessController')
     }
 }
@@ -103,20 +105,16 @@ singlePage['tp'] = {
 class PatientListController extends SqlAbstractController {
     constructor(dataFactory, $routeParams) {
         super(dataFactory)
-        conf.ctrl = this
         conf.sqlKeyName = 'Patient_family_name'
-        let sql = this.readSql2R(conf.sqlKeyName)
-        console.log(123321, sql)
-        dataFactory.httpGetSql({ sql: sql })
-            .then(dataSqlRequest => conf.ctrl.data = dataSqlRequest)
-        console.log(123)
+        console.log(conf.sqlKeyName)
+        let ctrl = this
+        dataFactory.httpGetSql({ sql: readSql2R(conf.sqlKeyName) })
+            .then(dataSqlRequest => ctrl.data = dataSqlRequest)
     }
     clickPatient = (r) => {
         conf.patient = r
-        console.log(123, conf.patient)
     }
-
-    sql_app = sql_app
+    // sql_app = sql_app
 }
 app.controller("PatientListController", PatientListController)
 singlePage['pl'] = {
@@ -125,3 +123,7 @@ singlePage['pl'] = {
 }
 
 app.config(RouteProviderConfig)
+
+sql_app.Patient_family_name.sqlHtml = {
+    patient_id: '<a data-ng-click="ctrl.clickPatient(r)" href="#!/hy_{{r.patient_id}}"> {{r[k]}} </a>',
+}

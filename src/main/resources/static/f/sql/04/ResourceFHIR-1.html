@@ -1,0 +1,72 @@
+<div data-ng-if="ctrl.conf.fr[ctrl.singlePage.FirstUrlTag()].currEl">
+    <div data-ng-repeat="r in [ctrl.conf.fr[ctrl.singlePage.FirstUrlTag()].currEl]"
+        data-ng-include="ctrl.conf.fr[ctrl.singlePage.FirstUrlTag()].frn+'/rsEd.html'">
+    </div>
+    <div class="w3-tiny w3-code" data-ng-if="false && !('mr'==ctrl.singlePage.FirstUrlTag())">
+        {{ctrl.singlePage.FirstUrlTag()}}
+        a2
+        {{ctrl.singlePage.FirstUrlTag()}}
+        {{ctrl.conf.fr[ctrl.singlePage.FirstUrlTag()].frn}}
+        -
+        {{ctrl.conf.fr[ctrl.singlePage.FirstUrlTag()].currEl}}
+    </div>
+</div>
+--
+<div class="w3-card ">
+    <div class="w3-light-gray w3-container">
+        <span class="w3-tiny am-b">ResourceFHIR: </span>
+        <span class="w3-tiny w3-border-top w3-border-amber"> {{ctrl.singlePage.Url()}}</span>
+        <span data-ng-if="ctrl.singlePage.Url().split('/').length <= 3">
+            <span class="w3-hover-shadow"><i title="_>." class="fas fa-ellipsis-v"></i>
+                ></span>
+            <span data-ng-repeat="cr in ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].children" class="w3-small">
+                <a href="#!{{ctrl.singlePage.Url()}}/{{cr}}"> {{ctrl.conf.fr[cr].frn}}</a>
+                |
+            </span>
+        </span>
+        _ <. <span class="w3-small am-b">
+            {{ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].frn}}
+            </span>
+            <span class="w3-right w3-tiny">
+                <a href="/f/sql/01/i.html#!/sql/{{ctrl.conf.fr.cp.sql_app_children[
+                    ctrl.conf.fr.cp.sql_app_children_frs.indexOf(
+                    ctrl.singlePage.LastUrlTag())].sql_app}}">
+                    edEl-sql-tree
+                </a>
+            </span>
+    </div>
+    <div class="w3-border-bottom">
+        <span class="w3-right w3-tiny"> #{{ctrl.singlePage.Url().split('/').length-1}} </span>
+        <span class="w3-right w3-tiny">
+            <a href="/f/sql/01/i.html#!/sql/{{ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].sql_app}}">
+                sql-tree
+            </a>
+        </span>
+        <span class="w3-right">-1-|</span>
+        <i class="fas fa-search"></i>
+        <span class="w3-tiny"> seek Re |</span>
+        <i class="far fa-paper-plane"></i>
+        <span class="w3-tiny"> usage </span>
+        <span class="w3-tiny"> | ed body </span>
+        >
+        <span data-ng-include="'resourceFHIR/addElDropDown.html'"></span>
+    </div>
+
+    <div class="w3-row" data-ng-if="ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].dates||ctrl.conf.fr[ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].fr].dates">
+        <div class="w3-half w3-border-right">
+            <div data-ng-repeat="rList in [dataSqlRequest.list]" data-ng-include="'/f/sql/03/amRsRowHtml1.html'"></div>
+        </div>
+        <div class="w3-half w3-container">
+            <div data-ng-repeat="(key, d) in ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].dates"
+                data-ng-include="'/f/sql/03/confDates/ed.html'">
+            </div>
+            <div data-ng-repeat="(key, d) in ctrl.conf.fr[ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].fr].dates"
+                data-ng-include="'/f/sql/03/confDates/ed.html'">
+            </div>
+        </div>
+    </div>
+    <div data-ng-if="!ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].dates&&!ctrl.conf.fr[ctrl.conf.fr[ctrl.singlePage.LastUrlTag()].fr].dates">
+        <div data-ng-repeat="rList in [dataSqlRequest.list]" data-ng-include="'/f/sql/03/amRsRowHtml1.html'"></div>
+    </div>
+    &nbsp;
+</div>
