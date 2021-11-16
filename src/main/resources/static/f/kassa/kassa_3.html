@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Factory Example 2</title>
+	<script src="/webjars/angular/1.8.2/angular.min.js" type="application/javascript"></script>
+	<script src="Kassa_2.js"></script>
+
+
+	<script>
+		var application = angular.module('MyFirstZ', []);
+
+		application.factory('MyFactoru', MyFactoru);
+
+		application.controller('MyContr', MyContr)
+
+	</script>
+</head>
+
+<body>
+	<div ng-app="MyFirstZ" ng-controller="MyContr as ctrl">
+<table>
+<tr>
+	<td>e11</td>
+	<td>{{ctrl.a}}</td>
+</tr>
+<tr>
+	<td>e21</td>
+	<td>e22</td>
+</tr>
+
+
+</table>
+
+		<p>
+			a123999
+			Enter A Number: <input type="number" ng-model="ctrl.a" /> <br />
+			Enter A Number: <input type="number" ng-model="n2" /> <br />
+		</p>
+	
+		{{ctrl}} <br/>
+		
+		{{ctrl.a}} <br />
+
+		<button ng-click="ctrl.results(n1,n2)">Subtract</button>
+	
+		<button ng-click="ctrl.results2()">Add</button>
+
+			<p>Results: {{ctrl.a}}
+			<p>Results2: {{ctrl.b}}
+
+	</div>
+</body>
+
+</html>

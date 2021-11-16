@@ -115,7 +115,10 @@ public class ExecuteSqlBlock extends DbCommon {
 
 	@Transactional
 	public void executeSql(Map<String, Object> data) {
+		System.out.println("-118--");
+		System.out.println(data);
 		String sql = (String) data.get("sql");
+		System.out.println(sql);
 		updateNewIds(sql, data, env);
 
 		int i = 0;
