@@ -22,6 +22,34 @@ sql_app.PlanDefinition_action_title = {
     WHERE an7te.parent=an.doc_id AND an7te.reference=373452 \n\
     AND an.reference=369782 AND s.sort_id=an7te.doc_id ORDER BY s.sort',
 }
+
+sql_app.PD_Trigger_DataRequirement_type_path = {
+    name:'Сценарії-плани > tригери > необхідні дані тип шлях',
+    sql:'SELECT n.value pd_name, tdr.* FROM doc tr \n\
+    LEFT JOIN doc trim \n\
+    LEFT JOIN (:sql_app.Trigger_DataRequirement_type_path ) tdr ON tdr.triger_id=trim.reference2 \n\
+    ON trim.parent=tr.doc_id \n\
+    , doc pdtr \n\
+    LEFT JOIN string n ON n.string_id=pdtr.doc_id \n\
+    WHERE pdtr.reference=371998 AND tr.parent=pdtr.doc_id AND tr.reference=373479',
+}
+sql_app.Trigger_DataRequirement_type_path = {
+    name:'Тригери > необхідні дані тип шлях',
+    sql:'SELECT n.value tr_name, tdr.doc_id triger_id, dr.* FROM doc tdr \n\
+    LEFT JOIN string n ON n.string_id=tdr.doc_id \n\
+    LEFT JOIN doc td \n\
+    LEFT JOIN (:sql_app.DataRequirement_type_path ) dr ON dr.dr_type_id=td.reference2 \n\
+    ON td.parent=tdr.doc_id AND td.reference=369811 \n\
+    WHERE tdr.reference=369820',
+}
+sql_app.DataRequirement_type_path = {
+    name:'Необхідні дані тип шлях',
+    sql:'SELECT dr.doc_id dr_type_id, dr.reference2 dr_type_def_id \n\
+    , dp.doc_id dr_codeFilter_path_id, dp.reference2 codeFilter_path_def_id \n\
+    FROM doc dr \n\
+    LEFT JOIN doc dp ON dp.parent=dr.doc_id \n\
+    WHERE dr.reference = 84929',
+}
 sql_app.encounter_MedicationRequest_sc_doseQuantityTimingPeriod = {
     name:'ЕМЗ Взаємодія призначення ліків доза кількість хронометраж період',
     sql:'SELECT mrer.doc_id mrEncounter_id, mrer.reference2 mrEncounter_r2, mrbn.reference2 basedOn \n\
