@@ -1,5 +1,5 @@
 // const singlePage = {}, conf = {}, sql_app = {}
-const conf = {}
+// const conf = {} // see lib-init.js
 
 // var app = angular.module("app", ['ngRoute', 'ngResource', 'ngSanitize'])
 // angular.element(() => angular.bootstrap(document, ['app']))

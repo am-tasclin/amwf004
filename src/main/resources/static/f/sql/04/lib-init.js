@@ -1,13 +1,37 @@
 'use strict';
 var app = angular.module("app", ['ngRoute', 'ngResource', 'ngSanitize'])
 angular.element(() => angular.bootstrap(document, ['app']))
-const singlePage = {}, sql_app = {}
+const singlePage = {}, sql_app = {}, conf = {}
 class AbstractController { singlePage = singlePage; conf = conf; getSql = sqlName => sql_app[sqlName] }
+
+// Element_id to element map.
+conf.eMap = {}
+
+// FHIR element name to FHIR element_id
+const name2id = n => n.toLowerCase() + '_id'
+// Add element to element_id to element map.
+const addEMap = (l, n) => l.forEach(e => conf.eMap[e[name2id(n)]] = e)
+// Get sql from our name
+const readSql2R = sqlN => replaceSql(sql_app[sqlN].sql)
+// Named structured SQL to native SQL
+const replaceSql = sql => {
+    while (sql.includes(':sql_app.')) {
+        let sql_name = sql.split(':sql_app.')[1].split(' ')[0]
+        let sql_inner = readSql2R(sql_name)
+        sql = sql.replace(':sql_app.' + sql_name, sql_inner)
+    }
+    return '' + sql
+}
 
 singlePage.Url = () => window.location.href.split('#!')[1]
 singlePage.PseudoREST = singlePage.Url
 singlePage.UrlList = () => singlePage.Url().split('/')
 singlePage.PseudoRESTKey = key => singlePage.UrlList().filter(w => w.includes(key))
+singlePage.UrlMap = () => {
+    const m = {}
+    singlePage.UrlList().forEach(v => { if (v) m[v.split('_')[0]] = v.split('_')[1] })
+    return m
+}
 
 singlePage.FirstUrl = () => singlePage.Url() ? singlePage.Url().split('/')[1] : ''
 singlePage.FirstUrlTag = () => singlePage.FirstUrl().split('_')[0]
@@ -36,19 +60,6 @@ singlePage.ClickTagHref = (tag, id) => {
     })
     return newUrl
 }
-
-let readSql2R = sqlN => replaceSql(sql_app[sqlN].sql)
-let replaceSql = sql => {
-    while (sql.includes(':sql_app.')) {
-        let sql_name = sql.split(':sql_app.')[1].split(' ')[0]
-        let sql_inner = readSql2R(sql_name)
-        sql = sql.replace(':sql_app.' + sql_name, sql_inner)
-    }
-    return '' + sql
-}
-
-
-
 
 // app.factory("dataDBexchangeService", DataDBexchangeService)
 class DataDBexchangeService {
@@ -109,6 +120,7 @@ class AmEmrLink {
             let innerHtml
             if (a.emrid) {
                 innerHtml = '<a  class="w3-hover-shadow am-0u" \n\
+                data-ng-click="ctrl.clickedId('+a.emrid+')" \n\
                 data-ng-class="{\'w3-green\':' + a.emrid
                     + '==ctrl.singlePage.LastUrlId()}" \n\
                 href="#!{{ctrl.singlePage.UrlOnOff(\'emr_' + a.emrid + '\', 2)}}" >'

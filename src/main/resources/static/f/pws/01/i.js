@@ -22,34 +22,54 @@ class InitPageController extends AbstractController {
 }
 app.controller("InitPageController", InitPageController)
 
+const contentDoc = {}
+contentDoc.readElements = {
+    patient: { sql: 'Patient_family_name' },
+    episode: { sql: 'EpisodeOfCare_Patient' },
+    encounter: { sql: 'Encounter_Patient' },
+    mrEncounter: { sql: 'encounter_MedicationRequest_sc_doseQuantityTimingPeriod' },
+}
+
 // app.controller("HistoryProcessController", HistoryProcessController)
 class HistoryProcessController extends SqlAbstractController {
-    constructor(dataFactory, $routeParams) {
+    constructor(dataFactory, $timeout) {
         super(dataFactory)
         console.log('HistoryProcessController', singlePage.FirstUrlId() || singlePage.UrlParamKeyValue('pt'))
+        let timeoutMs = 0
         if (singlePage.FirstUrlId() || singlePage.UrlParamKeyValue('pt')) {
             if (!conf.patient) {
-                this.read('Patient_family_name', 'patient')
-                this.read('EpisodeOfCare_Patient', 'episodes')
-                this.read('Encounter_Patient', 'encounters')
-                this.read('encounter_MedicationRequest_sc_doseQuantityTimingPeriod', 'mrEncounter')
+                angular.forEach(contentDoc.readElements, (v, k) => this.read(v.sql, k))
+                timeoutMs = 200
             } else {
                 console.log('patient_id = ', conf.patient[0].patient_id)
             }
         }
+        $timeout(() => {
+            let emrEl = conf.eMap[singlePage.UrlMap()['emr']]
+            console.log(emrEl, timeoutMs)
+            if (emrEl && emrEl.el_def_id && emrEl.el_att_def_id) {//triggered by FHIR.path
+                let sql = 'SELECT * FROM (:sql_app.PD_Trigger_DataRequirement_type_path ) x WHERE dr_type_def_id=:x AND codefilter_path_def_id=:y'
+                sql = replaceSql(sql).replace(':x', emrEl.el_def_id).replace(':y', emrEl.el_att_def_id)
+                this.dataFactory.httpGetSql({sql:sql}).then(dataSqlRequest=>{
+                    console.log(dataSqlRequest)
+                })
+            }
+        }, timeoutMs);
     }
 
     f1 = (sql2Name) => this.sqlForOnePatient.replace(':sql ', readSql2R(sql2Name))
         .replace(':patient_id', patient_id)
 
-    read = (sql2Name, confKey) => this.dataFactory.httpGetSql(
-        {
-            sql: this.sqlForOnePatient.replace(':sql ', readSql2R(sql2Name))
-                .replace(':patient_id', singlePage.FirstUrlId() || singlePage.UrlParamKeyValue('pt'))
-        }
-    ).then(dataSqlRequest => conf[confKey] = dataSqlRequest.list)
+    read = (sql2Name, confKey) => this.dataFactory.httpGetSql({
+        sql: this.sqlForOnePatient.replace(':sql ', readSql2R(sql2Name))
+            .replace(':patient_id', singlePage.FirstUrlId() || singlePage.UrlParamKeyValue('pt'))
+    }).then(dataSqlRequest => {
+        conf[confKey] = dataSqlRequest.list
+        addEMap(conf[confKey], confKey)
+    })
 
     sqlForOnePatient = 'SELECT * FROM (:sql ) p WHERE patient_id = :patient_id'
+    clickedId = (id) => conf.clickedId = id
     clicEpisode = (ee) => {
         console.log(ee)
         conf.clickedElement = ee
