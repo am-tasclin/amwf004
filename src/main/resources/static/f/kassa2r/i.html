@@ -46,14 +46,17 @@
                                     <td>Сумма r </td>
                                     <td><input data-ng-model="myNumb" type="number"> </td>
                                 </tr>
+                                
                                 <tr>
-                                    <td>Валюта</td>
-                                    <td><input type="checkbox" data-ng-model="value1"></td>
-                                </tr>
-                                <tr>
-                                    <td>Нал/БезНал11</td>
-                                    <td> <input type="radio" ng-model="Nal" value="Нал">
-                                        <input type="radio" ng-model="Nal" value="БезНал">
+                                    <td>
+                                        <input type="checkbox" data-ng-model="value1" id="vt">
+                                        <label for="vt">Валюта</label>
+                                    </td>
+                                    <td>
+                                        <input type="radio" ng-model="Nal" id="nl" value="Нал">
+                                        <label for="nl">Нал</label>/
+                                        <input type="radio" ng-model="Nal" id="bn" value="БезНал">
+                                        <label for="bn">БезНал</label>
                                     </td>
                                 </tr>
                                 <tr>
