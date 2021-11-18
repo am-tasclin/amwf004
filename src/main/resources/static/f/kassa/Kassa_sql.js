@@ -4,24 +4,36 @@ let sql_app = {}
 sql_app.SelectKassa = {
     name: 'Касса ',
     sql: 'SELECT idNom, DateProv, SumaProv, IdNomKassOp, NameKassop, IdNomVal,NameVal,Pr_rasx, IdDoc  \n\
-    From kassa.finans \n\
-    Where DateProv >=:d1 and DateProv<=:d2 and Pr_rasx=:p '  ,
+    FROM kassa.finans \n\
+    WHERE DateProv >=:d1 and DateProv<=:d2 and Pr_rasx=:p '  ,
 }
+
 
 sql_app.AddKassa = {
     name: 'Добавление кассового ордера',
-    sql: ' insert into finans (idNom, DateProv, SumaProv, IdNomKassOp, NameKassop, IdNomVal,NameVal,Pr_rasx, IdDoc) \n\
+    sql: ' INSERT INTP finans (idNom, DateProv, SumaProv, IdNomKassOp, NameKassop, IdNomVal,NameVal,Pr_rasx, IdDoc) \n\
     VALUES  ( \n\
-       (SELECT Count(*)+1 from finans) , \n\
+       (SELECT COUNT(*)+1 FROM kassa.finans) , \n\
        :Ld1, :Lsuma,\n\
-       :LIdKassOp,   (select NameKassOp from SpKassOp where IdKassOp=:LidKassOp), \n\
-       :LidNomVal,   (select NameVal  from SpValut where IdNomVal=:LidNomVal), \n\
+       :LIdKassOp,   (SELECT NameKassOp FROM SpKassOp WHERE IdKassOp=:LidKassOp), \n\
+       :LidNomVal,   (SELECT NameVal    FROM SpValut  WHERE IdNomVal=:LidNomVal), \n\
        :Lpr, :lIdDoc)' ,
 }
 
+
+
+sql_app.AddKassa_VB = {
+    name: 'Добавление кассового ордера',
+    sql: ' INSERT INTO kassa.finans (pr_rasx,idNom, DateProv,SumaProv) \n\
+    VALUES  (1, \n\
+            (SELECT COUNT(*)+1 FROM kassa.finans), \n\
+            :Ld1, :ssum)' ,
+}
+
+
 sql_app.GroupKassa = {
     name: 'Общая сума и кол-во проводок ',
-    sql: ' SELECT count(*) Count, Sum(SumaProv) SumaProv  \n\
+    sql: ' SELECT COUNT(*) Count, SUM(SumaProv) SumaProv  \n\
         FROM finans \n\
         WHERE DateProv >=:d1 and DateProv<=:d2 and Pr_rasx=:P'  ,
 }
