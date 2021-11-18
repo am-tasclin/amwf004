@@ -1,4 +1,5 @@
-//var app = angular.module('myApp', []);
+'use strict';
+//var app = angular.module('myApp', []); // see lib-init.js
 app.controller('myCtrl',
     function ($scope, $http) {
         $scope.firstName = "ФОП Глобус";
@@ -38,7 +39,10 @@ app.controller('myCtrl',
             console.log(12)
         }
 
-        makeSelect = () => sql_app.SelectKassa.sql.replace(':d1', "'" + $scope.d1.toISOString().split('T')[0] + "'").replace(':d2', "'" + $scope.d2.toISOString().split('T')[0] + "'").replace(':p', 1)
+        const makeSelect = () => sql_app.SelectKassa.sql
+            .replace(':d1', "'" + $scope.d1.toISOString().split('T')[0] + "'")
+            .replace(':d2', "'" + $scope.d2.toISOString().split('T')[0] + "'")
+            .replace(':p', 1)
 
         $scope.b3Click = (a) => {
             console.log("b3Click")
@@ -50,7 +54,6 @@ app.controller('myCtrl',
                 })
             console.log(sql)
         }
-
 
         console.log($scope.d2.toISOString().split('T'))
         console.log(sql_app.SelectKassa.sql, $scope.d2.toISOString().split('T')[0], $scope.d1.toISOString())
