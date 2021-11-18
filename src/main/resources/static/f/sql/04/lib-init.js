@@ -1,7 +1,10 @@
 'use strict';
 var app = angular.module("app", ['ngRoute', 'ngResource', 'ngSanitize'])
 angular.element(() => angular.bootstrap(document, ['app']))
-const singlePage = {}, sql_app = {}, conf = {}
+// not for $scope
+const sql_app = {}
+// for|as $scope
+const singlePage = {}/* $route fn */, conf = {}/* conf page|app|content */
 class AbstractController { singlePage = singlePage; conf = conf; getSql = sqlName => sql_app[sqlName] }
 
 // Element_id to element map.

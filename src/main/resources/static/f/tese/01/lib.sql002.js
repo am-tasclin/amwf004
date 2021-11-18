@@ -74,8 +74,10 @@ class RouteProviderConfig {
     constructor($routeProvider) {
         // console.log('RouteProviderConfig', Object.keys(singlePage))
         angular.forEach(singlePage, (v, k) => {
-            if (!v.controllerAs) v.controllerAs = 'ctrl'
-            $routeProvider.when("/" + k, v)
+            if (v.controller) {
+                if (!v.controllerAs) v.controllerAs = 'ctrl'
+                $routeProvider.when("/" + k, v)
+            }
         })
         $routeProvider.otherwise({ template: "<h1>?</h1><p>Hi API</p>" })
     }
