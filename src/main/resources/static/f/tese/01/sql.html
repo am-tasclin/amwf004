@@ -1,4 +1,11 @@
 <!--
     <div data-ng-include="'sqlDropdown.html'"></div>
 -->
+<span class="w3-tiny am-b w3-btn w3-padding-small" data-ng-click="ctrl.conf.modalDisplay.display = 'block'">
+    sqlTable :</span>
+{{ctrl.sql_app[ctrl.conf.sqlKeyName].name}}
+<span class="w3-right w3-tiny">cnt:{{ctrl.data.list.length}}/</span>
+<pre class="w3-border w3-tiny" style="margin-top: 3px;"
+    data-ng-bind-html="ctrl.conf.sqlAppToLink(ctrl.getSql(ctrl.singlePage.UrlList()[2]).sql)">
+</pre>
 <div data-ng-include="'/f/tese/01/sqlTable.html'"></div>

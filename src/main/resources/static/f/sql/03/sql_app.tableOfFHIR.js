@@ -248,7 +248,7 @@ sql_app.tableOfFHIR_Quantity = () => {
 }
 
 sql_app.tableOfFHIR_encounter_MedicationRequest_sc_doseQuantityTimingPeriod = () => {
-    let sql = 'SELECT mrer.doc_id mrEncounter_id, mrer.reference2 mrEncounter_r2, er.reference2 basedOn \n\
+    let sql = 'SELECT mrbn.doc_id mrEncounter_id, mrer.reference2 mrEncounter_r2, er.reference2 basedOn \n\
     , mr.* FROM doc mrer \n\
     LEFT JOIN doc er ON er.parent=mrer.doc_id AND er.reference=369777 \n\
     , (:sql_app.tableOfFHIR_MedicationRequest_sc_doseQuantityTimingPeriod ) mr \n\
