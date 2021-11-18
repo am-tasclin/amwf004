@@ -20,14 +20,16 @@
         <div class="w3-border-bottom" style="height:92vh; overflow:auto;">
             <div data-ng-controller="myCtrl">
                 <div class="w3-border w3-container" style="margin-top: 5px;">
-                    <span class="w3-small am-b"> Организация: </span>
-                    <input class="w3-border" type="text" data-ng-model="firstName">
-                    <span class="w3-small am-b"> Оператор: </span>
-                    <input class="w3-border" type="text" data-ng-model="lastName">
+                    <div>
+                        <span class="w3-small am-b"> Организация: </span>
+                        <input class="w3-border" type="text" data-ng-model="firstName">
+                        <span class="w3-small am-b"> Оператор: </span>
+                        <input class="w3-border" type="text" data-ng-model="lastName">
+                    </div>
                     <span class="w3-small am-b"> Період: </span>
                     <input class="w3-border" type="date" data-ng-model="d1"> -
                     <input class="w3-border" type="date" data-ng-model="d2">
-                    <button class="w3-btn w3-padding-small w3-grey w3-round" data-ng-click="b3Click()">ОК</button>
+                    <button style="width: 130px;" class="w3-btn w3-padding-small w3-grey w3-round" data-ng-click="b3Click()">ОК</button>
                 </div>
 
 
