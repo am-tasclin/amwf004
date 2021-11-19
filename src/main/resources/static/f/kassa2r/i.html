@@ -85,6 +85,7 @@
                         <table>
                             <thead class="w3-tiny am-b">
                                 <tr>
+                                    <th></th>
                                     <th>"№№" </th>
                                     <th>Дата </th>
                                     <th>Сумма </th>
@@ -97,7 +98,7 @@
                             <tbody class="w13-small">
                                 <tr class="w3-hover-shadow" data-ng-repeat="(k,r) in data.list">
                                     <td>{{k}}</td>
-                                    <td data-ng-repeat="(k,v) in r" class="w3-border"  data-am:sql:html>
+                                    <td data-ng-repeat="(k,v) in r" class="w3-border" data-am:sql:html>
                                         {{v}}
                                     </td>
                                 </tr>
