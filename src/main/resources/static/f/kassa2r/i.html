@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="/f/css/am.css">
 <link rel="shortcut icon" href="/f/img/algoritmed.ico" type="image/x-icon">
 <script src="/webjars/angular/1.8.2/angular.min.js" type="application/javascript"></script>
+<script src="/webjars/angular-i18n/1.8.2/angular-locale_uk-ua.js" type="application/javascript"></script>
 <script src="lib-init.js" type="application/javascript"></script>
 <script src="/f/kassa2r/config.sql.js" type="application/javascript"></script>
 <script src="i.js" type="application/javascript"> </script>
@@ -96,7 +97,7 @@
                             <tbody class="w13-small">
                                 <tr class="w3-hover-shadow" data-ng-repeat="(k,r) in data.list">
                                     <td>{{k}}</td>
-                                    <td data-ng-repeat="(k,v) in r" class="w3-border">
+                                    <td data-ng-repeat="(k,v) in r" class="w3-border"  data-am:sql:html>
                                         {{v}}
                                     </td>
                                 </tr>

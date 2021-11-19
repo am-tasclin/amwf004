@@ -1,5 +1,7 @@
 'use strict';
 //var app = angular.module('myApp', []); // see lib-init.js
+app.directive('amSqlHtml', AmSqlHtml)
+
 app.controller('myCtrl',
     function ($scope, $http) {
         $scope.firstName = "ФОП Глобус";
@@ -8,6 +10,7 @@ app.controller('myCtrl',
         $scope.d2 = new Date('2022-02-02')
         $scope.d3 = new Date()
         $scope.myNumb = 0
+        conf.sqlKeyName = 'SelectKassa'
 
         $scope.b1Click = (a) => {
             console.log("b11111click", $scope.myNumb)
@@ -65,6 +68,7 @@ app.controller('myCtrl',
         $http.get('/r/url_sql_read_db1'
             , { params: { sql: sql } }).then((responce) => {
                 $scope.data = responce.data
+                console.log(responce.data)
             })
     }
 )

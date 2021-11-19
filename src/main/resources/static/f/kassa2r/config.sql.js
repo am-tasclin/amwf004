@@ -5,6 +5,9 @@ sql_app.SelectKassa = {
     sql: 'SELECT idNom, DateProv, SumaProv, IdNomKassOp, NameKassop, IdNomVal,NameVal,Pr_rasx, IdDoc  \n\
     FROM kassa.finans \n\
     WHERE DateProv >=:d1 and DateProv<=:d2 and Pr_rasx=:p ',
+    sqlHtml: {
+        dateprov: "{{v | date : 'medium'}}",
+	},
 }
 
 sql_app.AddKassa = {

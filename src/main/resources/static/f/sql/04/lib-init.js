@@ -4,7 +4,8 @@ angular.element(() => angular.bootstrap(document, ['app']))
 // not for $scope
 const sql_app = {}
 // for|as $scope
-const singlePage = {}/* $route fn */, conf = {}/* conf page|app|content */
+const singlePage = {}/* $route fn */
+    , conf = {}/* conf page|app|content */
 class AbstractController { singlePage = singlePage; conf = conf; getSql = sqlName => sql_app[sqlName] }
 
 // Element_id to element map.
@@ -123,7 +124,7 @@ class AmEmrLink {
             let innerHtml
             if (a.emrid) {
                 innerHtml = '<a  class="w3-hover-shadow am-0u" \n\
-                data-ng-click="ctrl.clickedId('+a.emrid+')" \n\
+                data-ng-click="ctrl.clickedId('+ a.emrid + ')" \n\
                 data-ng-class="{\'w3-green\':' + a.emrid
                     + '==ctrl.singlePage.LastUrlId()}" \n\
                 href="#!{{ctrl.singlePage.UrlOnOff(\'emr_' + a.emrid + '\', 2)}}" >'
