@@ -37,8 +37,10 @@
                 </span>
                 {{ctrl.conf.patient?'':"<Ім'я Пацієнта>"}}
             </span>
+
             <div class="am-max-width-1" data-ng-view></div>
             <p></p>
+
             <div class="w3-card w3-topbar">
                 <div class="w3-light-gray w3-container">
                     <span class="w3-tiny am-b">
@@ -46,6 +48,13 @@
                     </span>
                 </div>
                 --
+                <div data-ng-repeat="pd in ctrl.conf.plandefinition">
+                    <a href="#!{{ctrl.singlePage.UrlOnOff('pd_'+pd.pd_id,3)}}" class="am-0u">
+                        <div class="w3-hover-shadow"> {{pd.pd_name}}
+                            <span class="w3-tiny">{{pd.tr_name}}</span>
+                        </div>
+                    </a>
+                </div>
             </div>
         </div>
     </div>

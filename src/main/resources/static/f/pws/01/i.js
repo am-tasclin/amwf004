@@ -21,11 +21,34 @@ contentDoc.readHystoryElements = {
     encounter: { sql: 'Encounter_Patient' },
     mrEncounter: { sql: 'encounter_MedicationRequest_sc_doseQuantityTimingPeriod' },
 }
+contentDoc.readPlanDefinitionElements = {
+    pd_action: { sql: 'PlanDefinition_action_title' },
+}
 sql_app.actuelEMR_PD_Trigger_DataRequirement_type_path = {
     name: 'ЕМЗ елемент > Сценарії-плани > tригери > необхідні дані тип шлях',
     sql: 'SELECT * FROM (:sql_app.PD_Trigger_DataRequirement_type_path ) x \n\
     WHERE dr_type_def_id=:x AND codefilter_path_def_id=:y',
 }
+
+// app.controller("PlanDefinitionController", PlanDefinitionController)
+class PlanDefinitionController extends SqlAbstractController {
+    constructor(dataFactory) {
+        super(dataFactory)
+        angular.forEach(contentDoc.readPlanDefinitionElements,
+            (v, k) => dataFactory.httpGetSql({ sql: readSql2R(v.sql) })
+                .then(dataSqlRequest => conf[k] = dataSqlRequest.list)
+        )
+    }
+}
+app.controller("PlanDefinitionController", PlanDefinitionController)
+
+angular.forEach(['hy_:pt_id/emr_:emr_id/pd_:pd_id'], element => {
+    singlePage[element] = {
+        templateUrl: 'hy.html',
+        controller: 'PlanDefinitionController',
+    }
+})
+
 
 // app.controller("HistoryProcessController", HistoryProcessController)
 class HistoryProcessController extends SqlAbstractController {
@@ -50,6 +73,7 @@ class HistoryProcessController extends SqlAbstractController {
                 // console.log(sql)
                 this.dataFactory.httpGetSql({ sql: sql }).then(dataSqlRequest => {
                     console.log(dataSqlRequest)
+                    conf['plandefinition'] = dataSqlRequest.list
                 })
             }
         }, timeoutMs);

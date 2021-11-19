@@ -12,8 +12,11 @@ class InitFHIResourceController extends AbstractController {
         let tag = 'pd', tag_id = 1 * singlePage.PseudoRESTKey('pd_')[0].split('_')[1]
         console.log(tag, tag_id)
         let sqlOt = sql_app[conf.FHIR.pd.sqlName]
+        
+        console.log(conf.FHIR.pd, conf.FHIR.pd.sqlName)
         let sql = 'SELECT * FROM (' + sqlOt.sql + ') x  WHERE ' + conf.FHIR_app.TagIdName(tag) + ' = ' + tag_id
-        // console.log(123, singlePage.Url(), conf.FHIR.pd.sqlName, sql)
+        console.log(sql)
+        console.log(123, singlePage.Url(), conf.FHIR.pd.sqlName)
         this.dataBeFactory.httpGet({ sql: sql }).then(dataSqlRequest => {
             // console.log(dataSqlRequest, 1)
             conf.FHIR[tag].currEl = dataSqlRequest.list[0]

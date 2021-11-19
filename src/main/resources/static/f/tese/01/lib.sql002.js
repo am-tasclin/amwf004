@@ -100,7 +100,9 @@ singlePage.UrlParamKeyValue = (key) => singlePage.UrlParamKey(key).length > 0 ? 
 // singlePage.LastUrlTag = () => singlePage.LastUrl().split('_')[0]
 // singlePage.LastUrlId = () => singlePage.LastUrl().split('_')[1]
 
-singlePage.UrlOnOff = (s, p) => singlePage.Url().includes(s) ? singlePage.UrlList().slice(0, p).join('/') : singlePage.UrlList().slice(0, p).concat([s]).join('/')
+singlePage.UrlOnOff = (s, p) => singlePage.Url().includes(s)
+    ? singlePage.UrlList().slice(0, p).join('/')
+    : singlePage.UrlList().slice(0, p).concat([s]).join('/')
 // singlePage.UrlOnOff = s => singlePage.Url().includes(s)?singlePage.Url().replace(s,''):(singlePage.Url()+s)
 
 conf.sqlAppToLink = text =>

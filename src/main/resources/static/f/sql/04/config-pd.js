@@ -1,5 +1,5 @@
 'use strict';
-const conf = {}
+//const conf = {}
 conf.FHIR_app = {}
 conf.FHIR_app.TagIdName = tag =>
     conf.FHIR[tag].frname.toLowerCase() + '_id'

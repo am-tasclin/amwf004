@@ -1,5 +1,6 @@
 'use strict';
 var app = angular.module("app", ['ngRoute', 'ngResource', 'ngSanitize'])
+//app - angylar module to root Element <HTML>
 angular.element(() => angular.bootstrap(document, ['app']))
 // not for $scope
 const sql_app = {}
@@ -104,22 +105,23 @@ class DataDBexchangeService {
     }
 }
 
-class AmSqlHtml {
+class AmAttDirection { restrict = 'A' }
+class AmSqlHtml extends AmAttDirection {
     constructor($compile) {
+        super()
         this.link = (s, e) => {
             let sqlE = sql_app[conf.sqlKeyName]
-            if (sqlE.sqlHtml)
-                if (sqlE.sqlHtml[s.k] != null) {
-                    e.html(sqlE.sqlHtml[s.k])
-                    $compile(e.contents())(s)
-                }
+            if (sqlE.sqlHtml && sqlE.sqlHtml[s.k] != null) {
+                e.html(sqlE.sqlHtml[s.k])
+                $compile(e.contents())(s)
+            }
         }
     }
-    restrict = 'A'
 }
 
-class AmEmrLink {
+class AmEmrLink extends AmAttDirection {
     constructor($compile) {
+        super()
         this.link = (s, e, a) => {
             let innerHtml
             if (a.emrid) {
@@ -136,5 +138,4 @@ class AmEmrLink {
             }
         }
     }
-    restrict = 'A'
 }
