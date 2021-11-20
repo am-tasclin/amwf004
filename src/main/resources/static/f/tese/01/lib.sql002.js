@@ -22,9 +22,11 @@ class SqlAbstractController extends AbstractController {
         super()
         this.dataFactory = dataFactory
     }
-    getChoisedListItem = () => !sql_app.simpleSQLselect ? '' :
-        sql_app.simpleSQLs[sql_app.simpleSQLselect].choisedListItem
 }
+
+SqlAbstractController.getChoisedListItem =
+    () => !sql_app.simpleSQLselect ? '' :
+        sql_app.simpleSQLs[sql_app.simpleSQLselect].choisedListItem
 
 // app.controller("SqlController", SqlController)
 class SqlController extends SqlAbstractController {

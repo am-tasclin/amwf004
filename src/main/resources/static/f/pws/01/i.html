@@ -54,6 +54,12 @@
                             <span class="w3-tiny">{{pd.tr_name}}</span>
                         </div>
                     </a>
+                    <div class="w3-container w3-border-left" data-ng-if="pd.pd_id==ctrl.singlePage.UrlMap()['pd']">
+                        аction
+                        <div data-ng-repeat="pda in ctrl.conf.pd_action" data-ng-if="pd.pd_id==pda.pd_id">
+                            {{pda.title_id}} - {{pda.action_title}}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
