@@ -1,0 +1,43 @@
+<span class="w3-small am-b"> Створення проводки</span>
+<table class="w3-light-gray w3-card">
+    <tbody>
+        <tr>
+            <td>Дата проводки </td>
+            <td><input type="date" data-ng-model="d3"> </td>
+        </tr>
+        <tr>
+            <td>Сумма r </td>
+            <td><input data-ng-model="myNumb" type="number"> </td>
+        </tr>
+
+        <tr>
+            <td>
+                <input type="checkbox" data-ng-model="value1" id="vt">
+                <label for="vt">Валюта</label>
+            </td>
+            <td>
+                <input type="radio" ng-model="Nal" id="nl" value="Нал">
+                <label for="nl">Нал</label>/
+                <input type="radio" ng-model="Nal" id="bn" value="БезНал">
+                <label for="bn">БезНал</label>
+            </td>
+        </tr>
+        <tr>
+            <td>Контрагент++</td>
+            <td> <input type="" ng-model="s1"> </td>
+        </tr>
+        <tr>
+            <td>Кассовая операция</td>
+        </tr>
+        <tr>
+            <td> <button class="w3-btn w3-grey" data-ng-click="b1Click()">Создать
+                    проводку
+                </button>
+            </td>
+            <td> <button class="w3-btn w3-grey" data-ng-click="b2Click()">Удалить
+                    проводку
+                </button>
+            </td>
+        </tr>
+    </tbody>
+</table>

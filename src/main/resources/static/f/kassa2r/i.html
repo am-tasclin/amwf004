@@ -30,81 +30,13 @@
                     <span class="w3-small am-b"> Період: </span>
                     <input class="w3-border" type="date" data-ng-model="d1"> -
                     <input class="w3-border" type="date" data-ng-model="d2">
-                    <button style="width: 130px;" class="w3-btn w3-padding-small w3-grey w3-round" data-ng-click="b3Click()">ОК</button>
+                    <button style="width: 130px;" class="w3-btn w3-padding-small w3-grey w3-round"
+                        data-ng-click="b3Click()">ОК</button>
                 </div>
-
                 <div class="w3-row">
-                    <div class="w3-col" style="width:400px">
-                        <span class="w3-small am-b">
-                            Створення проводки
-                        </span>
-                        <table class="w3-light-gray w3-card">
-                            <tbody>
-                                <tr>
-                                    <td>Дата проводки </td>
-                                    <td><input type="date" data-ng-model="d3"> </td>
-                                </tr>
-                                <tr>
-                                    <td>Сумма r </td>
-                                    <td><input data-ng-model="myNumb" type="number"> </td>
-                                </tr>
-                                
-                                <tr>
-                                    <td>
-                                        <input type="checkbox" data-ng-model="value1" id="vt">
-                                        <label for="vt">Валюта</label>
-                                    </td>
-                                    <td>
-                                        <input type="radio" ng-model="Nal" id="nl" value="Нал">
-                                        <label for="nl">Нал</label>/
-                                        <input type="radio" ng-model="Nal" id="bn" value="БезНал">
-                                        <label for="bn">БезНал</label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Контрагент++</td>
-                                    <td> <input type="" ng-model="s1"> </td>
-                                </tr>
-                                <tr>
-                                    <td>Кассовая операция</td>
-                                </tr>
-                                <tr>
-                                    <td> <button class="w3-btn w3-grey" data-ng-click="b1Click()">Создать
-                                            проводку
-                                        </button>
-                                    </td>
-                                    <td> <button class="w3-btn w3-grey" data-ng-click="b2Click()">Удалить
-                                            проводку
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="w3-col" style="width:400px" data-ng-include="'insert-kassa.html'">
                     </div>
-                    <div class="w3-rest w3-container w3-border-left">
-                        <table>
-                            <thead class="w3-tiny am-b">
-                                <tr>
-                                    <th></th>
-                                    <th>"№№" </th>
-                                    <th>Дата </th>
-                                    <th>Сумма </th>
-                                    <th>Валюта </td>
-                                    <th>Контрагент </th>
-                                    <th>Номер док </th>
-                                    <th>Касова оп. </th>
-                                </tr>
-                            </thead>
-                            <tbody class="w13-small">
-                                <tr class="w3-hover-shadow" data-ng-repeat="(k,r) in data.list">
-                                    <td>{{k}}</td>
-                                    <td data-ng-repeat="(k,v) in r" class="w3-border"
-                                     data-am-sql-html>
-                                        {{v}}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="w3-rest w3-container w3-border-left" data-ng-include="'table-kassa.html'">
                     </div>
                 </div>
             </div>
