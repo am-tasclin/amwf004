@@ -47,7 +47,7 @@
                         Ведення <span title="Електроних медичних записів" class="am-u">ЕМЗ</span>:
                     </span>
                 </div>
-                --
+                <span class="w3-tiny am-b">план/сценарій</span>
                 <div data-ng-repeat="pd in ctrl.conf.plandefinition">
                     <a href="#!{{ctrl.singlePage.UrlOnOff('pd_'+pd.pd_id,3)}}" class="am-0u">
                         <div class="w3-hover-shadow"> {{pd.pd_name}}
@@ -55,9 +55,11 @@
                         </div>
                     </a>
                     <div class="w3-container w3-border-left" data-ng-if="pd.pd_id==ctrl.singlePage.UrlMap()['pd']">
-                        аction
-                        <div data-ng-repeat="pda in ctrl.conf.pd_action" data-ng-if="pd.pd_id==pda.pd_id">
-                            {{pda.title_id}} - {{pda.action_title}}
+                        <span class="w3-tiny am-b">аction</span>
+                        <div class="w3-hover-shadow" data-ng-repeat="pda in ctrl.conf.pd_action"
+                            data-ng-if="pd.pd_id==pda.pd_id">
+                            <span class="w3-tiny"> {{pda.title_id}} &nbsp;</span>
+                            {{pda.action_title}}
                         </div>
                     </div>
                 </div>

@@ -1,10 +1,10 @@
 'use strict'
-app.factory("dataBeFactory", DataDBexchangeService)
-app.factory("editFRFactory", EditFHIResourceService)
-app.config(RouteProviderConfig)
-app.controller("InitFHIResourceController", InitFHIResourceController)
+app.config(RouteProviderFHIRConfig)
 app.directive('amSqlHtml', AmSqlHtml)
 app.directive('amEmrLink', AmEmrLink)
+app.factory("dataBeFactory", DataDBexchangeService)
+app.factory("editFRFactory", EditFHIResourceService)
+app.controller("InitFHIResourceController", InitFHIResourceController)
 
 // app.controller("PlanDefinitionController", PlanDefinitionController)
 class PlanDefinitionController extends InitFHIResourceController {

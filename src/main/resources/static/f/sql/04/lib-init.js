@@ -128,7 +128,7 @@ class AmEmrLink extends AmAttDirection {
                 innerHtml = '<a  class="w3-hover-shadow am-0u" \n\
                 data-ng-click="ctrl.clickedId('+ a.emrid + ')" \n\
                 data-ng-class="{\'w3-green\':' + a.emrid
-                    + '==ctrl.singlePage.LastUrlId()}" \n\
+                    + '==ctrl.singlePage.UrlMap()[\'emr\']}" \n\
                 href="#!{{ctrl.singlePage.UrlOnOff(\'emr_' + a.emrid + '\', 2)}}" >'
                     + e[0].innerHTML + ' </a>'
             }

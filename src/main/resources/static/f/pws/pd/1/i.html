@@ -12,28 +12,29 @@
     <script src="/webjars/angular-route/1.8.2/angular-route.min.js" type="application/javascript"></script>
     <script src="/webjars/angular-resource/1.8.2/angular-resource.min.js" type="application/javascript"></script>
     <script src="/webjars/angular-sanitize/1.8.2/angular-sanitize.min.js" type="application/javascript"></script>
-    <!--
-        <script src="/f/tese/01/lib.sql002.js" type="application/javascript"></script>
-    -->
     <script src="/f/sql/04/lib-init.js" type="application/javascript"></script>
-    <script src="config-pd.js" type="application/javascript"></script>
-    <script src="/f/tese/01/config.sql.js" type="application/javascript"></script>
     <script src="/f/tese/01/lib.sql002.js" type="application/javascript"></script>
-    <script src="libFHIR004.js" type="application/javascript"></script>
-    <script src="pd.js" type="application/javascript"></script>
+    <script src="/f/tese/01/config.sql.js" type="application/javascript"></script>
+    <script src="/f/sql/04/config-pd.js" type="application/javascript"></script>
+
+    <script src="i.js" type="application/javascript"></script>
 </head>
 
-<body class="w3-container" data-ng-keydown="[27].includes($event.keyCode) && ctrl.keyDownEsc()">
-    <div class="w3-border-bottom am-max-width-1">
-        <a href="/" class="w3-btn w3-border w3-padding-small w3-small">↑</a>
-        <span class="w3-tiny am-b" title="v.04 Workflow - Resource-FHIR-editor">Workflow-editor</span>&nbsp;⁙
-        <span data-ng-repeat="(k,v) in ctrl.conf.FHIR" class="w3-small">
-            <a href="#!/{{k}}" data-ng-class="{
-                'w3-light-gray':ctrl.singlePage.Url().includes(k),
-                'w3-border-bottom w3-border-amber':k==ctrl.singlePage.LastUrl()}"> {{v.frname}} </a>
-            {{k!=ctrl.singlePage.LastUrl()&&ctrl.singlePage.Url().includes(k)?'>':'|'}}
-        </span>
-        <div class="w3-border-bottom" style="height:90vh; overflow:auto;" ng-view></div>
+<body class="w3-container">
+    <div class="am-max-width-1">
+        <div class="w3-border-bottom">
+            <a href="/" class="w3-btn w3-border w3-padding-small w3-small">↑</a>
+            <span class="w3-tiny am-b" title="v.05 Workflow - Resource-FHIR-editor">Workflow-editor</span> ⁙
+            <span data-ng-repeat="(k,v) in ctrl.conf.FHIR" class="w3-small">
+                <a href="#!/{{k}}" data-ng-class="{
+                    'w3-light-gray':ctrl.singlePage.Url().includes(k),
+                    'w3-border-bottom w3-border-amber':k==ctrl.singlePage.LastUrl()}"> {{v.frname}} </a>
+                {{k!=ctrl.singlePage.LastUrl()&&ctrl.singlePage.Url().includes(k)?'>':'|'}}
+            </span>
+        </div>
+        <div data-ng-view class="w3-border-bottom" style="height:90vh; overflow:auto;">
+            a1
+        </div>
         ⁙
         <div class="w3-right">
             <a class="am-0u" href="/f/wf001/w.html?p=371903">
@@ -42,6 +43,5 @@
             </a>
         </div>
     </div>
+    </div>
 </body>
-
-</html>

@@ -15,8 +15,9 @@
 		<span class="w3-tiny am-i"> {{e.dmtitle}} </span>
 		<div class="w3-container w3-border-left">
 			<div data-ng-repeat="er in ctrl.conf.encounter" data-ng-if="e.episode_id==er.episodeofcare_r2">
-				
-				<span class="am-u w3-small w3-hover-shadow" data-ng-click="ctrl.clicEncounter(er)"
+
+				<span title="{{er.encounter_id}}" class="am-u w3-small w3-hover-shadow"
+					data-ng-click="ctrl.clicEncounter(er)"
 					data-ng-class="{'w3-green':ctrl.conf.clickedElement.encounter_id==er.encounter_id}">
 					{{er.tsps_v | date : 'shortTime'}}{{er.tsps_v | date : ' EEE, d'}}</span>
 
@@ -27,7 +28,7 @@
 					data-ng-click="ctrl.clicDiagnose(er)">
 					<span class="w3-small am-b">Дз:</span>
 
-					<span data-emrid="{{er.dgcondition_id}}" data-p="2"  data-am:emr:link>{{er.dgcondition_code}}:
+					<span data-emrid="{{er.dgcondition_id}}" data-p="2" data-am:emr:link>{{er.dgcondition_code}}:
 						{{er.dgcondition_i18n}}</span>
 				</div>
 				<div data-ng-repeat="mr in ctrl.conf.mrEncounter" data-ng-if="mr.mrencounter_r2==er.encounter_id">
