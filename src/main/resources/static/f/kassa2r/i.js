@@ -11,6 +11,10 @@ app.controller('myCtrl',
         $scope.d3 = new Date()
         $scope.myNumb = 0
         conf.sqlKeyName = 'SelectKassa'
+        $scope.n1 = 'insert-kassa.html'
+        $scope.n2 = 'table-kassa.html'
+        $scope.Vrec = 0
+        $scope.Vsum = 0
 
         $scope.b1Click = (a) => {
             console.log("b11111click", $scope.myNumb)
@@ -46,6 +50,27 @@ app.controller('myCtrl',
             .replace(':d1', "'" + $scope.d1.toISOString().split('T')[0] + "'")
             .replace(':d2', "'" + $scope.d2.toISOString().split('T')[0] + "'")
             .replace(':p', 1)
+
+        const makeGroupSelect = () => sql_app.GroupKassa.sql
+            .replace(':d1', "'" + $scope.d1.toISOString().split('T')[0] + "'")
+            .replace(':d2', "'" + $scope.d2.toISOString().split('T')[0] + "'")
+            .replace(':p', 1)
+
+
+        $scope.b4Сlick = (a) => {
+            console.log("b4 - group")
+            sql = makegroupSelect()
+
+            $http.get('/r/url_sql_read_db1'
+                , { params: { sql: sql } }).then((responce) => {
+                    $scope.data = responce.data
+                    $scope.Vrec = responce.data.list1.count
+                })
+            console.log(Vrec)
+
+
+        }
+
 
         $scope.b3Click = (a) => {
             console.log("b3Click")
