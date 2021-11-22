@@ -10,7 +10,8 @@ sql_app.FHIRs_Group = {
 }
 sql_app.FHIR_PlanDefinition = {
     name:'Означення плана',
-    sql:'SELECT value, d.doc_id plandefinition_id, d.* FROM doc d \n\
+    sql:'SELECT value, d.doc_id plandefinition_id \n\
+    , d.doc_id pd_id, d.* FROM doc d \n\
     LEFT JOIN string ON string_id=doc_id \n\
     WHERE reference=371998', //☰ [371998]   name:371997 -  [368815] PlanDefinition
 }
