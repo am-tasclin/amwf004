@@ -24,7 +24,7 @@ app.controller("PlanDefinitionController", PlanDefinitionController)
 class InitPageController extends AbstractController {
     constructor($scope, $route, $routeParams) {
         super()
-        // console.log(singlePage.Url(), Object.keys($route.routes))
+        //console.log(singlePage.Url(), Object.keys($route.routes))
     }
 }
 app.controller("InitPageController", InitPageController)

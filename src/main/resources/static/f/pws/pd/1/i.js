@@ -1,12 +1,30 @@
 'use strict'
 app.config(RouteProviderFHIRConfig)
-app.factory("dataBeFactory", DataDBexchangeService)
-class InitPageController extends AbstractController {
-    constructor($route) {
-        super()
-        // console.log(Object.keys($route.routes)) // NOT DELETE
+class PlDefDataFactory extends DataDBexchangeService {
+    constructor($http, $q, $resource) {
+        super($http, $q, $resource)
+        this.readActivityDefinition = () => {
+            console.log(conf.FHIR.ad, singlePage.UrlMap()['ad'])
+        }
+        this.readPlanDefinition = () => {
+            console.log(conf.FHIR.pd, singlePage.UrlMap()['pd'])
+            let makeSql = sqlName => replaceSql(
+                sql_app.PlanDefinitionById.buildSql(sqlName, singlePage.UrlMap()['pd']))
+            this.httpGet({ sql: makeSql(conf.FHIR.pd.sqlName) }).then(dataSqlRequest => {
+                conf.FHIR.pd.currEl = dataSqlRequest.list[0]
+                angular.forEach(conf.FHIR.pd.sql_app_children, (v, sqlName) => {
+                    this.httpGet({ sql: makeSql(sqlName) }).then(dataSqlRequest => {
+                        if (!conf.FHIR.pd.currEl.sql_app_children)
+                            conf.FHIR.pd.currEl.sql_app_children = {}
+                        conf.FHIR.pd.currEl.sql_app_children[sqlName] = dataSqlRequest.list
+                    })
+                })
+            })
+        }
     }
 }
+app.factory("dataBeFactory", PlDefDataFactory)
+
 sql_app.PlanDefinitionById = {
     name: 'План/сценарій по Id',
     sql: 'SELECT * FROM (:sql_app.sql_x ) x \n\
@@ -19,24 +37,24 @@ sql_app.PlanDefinitionById = {
 class PlanDefinitionController extends AbstractController {
     constructor(dataBeFactory) {
         super()
-        console.log(conf.FHIR.pd)
-        dataBeFactory.httpGet({
-            sql: replaceSql(sql_app.PlanDefinitionById
-                .buildSql(conf.FHIR.pd.sqlName, singlePage.UrlMap()['pd']))
-        }).then(dataSqlRequest => {
-            conf.FHIR.pd.currEl = dataSqlRequest.list[0]
-            angular.forEach(conf.FHIR.pd.sql_app_children, (v, sqlName) => {
-                dataBeFactory.httpGet({
-                    sql: replaceSql(sql_app.PlanDefinitionById
-                        .buildSql(sqlName, singlePage.UrlMap()['pd']))
-                }).then(dataSqlRequest => {
-                    if (!conf.FHIR.pd.currEl.sql_app_children)
-                        conf.FHIR.pd.currEl.sql_app_children = {}
-                    conf.FHIR.pd.currEl.sql_app_children[sqlName] = dataSqlRequest.list
-                })
-            })
-        })
+        if (singlePage.UrlMap()['pd']) dataBeFactory.readPlanDefinition()
     }
 }
-app.controller("InitPageController", InitPageController)
+class ActivityDefinitionController extends AbstractController {
+    constructor(dataBeFactory) {
+        super()
+        console.log(123)
+        if (singlePage.UrlMap()['pd']) dataBeFactory.readPlanDefinition()
+        if (singlePage.UrlMap()['ad']) dataBeFactory.readActivityDefinition()
+    }
+}
+class InitPageController extends AbstractController {
+    constructor($route) {
+        super()
+        // console.log(Object.keys($route.routes)) // NOT DELETE
+    }
+}
+
 app.controller("PlanDefinitionController", PlanDefinitionController)
+app.controller("ActivityDefinitionController", ActivityDefinitionController)
+app.controller("InitPageController", InitPageController)

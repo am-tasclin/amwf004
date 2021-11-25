@@ -22,6 +22,7 @@ conf.FHIR.pd = {
 }
 conf.FHIR.ad = {
     frname: 'ActivityDefinition',
+    controller: 'ActivityDefinitionController',
     children: ['tk'],
 }
 conf.FHIR.tk = {
