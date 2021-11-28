@@ -33,45 +33,65 @@ sql_app.actuelEMR_PD_Trigger_DataRequirement_type_path = {
 }
 
 const sqlForOnePatient = 'SELECT * FROM (:sql ) p WHERE patient_id = :patient_id'
+let timeoutMs = 0
 class PWSDataFactory extends DataFactory {
-    constructor($http, $q, $timeout) {
-        super($http, $q)
-        let timeoutMs = 0
-        const read = (sql2Name, confKey) => this.httpGetSql({
-            sql: sqlForOnePatient.replace(':sql ', readSql2R(sql2Name))
-                .replace(':patient_id', singlePage.FirstUrlId() || singlePage.UrlParamKeyValue('pt'))
-        }).then(dataSqlRequest => {
-            conf[confKey] = dataSqlRequest.list
-            addEMap(conf[confKey], confKey)
-            angular.forEach(contentDoc.readEMR[confKey].emr
-                , v => addEMap(conf[confKey], v))
-        })
-        this.readPatient = () => {
-            if (!conf.patient) {
-                console.log(singlePage.UrlMap()['hy'])
-                angular.forEach(contentDoc.readEMR, (v, k) => read(v.sql, k))
-                timeoutMs = 200
-            } else if (conf.patient[0].patient_id == singlePage.UrlMap()['hy']) {
-                timeoutMs = 0
-                console.log(timeoutMs, conf.patient[0].patient_id == singlePage.UrlMap()['hy'])
-            }
-        }
-        this.runTrigger = () => {
-            $timeout(() => {
-                let emrEl = conf.eMap[singlePage.UrlMap()['emr']]
-                console.log(emrEl, timeoutMs)
-                if (emrEl && emrEl.el_def_id && emrEl.el_att_def_id) {//triggered by FHIR.path
-                    let sql = readSql2R('actuelEMR_PD_Trigger_DataRequirement_type_path')
-                        .replace(':x', emrEl.el_def_id).replace(':y', emrEl.el_att_def_id)
-                    // console.log(sql)
-                    this.httpGetSql({ sql: sql })
-                        .then(dataSqlRequest => conf['plandefinition'] = dataSqlRequest.list)
-                } else {
-                    delete conf['plandefinition']
-                }
-            }, timeoutMs)
+    $timeout
+    constructor($http, $q, $timeout) { super($http, $q); this.$timeout = $timeout }
+    read = (sql2Name, confKey) => this.httpGetSql({
+        sql: sqlForOnePatient.replace(':sql ', readSql2R(sql2Name))
+            .replace(':patient_id', singlePage.FirstUrlId() || singlePage.UrlParamKeyValue('pt'))
+    }).then(dataSqlRequest => {
+        conf[confKey] = dataSqlRequest.list
+        addEMap(conf[confKey], confKey)
+        angular.forEach(contentDoc.readEMR[confKey].emr
+            , v => addEMap(conf[confKey], v))
+    })
+    readPatient = () => {
+        if (!conf.patient) {
+            console.log(singlePage.UrlMap()['hy'], 111)
+            angular.forEach(contentDoc.readEMR, (v, k) => this.read(v.sql, k))
+            timeoutMs = 200
+        } else if (conf.patient[0].patient_id == singlePage.UrlMap()['hy']) {
+            timeoutMs = 0
+            console.log(timeoutMs, conf.patient[0].patient_id == singlePage.UrlMap()['hy'])
         }
     }
+    runTrigger = () => {
+        this.$timeout(() => {
+            let emrEl = conf.eMap[singlePage.UrlMap()['emr']]
+            console.log(emrEl, timeoutMs)
+            if (emrEl && emrEl.el_def_id && emrEl.el_att_def_id) {//triggered by FHIR.path
+                let sql = readSql2R('actuelEMR_PD_Trigger_DataRequirement_type_path')
+                    .replace(':x', emrEl.el_def_id).replace(':y', emrEl.el_att_def_id)
+                // console.log(sql)
+                this.httpGetSql({ sql: sql })
+                    .then(dataSqlRequest => conf['plandefinition'] = dataSqlRequest.list)
+            } else {
+                delete conf['plandefinition']
+            }
+        }, timeoutMs)
+    }
+}
+angular.forEach(['hy_:pt_id/emr_:emr_id/pd_:pd_id', 'hy_:pt_id/emr_:emr_id/pd_:pd_id/pda_:pda_id']
+    , element => {
+        singlePage[element] = {
+            templateUrl: 'hy.html',
+            controller: 'PlanDefinitionController',
+        }
+    })
+angular.forEach(['hy', 'hy_:pt_id', 'hy_:pt_id/emr_:emr_id'], element => {
+    singlePage[element] = {
+        templateUrl: 'hy.html',
+        controller: 'HistoryProcessController',
+    }
+})
+singlePage['tp'] = {
+    templateUrl: 'tp.html',
+    controller: 'TherapyProcessController',
+}
+singlePage['pl'] = {
+    templateUrl: '/f/tese/01/sql.html',
+    controller: 'PatientListController',
 }
 // app.controller("PlanDefinitionController", PlanDefinitionController)
 class PlanDefinitionController extends AbstractController {
@@ -85,12 +105,6 @@ class PlanDefinitionController extends AbstractController {
                 .then(dataSqlRequest => conf[k] = dataSqlRequest.list))
     }
 }
-angular.forEach(['hy_:pt_id/emr_:emr_id/pd_:pd_id'], element => {
-    singlePage[element] = {
-        templateUrl: 'hy.html',
-        controller: 'PlanDefinitionController',
-    }
-})
 class HistoryProcessController extends AbstractController {
     constructor(dataFactory) {
         super()
@@ -98,7 +112,6 @@ class HistoryProcessController extends AbstractController {
         dataFactory.readPatient()
         dataFactory.runTrigger()
     }
-
     clickedId = (id) => conf.clickedId = id
     clicEpisode = (ee) => {
         console.log(ee)
@@ -115,31 +128,11 @@ class HistoryProcessController extends AbstractController {
         console.log(er.reason_id, er.reason_code_id, er)
     }
 }
-angular.forEach(['hy', 'hy_:pt_id', 'hy_:pt_id/emr_:emr_id'], element => {
-    singlePage[element] = {
-        templateUrl: 'hy.html',
-        controller: 'HistoryProcessController',
-    }
-})
-class EMRProcessController extends AbstractController {
-    constructor(dataFactory) {
-        super()
-        console.log('EMRProcessController')
-    }
-}
-singlePage['emz'] = {
-    templateUrl: 'emz.html',
-    controller: 'EMRProcessController',
-}
 class TherapyProcessController extends AbstractController {
     constructor(dataFactory) {
         super()
         console.log('TherapyProcessController')
     }
-}
-singlePage['tp'] = {
-    templateUrl: 'tp.html',
-    controller: 'TherapyProcessController',
 }
 class PatientListController extends AbstractController {
     constructor(dataFactory) {
@@ -155,11 +148,6 @@ class PatientListController extends AbstractController {
     }
     // sql_app = sql_app
 }
-singlePage['pl'] = {
-    templateUrl: '/f/tese/01/sql.html',
-    controller: 'PatientListController',
-}
-
 sql_app.Patient_family_name.sqlHtml = {
     patient_id: '<a data-ng-click="ctrl.clickPatient(r)" href="#!/hy_{{r.patient_id}}"> {{r[k]}} </a>',
 }
@@ -174,6 +162,5 @@ app.factory("dataFactory", PWSDataFactory)
 app.controller("InitPageController", InitPageController)
 app.controller("PlanDefinitionController", PlanDefinitionController)
 app.controller("HistoryProcessController", HistoryProcessController)
-app.controller("EMRProcessController", EMRProcessController)
 app.controller("TherapyProcessController", TherapyProcessController)
 app.controller("PatientListController", PatientListController)

@@ -56,10 +56,18 @@
                     </a>
                     <div class="w3-container w3-border-left" data-ng-if="pd.pd_id==ctrl.singlePage.UrlMap()['pd']">
                         <span class="w3-tiny am-b">аction</span>
-                        <div class="w3-hover-shadow" data-ng-repeat="pda in ctrl.conf.pd_action"
-                            data-ng-if="pd.pd_id==pda.pd_id">
-                            <span class="w3-tiny"> {{pda.title_id}} &nbsp;</span>
-                            {{pda.action_title}}
+                        <div data-ng-repeat="pda in ctrl.conf.pd_action" data-ng-if="pd.pd_id==pda.pd_id">
+                            <a href="#!{{ctrl.singlePage.UrlOnOff('pda_'+pda.title_id,4)}}" class="am-0u">
+                                <div class="w3-hover-shadow">
+                                    <span class="w3-tiny" data-ng-class="{'w3-border-top w3-leftbar'
+                                        :ctrl.singlePage.UrlMap()['pda']==pda.title_id}">
+                                        {{pda.title_id}} &nbsp;</span>
+                                    {{pda.action_title}}
+                                </div>
+                            </a>
+                            <div data-ng-if="ctrl.singlePage.UrlMap()['pda']==pda.title_id" class="w3-card w3-leftbar">
+                                a1
+                            </div>
                         </div>
                     </div>
                 </div>

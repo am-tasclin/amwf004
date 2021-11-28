@@ -1,26 +1,24 @@
 'use strict'
 app.config(RouteProviderFHIRConfig)
 class PlDefDataFactory extends DataDBexchangeService {
-    constructor($http, $q, $resource) {
-        super($http, $q, $resource)
-        this.readActivityDefinition = () => {
-            console.log(conf.FHIR.ad, singlePage.UrlMap()['ad'])
-        }
-        this.readPlanDefinition = () => {
-            console.log(conf.FHIR.pd, singlePage.UrlMap()['pd'])
-            let makeSql = sqlName => replaceSql(
-                sql_app.PlanDefinitionById.buildSql(sqlName, singlePage.UrlMap()['pd']))
-            this.httpGet({ sql: makeSql(conf.FHIR.pd.sqlName) }).then(dataSqlRequest => {
-                conf.FHIR.pd.currEl = dataSqlRequest.list[0]
-                angular.forEach(conf.FHIR.pd.sql_app_children, (v, sqlName) => {
-                    this.httpGet({ sql: makeSql(sqlName) }).then(dataSqlRequest => {
-                        if (!conf.FHIR.pd.currEl.sql_app_children)
-                            conf.FHIR.pd.currEl.sql_app_children = {}
-                        conf.FHIR.pd.currEl.sql_app_children[sqlName] = dataSqlRequest.list
-                    })
+    constructor($http, $q, $resource) { super($http, $q, $resource) }
+    readPlanDefinition = () => {
+        console.log(conf.FHIR.pd, singlePage.UrlMap()['pd'])
+        let makeSql = sqlName => replaceSql(
+            sql_app.PlanDefinitionById.buildSql(sqlName, singlePage.UrlMap()['pd']))
+        this.httpGet({ sql: makeSql(conf.FHIR.pd.sqlName) }).then(dataSqlRequest => {
+            conf.FHIR.pd.currEl = dataSqlRequest.list[0]
+            angular.forEach(conf.FHIR.pd.sql_app_children, (v, sqlName) => {
+                this.httpGet({ sql: makeSql(sqlName) }).then(dataSqlRequest => {
+                    if (!conf.FHIR.pd.currEl.sql_app_children)
+                        conf.FHIR.pd.currEl.sql_app_children = {}
+                    conf.FHIR.pd.currEl.sql_app_children[sqlName] = dataSqlRequest.list
                 })
             })
-        }
+        })
+    }
+    readActivityDefinition = () => {
+        console.log(conf.FHIR.ad, singlePage.UrlMap()['ad'])
     }
 }
 app.factory("dataBeFactory", PlDefDataFactory)
