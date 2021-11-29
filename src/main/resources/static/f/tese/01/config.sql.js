@@ -51,9 +51,16 @@ sql_app.DataRequirement_type_path = {
     LEFT JOIN doc dp ON dp.parent=dr.doc_id \n\
     WHERE dr.reference = 84929',
 }
+sql_app.eRecept = {
+    name:'еРецепти',
+    sql:'SELECT d1.doc_id recept_id, d2.reference2 recept_basedon_id  \n\
+    FROM doc d1,doc d2 \n\
+    WHERE d1.doc_id=d2.parent \n\
+    AND d2.reference=369777',
+}
 sql_app.encounter_MedicationRequest_sc_doseQuantityTimingPeriod = {
     name:'ЕМЗ Взаємодія призначення ліків доза кількість хронометраж період',
-    sql:'SELECT mrbn.doc_id mrEncounter_id, mrbn.reference2 basedOn, mrer.reference2 mrEncounter_r2 \n\
+    sql:'SELECT mrbn.doc_id mrEncounter_id, mrbn.parent mr_emr_id, mrbn.reference2 basedOn, mrer.reference2 mrEncounter_r2 \n\
     , 368833 el_def_id, 373464 el_att_def_id \n\
     , er.reference2 patient_id, mr.* FROM doc mrer \n\
     LEFT JOIN doc mrbn ON mrbn.parent=mrer.doc_id AND mrbn.reference=369777 \n\
