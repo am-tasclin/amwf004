@@ -2,31 +2,22 @@
 
 sql_app.SelectKassa = {
     name: 'Касса ',
-    sql: 'SELECT idNom, DateProv, SumaProv, IdNomKassOp, NameKassop, IdNomVal,NameVal,Pr_rasx, IdDoc  \n\
+    sql: 'SELECT idNom, DateProv, SumaProv,  NameKassop, NameContr,NameVal, Nal_beznal  \n\
     FROM kassa.finans \n\
     WHERE DateProv >=:d1 and DateProv<=:d2 and Pr_rasx=:p ',
     sqlHtml: {
         dateprov: "{{v | date : 'medium'}}",
-	},
+    },
 }
 
-sql_app.AddKassa = {
-    name: 'Добавление кассового ордера',
-    sql: 'INSERT INTP finans (idNom, DateProv, SumaProv, IdNomKassOp, NameKassop, IdNomVal,NameVal,Pr_rasx, IdDoc) \n\
-    VALUES  ( \n\
-       (SELECT COUNT(*)+1 FROM kassa.finans) , \n\
-       :Ld1, :Lsuma,\n\
-       :LIdKassOp,   (SELECT NameKassOp FROM SpKassOp WHERE IdKassOp=:LidKassOp), \n\
-       :LidNomVal,   (SELECT NameVal    FROM SpValut  WHERE IdNomVal=:LidNomVal), \n\
-       :Lpr, :lIdDoc)' ,
-}
+
 
 sql_app.AddKassa_VB = {
     name: 'Добавление кассового ордера',
-    sql: 'INSERT INTO kassa.finans (pr_rasx, idNom, DateProv,SumaProv) \n\
-    VALUES (1, \n\
-           (SELECT COUNT(*)+1 FROM kassa.finans), \n\
-           :Ld1, :ssum)' ,
+    sql: 'INSERT INTO kassa.finans (pr_rasx, idNom, DateProv,SumaProv,NameKassOp,NameContr, nameval, nal_beznal) \n\
+    VALUES (:pr, \n\
+           (SELECT max(idnom)+1 FROM kassa.finans), \n\
+           :Ld1, :ssum, :KassOp, :NameContr, :val, :nal)' ,
 }
 
 sql_app.GroupKassa = {
@@ -44,4 +35,25 @@ sql_app.UpdateKassa = {
 sql_app.DeleteKassa = {
     name: 'Удаление проводки',
     sql: 'DELETE FROM kassa.finans WHERE idNom=:LidNom',
+}
+
+sql_app.SpContragent = {
+    name: 'Справочник контрагентов',
+    sql: ' SELECT IdNomContr, NameContr FROM  SpContragents ORDER BY NameContr',
+}
+
+sql_app.SpGrupKassOp = {
+    name: 'Справочник групп кассових операций',
+    sql: ' SELECT IdNomGrupKassOp, NameGrupKassOp, Pr_Rasx FROM SpGrupKassOp ORDER BY NameGrupKassOP',
+}
+
+
+sql_app.SpKassOp = {
+    name: 'Справочник кассових операций',
+    sql: 'SELECT IdNomKassOP, NameKassOp, IdNomGrupKassOp,Pr_rasx FROM SpKassOp ORDER BY  Pr_rasx,  NameKassOp, IdNomGrupKassOp',
+}
+
+sql_app.SpValut = {
+    name: 'Справочник валют',
+    sql: 'SELECT IdNomVal, NameVal FROM SpVal ORDER BY NameVal',
 }

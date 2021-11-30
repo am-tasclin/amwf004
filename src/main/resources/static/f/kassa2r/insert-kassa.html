@@ -6,54 +6,66 @@
             <td><input type="date" data-ng-model="d3"> </td>
         </tr>
         <tr>
-            <td>Сумма r </td>
-            <td><input data-ng-model="myNumb" type="number"> </td>
+            <td>Сумма </td>
+            <td><input type="number" data-ng-model="ctrl.formData.myNumb"> </td>
         </tr>
 
         <tr>
+            <td>Валюта</td>
             <td>
-                <input type="checkbox" data-ng-model="value1" id="vt">
-                <label for="vt">Валюта</label>
-            </td>
-            <td>
-                <input type="radio" ng-model="Nal" id="nl" value="Нал">
-                <label for="nl">Нал</label>/
-                <input type="radio" ng-model="Nal" id="bn" value="БезНал">
-                <label for="bn">БезНал</label>
+                <input type="radio" data-ng-model="ctrl.formData.Val" id="nl1" value="Грн">
+                <label for="nl1">Грн</label>
+                <input type="radio" data-ng-model="ctrl.formData.Val" id="bn1" value="$$">
+                <label for="bn1">$$</label>{{ctrl.formData.Val}}
+
             </td>
         </tr>
         <tr>
-            <td>Контрагент++</td>
-            <td> <input type="" ng-model="s1"> </td>
+            <td></td>
+            <td>
+                <input type="radio" data-ng-model="ctrl.formData.Nal" id="nl" value="0">
+                <label for="nl">Нал</label>
+                <input type="radio" data-ng-model="ctrl.formData.Nal" id="bn" value="1">
+                <label for="bn">БезНал</label>
+            </td>
+
+        </tr>
+        <tr>
+            <td>Контрагент {{LName}} </td>
+            <td> <input type="text" data-ng-model="ctrl.formData.LName"> </td>
         </tr>
         <tr>
             <td>Кассовая операция</td>
+            <td> <input type="text" data-ng-model="ctrl.formData.KassOp"> </td>
         </tr>
         <tr>
-            <td> <button class="w3-btn w3-grey" data-ng-click="b1Click()">Создать
+            <td> <button class="w3-btn w3-grey" data-ng-click="AddKassa()">Создать
                     проводку
                 </button>
             </td>
-            <td> <button class="w3-btn w3-grey" data-ng-click="b2Click()">Удалить
+            <td> <button class="w3-btn w3-grey" data-ng-click="DeleteKassa()">Удалить
                     проводку
                 </button>
             </td>
         </tr>
+
     </tbody>
 </table>
 
 <table>
-    <tr>
-        <td>Всього проводок</td>
-        <td> <input ng-model="Vrec" id="bb" value="0"></td>
+    <tbody>
+        <tr>
+            <td>Всього проводок</td>
+            <td> {{Vrec}} </td>
 
-    </tr>
-    <tr>
-        <td>Загальна сума </td>
-        <td> <input ng-model="Vsum" id="bs" value="0"></td>
+        </tr>
+        <tr>
+            <td>Загальна сума </td>
+            <td> {{Vsum}} </td>
 
-    </tr>
-    <td> <button class="w3-btn w3-grey" data-ng-click="b4Click()">Пересчитать
-        </button>
-    </td>
+        </tr>
+        <td> <button class="w3-btn w3-grey" data-ng-click="Perechet()">Пересчитать
+            </button>
+        </td>
+    </tbody>
 </table>

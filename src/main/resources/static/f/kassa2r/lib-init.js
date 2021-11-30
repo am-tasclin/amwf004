@@ -1,11 +1,13 @@
 'use strict';
-var app = angular.module("app", [])
+var app = angular.module("app", ['ngRoute'])
 angular.element(() => angular.bootstrap(document, ['app']))
 
 // not for $scope
 const sql_app = {}
 // for|as $scope
-const conf = {}/* conf page|app|content */
+const singlePage = {}/* $route fn */
+    , conf = {}/* conf page|app|content */
+class AbstractController { singlePage = singlePage; conf = conf; getSql = sqlName => sql_app[sqlName] }
 
 class AmSqlHtml {
     constructor($compile) {
