@@ -10,8 +10,11 @@
         <div class="w3-card w3-leftbar"
             data-ng-if="an7tl.title_id ==
             ctrl.singlePage.X_UrlId(ctrl.singlePage.TagPosition(ctrl.conf.FHIR.pd.sql_app_children.PlanDefinition_action_title.frKey))">
-            a1
-            a1
+            <div data-ng-repeat="anad in ctrl.conf.FHIR.pd.currEl.sql_app_children.pd_action_ActivityDefinition_title_name"
+                data-ng-if="an7tl.title_id==anad.parent">
+                <span class="w3-tiny am-b"> {{anad.ad_title}} : </span>
+                {{anad.ad_name}}
+            </div>
         </div>
     </div>
 </div>

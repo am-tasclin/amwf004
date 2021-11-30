@@ -51,6 +51,14 @@ sql_app.DataRequirement_type_path = {
     LEFT JOIN doc dp ON dp.parent=dr.doc_id \n\
     WHERE dr.reference = 84929',
 }
+sql_app.pd_action_ActivityDefinition_title_name = {
+    name:'Команда MeTaL комп\'ютерне і людське ім\'я -> в плані',
+    sql:'SELECT d1.doc_id pd_ad_id, d1.parent, d3.parent pd_id, x.* \n\
+    FROM doc d3, doc d2, doc d1 , (:sql_app.ActivityDefinition_title_name ) x \n\
+    WHERE d1.reference=369920 \n\
+    AND d2.doc_id=d1.parent AND d3.doc_id=d2.parent \n\
+    AND x.am_title_id=d1.reference2 ',
+}
 sql_app.ActivityDefinition_title_name = {
     name:'Команда MeTaL комп\'ютерне і людське ім\'я',
     sql:'SELECT d1.doc_id am_title_id, s1.value ad_title \n\

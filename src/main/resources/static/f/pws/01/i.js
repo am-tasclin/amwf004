@@ -56,6 +56,9 @@ class PWSDataFactory extends DataFactory {
             console.log(timeoutMs, conf.patient[0].patient_id == singlePage.UrlMap()['hy'])
         }
     }
+    runPlanDefinition = (pd) => {
+        console.log(pd)
+    }
     runTrigger = () => {
         this.$timeout(() => {
             let emrEl = conf.eMap[singlePage.UrlMap()['emr']]
@@ -65,7 +68,10 @@ class PWSDataFactory extends DataFactory {
                     .replace(':x', emrEl.el_def_id).replace(':y', emrEl.el_att_def_id)
                 // console.log(sql)
                 this.httpGetSql({ sql: sql })
-                    .then(dataSqlRequest => conf['plandefinition'] = dataSqlRequest.list)
+                    .then(dataSqlRequest => {
+                        conf['plandefinition'] = dataSqlRequest.list
+                        // angular.forEach(dataSqlRequest.list, pd => this.runPlanDefinition(pd))
+                    })
             } else {
                 delete conf['plandefinition']
             }
@@ -100,9 +106,14 @@ class PlanDefinitionController extends AbstractController {
         console.log(singlePage.UrlMap(), singlePage.UrlMap()['hy'])
         dataFactory.readPatient()
         dataFactory.runTrigger()
+        console.log(singlePage.UrlMap()['pd'])
         angular.forEach(contentDoc.readPlanDefinitionElements,
-            (v, k) => dataFactory.httpGetSql({ sql: readSql2R(v.sql) })
-                .then(dataSqlRequest => conf[k] = dataSqlRequest.list))
+            (v, k) => {
+                console.log(v.sql)
+                console.log(readSql2R(v.sql))
+                dataFactory.httpGetSql({ sql: readSql2R(v.sql) })
+                    .then(dataSqlRequest => conf[k] = dataSqlRequest.list)
+            })
     }
 }
 class HistoryProcessController extends AbstractController {

@@ -12,11 +12,12 @@ conf.FHIR.pd = {
     controller: 'PlanDefinitionController',
     sqlName: 'FHIR_PlanDefinition',
     sql_app_children: {
-        PlanDefinition_action_title:
-        {
+        PlanDefinition_action_title: {
             frKey: 'ad',
             sql: 'SELECT * FROM (:sql_app.PlanDefinition_action_title ) x \n\
             WHERE pd_id=:pd_id',
+        },
+        pd_action_ActivityDefinition_title_name: {
         },
     },
 }

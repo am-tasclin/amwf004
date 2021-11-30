@@ -2,6 +2,7 @@
 app.config(RouteProviderFHIRConfig)
 class PlDefDataFactory extends DataDBexchangeService {
     constructor($http, $q, $resource) { super($http, $q, $resource) }
+
     readPlanDefinition = () => {
         console.log(conf.FHIR.pd, singlePage.UrlMap()['pd'])
         let makeSql = sqlName => replaceSql(
@@ -9,6 +10,8 @@ class PlDefDataFactory extends DataDBexchangeService {
         this.httpGet({ sql: makeSql(conf.FHIR.pd.sqlName) }).then(dataSqlRequest => {
             conf.FHIR.pd.currEl = dataSqlRequest.list[0]
             angular.forEach(conf.FHIR.pd.sql_app_children, (v, sqlName) => {
+                console.log(sqlName, v)
+                console.log(makeSql(sqlName))
                 this.httpGet({ sql: makeSql(sqlName) }).then(dataSqlRequest => {
                     if (!conf.FHIR.pd.currEl.sql_app_children)
                         conf.FHIR.pd.currEl.sql_app_children = {}
@@ -17,6 +20,7 @@ class PlDefDataFactory extends DataDBexchangeService {
             })
         })
     }
+
     readActivityDefinition = () => {
         console.log(conf.FHIR.ad, singlePage.UrlMap()['ad'])
     }
