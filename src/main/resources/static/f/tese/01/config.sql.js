@@ -51,6 +51,15 @@ sql_app.DataRequirement_type_path = {
     LEFT JOIN doc dp ON dp.parent=dr.doc_id \n\
     WHERE dr.reference = 84929',
 }
+sql_app.ActivityDefinition_title_name = {
+    name:'Команда MeTaL комп\'ютерне і людське ім\'я',
+    sql:'SELECT d1.doc_id am_title_id, s1.value ad_title \n\
+    , d2.doc_id ad_name_id, s2.value ad_name --, * \n\
+    FROM doc d1 LEFT JOIN string s1 ON s1.string_id=d1.doc_id \n\
+    ,doc d2 LEFT JOIN string s2 ON s2.string_id=d2.doc_id \n\
+    WHERE d1.doc_id=d2.parent \n\
+    AND d1.reference=371999 AND d2.reference=373500 ',
+}
 sql_app.eRecept = {
     name:'еРецепти',
     sql:'SELECT d1.doc_id recept_id, d2.reference2 recept_basedon_id  \n\

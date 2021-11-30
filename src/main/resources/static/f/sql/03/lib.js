@@ -99,9 +99,7 @@ conf.exe.NewEl.openDialog = (openedDialogNewEl) => {
 //app.factory("editFRFactory", EditFHIResourceFactory)
 class EditFHIResourceService {
     dataBeFactory
-    constructor(dataBeFactory) {
-        this.dataBeFactory = dataBeFactory
-    }
+    constructor(dataBeFactory) { this.dataBeFactory = dataBeFactory }
     deleteEl = () => {
         let confDocEl = conf.fr[singlePage.FirstUrlTag()],
             docEl = confDocEl.currEl
@@ -200,11 +198,13 @@ class EditFHIResourceService {
         console.log(newEl)
         if (newEl.initSqlCmdMap) newEl.initSqlCmdMap()
         console.log(2, singlePage.LastUrlTag(), newEl.sqlCmdMap)
+        return
         this.dataBeFactory.adn_insert.save(newEl.sqlCmdMap).$promise.then((map) => {
             console.log(map, 1)
             if (newEl.afterExeSqlCmdMap) newEl.afterExeSqlCmdMap(map)
         })
     }
+
 }
 
 // app.factory("dataDBexchangeService", DataDBexchangeService)
