@@ -17,8 +17,7 @@ conf.FHIR.pd = {
             sql: 'SELECT * FROM (:sql_app.PlanDefinition_action_title ) x \n\
             WHERE pd_id=:pd_id',
         },
-        pd_action_ActivityDefinition_title_name: {
-        },
+        pd_action_ActivityDefinition_title_name: {},
     },
 }
 conf.FHIR.ad = {

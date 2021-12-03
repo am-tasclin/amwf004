@@ -25,6 +25,7 @@ contentDoc.readEMR = {
 }
 contentDoc.readPlanDefinitionElements = {
     pd_action: { sql: 'PlanDefinition_action_title' },
+    pd_action_ad: { sql: 'pd_action_ActivityDefinition_title_name' },
 }
 sql_app.actuelEMR_PD_Trigger_DataRequirement_type_path = {
     name: 'ЕМЗ елемент > Сценарії-плани > tригери > необхідні дані тип шлях',
@@ -109,7 +110,7 @@ class PlanDefinitionController extends AbstractController {
         console.log(singlePage.UrlMap()['pd'])
         angular.forEach(contentDoc.readPlanDefinitionElements,
             (v, k) => {
-                console.log(v.sql)
+                console.log(1, k, 1, v.sql)
                 console.log(readSql2R(v.sql))
                 dataFactory.httpGetSql({ sql: readSql2R(v.sql) })
                     .then(dataSqlRequest => conf[k] = dataSqlRequest.list)

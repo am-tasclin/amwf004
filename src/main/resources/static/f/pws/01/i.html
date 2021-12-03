@@ -67,7 +67,11 @@
                             </a>
                             <div data-ng-if="ctrl.singlePage.UrlMap()['pda']==pda.title_id" class="w3-card w3-leftbar">
                                 <div class="w3-right w3-tiny">a2</div>
-                                .
+                                <div data-ng-repeat="anad in ctrl.conf.pd_action_ad"
+                                    data-ng-if="anad.parent==pda.title_id">
+                                    <span class="w3-tiny am-b"> {{anad.ad_title}} : </span>
+                                    {{anad.ad_name}}
+                                </div>
                             </div>
                         </div>
                     </div>
