@@ -108,14 +108,16 @@ class PlanDefinitionController extends AbstractController {
         dataFactory.readPatient()
         dataFactory.runTrigger()
         console.log(singlePage.UrlMap()['pd'])
-        angular.forEach(contentDoc.readPlanDefinitionElements,
-            (v, k) => {
-                console.log(1, k, 1, v.sql)
-                console.log(readSql2R(v.sql))
-                dataFactory.httpGetSql({ sql: readSql2R(v.sql) })
-                    .then(dataSqlRequest => conf[k] = dataSqlRequest.list)
+        angular.forEach(contentDoc.readPlanDefinitionElements, (v, k) => {
+            console.log(k, 1, v.sql, 2, readSql2R(v.sql))
+            dataFactory.httpGetSql({ sql: readSql2R(v.sql) }
+            ).then(dataSqlRequest => {
+                conf[k] = dataSqlRequest.list
+                addEMap(conf[k], k)
             })
+        })
     }
+
 }
 class HistoryProcessController extends AbstractController {
     constructor(dataFactory) {
@@ -167,6 +169,9 @@ class InitPageController extends AbstractController {
     constructor($route) {
         super()
         // console.log(Object.keys($route.routes)) // NOT DELETE
+    }
+    save_pd_action = () => {
+        console.log(1223, singlePage.UrlMap()['pda'], conf.eMap[singlePage.UrlMap()['pda']])
     }
 }
 

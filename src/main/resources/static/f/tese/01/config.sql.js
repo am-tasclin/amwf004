@@ -17,13 +17,12 @@ sql_app.FHIR_PlanDefinition = {
 }
 sql_app.PlanDefinition_action_title = {
     name:'Означення плана активності заголовки',
-    sql:'SELECT value action_title, an7te.doc_id title_id, an.parent pd_id \n\
+    sql:'SELECT value action_title, an7te.doc_id pd_action_id, an7te.doc_id title_id, an.parent pd_id \n\
     FROM doc an, sort s, doc an7te \n\
     LEFT JOIN string st ON st.string_id=an7te.doc_id \n\
     WHERE an7te.parent=an.doc_id AND an7te.reference=373452 \n\
     AND an.reference=369782 AND s.sort_id=an7te.doc_id ORDER BY s.sort',
 }
-
 sql_app.PD_Trigger_DataRequirement_type_path = {
     name:'Сценарії-плани > tригери > необхідні дані тип шлях',
     sql:'SELECT pdtr.doc_id pd_id, n.value pd_name, tdr.* FROM doc tr \n\
@@ -53,7 +52,7 @@ sql_app.DataRequirement_type_path = {
 }
 sql_app.pd_action_ActivityDefinition_title_name = {
     name:'Команда MeTaL комп\'ютерне і людське ім\'я -> в плані',
-    sql:'SELECT d1.doc_id pd_ad_id, d1.parent, d3.parent pd_id, x.* \n\
+    sql:'SELECT d1.doc_id pd_ad_id, d1.doc_id pd_action_ad_id, d1.parent, d3.parent pd_id, x.* \n\
     FROM doc d3, doc d2, doc d1 , (:sql_app.ActivityDefinition_title_name ) x \n\
     WHERE d1.reference=369920 \n\
     AND d2.doc_id=d1.parent AND d3.doc_id=d2.parent \n\

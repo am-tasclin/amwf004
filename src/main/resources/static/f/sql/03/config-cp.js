@@ -435,4 +435,3 @@ conf.vs.edEl = {
     minus: 'Вилучити',
     wrench: 'Редагувати',
 }//EditElement
-
