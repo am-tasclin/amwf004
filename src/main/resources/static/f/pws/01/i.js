@@ -37,7 +37,12 @@ const sqlForOnePatient = 'SELECT * FROM (:sql ) p WHERE patient_id = :patient_id
 let timeoutMs = 0
 class PWSDataFactory extends DataFactory {
     $timeout
-    constructor($http, $q, $timeout) { super($http, $q); this.$timeout = $timeout }
+    adn_insert
+    constructor($http, $q, $timeout, $resource) {
+        super($http, $q)
+        this.$timeout = $timeout
+        this.adn_insert = $resource('/r/adn/insert', { sqlCmdMap: '@sqlCmdMap' })
+    }
     read = (sql2Name, confKey) => this.httpGetSql({
         sql: sqlForOnePatient.replace(':sql ', readSql2R(sql2Name))
             .replace(':patient_id', singlePage.FirstUrlId() || singlePage.UrlParamKeyValue('pt'))
@@ -109,7 +114,7 @@ class PlanDefinitionController extends AbstractController {
         dataFactory.runTrigger()
         console.log(singlePage.UrlMap()['pd'])
         angular.forEach(contentDoc.readPlanDefinitionElements, (v, k) => {
-            console.log(k, 1, v.sql, 2, readSql2R(v.sql))
+            // console.log(k, 1, v.sql, 2, readSql2R(v.sql))
             dataFactory.httpGetSql({ sql: readSql2R(v.sql) }
             ).then(dataSqlRequest => {
                 conf[k] = dataSqlRequest.list
@@ -166,12 +171,27 @@ sql_app.Patient_family_name.sqlHtml = {
     patient_id: '<a data-ng-click="ctrl.clickPatient(r)" href="#!/hy_{{r.patient_id}}"> {{r[k]}} </a>',
 }
 class InitPageController extends AbstractController {
-    constructor($route) {
+    dataFactory
+    constructor($route, dataFactory) {
         super()
+        this.dataFactory = dataFactory
         // console.log(Object.keys($route.routes)) // NOT DELETE
     }
     save_pd_action = () => {
-        console.log(1223, singlePage.UrlMap()['pda'], conf.eMap[singlePage.UrlMap()['pda']])
+        let sqlCmdMap = {
+            insert_doc: {
+                parent: 373495,
+                reference: 373494,// performerType:373494
+                insert_doc: {
+                    reference: 369777,// o[]37 :369777 basedOn
+                }
+            }
+        }
+        console.log(sqlCmdMap, 1223, singlePage.UrlMap()['pda'], conf.eMap[singlePage.UrlMap()['pda']])
+        console.log(this.dataFactory)
+        this.dataFactory.adn_insert.save(sqlCmdMap).$promise.then((map) => {
+            console.log(1, map)
+        })
     }
 }
 
