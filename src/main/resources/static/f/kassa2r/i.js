@@ -21,6 +21,8 @@ class LRLController extends AbstractController {
 app.controller("LRLController", LRLController)
 
 let formData = {}
+// https://uk.wikipedia.org/wiki/Бухгалтерський_запис
+//Прово́дка, бухга́лтерський за́пис (англ. Entry) 
 formData.posting = {}
 formData.posting.LName = 'Iванов'
 formData.posting.myNumb = 1234
@@ -39,18 +41,12 @@ formData.posting.Vsum = 0
 formData.posting.PrRasx = 1
 
 conf.sqlKeyName = 'SelectKassa'
-console.log(formData.firstName)
-
+console.log(formData.posting.firstName)
 
 class TestControl {
-    constructor($scope, $http) {
-
+    constructor($http) {
         this.formData = formData
-
-        this.selectRow = (row) => {
-            console.log(123, row)
-            this.selectedRow = row
-        }
+        this.selectRow = row => this.selectedRow = row
 
         this.AddKassa = () => {
             console.log("AddKassa", this.formData.Val)
@@ -65,13 +61,12 @@ class TestControl {
             sql = sql + '; \n\ ' + makeSelect()
             console.log(sql)
 
-
-            $http.post('/r/url_sql_read_db1'
-                , { sql: sql }).then((responce) => {
-                    console.log(responce.data.list1)
-                    $scope.data.list = responce.data.list1
-                    //$scope.data = responce.data
-                })
+            $http.post('/r/url_sql_read_db1', { sql: sql }
+            ).then(responce => {
+                console.log(responce.data.list1)
+                $scope.data.list = responce.data.list1
+                //$scope.data = responce.data
+            })
             console.log(12)
         }
 
@@ -81,71 +76,55 @@ class TestControl {
             sql = sql + '; \n\ ' + makeSelect()
 
             console.log(sql)
-            $http.post('/r/url_sql_read_db1'
-                , { sql: sql }).then((responce) => {
-                    console.log(responce.data)
-
-                    $scope.data.list = responce.data.list1
-                })
+            $http.post('/r/url_sql_read_db1', { sql: sql }
+            ).then(responce => {
+                console.log(responce.data)
+                $scope.data.list = responce.data.list1
+            })
             console.log('DeleteKassa')
         }
 
-        const makeSelect = () => sql_app.SelectKassa.sql
-            .replace(':d1', "'" + formData.posting.d1.toISOString().split('T')[0] + "'")
-            .replace(':d2', "'" + formData.posting.d2.toISOString().split('T')[0] + "'")
-            .replace(':p', formData.posting.PrRasx)
-
-
-       this.Perechet = () => {
+        this.Perechet = () => {
             console.log("Неполучаеться сбросить в переменные значения из запроса")
 
-            sql = sql_app.GroupKassa.sql
+            let sql = sql_app.GroupKassa.sql
                 .replace(':d1', "'" + formData.posting.d1.toISOString().split('T')[0] + "'")
                 .replace(':d2', "'" + formData.posting.d2.toISOString().split('T')[0] + "'")
                 .replace(':P', formData.posting.PrRasx)
             console.log(sql)
 
-
-
-            $http.get('/r/url_sql_read_db1'
-                , { params: { sql: sql } }).then((responce) => {
-                    $scope.data = responce.data
-
-
-                    // Тут не работает
-                    formData.posting.Vrec = responce.data.list.Count
-                    formData.posting.Vsum = responce.data.list.SumaProv
-                })
-                
-                // а здесь не видит this.formData.selectRow
-                console.log("GropKassa", this.formData.selectRow)
-
-            
-            
-
-        }
-
-        this.Ok_button = (a) => {
-            console.log("Ok_button")
-            sql = makeSelect()
-            $http.get('/r/url_sql_read_db1'
-                , { params: { sql: sql } }).then((responce) => {
-                    $scope.data = responce.data
-                })
-            console.log(sql)
-        }
-
-        let sql = sql_app.SelectKassa.sql.replace(':d1', "'" + formData.posting.d1.toISOString().split('T')[0] + "'").replace(':d2', "'" + formData.posting.d2.toISOString().split('T')[0] + "'").replace(':p', 1)
-
-        console.log(sql)
-
-        $http.get('/r/url_sql_read_db1'
-            , { params: { sql: sql } }).then((responce) => {
-                $scope.data = responce.data
-                console.log(responce.data)
+            $http.get('/r/url_sql_read_db1', { params: { sql: sql } }
+            ).then(responce => {
+                console.log(responce.data.list)
+                this.data.list.push(responce.data.list[0])
+                console.log(this.data.list)
+                // Тут не работает
+                //$scope.data = responce.data
+                formData.posting.Vrec = responce.data.list.Count
+                formData.posting.Vsum = responce.data.list.SumaProv
             })
-    }
 
+            // а здесь не видит this.formData.selectRow
+            console.log("GropKassa", this.formData.selectRow)
+        }
+
+        this.Ok_button = () => {
+            console.log("Ok_button")
+            $http.get('/r/url_sql_read_db1', { params: { sql: makeSelect() } }
+            ).then(responce => {
+                this.data = responce.data
+            })
+        }
+        this.Ok_button()
+    }
 }
+
+const makeSelect = () => {
+    return sql_app.SelectKassa.sql
+        .replace(':d1', "'" + formData.posting.d1.toISOString().split('T')[0] + "'")
+        .replace(':d2', "'" + formData.posting.d2.toISOString().split('T')[0] + "'")
+        .replace(':p', formData.posting.PrRasx)
+}
+
 
 app.controller('myCtrl', TestControl)

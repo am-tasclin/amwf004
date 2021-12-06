@@ -13,7 +13,7 @@
         </tr>
     </thead>
     <tbody class="w13-small">
-        <tr class="w3-hover-shadow" data-ng-repeat="(k,r) in data.list"
+        <tr class="w3-hover-shadow" data-ng-repeat="(k,r) in ctrl.data.list"
             data-ng-class="{'w3-red':ctrl.selectedRow.idnom==r.idnom}" data-ng-click="ctrl.selectRow(r)">
             <td>{{k}}
 
