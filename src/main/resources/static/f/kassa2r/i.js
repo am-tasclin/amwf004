@@ -49,37 +49,32 @@ class TestControl {
         this.selectRow = row => this.selectedRow = row
 
         this.AddKassa = () => {
-            console.log("AddKassa", this.formData.Val)
-            sql = sql_app.AddKassa_VB.sql.replace(':pr', formData.posting.PrRasx)
+            console.log("AddKassa", formData.posting.val)
+            let sql = sql_app.AddKassa_VB.sql.replace(':pr', formData.posting.PrRasx)
                 .replace(':Ld1', "'" + formData.posting.d3.toISOString().split('T')[0] + "'")
                 .replace(':ssum', formData.posting.myNumb)
                 .replace(':KassOp', "'" + formData.posting.KassOp + "'")
                 .replace(':NameContr', "'" + formData.posting.LName + "'")
-                .replace(':val', "'" + formData.posting.Val + "'")
+                .replace(':val', "'" + formData.posting.val + "'")
                 .replace(':nal', formData.posting.Nal)
 
             sql = sql + '; \n\ ' + makeSelect()
             console.log(sql)
 
             $http.post('/r/url_sql_read_db1', { sql: sql }
-            ).then(responce => {
-                console.log(responce.data.list1)
-                $scope.data.list = responce.data.list1
-                //$scope.data = responce.data
-            })
-            console.log(12)
+            ).then(responce => this.data.list = responce.data.list1)
         }
 
         this.DeleteKassa = (a) => {
             console.log("DeleteKassa", this.selectedRow.idnom)
-            sql = sql_app.DeleteKassa.sql.replace(':LidNom', this.selectedRow.idnom)
+            let sql = sql_app.DeleteKassa.sql.replace(':LidNom', this.selectedRow.idnom)
             sql = sql + '; \n\ ' + makeSelect()
 
             console.log(sql)
             $http.post('/r/url_sql_read_db1', { sql: sql }
             ).then(responce => {
                 console.log(responce.data)
-                $scope.data.list = responce.data.list1
+                this.data.list = responce.data.list1
             })
             console.log('DeleteKassa')
         }
@@ -87,21 +82,16 @@ class TestControl {
         this.Perechet = () => {
             console.log("Неполучаеться сбросить в переменные значения из запроса")
 
-            let sql = sql_app.GroupKassa.sql
-                .replace(':d1', "'" + formData.posting.d1.toISOString().split('T')[0] + "'")
-                .replace(':d2', "'" + formData.posting.d2.toISOString().split('T')[0] + "'")
-                .replace(':P', formData.posting.PrRasx)
+            let sql = makeSelect('GroupKassa')
             console.log(sql)
 
             $http.get('/r/url_sql_read_db1', { params: { sql: sql } }
             ).then(responce => {
-                console.log(responce.data.list)
                 this.data.list.push(responce.data.list[0])
-                console.log(this.data.list)
                 // Тут не работает
                 //$scope.data = responce.data
-                formData.posting.Vrec = responce.data.list.Count
-                formData.posting.Vsum = responce.data.list.SumaProv
+                // formData.posting.Vrec = responce.data.list.Count
+                // formData.posting.Vsum = responce.data.list.SumaProv
             })
 
             // а здесь не видит this.formData.selectRow
@@ -119,8 +109,9 @@ class TestControl {
     }
 }
 
-const makeSelect = () => {
-    return sql_app.SelectKassa.sql
+const makeSelect = sqlName => {
+    if (!sqlName) sqlName = 'SelectKassa'
+    return sql_app[sqlName].sql
         .replace(':d1', "'" + formData.posting.d1.toISOString().split('T')[0] + "'")
         .replace(':d2', "'" + formData.posting.d2.toISOString().split('T')[0] + "'")
         .replace(':p', formData.posting.PrRasx)

@@ -14,7 +14,7 @@ sql_app.GroupKassa = {
     name: 'Общая сума и кол-во проводок ',
     sql: 'SELECT COUNT(*) idNom, \'∑\' DateProv, SUM(SumaProv) SumaProv  \n\
         FROM  kassa.finans \n\
-        WHERE DateProv >=:d1 AND DateProv<=:d2 AND Pr_rasx=:P'  ,
+        WHERE DateProv >=:d1 AND DateProv<=:d2 AND Pr_rasx=:p'  ,
 }
 
 sql_app.AddKassa_VB = {
