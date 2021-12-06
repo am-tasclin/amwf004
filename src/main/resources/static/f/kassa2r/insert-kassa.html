@@ -3,19 +3,19 @@
     <tbody>
         <tr>
             <td>Дата проводки </td>
-            <td><input type="date" data-ng-model="d3"> </td>
+            <td><input type="date" data-ng-model="ctrl.formData.posting.d3"> </td>
         </tr>
         <tr>
             <td>Сумма </td>
-            <td><input type="number" data-ng-model="ctrl.formData.myNumb"> </td>
+            <td><input type="number" data-ng-model="ctrl.formData.posting.myNumb"> </td>
         </tr>
 
         <tr>
             <td>Валюта</td>
             <td>
-                <input type="radio" data-ng-model="ctrl.formData.Val" id="nl1" value="Грн">
+                <input type="radio" data-ng-model="ctrl.formData.posting.Val" id="nl1" value="Грн">
                 <label for="nl1">Грн</label>
-                <input type="radio" data-ng-model="ctrl.formData.Val" id="bn1" value="$$">
+                <input type="radio" data-ng-model="ctrl.formData.posting.Val" id="bn1" value="$$">
                 <label for="bn1">$$</label>{{ctrl.formData.Val}}
 
             </td>
@@ -23,48 +23,44 @@
         <tr>
             <td></td>
             <td>
-                <input type="radio" data-ng-model="ctrl.formData.Nal" id="nl" value="0">
+                <input type="radio" data-ng-model="ctrl.formData.posting.Nal" id="nl" value="0">
                 <label for="nl">Нал</label>
-                <input type="radio" data-ng-model="ctrl.formData.Nal" id="bn" value="1">
+                <input type="radio" data-ng-model="ctrl.formData.posting.Nal" id="bn" value="1">
                 <label for="bn">БезНал</label>
             </td>
 
         </tr>
         <tr>
             <td>Контрагент {{LName}} </td>
-            <td> <input type="text" data-ng-model="ctrl.formData.LName"> </td>
+            <td> <input type="text" data-ng-model="ctrl.formData.posting.LName"> </td>
         </tr>
         <tr>
             <td>Кассовая операция</td>
-            <td> <input type="text" data-ng-model="ctrl.formData.KassOp"> </td>
+            <td> <input type="text" data-ng-model="ctrl.formData.posting.KassOp"> </td>
         </tr>
         <tr>
-            <td> <button class="w3-btn w3-grey" data-ng-click="AddKassa()">Создать
+            <td> <button class="w3-btn w3-grey" data-ng-click="ctrl.AddKassa()">Создать
                     проводку
                 </button>
             </td>
-            <td> <button class="w3-btn w3-grey" data-ng-click="DeleteKassa()">Удалить
+            <td> <button class="w3-btn w3-grey" data-ng-click="ctrl.DeleteKassa()">Удалить
                     проводку
                 </button>
             </td>
         </tr>
 
-    </tbody>
-</table>
-
-<table>
-    <tbody>
         <tr>
             <td>Всього проводок</td>
-            <td> {{Vrec}} </td>
+            <td> {{ctrl.formData.posting.Vrec}} 
+            </td>
 
         </tr>
         <tr>
             <td>Загальна сума </td>
-            <td> {{Vsum}} </td>
+            <td> {{ctrl.formData.posting.Vsum}} </td>
 
         </tr>
-        <td> <button class="w3-btn w3-grey" data-ng-click="Perechet()">Пересчитать
+        <td> <button class="w3-btn w3-grey" data-ng-click="ctrl.Perechet()">Пересчитать
             </button>
         </td>
     </tbody>

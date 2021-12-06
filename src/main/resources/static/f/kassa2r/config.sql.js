@@ -23,13 +23,13 @@ sql_app.AddKassa_VB = {
 sql_app.GroupKassa = {
     name: 'Общая сума и кол-во проводок ',
     sql: 'SELECT COUNT(*) Count, SUM(SumaProv) SumaProv  \n\
-        FROM finans \n\
+        FROM  kassa.finans \n\
         WHERE DateProv >=:d1 and DateProv<=:d2 and Pr_rasx=:P'  ,
 }
 
 sql_app.UpdateKassa = {
     name: 'Изменение номера сопутствующего документа',
-    sql: 'UPDATE finans SET idDoc=:LIdDoc WHERE idNom=:LidNom',
+    sql: 'UPDATE  kassa.finans SET idDoc=:LIdDoc WHERE idNom=:LidNom',
 }
 
 sql_app.DeleteKassa = {
@@ -39,21 +39,21 @@ sql_app.DeleteKassa = {
 
 sql_app.SpContragent = {
     name: 'Справочник контрагентов',
-    sql: ' SELECT IdNomContr, NameContr FROM  SpContragents ORDER BY NameContr',
+    sql: ' SELECT IdNomContr, NameContr FROM   kassa.SpContragents ORDER BY NameContr',
 }
 
 sql_app.SpGrupKassOp = {
     name: 'Справочник групп кассових операций',
-    sql: ' SELECT IdNomGrupKassOp, NameGrupKassOp, Pr_Rasx FROM SpGrupKassOp ORDER BY NameGrupKassOP',
+    sql: ' SELECT IdNomGrupKassOp, NameGrupKassOp, Pr_Rasx FROM kassa.SpGrupKassOp ORDER BY NameGrupKassOP',
 }
 
 
 sql_app.SpKassOp = {
     name: 'Справочник кассових операций',
-    sql: 'SELECT IdNomKassOP, NameKassOp, IdNomGrupKassOp,Pr_rasx FROM SpKassOp ORDER BY  Pr_rasx,  NameKassOp, IdNomGrupKassOp',
+    sql: 'SELECT IdNomKassOP, NameKassOp, IdNomGrupKassOp,Pr_rasx FROM kassa.SpKassOp ORDER BY  Pr_rasx,  NameKassOp, IdNomGrupKassOp',
 }
 
 sql_app.SpValut = {
     name: 'Справочник валют',
-    sql: 'SELECT IdNomVal, NameVal FROM SpVal ORDER BY NameVal',
+    sql: 'SELECT IdNomVal, NameVal FROM kassa.SpVal ORDER BY NameVal',
 }
