@@ -170,25 +170,45 @@ class PatientListController extends AbstractController {
 sql_app.Patient_family_name.sqlHtml = {
     patient_id: '<a data-ng-click="ctrl.clickPatient(r)" href="#!/hy_{{r.patient_id}}"> {{r[k]}} </a>',
 }
+
+let sqlCmdMap2 = {
+    x: 2
+}
+
+let sqlCmdMap = {
+    init: sqlCmdMap => {
+        sqlCmdMap.insert_doc.insert_doc.reference2
+            = conf.eMap[singlePage.UrlMap()['emr']].mr_emr_id
+    },
+    insert_doc: {
+        parent: 373495,
+        reference: 373494, // performerType:373494
+        insert_doc: {
+            reference: 369777, // o[]37 :369777 basedOn
+        }
+    }
+}
+
 class InitPageController extends AbstractController {
     dataFactory
     constructor($route, dataFactory) {
         super()
         this.dataFactory = dataFactory
         // console.log(Object.keys($route.routes)) // NOT DELETE
+
+        dataFactory.httpGetSql({ sql: 'SELECT * FROM string WHERE string_id=373519' }
+        ).then(r => {
+            console.log(r.list[0].value)
+            let txt = r.list[0].value.replace(/\n|\r/g, "")
+            sqlCmdMap2 = JSON.parse(txt)
+            sqlCmdMap2.init = eval('(' + sqlCmdMap2.init + ')')
+            console.log(1, sqlCmdMap2)
+        })
     }
     save_pd_action = () => {
-        let sqlCmdMap = {
-            insert_doc: {
-                parent: 373495,
-                reference: 373494,// performerType:373494
-                insert_doc: {
-                    reference: 369777,// o[]37 :369777 basedOn
-                }
-            }
-        }
         console.log(sqlCmdMap, 1223, singlePage.UrlMap()['pda'], conf.eMap[singlePage.UrlMap()['pda']])
-        console.log(this.dataFactory)
+        if (sqlCmdMap.init) sqlCmdMap.init(sqlCmdMap)
+        console.log(123, sqlCmdMap)
         this.dataFactory.adn_insert.save(sqlCmdMap).$promise.then((map) => {
             console.log(1, map)
         })

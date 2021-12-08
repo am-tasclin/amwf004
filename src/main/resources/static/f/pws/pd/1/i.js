@@ -11,7 +11,7 @@ class PlDefDataFactory extends DataDBexchangeService {
             conf.FHIR.pd.currEl = dataSqlRequest.list[0]
             angular.forEach(conf.FHIR.pd.sql_app_children, (v, sqlName) => {
                 console.log(sqlName, v)
-                console.log(makeSql(sqlName))
+                // console.log(makeSql(sqlName))
                 this.httpGet({ sql: makeSql(sqlName) }).then(dataSqlRequest => {
                     if (!conf.FHIR.pd.currEl.sql_app_children)
                         conf.FHIR.pd.currEl.sql_app_children = {}
