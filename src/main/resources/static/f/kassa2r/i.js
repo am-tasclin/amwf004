@@ -62,7 +62,6 @@ class TestControl {
         this.value = "AB-"
         console.log(this.bloodgroup)
 
-
         this.formData = formData
         this.selectRow = row => this.selectedRow = row
 
@@ -75,8 +74,6 @@ class TestControl {
                 this.data = responce.data
             })
         }
-
-
 
         this.AddKassa = () => {
             let sql = sql_app.AddKassa_VB.sql.replace(':pr', formData.seek.PrRasx)
@@ -110,7 +107,7 @@ class TestControl {
 
         this.Perechet = () => {
 
-            let sql = makeSelect('GroupKassa')
+            let sql = makeSelect('GroupKassa2')
 
             $http.get('/r/url_sql_read_db1', { params: { sql: sql } }
             ).then(responce => {
@@ -134,11 +131,23 @@ class TestControl {
 
 const makeSelect = sqlName => {
     if (!sqlName) sqlName = 'SelectKassa'
-    return sql_app[sqlName].sql
+    let sql = replaceSql(sql_app[sqlName].sql)
+    return sql
         .replace(':d1', "'" + formData.seek.StartDateProv.toISOString().split('T')[0] + "'")
         .replace(':d2', "'" + formData.seek.FinishDateProv.toISOString().split('T')[0] + "'")
         .replace(':p', formData.seek.PrRasx)
 }
 
+// Get sql from our name
+const readSql2R = sqlN => replaceSql(sql_app[sqlN].sql)
+// Named structured SQL to native SQL
+const replaceSql = sql => {
+    while (sql.includes(':sql_app.')) {
+        let sql_name = sql.split(':sql_app.')[1].split(' ')[0]
+        let sql_inner = readSql2R(sql_name)
+        sql = sql.replace(':sql_app.' + sql_name, sql_inner)
+    }
+    return '' + sql
+}
 
 app.controller('myCtrl', TestControl)
