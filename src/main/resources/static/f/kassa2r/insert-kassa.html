@@ -1,21 +1,58 @@
+<table>
+    <tbody>
+        <tr>
+            <td>Всього проводок</td>
+            <td> {{ctrl.SelectGrup.idnom}}
+            </td>
+
+        </tr>
+        <tr>
+            <td>Загальна сума </td>
+            <td> {{ctrl.SelectGrup.sumaprov}} </td>
+
+        </tr>
+        <td> <button class="w3-btn w3-grey" data-ng-click="ctrl.Perechet()">Пересчитать
+            </button>
+        </td>
+        <td> <button class="w3-btn w3-grey" data-ng-click="ctrl.DeleteKassa()">Удалить
+            проводку
+        </button>
+    </td>
+    </tbody>
+</table>
+
+<span class="w3-small am-b"> Пошук</span>
+<table class="w3-light-gray w3-card">
+    <tbody>
+        <tr>
+            <td> Контрагент </td>
+            <td><input type="text" data-ng-model="ctrl.formData.seek.SeekLName"> </td>
+            <td><button style="width: 70px;" class="w3-btn w3-padding-small w3-grey w3-round am-no-print"
+                    data-ng-click="ctrl.Seek_button_Lname()">ОК</button></td>
+        </tr>
+        <tr>
+    </tbody>
+</table>
+
+
 <span class="w3-small am-b"> Створення проводки</span>
 <table class="w3-light-gray w3-card">
     <tbody>
         <tr>
             <td>Дата проводки </td>
-            <td><input type="date" data-ng-model="ctrl.formData.posting.d3"> </td>
+            <td><input type="date" data-ng-model="ctrl.formData.entry.NewDateProv"> </td>
         </tr>
         <tr>
             <td>Сумма </td>
-            <td><input type="number" data-ng-model="ctrl.formData.posting.myNumb"> </td>
+            <td><input type="number" data-ng-model="ctrl.formData.entry.myNumb"> </td>
         </tr>
 
         <tr>
             <td>Валюта</td>
             <td>
-                <input type="radio" data-ng-model="ctrl.formData.posting.Val" id="nl1" value="Грн">
+                <input type="radio" data-ng-model="ctrl.formData.entry.Val" id="nl1" value="Грн">
                 <label for="nl1">Грн</label>
-                <input type="radio" data-ng-model="ctrl.formData.posting.Val" id="bn1" value="$$">
+                <input type="radio" data-ng-model="ctrl.formData.entry.Val" id="bn1" value="$$">
                 <label for="bn1">$$</label>{{ctrl.formData.Val}}
 
             </td>
@@ -23,45 +60,34 @@
         <tr>
             <td></td>
             <td>
-                <input type="radio" data-ng-model="ctrl.formData.posting.Nal" id="nl" value="0">
+                <input type="radio" data-ng-model="ctrl.formData.entry.Nal" id="nl" value="0">
                 <label for="nl">Нал</label>
-                <input type="radio" data-ng-model="ctrl.formData.posting.Nal" id="bn" value="1">
+                <input type="radio" data-ng-model="ctrl.formData.entry.Nal" id="bn" value="1">
                 <label for="bn">БезНал</label>
             </td>
 
         </tr>
         <tr>
-            <td>Контрагент {{LName}} </td>
-            <td> <input type="text" data-ng-model="ctrl.formData.posting.LName"> </td>
+            <td>Контрагент </td>
+            <td> <input type="text" data-ng-model="ctrl.formData.entry.LName"> </td>
         </tr>
         <tr>
             <td>Кассовая операция</td>
-            <td> <input type="text" data-ng-model="ctrl.formData.posting.KassOp"> </td>
+            <td> <input type="text" data-ng-model="ctrl.formData.entry.KassOp"> </td>
         </tr>
         <tr>
             <td> <button class="w3-btn w3-grey" data-ng-click="ctrl.AddKassa()">Создать
                     проводку
                 </button>
             </td>
-            <td> <button class="w3-btn w3-grey" data-ng-click="ctrl.DeleteKassa()">Удалить
-                    проводку
-                </button>
-            </td>
         </tr>
-
-        <tr>
-            <td>Всього проводок</td>
-            <td> {{ctrl.formData.posting.Vrec}} 
-            </td>
-
-        </tr>
-        <tr>
-            <td>Загальна сума </td>
-            <td> {{ctrl.formData.posting.Vsum}} </td>
-
-        </tr>
-        <td> <button class="w3-btn w3-grey" data-ng-click="ctrl.Perechet()">Пересчитать
-            </button>
-        </td>
     </tbody>
 </table>
+
+<select data-ng-model="ctrl.formData.entry.selectedItem">
+    <option data-ng-repeat="bloodgroupvalue in ctrl.bloodgroup" value="{{bloodgroupvalue.Id}}">{{bloodgroupvalue.Name}}</option>
+  </select>
+
+
+
+ 
