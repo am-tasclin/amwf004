@@ -21,42 +21,71 @@ class LRLController extends AbstractController {
 app.controller("LRLController", LRLController)
 
 let formData = {}
-// https://uk.wikipedia.org/wiki/Бухгалтерський_запис
-//Прово́дка, бухга́лтерський за́пис (англ. Entry) 
-formData.posting = {}
-formData.posting.LName = 'Iванов'
-formData.posting.myNumb = 1234
-formData.posting.firstName = 'ФОП Глобус'
-formData.posting.lastName = 'Сидоренко М.Н.'
-formData.posting.d1 = new Date('2021-01-01')
-formData.posting.d2 = new Date('2022-02-02')
-formData.posting.d3 = new Date()
-formData.posting.Nal = -1
-formData.posting.val = 'грн'
-formData.posting.KassOp = 'за товар'
-formData.posting.n1 = 'insert-kassa.html'
-formData.posting.n2 = 'table-kassa.html'
-formData.posting.Vrec = 0
-formData.posting.Vsum = 0
-formData.posting.PrRasx = 1
+
+formData.entry = {}
+formData.entry.LName = 'Iванов'
+formData.entry.myNumb = 1234
+formData.entry.NewDateProv = new Date()
+formData.entry.Nal = -1
+formData.entry.val = 'грн'
+formData.entry.KassOp = 'за товар'
+
+formData.global = {}
+formData.global.firstName = 'ФОП Глобус'
+formData.global.lastName = 'Сидоренко М.Н.'
+formData.global.n1 = 'insert-kassa.html'
+formData.global.n2 = 'table-kassa.html'
+
+formData.seek = {}
+formData.seek.StartDateProv = new Date('2021-01-01')
+formData.seek.FinishDateProv = new Date('2022-02-02')
+formData.seek.PrRasx = 1
+formData.seek.SeekLName = ''
 
 conf.sqlKeyName = 'SelectKassa'
-console.log(formData.posting.firstName)
+console.log(formData.global.firstName)
 
 class TestControl {
     constructor($http) {
+
+        this.bloodgroup =
+            [
+                { "Id": "1", "Name": "O+" },
+                { "Id": "2", "Name": "O-" },
+                { "Id": "3", "Name": "A+" },
+                { "Id": "4", "Name": "A-" },
+                { "Id": "5", "Name": "B+" },
+                { "Id": "6", "Name": "B-" },
+                { "Id": "7", "Name": "AB+" },
+                { "Id": "8", "Name": "AB-" }]
+        this.BloodGroup_List = this.bloodgroup
+        this.value = "AB-"
+        console.log(this.bloodgroup)
+
+
         this.formData = formData
         this.selectRow = row => this.selectedRow = row
 
+        this.Seek_button_Lname = () => {
+            let sql = makeselect() +
+             ' AND namecontr LIKE (' + "'" + '%' + formData.seek.SeekLName + '%' + "'" + ')'
+            
+             $http.get('/r/url_sql_read_db1', { params: { sql: sql } }
+            ).then(responce => {
+                this.data = responce.data
+            })
+        }
+
+
+
         this.AddKassa = () => {
-            console.log("AddKassa", formData.posting.val)
-            let sql = sql_app.AddKassa_VB.sql.replace(':pr', formData.posting.PrRasx)
-                .replace(':Ld1', "'" + formData.posting.d3.toISOString().split('T')[0] + "'")
-                .replace(':ssum', formData.posting.myNumb)
-                .replace(':KassOp', "'" + formData.posting.KassOp + "'")
-                .replace(':NameContr', "'" + formData.posting.LName + "'")
-                .replace(':val', "'" + formData.posting.val + "'")
-                .replace(':nal', formData.posting.Nal)
+            let sql = sql_app.AddKassa_VB.sql.replace(':pr', formData.seek.PrRasx)
+                .replace(':Ld1', "'" + formData.entry.NewDateProv.toISOString().split('T')[0] + "'")
+                .replace(':ssum', formData.entry.myNumb)
+                .replace(':KassOp', "'" + formData.entry.KassOp + "'")
+                .replace(':NameContr', "'" + formData.entry.LName + "'")
+                .replace(':val', "'" + formData.entry.val + "'")
+                .replace(':nal', formData.entry.Nal)
 
             sql = sql + '; \n\ ' + makeSelect()
             console.log(sql)
@@ -80,22 +109,16 @@ class TestControl {
         }
 
         this.Perechet = () => {
-            console.log("Неполучаеться сбросить в переменные значения из запроса")
 
             let sql = makeSelect('GroupKassa')
-            console.log(sql)
 
             $http.get('/r/url_sql_read_db1', { params: { sql: sql } }
             ).then(responce => {
-                this.data.list.push(responce.data.list[0])
-                // Тут не работает
-                //$scope.data = responce.data
-                // formData.posting.Vrec = responce.data.list.Count
-                // formData.posting.Vsum = responce.data.list.SumaProv
-            })
+                this.SelectGrup = responce.data.list[0]
 
-            // а здесь не видит this.formData.selectRow
-            console.log("GropKassa", this.formData.selectRow)
+                console.log(this.SelectGrup.idnom)
+
+            })
         }
 
         this.Ok_button = () => {
@@ -112,9 +135,9 @@ class TestControl {
 const makeSelect = sqlName => {
     if (!sqlName) sqlName = 'SelectKassa'
     return sql_app[sqlName].sql
-        .replace(':d1', "'" + formData.posting.d1.toISOString().split('T')[0] + "'")
-        .replace(':d2', "'" + formData.posting.d2.toISOString().split('T')[0] + "'")
-        .replace(':p', formData.posting.PrRasx)
+        .replace(':d1', "'" + formData.seek.StartDateProv.toISOString().split('T')[0] + "'")
+        .replace(':d2', "'" + formData.seek.FinishDateProv.toISOString().split('T')[0] + "'")
+        .replace(':p', formData.seek.PrRasx)
 }
 
 
