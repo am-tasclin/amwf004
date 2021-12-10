@@ -109,11 +109,10 @@ singlePage['pl'] = {
 class PlanDefinitionController extends AbstractController {
     constructor(dataFactory, $timeout) {
         super()
-console.log('PlanDefinitionController')
-        console.log(singlePage.UrlMap(), singlePage.UrlMap()['hy'])
+        console.log('PlanDefinitionController', singlePage.UrlMap(), singlePage.UrlMap()['hy'])
         dataFactory.readPatient()
         dataFactory.runTrigger()
-        console.log(singlePage.UrlMap()['pd'])
+        console.log(singlePage.UrlMap()['pd'], singlePage.UrlMap()['pda'])
         angular.forEach(contentDoc.readPlanDefinitionElements, (v, k) => {
             // console.log(k, 1, v.sql, 2, readSql2R(v.sql))
             dataFactory.httpGetSql({ sql: readSql2R(v.sql) }
@@ -204,7 +203,7 @@ class InitPageController extends AbstractController {
             sqlCmdMap2 = JSON.parse(txt)
             sqlCmdMap2.init = eval('(' + sqlCmdMap2.init + ')')
             let rr = $route.routes // init routes? from times to times
-            console.log('sqlCmdMap2 from DB = ', sqlCmdMap2, )
+            console.log('sqlCmdMap2 from DB = ', sqlCmdMap2,)
         })
     }
     save_pd_action = () => {

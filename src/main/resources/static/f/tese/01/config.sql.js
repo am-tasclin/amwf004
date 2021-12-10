@@ -50,6 +50,17 @@ sql_app.DataRequirement_type_path = {
     LEFT JOIN doc dp ON dp.parent=dr.doc_id \n\
     WHERE dr.reference = 84929',
 }
+sql_app.task_instantiatesCanonical_InputValue = {
+    name:'завдання в сценарії -> дані команди вводу',
+    sql:'SELECT task.doc_id task_id, s1.value taskInputValue, taskInputValue.doc_id taskInputValue_id \n\
+    FROM doc task LEFT JOIN doc taskInputValue \n\
+      LEFT JOIN string s1 ON s1.string_id=taskInputValue.doc_id \n\
+    ON taskInputValue.parent=task.doc_id AND taskInputValue.reference=371933 \n\
+    WHERE task.reference=371927',
+    sqlHtml: {
+        taskinputvalue: '<pre class="w3-small">{{r[k]}}</pre>',
+    },
+}
 sql_app.pd_action_ActivityDefinition_title_name = {
     name:'Команда MeTaL комп\'ютерне і людське ім\'я -> в плані',
     sql:'SELECT d1.doc_id pd_ad_id, d1.doc_id pd_action_ad_id, d1.parent, d3.parent pd_id, x.* \n\

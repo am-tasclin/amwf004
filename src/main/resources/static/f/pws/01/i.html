@@ -49,6 +49,8 @@
                 </div>
                 <span class="w3-tiny am-b">план/сценарій</span>
                 <div data-ng-repeat="pd in ctrl.conf.plandefinition">
+                    <a href="/f/pws/pd/1/i.html#!/pd_{{pd.pd_id}}" target="_blank" class="w3-right w3-tiny">
+                        <i class="far fa-edit"></i> план </a>
                     <a href="#!{{ctrl.singlePage.UrlOnOff('pd_'+pd.pd_id,3)}}" class="am-0u">
                         <div class="w3-hover-shadow"> {{pd.pd_name}}
                             <span class="w3-tiny">{{pd.tr_name}}</span>
