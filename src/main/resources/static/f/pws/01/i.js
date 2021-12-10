@@ -109,6 +109,7 @@ singlePage['pl'] = {
 class PlanDefinitionController extends AbstractController {
     constructor(dataFactory, $timeout) {
         super()
+console.log('PlanDefinitionController')
         console.log(singlePage.UrlMap(), singlePage.UrlMap()['hy'])
         dataFactory.readPatient()
         dataFactory.runTrigger()
@@ -194,15 +195,16 @@ class InitPageController extends AbstractController {
     constructor($route, dataFactory) {
         super()
         this.dataFactory = dataFactory
-        // console.log(Object.keys($route.routes)) // NOT DELETE
+        //console.log(Object.keys($route.routes)) // NOT DELETE
 
         dataFactory.httpGetSql({ sql: 'SELECT * FROM string WHERE string_id=373519' }
         ).then(r => {
-            console.log(r.list[0].value)
+            // console.log(r.list[0].value)
             let txt = r.list[0].value.replace(/\n|\r/g, "")
             sqlCmdMap2 = JSON.parse(txt)
             sqlCmdMap2.init = eval('(' + sqlCmdMap2.init + ')')
-            console.log(1, sqlCmdMap2)
+            let rr = $route.routes // init routes? from times to times
+            console.log('sqlCmdMap2 from DB = ', sqlCmdMap2, )
         })
     }
     save_pd_action = () => {

@@ -3,23 +3,6 @@
 app.directive('amSqlHtml', AmSqlHtml)
 app.config(RouteProviderConfig)
 
-singlePage.lr = {
-    templateUrl: 'lr.html',
-    controller: 'LRLController',
-}
-singlePage.rl = {
-    templateUrl: 'rl.html',
-    controller: 'LRLController',
-}
-
-class LRLController extends AbstractController {
-    constructor($scope, $route, $routeParams) {
-        super()
-        console.log(123)
-    }
-}
-app.controller("LRLController", LRLController)
-
 let formData = {}
 
 formData.entry = {}
@@ -33,8 +16,8 @@ formData.entry.KassOp = 'за товар'
 formData.global = {}
 formData.global.firstName = 'ФОП Глобус'
 formData.global.lastName = 'Сидоренко М.Н.'
-formData.global.n1 = 'insert-kassa.html'
-formData.global.n2 = 'table-kassa.html'
+formData.global.n1 = '/f/kassa2r/insert-kassa.html'
+formData.global.n2 = '/f/kassa2r/table-kassa.html'
 
 formData.seek = {}
 formData.seek.StartDateProv = new Date('2021-01-01')
@@ -46,20 +29,10 @@ conf.sqlKeyName = 'SelectKassa'
 console.log(formData.global.firstName)
 
 class TestControl {
-    constructor($http) {
+    constructor(dataFactory) {
 
-        this.bloodgroup = [
-            { "Id": "1", "Name": "O+" },
-            { "Id": "2", "Name": "O-" },
-            { "Id": "3", "Name": "A+" },
-            { "Id": "4", "Name": "A-" },
-            { "Id": "5", "Name": "B+" },
-            { "Id": "6", "Name": "B-" },
-            { "Id": "7", "Name": "AB+" },
-            { "Id": "8", "Name": "AB-" }]
-        this.BloodGroup_List = this.bloodgroup
-        this.value = "AB-"
-        console.log(this.bloodgroup)
+        // to tutorial 2
+        this.bloodgroup = bloodgroup
 
         this.formData = formData
         this.selectRow = row => this.selectedRow = row
@@ -68,10 +41,10 @@ class TestControl {
             let sql = makeSelect() +
                 ' AND lower(namecontr) LIKE lower(\'%' + formData.seek.SeekLName + '%\')'
             console.log(sql)
-            $http.get('/r/url_sql_read_db1', { params: { sql: sql } }
-            ).then(responce => {
-                this.data = responce.data
-            })
+
+            dataFactory.httpGetSql({ sql: sql })
+                .then(responceData => this.data = responceData)
+
         }
 
         this.AddKassa = () => {
@@ -86,46 +59,62 @@ class TestControl {
             sql = sql + '; \n\ ' + makeSelect()
             console.log(sql)
 
-            $http.post('/r/url_sql_read_db1', { sql: sql }
-            ).then(responce => this.data.list = responce.data.list1)
+            dataFactory.httpPostSql({ sql: sql })
+                .then(responceData => this.data.list = responceData.list1)
         }
 
-        this.DeleteKassa = (a) => {
+        this.DeleteKassa = () => {
             console.log("DeleteKassa", this.selectedRow.idnom)
             let sql = sql_app.DeleteKassa.sql.replace(':LidNom', this.selectedRow.idnom)
             sql = sql + '; \n\ ' + makeSelect()
 
             console.log(sql)
-            $http.post('/r/url_sql_read_db1', { sql: sql }
-            ).then(responce => {
-                console.log(responce.data)
-                this.data.list = responce.data.list1
-            })
-            console.log('DeleteKassa')
+
+            dataFactory.httpPostSql({ sql: sql })
+                .then(responceData => this.data.list = responceData.list1)
         }
 
-        this.Perechet = () => {
+        this.Perechet = () =>
+            dataFactory.httpGetSql({ sql: makeSelect('GroupKassa2') })
+                .then(responceData => this.SelectGrup = responceData.list[0])
 
-            let sql = makeSelect('GroupKassa2')
+        this.Ok_button = () =>
+            dataFactory.httpGetSql({ sql: makeSelect() })
+                .then(responceData => this.data = responceData)
 
-            $http.get('/r/url_sql_read_db1', { params: { sql: sql } }
-            ).then(responce => {
-                this.SelectGrup = responce.data.list[0]
-
-                console.log(this.SelectGrup.idnom)
-
-            })
-        }
-
-        this.Ok_button = () => {
-            console.log("Ok_button")
-            $http.get('/r/url_sql_read_db1', { params: { sql: makeSelect() } }
-            ).then(responce => {
-                this.data = responce.data
-            })
-        }
         this.Ok_button()
     }
+}
+
+class RWDataFactory {
+    constructor($http, $q) { this.$http = $http; this.$q = $q }
+    urlSql = '/r/url_sql_read_db1'
+    sqlRowLimit = 50
+
+    httpPostSql = params => {
+        let deferred = this.$q.defer()
+
+        this.$http.post(this.urlSql, params)
+            .then(response => deferred.resolve(response.data))
+
+        return deferred.promise
+    }
+
+    httpGetSql = params => {
+        let deferred = this.$q.defer()
+        if (params.limit) sqlRowLimit = params.limit
+        params.sql = params.sql + ' LIMIT ' + this.sqlRowLimit
+
+        this.$http.get(this.urlSql, { params: params }
+        ).then(response => deferred.resolve(response.data)
+            , response => console.error(response.status)
+        )
+
+        return deferred.promise
+    }
+    // deferred.reject(response.status)
+    // https://metanit.com/web/angular/3.3.php
+
 }
 
 const makeSelect = sqlName => {
@@ -149,4 +138,38 @@ const replaceSql = sql => {
     return '' + sql
 }
 
+app.factory("dataFactory", RWDataFactory)
 app.controller('myCtrl', TestControl)
+
+// to tutorial 1
+singlePage.lr = {
+    templateUrl: 'lr.html',
+    controller: 'LRLController',
+}
+singlePage.rl = {
+    templateUrl: 'rl.html',
+    controller: 'LRLController',
+}
+
+class LRLController extends AbstractController {
+    constructor($scope, $route, $routeParams) {
+        super()
+        console.log(123)
+    }
+}
+app.controller("LRLController", LRLController)
+
+// to tutorial 2
+const bloodgroup = {
+    list: [
+        { "Id": "1", "Name": "O+" },
+        { "Id": "2", "Name": "O-" },
+        { "Id": "3", "Name": "A+" },
+        { "Id": "4", "Name": "A-" },
+        { "Id": "5", "Name": "B+" },
+        { "Id": "6", "Name": "B-" },
+        { "Id": "7", "Name": "AB+" },
+        { "Id": "8", "Name": "AB-" }],
+    value: '8',
+}
+console.log(bloodgroup)
