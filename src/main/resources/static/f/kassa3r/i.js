@@ -29,61 +29,62 @@ conf.sqlKeyName = 'SelectKassa'
 console.log(formData.global.firstName)
 
 class TestControl {
+    // to tutorial 2
+    bloodgroup = bloodgroup
+    formData = formData
+
     constructor(dataFactory) {
-
-        // to tutorial 2
-        this.bloodgroup = bloodgroup
-
-        this.formData = formData
-        this.selectRow = row => this.selectedRow = row
-
-        this.Seek_button_Lname = () => {
-            let sql = makeSelect() +
-                ' AND lower(namecontr) LIKE lower(\'%' + formData.seek.SeekLName + '%\')'
-            console.log(sql)
-
-            dataFactory.httpGetSql({ sql: sql })
-                .then(responceData => this.data = responceData)
-
-        }
-
-        this.AddKassa = () => {
-            let sql = sql_app.AddKassa_VB.sql.replace(':pr', formData.seek.PrRasx)
-                .replace(':Ld1', "'" + formData.entry.NewDateProv.toISOString().split('T')[0] + "'")
-                .replace(':ssum', formData.entry.myNumb)
-                .replace(':KassOp', "'" + formData.entry.KassOp + "'")
-                .replace(':NameContr', "'" + formData.entry.LName + "'")
-                .replace(':val', "'" + formData.entry.val + "'")
-                .replace(':nal', formData.entry.Nal)
-
-            sql = sql + '; \n\ ' + makeSelect()
-            console.log(sql)
-
-            dataFactory.httpPostSql({ sql: sql })
-                .then(responceData => this.data.list = responceData.list1)
-        }
-
-        this.DeleteKassa = () => {
-            console.log("DeleteKassa", this.selectedRow.idnom)
-            let sql = sql_app.DeleteKassa.sql.replace(':LidNom', this.selectedRow.idnom)
-            sql = sql + '; \n\ ' + makeSelect()
-
-            console.log(sql)
-
-            dataFactory.httpPostSql({ sql: sql })
-                .then(responceData => this.data.list = responceData.list1)
-        }
-
-        this.Perechet = () =>
-            dataFactory.httpGetSql({ sql: makeSelect('GroupKassa2') })
-                .then(responceData => this.SelectGrup = responceData.list[0])
-
-        this.Ok_button = () =>
-            dataFactory.httpGetSql({ sql: makeSelect() })
-                .then(responceData => this.data = responceData)
-
+        this.dataFactory = dataFactory
         this.Ok_button()
     }
+
+    selectRow = row => this.selectedRow = row
+    
+    Seek_button_Lname = () => {
+        let sql = makeSelect() +
+            ' AND lower(namecontr) LIKE lower(\'%' + formData.seek.SeekLName + '%\')'
+        console.log(sql)
+
+        this.Ok_button(sql)
+    }
+
+    AddKassa = () => {
+        let sql = sql_app.AddKassa_VB.sql.replace(':pr', formData.seek.PrRasx)
+            .replace(':Ld1', "'" + formData.entry.NewDateProv.toISOString().split('T')[0] + "'")
+            .replace(':ssum', formData.entry.myNumb)
+            .replace(':KassOp', "'" + formData.entry.KassOp + "'")
+            .replace(':NameContr', "'" + formData.entry.LName + "'")
+            .replace(':val', "'" + formData.entry.val + "'")
+            .replace(':nal', formData.entry.Nal)
+
+        sql = sql + '; \n\ ' + makeSelect()
+        console.log(sql)
+
+        this.dataFactory.httpPostSql({ sql: sql }
+        ).then(responceData => this.data.list = responceData.list1)
+    }
+
+    DeleteKassa = () => {
+        console.log("DeleteKassa", this.selectedRow.idnom)
+        let sql = sql_app.DeleteKassa.sql.replace(':LidNom', this.selectedRow.idnom)
+        sql = sql + '; \n\ ' + makeSelect()
+
+        console.log(sql)
+
+        this.dataFactory.httpPostSql({ sql: sql }
+        ).then(responceData => this.data.list = responceData.list1)
+    }
+
+    Perechet = () =>
+        this.dataFactory.httpGetSql({ sql: makeSelect('GroupKassa2') }
+        ).then(responceData => this.SelectGrup = responceData.list[0])
+
+    Ok_button = (sql) => {
+        if (!sql) sql = makeSelect()
+        this.dataFactory.httpGetSql({ sql: sql }
+        ).then(responceData => this.data = responceData)
+    }
+
 }
 
 class RWDataFactory {
