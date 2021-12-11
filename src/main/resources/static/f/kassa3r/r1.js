@@ -1,6 +1,4 @@
 'use strict';
-var app = angular.module("app", [])
-angular.element(() => angular.bootstrap(document, ['app']))
 
 class List2Controller {
     bloodgroup = bloodgroup
@@ -25,6 +23,11 @@ const bloodgroup = {
         { "Id": "7", "Name": "AB+" },
         { "Id": "8", "Name": "AB-" }],
     value: '8',
+    clickCount: 0,
 }
 console.log(bloodgroup)
 
+sql_app.spcontragent = {
+    name:'Контрагенти',
+    sql:'SELECT * FROM kassa.spcontragents',
+}

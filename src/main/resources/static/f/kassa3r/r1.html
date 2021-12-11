@@ -8,6 +8,7 @@
 <script src="/webjars/angular/1.8.2/angular.min.js" type="application/javascript"></script>
 <script src="/webjars/angular-i18n/1.8.2/angular-locale_uk-ua.js" type="application/javascript"></script>
 <script src="/webjars/angular-route/1.8.2/angular-route.min.js" type="application/javascript"></script>
+<script src="/f/kassa2r/lib-init.js" type="application/javascript"></script>
 <script src="r1.js" type="application/javascript"> </script>
 
 <body>
@@ -44,14 +45,13 @@
             <div data-ng-controller="L2Ctrl as ctrl" class="w3-half">
                 list3
                 <input class="w3-border" data-ng-model="ctrl.seek" data-ng-focus="ctrl.viewList=!ctrl.viewList"
-                    data-ng-b1lur="ctrl.viewList=false">
+                    data-ng-click="ctrl.bloodgroup.clickCount=ctrl.bloodgroup.clickCount+1" data-ng-b1lur="ctrl.viewList=false">
                 {{ctrl.viewList}}
                 <div data-ng-if="ctrl.viewList" class="w3-leftbar w3-card">
                     <span class="w3-tiny am-b"> тіло списка </span>|
                     <span data-ng-repeat="b in ctrl.bloodgroup.list">
-                        <span class="w3-hover-shadow" 
-                        data-ng-click="ctrl.bloodgroup.value=b.Id;ctrl.viewList=false"
-                        data-ng-class="{'w3-green':ctrl.bloodgroup.value==b.Id}">
+                        <span class="w3-hover-shadow" data-ng-click="ctrl.bloodgroup.value=b.Id;ctrl.viewList=false"
+                            data-ng-class="{'w3-green':ctrl.bloodgroup.value==b.Id}">
                             {{b.Name}}
                         </span>
                         |</span>
@@ -59,6 +59,8 @@
                 <div>
                     text
                     {{ctrl.bloodgroup.value}}
+                    /
+                    {{ctrl.bloodgroup.clickCount}}
                 </div>
             </div>
             <div class="w3-half w3-border-left w3-container">
