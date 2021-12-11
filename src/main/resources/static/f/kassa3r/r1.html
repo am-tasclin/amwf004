@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="uk-UA">
+<meta charset="utf-8" />
+<link rel="stylesheet" href="/webjars/font-awesome/5.15.2/css/all.min.css">
+<link rel="stylesheet" href="/f/css/w3.css">
+<link rel="stylesheet" href="/f/css/am.css">
+<link rel="shortcut icon" href="/f/img/algoritmed.ico" type="image/x-icon">
+<script src="/webjars/angular/1.8.2/angular.min.js" type="application/javascript"></script>
+<script src="/webjars/angular-i18n/1.8.2/angular-locale_uk-ua.js" type="application/javascript"></script>
+<script src="/webjars/angular-route/1.8.2/angular-route.min.js" type="application/javascript"></script>
+<script src="r1.js" type="application/javascript"> </script>
+
+<body>
+    <div class="w3-container am-max-width-1">
+        <div class="w3-border-bottom">
+            <a href="/" class="w3-btn w3-border w3-padding-small w3-small">↑</a>
+            <span class="w3-small am-b">Список</span>&nbsp;⁙
+        </div>
+        list library
+        <div class="w3-row w3-border-top">
+            <div data-ng-controller="L1Ctrl as ctrl" class="w3-half">
+                list1
+                <span class="w3-dropdown-hover">
+                    <input class="w3-border" data-ng-model="ctrl.seek">
+                    <div class="w3-dropdown-content w3-card">
+                        <div class="w3-tiny am-b w3-light-grey"> тіло списка </div>
+                        <div data-ng-repeat="b in ctrl.bloodgroup.list" class="w3-hover-shadow"
+                            data-ng-class="{'w3-green':ctrl.bloodgroup.value==b.Id}"
+                            data-ng-click="ctrl.bloodgroup.value=b.Id">
+                            {{b.Name}}
+                        </div>
+                    </div>
+                </span>
+            </div>
+            <div data-ng-controller="L2Ctrl as ctrl" class="w3-half w3-border-left w3-container">
+                list2
+                <select data-ng-model="ctrl.bloodgroup.value" class="w3-border">
+                    <option data-ng-repeat="bloodgroupvalue in ctrl.bloodgroup.list" value="{{bloodgroupvalue.Id}}">
+                        {{bloodgroupvalue.Name}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="w3-row w3-border-top">
+            <div data-ng-controller="L2Ctrl as ctrl" class="w3-half">
+                list3
+                <input class="w3-border" data-ng-model="ctrl.seek" data-ng-focus="ctrl.viewList=!ctrl.viewList"
+                    data-ng-b1lur="ctrl.viewList=false">
+                {{ctrl.viewList}}
+                <div data-ng-if="ctrl.viewList" class="w3-leftbar w3-card">
+                    <span class="w3-tiny am-b"> тіло списка </span>|
+                    <span data-ng-repeat="b in ctrl.bloodgroup.list">
+                        <span class="w3-hover-shadow" 
+                        data-ng-click="ctrl.bloodgroup.value=b.Id;ctrl.viewList=false"
+                        data-ng-class="{'w3-green':ctrl.bloodgroup.value==b.Id}">
+                            {{b.Name}}
+                        </span>
+                        |</span>
+                </div>
+                <div>
+                    text
+                    {{ctrl.bloodgroup.value}}
+                </div>
+            </div>
+            <div class="w3-half w3-border-left w3-container">
+                list4
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

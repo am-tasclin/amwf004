@@ -39,7 +39,7 @@ class TestControl {
     }
 
     selectRow = row => this.selectedRow = row
-    
+
     Seek_button_Lname = () => {
         let sql = makeSelect() +
             ' AND lower(namecontr) LIKE lower(\'%' + formData.seek.SeekLName + '%\')'
@@ -95,8 +95,10 @@ class RWDataFactory {
     httpPostSql = params => {
         let deferred = this.$q.defer()
 
-        this.$http.post(this.urlSql, params)
-            .then(response => deferred.resolve(response.data))
+        this.$http.post(this.urlSql, params
+        ).then(response => deferred.resolve(response.data)
+            , response => console.error(response.status)
+        )
 
         return deferred.promise
     }
