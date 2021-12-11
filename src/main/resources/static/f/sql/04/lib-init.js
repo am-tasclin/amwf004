@@ -7,10 +7,23 @@ const sql_app = {}
 // for|as $scope
 const singlePage = {}/* $route fn */
     , conf = {}/* conf page|app|content */
-class AbstractController { singlePage = singlePage; conf = conf; getSql = sqlName => sql_app[sqlName] }
-
+class AbstractController {
+    singlePage = singlePage; conf = conf;
+    getSql = sqlName => sql_app[sqlName]
+}
 // Element_id to element map.
 conf.eMap = {}
+
+//MeTaL Medical, Math and Model Task Language
+const metal = {}
+metal.init = (metalInit) => {
+    // console.log(metalInit)
+    let txt = metalInit.replace(/\n|\r/g, "")
+    let sqlCmdMapVar = JSON.parse(txt)
+    sqlCmdMapVar.init = eval('(' + sqlCmdMapVar.init + ')')
+    // console.log('sqlCmdMap2 from DB = ', sqlCmdMapVar,)
+    return sqlCmdMapVar
+}
 
 // FHIR element name to FHIR element_id
 const name2id = n => n.toLowerCase() + '_id'
@@ -76,7 +89,7 @@ class DataDBexchangeService {
             adn_deletes: $resource('/r/adn/deletes', { sqlCmdListMap: '@sqlCmdListMap' }),
             url_sql_read_db1: $resource('/r/url_sql_read_db1', { data: '@data' }),
             url: '/r/url_sql_read_db1',
-            httpGet: function (params) {
+            httpGetSql: function (params) {
                 var deferred = $q.defer()
                 $http.get(this.url, { params: params })
                     .then((response) => {

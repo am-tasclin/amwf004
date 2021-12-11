@@ -1,5 +1,6 @@
 'use strict'
 app.config(RouteProviderFHIRConfig)
+
 class PlDefDataFactory extends DataDBexchangeService {
     constructor($http, $q, $resource) { super($http, $q, $resource) }
 
@@ -7,12 +8,13 @@ class PlDefDataFactory extends DataDBexchangeService {
         console.log(conf.FHIR.pd, singlePage.UrlMap()['pd'])
         let makeSql = sqlName => replaceSql(
             sql_app.PlanDefinitionById.buildSql(sqlName, singlePage.UrlMap()['pd']))
-        this.httpGet({ sql: makeSql(conf.FHIR.pd.sqlName) }).then(dataSqlRequest => {
+        this.httpGetSql({ sql: makeSql(conf.FHIR.pd.sqlName) }
+        ).then(dataSqlRequest => {
             conf.FHIR.pd.currEl = dataSqlRequest.list[0]
             angular.forEach(conf.FHIR.pd.sql_app_children, (v, sqlName) => {
                 console.log(sqlName, v)
                 // console.log(makeSql(sqlName))
-                this.httpGet({ sql: makeSql(sqlName) }).then(dataSqlRequest => {
+                this.httpGetSql({ sql: makeSql(sqlName) }).then(dataSqlRequest => {
                     if (!conf.FHIR.pd.currEl.sql_app_children)
                         conf.FHIR.pd.currEl.sql_app_children = {}
                     conf.FHIR.pd.currEl.sql_app_children[sqlName] = dataSqlRequest.list
@@ -24,6 +26,7 @@ class PlDefDataFactory extends DataDBexchangeService {
     readActivityDefinition = () => {
         console.log(conf.FHIR.ad, singlePage.UrlMap()['ad'])
     }
+
 }
 app.factory("dataBeFactory", PlDefDataFactory)
 
@@ -45,9 +48,14 @@ class PlanDefinitionController extends AbstractController {
 class ActivityDefinitionController extends AbstractController {
     constructor(dataBeFactory) {
         super()
-        console.log(123)
         if (singlePage.UrlMap()['pd']) dataBeFactory.readPlanDefinition()
-        if (singlePage.UrlMap()['ad']) dataBeFactory.readActivityDefinition()
+        if (singlePage.UrlMap()['ad']) {
+            dataBeFactory.readActivityDefinition()
+            console.log(123, singlePage.UrlMap()['ad'], dataBeFactory)
+            // dataBeFactory.httpGetSql = dataBeFactory.httpGet
+            sql_app.action_task_1
+                .readActionTask(dataBeFactory, singlePage.UrlMap()['ad'])
+        }
     }
 }
 class InitPageController extends AbstractController {

@@ -1,5 +1,4 @@
 'use strict';
-
 class List2Controller { bloodgroup = bloodgroup }
 
 class List1Controller extends List2Controller {
@@ -8,12 +7,15 @@ class List1Controller extends List2Controller {
 }
 
 class List3Controller {
+
     constructor(dataFactory) { this.dataFactory = dataFactory }
+
     click_spcontragent_seek = () => {
-        this.viewList=true
+        this.viewList = true
         console.log(this.seek, 1, sql_app.spcontragent.sql, 2, this.dataFactory)
         let sql = sql_app.spcontragent.sql
-        sql += ' WHERE namecontr LIKE (\'%' + this.seek + '%\')'
+        if (this.seek)
+            sql += ' WHERE namecontr LIKE (\'%' + this.seek + '%\')'
         console.log(sql)
         this.dataFactory.httpGetSql({ sql: sql }
         ).then(responceData => {
@@ -21,6 +23,7 @@ class List3Controller {
             console.log(this.data)
         })
     }
+
 }
 
 app.factory("dataFactory", RWDataFactory)

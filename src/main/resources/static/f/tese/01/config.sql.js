@@ -9,23 +9,23 @@ sql_app.FHIRs_Group = {
     noShow: ['reference2', 'doctype'],
 }
 sql_app.FHIR_PlanDefinition = {
-    name:'Означення плана',
-    sql:'SELECT value, d.doc_id plandefinition_id \n\
+    name: 'Означення плана',
+    sql: 'SELECT value, d.doc_id plandefinition_id \n\
     , d.doc_id pd_id, d.* FROM doc d \n\
     LEFT JOIN string ON string_id=doc_id \n\
     WHERE reference=371998', //☰ [371998]   name:371997 -  [368815] PlanDefinition
 }
 sql_app.PlanDefinition_action_title = {
-    name:'Означення плана активності заголовки',
-    sql:'SELECT value action_title, an7te.doc_id pd_action_id, an7te.doc_id title_id, an.parent pd_id \n\
+    name: 'Означення плана активності заголовки',
+    sql: 'SELECT value action_title, an7te.doc_id pd_action_id, an7te.doc_id title_id, an.parent pd_id \n\
     FROM doc an, sort s, doc an7te \n\
     LEFT JOIN string st ON st.string_id=an7te.doc_id \n\
     WHERE an7te.parent=an.doc_id AND an7te.reference=373452 \n\
     AND an.reference=369782 AND s.sort_id=an7te.doc_id ORDER BY s.sort',
 }
 sql_app.PD_Trigger_DataRequirement_type_path = {
-    name:'Сценарії-плани > tригери > необхідні дані тип шлях',
-    sql:'SELECT pdtr.doc_id pd_id, n.value pd_name, tdr.* FROM doc tr \n\
+    name: 'Сценарії-плани > tригери > необхідні дані тип шлях',
+    sql: 'SELECT pdtr.doc_id pd_id, n.value pd_name, tdr.* FROM doc tr \n\
     LEFT JOIN doc trim \n\
     LEFT JOIN (:sql_app.Trigger_DataRequirement_type_path ) tdr ON tdr.triger_id=trim.reference2 \n\
     ON trim.parent=tr.doc_id \n\
@@ -34,8 +34,8 @@ sql_app.PD_Trigger_DataRequirement_type_path = {
     WHERE pdtr.reference=371998 AND tr.parent=pdtr.doc_id AND tr.reference=373479',
 }
 sql_app.Trigger_DataRequirement_type_path = {
-    name:'Тригери > необхідні дані тип шлях',
-    sql:'SELECT n.value tr_name, tdr.doc_id triger_id, dr.* FROM doc tdr \n\
+    name: 'Тригери > необхідні дані тип шлях',
+    sql: 'SELECT n.value tr_name, tdr.doc_id triger_id, dr.* FROM doc tdr \n\
     LEFT JOIN string n ON n.string_id=tdr.doc_id \n\
     LEFT JOIN doc td \n\
     LEFT JOIN (:sql_app.DataRequirement_type_path ) dr ON dr.dr_type_id=td.reference2 \n\
@@ -43,16 +43,44 @@ sql_app.Trigger_DataRequirement_type_path = {
     WHERE tdr.reference=369820',
 }
 sql_app.DataRequirement_type_path = {
-    name:'Необхідні дані тип шлях',
-    sql:'SELECT dr.doc_id dr_type_id, dr.reference2 dr_type_def_id \n\
+    name: 'Необхідні дані тип шлях',
+    sql: 'SELECT dr.doc_id dr_type_id, dr.reference2 dr_type_def_id \n\
     , dp.doc_id dr_codeFilter_path_id, dp.reference2 codeFilter_path_def_id \n\
     FROM doc dr \n\
     LEFT JOIN doc dp ON dp.parent=dr.doc_id \n\
     WHERE dr.reference = 84929',
 }
+sql_app.action_task_1 = {
+    name: 'активність і завдання перша реалізація',
+    sql: 'SELECT * FROM (:sql_app.action_definitionCanonical ) a, \n\
+    (:sql_app.task_instantiatesCanonical_InputValue ) t \n\
+WHERE t.definitionCanonical_id=a.definitionCanonical_id ',
+    sqlHtml: {
+        taskinputvalue: '<pre class="w3-small">{{r[k]}}</pre>',
+    },
+    readActionTask: (dataFactory, ad) => {
+        let sql = readSql2R('action_task_1')
+        sql += ' AND action_id = ' + ad
+        // console.log(sql)
+        // console.log(sql_app.action_task_1)
+        dataFactory.httpGetSql({ sql: sql }
+        ).then(dataSqlRequest => {
+            if(dataSqlRequest.list[0]){
+                console.log(dataSqlRequest.list[0])
+                if (!sql_app.action_task_1.sqlCmdMap)
+                    sql_app.action_task_1.sqlCmdMap = {}
+                sql_app.action_task_1.sqlCmdMap[dataSqlRequest.list[0].action_id]
+                    = dataSqlRequest.list[0]
+                sql_app.action_task_1.sqlCmdMap[dataSqlRequest.list[0].action_id].js
+                    = metal.init(dataSqlRequest.list[0].taskinputvalue)
+                console.log(sql_app.action_task_1.sqlCmdMap)
+            }
+        })
+    },
+}
 sql_app.task_instantiatesCanonical_InputValue = {
-    name:'завдання в сценарії -> дані команди вводу',
-    sql:'SELECT task.doc_id task_id, s1.value taskInputValue, taskInputValue.doc_id taskInputValue_id \n\
+    name: 'завдання в сценарії -> дані команди вводу',
+    sql: 'SELECT task.doc_id task_id, s1.value taskInputValue, taskInputValue.doc_id taskInputValue_id, task.reference2 definitionCanonical_id \n\
     FROM doc task LEFT JOIN doc taskInputValue \n\
       LEFT JOIN string s1 ON s1.string_id=taskInputValue.doc_id \n\
     ON taskInputValue.parent=task.doc_id AND taskInputValue.reference=371933 \n\
@@ -61,17 +89,25 @@ sql_app.task_instantiatesCanonical_InputValue = {
         taskinputvalue: '<pre class="w3-small">{{r[k]}}</pre>',
     },
 }
+sql_app.action_definitionCanonical = {
+    name: 'акривність та визначенна команда',
+    sql: 'SELECT action.doc_id action_id, definitionCanonical.doc_id definitionCanonical_id, s1.* \n\
+    FROM doc action, doc definitionCanonical \n\
+    LEFT JOIN string s1 ON s1.string_id=definitionCanonical.reference2 \n\
+    WHERE definitionCanonical.reference=369920 \n\
+    AND action.doc_id=definitionCanonical.parent',
+}
 sql_app.pd_action_ActivityDefinition_title_name = {
-    name:'Команда MeTaL комп\'ютерне і людське ім\'я -> в плані',
-    sql:'SELECT d1.doc_id pd_ad_id, d1.doc_id pd_action_ad_id, d1.parent, d3.parent pd_id, x.* \n\
+    name: 'Команда MeTaL комп\'ютерне і людське ім\'я -> в плані',
+    sql: 'SELECT d1.doc_id pd_ad_id, d1.doc_id pd_action_ad_id, d1.parent, d3.parent pd_id, x.* \n\
     FROM doc d3, doc d2, doc d1 , (:sql_app.ActivityDefinition_title_name ) x \n\
     WHERE d1.reference=369920 \n\
     AND d2.doc_id=d1.parent AND d3.doc_id=d2.parent \n\
     AND x.am_title_id=d1.reference2 ',
 }
 sql_app.ActivityDefinition_title_name = {
-    name:'Команда MeTaL комп\'ютерне і людське ім\'я',
-    sql:'SELECT d1.doc_id am_title_id, s1.value ad_title \n\
+    name: 'Команда MeTaL комп\'ютерне і людське ім\'я',
+    sql: 'SELECT d1.doc_id am_title_id, s1.value ad_title \n\
     , d2.doc_id ad_name_id, s2.value ad_name --, * \n\
     FROM doc d1 LEFT JOIN string s1 ON s1.string_id=d1.doc_id \n\
     ,doc d2 LEFT JOIN string s2 ON s2.string_id=d2.doc_id \n\
@@ -79,15 +115,15 @@ sql_app.ActivityDefinition_title_name = {
     AND d1.reference=371999 AND d2.reference=373500 ',
 }
 sql_app.eRecept = {
-    name:'еРецепти',
-    sql:'SELECT d1.doc_id recept_id, d2.reference2 recept_basedon_id  \n\
+    name: 'еРецепти',
+    sql: 'SELECT d1.doc_id recept_id, d2.reference2 recept_basedon_id  \n\
     FROM doc d1,doc d2 \n\
     WHERE d1.doc_id=d2.parent \n\
     AND d2.reference=369777',
 }
 sql_app.encounter_MedicationRequest_sc_doseQuantityTimingPeriod = {
-    name:'ЕМЗ Взаємодія призначення ліків доза кількість хронометраж період',
-    sql:'SELECT mrbn.doc_id mrEncounter_id, mrbn.parent mr_emr_id, mrbn.reference2 basedOn, mrer.reference2 mrEncounter_r2 \n\
+    name: 'ЕМЗ Взаємодія призначення ліків доза кількість хронометраж період',
+    sql: 'SELECT mrbn.doc_id mrEncounter_id, mrbn.parent mr_emr_id, mrbn.reference2 basedOn, mrer.reference2 mrEncounter_r2 \n\
     , 368833 el_def_id, 373464 el_att_def_id \n\
     , er.reference2 patient_id, mr.* FROM doc mrer \n\
     LEFT JOIN doc mrbn ON mrbn.parent=mrer.doc_id AND mrbn.reference=369777 \n\
@@ -96,8 +132,8 @@ sql_app.encounter_MedicationRequest_sc_doseQuantityTimingPeriod = {
     WHERE mrer.reference = 373464 AND mrbn.reference2 = mr.medicationrequest_id',
 }
 sql_app.MedicationRequest_sc_doseQuantityTimingPeriod = {
-    name:'Призначення ліків доза кількість хронометраж період',
-    sql:'SELECT x.*, dqtp.*, esd.*, di.* FROM (:sql_app.MedicationRequest_sc ) x \n\
+    name: 'Призначення ліків доза кількість хронометраж період',
+    sql: 'SELECT x.*, dqtp.*, esd.*, di.* FROM (:sql_app.MedicationRequest_sc ) x \n\
     LEFT JOIN (SELECT di_c.parent di_c_p, di.reference di_r, di.reference2 di_r2 \n\
     FROM doc di_c, doc di WHERE di_c.reference=369984 AND di.parent=di_c.doc_id \n\
     ) di ON di_c_p=x.medicationrequest_id \n\
@@ -116,22 +152,22 @@ sql_app.DoseQuantity_timingPeriod = {
         WHERE doseAndRate.doc_id=dq.dosageandrate_id',
 }
 sql_app.DoseQuantity = {
-    name:'Доза кількість',
-    sql:'SELECT quantity_value, quantity_code, quantity_id, doseQuantity.doc_id doseQuantity_id, doseQuantity.parent dosageandrate_id \n\
+    name: 'Доза кількість',
+    sql: 'SELECT quantity_value, quantity_code, quantity_id, doseQuantity.doc_id doseQuantity_id, doseQuantity.parent dosageandrate_id \n\
     FROM doc doseQuantity \n\
     LEFT JOIN (:sql_app.Quantity ) q ON q.doc_id=doseQuantity.reference2 \n\
     WHERE doseQuantity.reference=369975',
 }
 sql_app.MedicationRequest_sc = {
-    name:'Призначення ліків субстанція',
-    sql:'SELECT d.doc_id medicationrequest_id, d.reference medicationrequest_r, medication.* FROM doc d \n\
+    name: 'Призначення ліків субстанція',
+    sql: 'SELECT d.doc_id medicationrequest_id, d.reference medicationrequest_r, medication.* FROM doc d \n\
     LEFT JOIN (:sql_app.Medication_sc ) medication \n\
     ON medication.medication_id=d.reference2 \n\
     WHERE d.reference=371469 ',
 }
 sql_app.Medication_sc = {
-    name:'Медикамент субстанція',
-    sql:'SELECT d.doc_id medication_id, item.doc_id item_id, strength.doc_id strength_ratio_id, substance.*, ratio.* FROM doc d \n\
+    name: 'Медикамент субстанція',
+    sql: 'SELECT d.doc_id medication_id, item.doc_id item_id, strength.doc_id strength_ratio_id, substance.*, ratio.* FROM doc d \n\
     LEFT JOIN (SELECT * FROM doc,sort WHERE doc_id=sort_id AND sort=1) item \n\
     LEFT JOIN (:sql_app.Substance_code ) substance ON substance_id=item.reference2 \n\
     LEFT JOIN doc strength \n\
@@ -141,14 +177,14 @@ sql_app.Medication_sc = {
     WHERE d.reference=369998 and d.reference2=369993',
 }
 sql_app.Substance_code = {
-    name:'Субстанція код',
-    sql:'SELECT value substance_code, d.doc_id substance_id \n\
+    name: 'Субстанція код',
+    sql: 'SELECT value substance_code, d.doc_id substance_id \n\
     FROM doc d, string \n\
     WHERE reference = 370024 AND string_id=reference2',
 }
 sql_app.Ratio = {
-    name:'Співвідношення',
-    sql:'SELECT n.quantity_value n_quantity_value, n.quantity_code n_quantity_code  \n\
+    name: 'Співвідношення',
+    sql: 'SELECT n.quantity_value n_quantity_value, n.quantity_code n_quantity_code  \n\
     , numerator.doc_id  ratio_id, numerator.doc_id  numerator_id, numerator.reference2 n_quantity_id --, n.*  \n\
     , dn.quantity_value dn_quantity_value, dn.quantity_code dn_quantity_code --, dn.* \n\
     , denominator.doc_id denominator_id, denominator.reference2 dn_quantity_id --, denominator.* \n\
@@ -160,8 +196,8 @@ sql_app.Ratio = {
     WHERE  numerator.reference = 368676',
 }
 sql_app.Quantity = {
-    name:'Кількість',
-    sql:'SELECT i.value quantity_value, f.value quantity_valuef, quantityCode.value quantity_code, quantityCode.reference2 quantity_code_id, quantityNum.doc_id quantity_id  \n\
+    name: 'Кількість',
+    sql: 'SELECT i.value quantity_value, f.value quantity_valuef, quantityCode.value quantity_code, quantityCode.reference2 quantity_code_id, quantityNum.doc_id quantity_id  \n\
     , quantityNum.* FROM doc quantityNum \n\
     LEFT JOIN integer i ON i.integer_id=quantityNum.doc_id \n\
     LEFT JOIN double f ON f.double_id=quantityNum.doc_id \n\

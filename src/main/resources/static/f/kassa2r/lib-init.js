@@ -7,7 +7,10 @@ const sql_app = {}
 // for|as $scope
 const singlePage = {}/* $route fn */
     , conf = {}/* conf page|app|content */
-class AbstractController { singlePage = singlePage; conf = conf; getSql = sqlName => sql_app[sqlName] }
+class AbstractController {
+    singlePage = singlePage; conf = conf; 
+    getSql = sqlName => sql_app[sqlName]
+}
 
 class AmSqlHtml {
     constructor($compile) {

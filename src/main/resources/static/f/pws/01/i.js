@@ -113,6 +113,10 @@ class PlanDefinitionController extends AbstractController {
         dataFactory.readPatient()
         dataFactory.runTrigger()
         console.log(singlePage.UrlMap()['pd'], singlePage.UrlMap()['pda'])
+        if (singlePage.UrlMap()['pda']) {
+            sql_app.action_task_1
+                .readActionTask(dataFactory, singlePage.UrlMap()['pda'])
+        }
         angular.forEach(contentDoc.readPlanDefinitionElements, (v, k) => {
             // console.log(k, 1, v.sql, 2, readSql2R(v.sql))
             dataFactory.httpGetSql({ sql: readSql2R(v.sql) }
@@ -171,10 +175,6 @@ sql_app.Patient_family_name.sqlHtml = {
     patient_id: '<a data-ng-click="ctrl.clickPatient(r)" href="#!/hy_{{r.patient_id}}"> {{r[k]}} </a>',
 }
 
-let sqlCmdMap2 = {
-    x: 2
-}
-
 let sqlCmdMap = {
     init: sqlCmdMap => {
         sqlCmdMap.insert_doc.insert_doc.reference2
@@ -195,15 +195,11 @@ class InitPageController extends AbstractController {
         super()
         this.dataFactory = dataFactory
         //console.log(Object.keys($route.routes)) // NOT DELETE
+        // let rr = $route.routes // init routes? from times to times
 
         dataFactory.httpGetSql({ sql: 'SELECT * FROM string WHERE string_id=373519' }
         ).then(r => {
-            // console.log(r.list[0].value)
-            let txt = r.list[0].value.replace(/\n|\r/g, "")
-            sqlCmdMap2 = JSON.parse(txt)
-            sqlCmdMap2.init = eval('(' + sqlCmdMap2.init + ')')
-            let rr = $route.routes // init routes? from times to times
-            console.log('sqlCmdMap2 from DB = ', sqlCmdMap2,)
+            metal.init(r.list[0].value)
         })
     }
     save_pd_action = () => {
