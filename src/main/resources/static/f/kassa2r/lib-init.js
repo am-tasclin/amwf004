@@ -24,7 +24,9 @@ class AmSqlHtml {
 }
 
 class RWDataFactory {
-    constructor($http, $q) { this.$http = $http; this.$q = $q }
+    constructor($http, $q) {
+        this.$http = $http; this.$q = $q
+    }
     urlSql = '/r/url_sql_read_db1'
     sqlRowLimit = 50
 
@@ -56,3 +58,6 @@ class RWDataFactory {
 
 }
 
+console.log(123)
+app.factory("dataFactory", RWDataFactory)
+console.log(123)

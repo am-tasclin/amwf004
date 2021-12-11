@@ -45,7 +45,8 @@
             <div data-ng-controller="L2Ctrl as ctrl" class="w3-half">
                 list3
                 <input class="w3-border" data-ng-model="ctrl.seek" data-ng-focus="ctrl.viewList=!ctrl.viewList"
-                    data-ng-click="ctrl.bloodgroup.clickCount=ctrl.bloodgroup.clickCount+1" data-ng-b1lur="ctrl.viewList=false">
+                    data-ng-click="ctrl.bloodgroup.clickCount=ctrl.bloodgroup.clickCount+1"
+                    data-ng-b1lur="ctrl.viewList=false">
                 {{ctrl.viewList}}
                 <div data-ng-if="ctrl.viewList" class="w3-leftbar w3-card">
                     <span class="w3-tiny am-b"> тіло списка </span>|
@@ -63,8 +64,16 @@
                     {{ctrl.bloodgroup.clickCount}}
                 </div>
             </div>
-            <div class="w3-half w3-border-left w3-container">
+            <div data-ng-controller="L3Ctrl as ctrl" class="w3-half w3-border-left w3-container">
                 list4
+                <input class="w3-border" data-ng-model="ctrl.seek" data-ng-focus="ctrl.viewList=!ctrl.viewList"
+                    data-ng-keydown="[13].includes($event.keyCode) && ctrl.click_spcontragent_seek()">
+                <div data-ng-if="ctrl.viewList" class="w3-leftbar w3-card">
+                    <div class="w3-tiny am-b"> тіло списка </div>
+                    <div data-ng-repeat="d in ctrl.data.list" class="w3-hover-shadow">
+                        {{d.namecontr}}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
