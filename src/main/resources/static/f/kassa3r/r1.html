@@ -20,9 +20,9 @@
         list library
         <div class="w3-row w3-border-top">
             <div data-ng-controller="L1Ctrl as ctrl" class="w3-half">
-                list1
+                list1 hover
                 <span class="w3-dropdown-hover">
-                    <input class="w3-border" data-ng-model="ctrl.seek">
+                    <input class="w3-border" data-ng-model="ctrl.seek" style="width: 75px;">
                     <div class="w3-dropdown-content w3-card">
                         <div class="w3-tiny am-b w3-light-grey"> тіло списка </div>
                         <div data-ng-repeat="b in ctrl.bloodgroup.list" class="w3-hover-shadow"
@@ -30,6 +30,14 @@
                             data-ng-click="ctrl.bloodgroup.value=b.Id">
                             {{b.Name}}
                         </div>
+                    </div>
+                </span>
+                click
+                <span class="w3-dropdown-click">
+                    <input class="w3-border" data-ng-model="ctrl.seek" style="width: 75px;"
+                        data-ng-click="ctrl.dropdownClick=!ctrl.dropdownClick">
+                    <div class="w3-dropdown-content w3-card" data-ng-class="{'w3-show':ctrl.dropdownClick}">
+                        a2
                     </div>
                 </span>
             </div>

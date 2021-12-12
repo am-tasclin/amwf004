@@ -52,15 +52,17 @@ sql_app.DataRequirement_type_path = {
 }
 sql_app.action_task_1 = {
     name: 'активність і завдання перша реалізація',
+
     sql: 'SELECT * FROM (:sql_app.action_definitionCanonical ) a, \n\
     (:sql_app.task_instantiatesCanonical_InputValue ) t \n\
 WHERE t.definitionCanonical_id=a.definitionCanonical_id ',
     sqlHtml: {
         taskinputvalue: '<pre class="w3-small">{{r[k]}}</pre>',
     },
-    readActionTask: (dataFactory, ad) => {
+
+    readActionTask: (dataFactory, action_id) => {
         let sql = readSql2R('action_task_1')
-        sql += ' AND action_id = ' + ad
+        sql += ' AND action_id = ' + action_id
         // console.log(sql)
         // console.log(sql_app.action_task_1)
         dataFactory.httpGetSql({ sql: sql }
@@ -77,6 +79,7 @@ WHERE t.definitionCanonical_id=a.definitionCanonical_id ',
             }
         })
     },
+
 }
 sql_app.task_instantiatesCanonical_InputValue = {
     name: 'завдання в сценарії -> дані команди вводу',
