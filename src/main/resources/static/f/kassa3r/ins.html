@@ -1,0 +1,9 @@
+<span class="w3-tiny am-b">ins:</span>
+<button class="w3-btn w3-border w3-padding-small" data-ng-click="ctrl.insert()">зберігати</button>
+<div>
+    <span data-ng-repeat="(k,v) in ctrl.getSql(ctrl.singlePage.UrlMap()['sql']).ins.vars">
+        <span class="w3-tiny am-b"> {{k}} </span>
+        <input data-ng-model="v.val" class="w3-border">
+        ,
+    </span>
+</div>

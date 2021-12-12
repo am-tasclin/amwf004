@@ -1,5 +1,5 @@
 'use strict';
-var app = angular.module("app", ['ngRoute'])
+var app = angular.module("app", ['ngRoute', 'ngResource', 'ngSanitize'])
 angular.element(() => angular.bootstrap(document, ['app']))
 
 // not for $scope
@@ -10,6 +10,20 @@ const singlePage = {}/* $route fn */
 class AbstractController {
     singlePage = singlePage; conf = conf; 
     getSql = sqlName => sql_app[sqlName]
+}
+
+conf.modalDisplay = { display: null }
+
+// Get sql from our name
+const readSql2R = sqlN => replaceSql(sql_app[sqlN].sql)
+// Named structured SQL to native SQL
+const replaceSql = sql => {
+    while (sql.includes(':sql_app.')) {
+        let sql_name = sql.split(':sql_app.')[1].split(' ')[0]
+        let sql_inner = readSql2R(sql_name)
+        sql = sql.replace(':sql_app.' + sql_name, sql_inner)
+    }
+    return '' + sql
 }
 
 class AmSqlHtml {
@@ -61,6 +75,4 @@ class RWDataFactory {
 
 }
 
-console.log(123)
 app.factory("dataFactory", RWDataFactory)
-console.log(123)

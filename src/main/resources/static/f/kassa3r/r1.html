@@ -16,6 +16,7 @@
         <div class="w3-border-bottom">
             <a href="/" class="w3-btn w3-border w3-padding-small w3-small">↑</a>
             <span class="w3-small am-b">Список</span>&nbsp;⁙
+            <a href="r1tab.html">r1tab</a>
         </div>
         list library
         <div class="w3-row w3-border-top">
@@ -23,20 +24,14 @@
                 list1 hover
                 <span class="w3-dropdown-hover">
                     <input class="w3-border" data-ng-model="ctrl.seek" style="width: 75px;">
-                    <div class="w3-dropdown-content w3-card">
-                        <div class="w3-tiny am-b w3-light-grey"> тіло списка </div>
-                        <div data-ng-repeat="b in ctrl.bloodgroup.list" class="w3-hover-shadow"
-                            data-ng-class="{'w3-green':ctrl.bloodgroup.value==b.Id}"
-                            data-ng-click="ctrl.bloodgroup.value=b.Id">
-                            {{b.Name}}
-                        </div>
-                    </div>
+                    <div class="w3-dropdown-content w3-card" data-ng-include="'bloodgroup-list.html'"></div>
                 </span>
                 click
                 <span class="w3-dropdown-click">
                     <input class="w3-border" data-ng-model="ctrl.seek" style="width: 75px;"
                         data-ng-click="ctrl.dropdownClick=!ctrl.dropdownClick">
-                    <div class="w3-dropdown-content w3-card" data-ng-class="{'w3-show':ctrl.dropdownClick}">
+                    <div class="w3-dropdown-content w3-card" data-ng-class="{'w3-show':ctrl.dropdownClick}"
+                        data-ng-include="'bloodgroup-list.html'">
                         a2
                     </div>
                 </span>

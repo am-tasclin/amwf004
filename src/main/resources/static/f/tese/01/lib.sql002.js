@@ -71,9 +71,10 @@ class DataFactory {
     }
 }
 
-// singlePage.Url = () => window.location.href.split('#!')[1]
+singlePage.Url = () => window.location.href.split('#!')[1]
+console.log(singlePage.Url())
 // singlePage.PseudoREST = singlePage.Url
-// singlePage.UrlList = () => singlePage.Url().split('/')
+singlePage.UrlList = () => singlePage.Url().split('/')
 // singlePage.PseudoRESTKey = key => singlePage.UrlList().filter(w => w.includes(key))
 
 singlePage.UrlParams = () => singlePage.Url().includes('?') ? singlePage.Url().split('?')[1].split('&') : []
@@ -92,6 +93,12 @@ singlePage.UrlOnOff = (s, p) => singlePage.Url().includes(s)
     ? singlePage.UrlList().slice(0, p).join('/')
     : singlePage.UrlList().slice(0, p).concat([s]).join('/')
 // singlePage.UrlOnOff = s => singlePage.Url().includes(s)?singlePage.Url().replace(s,''):(singlePage.Url()+s)
+
+singlePage.UrlMap = () => {
+    const m = {}
+    singlePage.Url().split('/').forEach(v => { if (v) m[v.split('_')[0]] = v.split('_')[1] })
+    return m
+}
 
 conf.sqlAppToLink = text =>
     !text ? '' : ('' + text).replace(new RegExp(':(sql_app\\.)(\\w+)', 'gi'), ':<b>$1<a href="#!/sql/$2">$2</a></b>')

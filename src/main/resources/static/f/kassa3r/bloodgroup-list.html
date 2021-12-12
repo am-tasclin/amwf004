@@ -1,0 +1,6 @@
+<div class="w3-tiny am-b w3-light-grey"> тіло списка </div>
+<div data-ng-repeat="b in ctrl.bloodgroup.list" class="w3-hover-shadow"
+    data-ng-class="{'w3-green':ctrl.bloodgroup.value==b.Id}"
+     data-ng-click="ctrl.bloodgroup.value=b.Id;ctrl.dropdownClick=false">
+    {{b.Name}}
+</div>

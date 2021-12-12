@@ -32,7 +32,6 @@ sql_app.AddKassa_VB = {
     :Ld1, :ssum, :KassOp, :NameContr, :val, :nal)' ,
 }
 
-
 sql_app.UpdateKassa = {
     name: 'Изменение номера сопутствующего документа',
     sql: 'UPDATE kassa.entry SET idDoc=:LIdDoc WHERE idNom=:LidNom',
@@ -43,24 +42,34 @@ sql_app.DeleteKassa = {
     sql: 'DELETE FROM kassa.entry WHERE idNom=:LidNom',
 }
 
-sql_app.SpContragent = {
+sql_app.SpContragents = {
     name: 'Справочник контрагентов',
     sql: ' SELECT IdNomContr, NameContr FROM   kassa.SpContragents ORDER BY NameContr',
+    rowId:'idnomcontr',
+    upd:{
+        sql:'',
+    },
+    ins:{
+        sql:'INSERT INTO kassa.SpContragents (namecontr, idnomcontr) \n\
+        VALUES (:var.namecontr , (SELECT max(IdNomContr)+1 FROM kassa.SpContragents))',
+    },
 }
 
 sql_app.SpGrupKassOp = {
     name: 'Справочник групп кассових операций',
-    sql: ' SELECT IdNomGrupKassOp, NameGrupKassOp, Pr_Rasx FROM kassa.SpGrupKassOp ORDER BY NameGrupKassOP',
+    sql: ' SELECT IdNomGrupKassOp, NameGrupKassOp, Pr_Rasx \n\
+    FROM kassa.SpGrupKassOp ORDER BY NameGrupKassOP',
 }
 
 sql_app.SpKassOp = {
     name: 'Справочник кассових операций',
-    sql: 'SELECT IdNomKassOP, NameKassOp, IdNomGrupKassOp,Pr_rasx FROM kassa.SpKassOp ORDER BY  Pr_rasx,  NameKassOp, IdNomGrupKassOp',
+    sql: 'SELECT IdNomKassOP, NameKassOp, IdNomGrupKassOp,Pr_rasx \n\
+    FROM kassa.SpKassOp ORDER BY  Pr_rasx,  NameKassOp, IdNomGrupKassOp',
 }
 
 sql_app.SpValut = {
     name: 'Справочник валют',
-    sql: 'SELECT IdNomVal, NameVal FROM kassa.SpVal ORDER BY NameVal',
+    sql: 'SELECT IdNomVal, NameVal FROM kassa.SpValut ORDER BY NameVal',
 }
 
 sql_app.Seek_LName = {
