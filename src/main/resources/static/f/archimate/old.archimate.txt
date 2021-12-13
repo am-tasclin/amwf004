@@ -1,0 +1,15 @@
+-rw-rw-r--  1 roman roman  87723 вер 18 01:07 api.covid-briskin.json
+-rw-r--r--  1 roman roman  20480 вер 19 00:48 .api.covid-briskin.json.swp
+lrwxrwxrwx  1 roman roman    149 гру 13 20:15 api.medzakupivli.com.json -> /media/roman/am2hdd2t/algoritmed-actuel/tenders/ТЗ_Категоризація_09.08.2021/NSZU-Patient/brief/covid-briskin/api.medzakupivli.com.json
+lrwxrwxrwx  1 roman roman    115 гру 13 20:14 ArchiMate-for-FHIR.archimate.xml -> /media/roman/am2hdd2t/algoritmed-old-before-20211026/DataModel/DataModel/ArchiMate/ArchiMate-for-FHIR.archimate.xml
+lrwxrwxrwx  1 roman roman    136 гру 13 20:20 EAM004-eHinUA.archimate.xml -> /media/roman/am2hdd2t/algoritmed-old-before-20211026/concept-ESOZ/concept-ESOZ/konzept-20201104/archi-source/EAM004-eHinUA.archimate.xml
+lrwxrwxrwx  1 roman roman    128 гру 13 20:23 FHIR-impl-II-002.archimate.xml -> /media/roman/am2hdd2t/algoritmed-old-before-20211026/DataModel/DataModel/ArchiMate/archi-mate-tmp/FHIR-impl-II-002.archimate.xml
+-rw-rw-r--  1 roman roman   8573 кві 20  2021 green-sertificate.archimate
+-rw-rw-r--  1 roman roman   6482 кві 20  2021 green-sertificate.archimate.bak
+lrwxrwxrwx  1 roman roman     76 кві 29  2021 html-AlgoritmedFHIR-202104 -> /home/roman/algoritmed-202101/DataModel/ArchiMate/html-AlgoritmedFHIR-202104
+lrwxrwxrwx  1 roman roman     84 лип  7 13:39 html-EAM004 -> /home/roman/algoritmed-202102/concept-ESOZ/konzept-20201104/archi-source/html-EAM004
+lrwxrwxrwx  1 roman roman     77 кві 18  2021 html-regulations-data-model -> /home/roman/algoritmed-202101/DataModel/ArchiMate/html-regulations-data-model
+lrwxrwxrwx  1 roman roman     98 кві 15  2021 Motivation-Elements-004.archimate -> /home/roman/algoritmed-202101/DataModel/ArchiMate/archi-mate-tmp/Motivation-Elements-004.archimate
+lrwxrwxrwx  1 roman roman     86 кві 12  2021 regulations-data-model.archimate.xml -> /home/roman/algoritmed-202101/DataModel/ArchiMate/regulations-data-model.archimate.xml
+-rw-rw-r--  1 roman roman 901432 жов  6 21:15 regulations-data-model.archimate.xml.bak
+roman@am-worker-001:~/algoritmed-jast/amwf004/src/main/resources/static/f/archimate$ 
