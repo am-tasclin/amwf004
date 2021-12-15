@@ -44,15 +44,25 @@ sql_app.DeleteKassa = {
 
 sql_app.SpContragents = {
     name: 'Справочник контрагентов',
-    sql: ' SELECT IdNomContr, NameContr FROM   kassa.SpContragents ORDER BY NameContr',
-    rowId:'idnomcontr',
-    upd:{
-        sql:'',
+    i18n: {
+        ua: {
+            namecontr: 'Контрагент',
+        }
     },
-    ins:{
-        sql:'INSERT INTO kassa.SpContragents (namecontr, idnomcontr) \n\
+    sql: ' SELECT IdNomContr, NameContr FROM   kassa.spcontragents ',
+    order: ' ORDER BY NameContr',
+    rowId: 'idnomcontr',
+    upd: {
+        sql: '',
+    },
+    ins: {
+        sql: 'INSERT INTO kassa.SpContragents (namecontr, idnomcontr) \n\
         VALUES (:var.namecontr , (SELECT max(IdNomContr)+1 FROM kassa.SpContragents))',
     },
+    del: {
+        sql: 'DELETE kassa.SpContragents WHERE idnomcontr =:var.idnomcontr ',
+
+    }
 }
 
 sql_app.SpGrupKassOp = {
@@ -65,6 +75,7 @@ sql_app.SpKassOp = {
     name: 'Справочник кассових операций',
     sql: 'SELECT IdNomKassOP, NameKassOp, IdNomGrupKassOp,Pr_rasx \n\
     FROM kassa.SpKassOp ORDER BY  Pr_rasx,  NameKassOp, IdNomGrupKassOp',
+    order: ' ORDER BY NameKassOp'
 }
 
 sql_app.SpValut = {

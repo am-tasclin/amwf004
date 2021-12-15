@@ -1,39 +1,15 @@
 <table>
     <tbody>
-        <tr>
-            <td>Всього проводок</td>
-            <td> {{ctrl.SelectGrup.idnom}}
-            </td>
 
-        </tr>
-        <tr>
-            <td>Загальна сума </td>
-            <td> {{ctrl.SelectGrup.sumaprov}} </td>
-
-        </tr>
         <td> <button class="w3-btn w3-grey" data-ng-click="ctrl.Perechet()">Пересчитать
             </button>
         </td>
         <td> <button class="w3-btn w3-grey" data-ng-click="ctrl.DeleteKassa()">Удалить
-            проводку
-        </button>
-    </td>
+                проводку
+            </button>
+        </td>
     </tbody>
 </table>
-
-<span class="w3-small am-b"> Пошук</span>
-<table class="w3-light-gray w3-card">
-    <tbody>
-        <tr>
-            <td> Контрагент </td>
-            <td><input type="text" data-ng-model="ctrl.formData.seek.SeekLName"> </td>
-            <td><button style="width: 70px;" class="w3-btn w3-padding-small w3-grey w3-round am-no-print"
-                    data-ng-click="ctrl.Seek_button_Lname()">ОК</button></td>
-        </tr>
-        <tr>
-    </tbody>
-</table>
-
 
 <span class="w3-small am-b"> Створення проводки</span>
 <table class="w3-light-gray w3-card">
@@ -69,12 +45,32 @@
         </tr>
         <tr>
             <td>Контрагент </td>
-            <td> <input type="text" data-ng-model="ctrl.formData.entry.LName"> </td>
+            <td>
+                <select data-ng-model="ctrl.formData.entry.selectedItem">
+                    <option data-ng-repeat="be in ctrl.bloodgroup.list"
+                        value="{{be.namecontr}}">
+                        {{be.namecontr}}
+                    </option>
+                </select>
+
+            </td>
         </tr>
         <tr>
-            <td>Кассовая операция</td>
-            <td> <input type="text" data-ng-model="ctrl.formData.entry.KassOp"> </td>
+            <td>Кассовая операция  </td>
+
+            <td>
+                <select data-ng-model="ctrl.formData.entry.kassop">
+                    <option data-ng-repeat="ko in ctrl.listop.list"
+                        value="{{ko.namekassop}}">
+                        {{ko.namekassop}}
+                    </option>
+                </select>
+
+            </td>
+
         </tr>
+
+
         <tr>
             <td> <button class="w3-btn w3-grey" data-ng-click="ctrl.AddKassa()">Создать
                     проводку
@@ -84,10 +80,25 @@
     </tbody>
 </table>
 
-<select data-ng-model="ctrl.formData.entry.selectedItem">
-    <option data-ng-repeat="bloodgroupvalue in ctrl.bloodgroup" value="{{bloodgroupvalue.Id}}">{{bloodgroupvalue.Name}}</option>
-  </select>
 
 
 
- 
+<span class="w3-small am-b"> Пошук</span>
+<table class="w3-light-gray w3-card">
+    <tbody>
+        <tr>
+            <td>
+                <input class="w3-border" data-ng-model="ctrl.formData.seek.SeekLName"
+                    data-ng-focus="ctrl.viewList=!ctrl.viewList"
+                    data-ng-keydown="[13].includes($event.keyCode) && ctrl.click_spcontragent_seek()">
+
+                <div data-ng-if="ctrl.viewList" class="w3-leftbar w3-card">
+                    <div data-ng-repeat="d in ctrl.dataSeek.list" class="w3-hover-shadow">
+                        {{d.namecontr}}
+                    </div>
+                </div>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>

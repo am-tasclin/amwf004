@@ -11,11 +11,11 @@ class List3Controller {
     constructor(dataFactory) { this.dataFactory = dataFactory }
 
     click_spcontragent_seek = () => {
-        this.viewList = true
+        this.iewList = true
+        console.log(sql_app.spcontragent)
         console.log(this.seek, 1, sql_app.spcontragent.sql, 2, this.dataFactory)
         let sql = sql_app.spcontragent.sql
-        if (this.seek)
-            sql += ' WHERE namecontr LIKE (\'%' + this.seek + '%\')'
+        if (this.seek)            sql += ' WHERE namecontr LIKE (\'%' + this.seek + '%\')'
         console.log(sql)
         this.dataFactory.httpGetSql({ sql: sql }
         ).then(responceData => {

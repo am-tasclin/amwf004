@@ -11,6 +11,8 @@
 <script src="/webjars/angular-resource/1.8.2/angular-resource.min.js" type="application/javascript"></script>
 <script src="/webjars/angular-sanitize/1.8.2/angular-sanitize.min.js" type="application/javascript"></script>
 <script src="/f/kassa2r/lib-init.js" type="application/javascript"></script>
+<script src="/f/kassa2r/config.sql.js" type="application/javascript"></script>
+
 <script src="r1.js" type="application/javascript"> </script>
 
 <body>
@@ -69,6 +71,7 @@
                     {{ctrl.bloodgroup.clickCount}}
                 </div>
             </div>
+            
             <div data-ng-controller="L3Ctrl as ctrl" class="w3-half w3-border-left w3-container">
                 list4
                 <input class="w3-border" data-ng-model="ctrl.seek" data-ng-focus="ctrl.viewList=!ctrl.viewList"
@@ -80,6 +83,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </body>

@@ -2,6 +2,7 @@
 //var app = angular.module('myApp', []); // see lib-init.js
 app.directive('amSqlHtml', AmSqlHtml)
 app.config(RouteProviderConfig)
+app.factory("dataFactory", RWDataFactory)
 
 singlePage.lr = {
     templateUrl: 'lr.html',
@@ -41,32 +42,65 @@ formData.seek.StartDateProv = new Date('2021-01-01')
 formData.seek.FinishDateProv = new Date('2022-02-02')
 formData.seek.PrRasx = 1
 formData.seek.SeekLName = ''
+formData.seek.post = 'sd'
 
 conf.sqlKeyName = 'SelectKassa'
-console.log(formData.global.firstName)
 
 class TestControl {
-    constructor($http) {
+    constructor($http, dataFactory) {
+        this.dataFactory = dataFactory
+        console.log(dataFactory)
+        this.bloodgroup = {
+            list: [],
+            value: '8',
+            clickCount: 0,
+        }
+        this.listop = this.bloodgroup
 
-        this.bloodgroup = [
-            { "Id": "1", "Name": "O+" },
-            { "Id": "2", "Name": "O-" },
-            { "Id": "3", "Name": "A+" },
-            { "Id": "4", "Name": "A-" },
-            { "Id": "5", "Name": "B+" },
-            { "Id": "6", "Name": "B-" },
-            { "Id": "7", "Name": "AB+" },
-            { "Id": "8", "Name": "AB-" }]
-        this.BloodGroup_List = this.bloodgroup
-        this.value = "AB-"
-        console.log(this.bloodgroup)
+        let ctrl = this
+        let sql = makeSelect('SpContragents')
+        dataFactory.httpGetSql({ sql: sql }).then(rData => {
+            ctrl.bloodgroup = rData
+            console.log(ctrl.bloodgroup)
+        })
+        this.BloodGroup_List = ctrl.bloodgroup.list
+
+        sql = makeSelect('SpKassOp')
+        dataFactory.httpGetSql({ sql: sql }).then(rData => {
+            ctrl.listop = rData
+            console.log(this.listop)
+        })
+
+
+
+        this.click_spcontragent_seek = () => {
+            this.iewList = true
+            let sql = sql_app.SpContragents.sql
+            sql += ' WHERE namecontr LIKE (\'%' + formData.seek.SeekLName + '%\')' + sql_app.SpContragents.order
+            this.dataFactory.httpGetSql({ sql: sql }
+            ).then(responceData => {
+                this.dataSeek = responceData
+            })
+        }
+
+        this.click_kassop_seek = () => {
+            this.iewList = true
+            let sql = sql_app.SpKassOp.sql
+            sql += ' WHERE NameKassOp LIKE (\'%' + formData.entry.KassOp + '%\')' + sql_app.SpKassOp.order
+            this.dataFactory.httpGetSql({ sql: sql }
+            ).then(responceData => {
+                this.dataSeek = responceData
+            })
+        }
+
+
 
         this.formData = formData
         this.selectRow = row => this.selectedRow = row
 
         this.Seek_button_Lname = () => {
             let sql = makeSelect() +
-                ' AND lower(namecontr) LIKE lower(\'%' + formData.seek.SeekLName + '%\')'
+                ' AND (namecontr) LIKE (\'%' + formData.seek.SeekLName + '%\')'
             console.log(sql)
             $http.get('/r/url_sql_read_db1', { params: { sql: sql } }
             ).then(responce => {
@@ -78,8 +112,8 @@ class TestControl {
             let sql = sql_app.AddKassa_VB.sql.replace(':pr', formData.seek.PrRasx)
                 .replace(':Ld1', "'" + formData.entry.NewDateProv.toISOString().split('T')[0] + "'")
                 .replace(':ssum', formData.entry.myNumb)
-                .replace(':KassOp', "'" + formData.entry.KassOp + "'")
-                .replace(':NameContr', "'" + formData.entry.LName + "'")
+                .replace(':KassOp', "'" + formData.entry.kassop + "'")
+                .replace(':NameContr', "'" + formData.entry.selectedItem + "'")
                 .replace(':val', "'" + formData.entry.val + "'")
                 .replace(':nal', formData.entry.Nal)
 

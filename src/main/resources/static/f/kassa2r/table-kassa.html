@@ -1,23 +1,37 @@
 <table>
     <thead class="w3-tiny am-b">
         <tr>
-            <th></th>
-            <th>"№№" </th>
-            <th>Дата </th>
-            <th>Сумма </th>
-            <th>Касова оп. </th>
-            <th>Контрагент </th>
-            <th>Валюта </td>
-            <th>Нал/БезНал </th>
+
+            <th class="w3-border">"№№" </th>
+            <th class="w3-border">Дата </th>
+            <th class="w3-border">Сумма </th>
+            <th class="w3-border">Касова оп. </th>
+            <th class="w3-border">Контрагент </th>
+            <th class="w3-border">Валюта </td>
+            <th class="w3-border">Нал/БезНал </th>
 
         </tr>
+        <tr>
+            <th class="w3-border"></th>
+            <th class="w3-border"> </th>
+            <th class="w3-border"> {{ctrl.SelectGrup.idnom}} </th>
+            <th class="w3-border"> {{ctrl.SelectGrup.sumaprov}} </th>
+            <th class="w3-border"> </th>
+            <th class="w3-border"> </th>
+            <th class="w3-border">
+                </td>
+
+
+        </tr>
+
+
+
     </thead>
     <tbody class="w13-small">
         <tr class="w3-hover-shadow" data-ng-repeat="(k,r) in ctrl.data.list"
             data-ng-class="{'w3-red':ctrl.selectedRow.idnom==r.idnom}" data-ng-click="ctrl.selectRow(r)">
-            <td>{{k}}
 
-            </td>
+
             <td data-ng-repeat="(k,v) in r" class="w3-border" data-am-sql-html>
                 {{v}}
             </td>
