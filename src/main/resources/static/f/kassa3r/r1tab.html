@@ -35,8 +35,8 @@
             </a>
             ⁙
             <a class="w3-right w3-small" href="r1.html">r1</a>
-            <span class="w3-tiny am-b"> {{ctrl.singlePage.UrlMap()['sql']}}: </span>
             <span class="am-i"> {{ctrl.getSql(ctrl.singlePage.UrlMap()['sql']).name}} </span>
+            <span class="w3-tiny am-b"> - {{ctrl.singlePage.UrlMap()['sql']}} </span>
         </div>
         <div class="w13-border-bottom" style="height:10vh; overflow:auto;">
             <pre class="w3-tiny" data-ng-if="!ctrl.singlePage.Url().includes('upd')

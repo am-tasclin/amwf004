@@ -36,8 +36,6 @@ sql_app.actuelEMR_PD_Trigger_DataRequirement_type_path = {
 const sqlForOnePatient = 'SELECT * FROM (:sql ) p WHERE patient_id = :patient_id'
 let timeoutMs = 0
 class PWSDataFactory extends DataFactory {
-    $timeout
-    adn_insert
     constructor($http, $q, $timeout, $resource) {
         super($http, $q)
         this.$timeout = $timeout
@@ -54,8 +52,11 @@ class PWSDataFactory extends DataFactory {
     })
     readPatient = () => {
         if (!conf.patient) {
-            console.log(singlePage.UrlMap()['hy'], 111)
-            angular.forEach(contentDoc.readEMR, (v, k) => this.read(v.sql, k))
+            console.log(55, singlePage.UrlMap()['hy'], contentDoc.readEMR)
+            angular.forEach(contentDoc.readEMR, (v, k) => {
+                console.log(57, k, v)
+                this.read(v.sql, k)
+            })
             timeoutMs = 200
         } else if (conf.patient[0].patient_id == singlePage.UrlMap()['hy']) {
             timeoutMs = 0

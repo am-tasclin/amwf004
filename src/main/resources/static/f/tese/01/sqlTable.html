@@ -11,8 +11,10 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="r in ctrl.data.list" class="w3-hover-shadow" data-ng-click="ctrl.choiseListItem(r)"
-                data-ng-class="{'w3-light-grey':r.doc_id==ctrl.getChoisedListItem()}">
+            <tr data-ng-repeat="r in ctrl.data.list" class="w3-hover-shadow"
+                data-ng-click="ctrl.choiseListItem(r); ctrl.selectedRowId = r[ctrl.getSql(ctrl.singlePage.UrlMap()['sql']).rowId]"
+                data-ng-class="{'w3-light-grey1':r.doc_id==ctrl.getChoisedListItem(),
+                'w3-card w3-light-green':ctrl.isSelectedRow(r), }">
                 <td data-ng-if="!ctrl.sql_app[ctrl.conf.sqlKeyName].noShow.includes(k)"
                     data-ng-repeat="(k,v) in ctrl.data.list[0]" data-am:sql:html>{{r[k]}}</td>
             </tr>

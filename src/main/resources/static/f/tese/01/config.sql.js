@@ -145,6 +145,7 @@ sql_app.MedicationRequest_sc_doseQuantityTimingPeriod = {
 }
 sql_app.DoseQuantity_timingPeriod = {
     name: 'Доза кількість, хронометраж період',
+    rowId: 'dosage_id',
     sql: 'SELECT doseAndRate.parent doseAndRate_p, doseQuantity_id dosage_id, timing.doc_id dosage_timing_id, dq.*, tp.* \n\
     FROM (:sql_app.DoseQuantity ) dq \n\
         , (SELECT * FROM doc doseAndRate WHERE doseAndRate.reference=369972) doseAndRate \n\

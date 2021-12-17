@@ -6,11 +6,8 @@ conf.sql_app = {}
 conf.sql_app.tableList = ['SpContragents', 'SpKassOp', 'SpValut',]
 
 conf.sql_app.tableList = []
-angular.forEach(sql_app, (sqlObj,k) => {
-    if(sqlObj.sql){
-        conf.sql_app.tableList.push(k)
-    }
-})
+angular.forEach(sql_app
+    , (sqlObj, k) => { if (sqlObj.sql) conf.sql_app.tableList.push(k) })
 
 // app.controller("SqlController", SqlController)
 class SqlController2 extends SqlAbstractController {
@@ -20,10 +17,13 @@ class SqlController2 extends SqlAbstractController {
             delete this.data
         conf.sqlKeyName = $routeParams.sql
         console.log(conf.sqlKeyName)
+        console.log(this)
         if (singlePage.Url().includes('ins')) this.initIns()
 
         this.readSql()
     }
+
+    isSelectedRow = r => this.selectedRowId == r[this.getSql(singlePage.UrlMap()['sql']).rowId]
 
     initIns = () => {
         sql_app.insObj = sql_app[conf.sqlKeyName].ins
@@ -40,7 +40,7 @@ class SqlController2 extends SqlAbstractController {
     readSql = () => {
         if (!this.data) {
             conf.sql = readSql2R(conf.sqlKeyName)
-            console.log(conf.sqlKeyName, conf.sql)
+            console.log(conf.sqlKeyName, conf.sql1)
             this.dataFactory.httpGetSql({ sql: conf.sql }
             ).then(responceData => {
                 this.data = responceData
