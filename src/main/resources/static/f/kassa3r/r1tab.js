@@ -1,8 +1,16 @@
 'use strict';
+
 app.factory("dataFactory", RWDataFactory)
 
 conf.sql_app = {}
 conf.sql_app.tableList = ['SpContragents', 'SpKassOp', 'SpValut',]
+
+conf.sql_app.tableList = []
+angular.forEach(sql_app, (sqlObj,k) => {
+    if(sqlObj.sql){
+        conf.sql_app.tableList.push(k)
+    }
+})
 
 // app.controller("SqlController", SqlController)
 class SqlController2 extends SqlAbstractController {
@@ -59,10 +67,11 @@ angular.forEach([
 app.config(RouteProviderConfig)
 
 class InitPageController extends AbstractController {
+
     constructor($routeParams, dataFactory) {
         super()
         this.dataFactory = dataFactory
-        console.log(22, $routeParams, this.dataFactory)
+        console.log(22, $routeParams, this.dataFactory, this)
     }
 
     keyDownEsc = () => { if (conf.modalDisplay.display == 'block') conf.modalDisplay.display = null }
@@ -76,5 +85,11 @@ class InitPageController extends AbstractController {
         ).then(responceData => conf.data.list = responceData.list1)
     }
 
+    sqlConfig = '/f/kassa2r/config.sql.js'
+
 }
+
+console.log(InitPageController.sqlConfig)
+
+
 app.controller("InitPageController", InitPageController)

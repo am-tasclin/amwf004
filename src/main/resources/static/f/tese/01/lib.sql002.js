@@ -94,14 +94,21 @@ singlePage.UrlOnOff = (s, p) => singlePage.Url().includes(s)
     : singlePage.UrlList().slice(0, p).concat([s]).join('/')
 // singlePage.UrlOnOff = s => singlePage.Url().includes(s)?singlePage.Url().replace(s,''):(singlePage.Url()+s)
 
+const urlMap = {}
 singlePage.UrlMap = () => {
-    const m = {}
-    singlePage.Url().split('/').forEach(v => { if (v) m[v.split('_')[0]] = v.split('_')[1] })
-    return m
+    // if (Object.keys(urlMap).length === 0)
+        singlePage.Url().split('/').forEach
+            (v => {
+                if (v)
+                    urlMap[v.split('_')[0]] = v.replace(v.split('_')[0] + '_', '')
+            })
+    return urlMap
 }
 
 conf.sqlAppToLink = text =>
     !text ? '' : ('' + text).replace(new RegExp(':(sql_app\\.)(\\w+)', 'gi'), ':<b>$1<a href="#!/sql/$2">$2</a></b>')
+conf.sqlAppToLink2 = text =>
+    !text ? '' : ('' + text).replace(new RegExp(':(sql_app\\.)(\\w+)', 'gi'), ':<b>$1<a href="#!/sql_$2">$2</a></b>')
 
 conf.sqlAppKeys = () => Object.keys(sql_app)
 conf.modalDisplay = { display: null }

@@ -12,7 +12,10 @@
 <script src="/webjars/angular-resource/1.8.2/angular-resource.min.js" type="application/javascript"></script>
 <script src="/webjars/angular-sanitize/1.8.2/angular-sanitize.min.js" type="application/javascript"></script>
 <script src="/f/kassa2r/lib-init.js" type="application/javascript"></script>
+<!--
 <script src="/f/kassa2r/config.sql.js" type="application/javascript"></script>
+-->
+<script src="/f/tese/01/config.sql.js" type="application/javascript"></script>
 <script src="/f/tese/01/lib.sql002.js" type="application/javascript"></script>
 <script src="r1tab.js" type="application/javascript"> </script>
 
@@ -38,7 +41,7 @@
         <div class="w13-border-bottom" style="height:10vh; overflow:auto;">
             <pre class="w3-tiny" data-ng-if="!ctrl.singlePage.Url().includes('upd')
             && !ctrl.singlePage.Url().includes('ins')
-            " data-ng-bind-html="ctrl.conf.sqlAppToLink(ctrl.getSql(ctrl.singlePage.UrlMap()['sql']).sql)">
+            " data-ng-bind-html="ctrl.conf.sqlAppToLink2(ctrl.getSql(ctrl.singlePage.UrlMap()['sql']).sql)">
             </pre>
             <div data-ng-if="ctrl.singlePage.Url().includes('upd')">
                 upd
