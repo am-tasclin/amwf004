@@ -117,6 +117,13 @@ sql_app.ActivityDefinition_title_name = {
     WHERE d1.doc_id=d2.parent \n\
     AND d1.reference=371999 AND d2.reference=373500 ',
 }
+sql_app.eReceptOfEMR = {
+    name: 'еРецепти від лікарських призначень',
+    sql:'SELECT rx.*, emr.mrencounter_id, emr.mr_emr_id, emr.patient_id \n\
+    FROM (:sql_app.encounter_MedicationRequest_sc_doseQuantityTimingPeriod ) emr \n\
+    , (:sql_app.eRecept ) rx \n\
+    WHERE rx.recept_basedon_id=emr.mr_emr_id',
+}
 sql_app.eRecept = {
     name: 'еРецепти',
     sql: 'SELECT d1.doc_id recept_id, d2.reference2 recept_basedon_id  \n\
@@ -136,6 +143,7 @@ sql_app.encounter_MedicationRequest_sc_doseQuantityTimingPeriod = {
 }
 sql_app.MedicationRequest_sc_doseQuantityTimingPeriod = {
     name: 'Призначення ліків доза кількість хронометраж період',
+    rowId:'medicationrequest_id',
     sql: 'SELECT x.*, dqtp.*, esd.*, di.* FROM (:sql_app.MedicationRequest_sc ) x \n\
     LEFT JOIN (SELECT di_c.parent di_c_p, di.reference di_r, di.reference2 di_r2 \n\
     FROM doc di_c, doc di WHERE di_c.reference=369984 AND di.parent=di_c.doc_id \n\

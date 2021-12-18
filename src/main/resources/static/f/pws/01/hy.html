@@ -40,6 +40,10 @@
 						{{mr.dn_quantity_value}}
 						{{mr.dn_quantity_code}}
 					</span>
+					<span data-ng-repeat="rx in ctrl.conf.recept" data-ng-if="rx.mr_emr_id==mr.mr_emr_id">
+						<span title="{{rx.recept_id}}"
+							class="am-rx w3-border w3-border-green w3-hover-shadow">R<span>x</span>&nbsp;.</span>
+					</span>
 				</div>
 			</div>
 		</div>

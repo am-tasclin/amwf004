@@ -21,9 +21,12 @@ class SqlController2 extends SqlAbstractController {
         if (singlePage.Url().includes('ins')) this.initIns()
 
         this.readSql()
+
     }
 
-    isSelectedRow = r => this.selectedRowId == r[this.getSql(singlePage.UrlMap()['sql']).rowId]
+    isSelectedRow = r => this.selectedRowId
+        && this.selectedRowId == r[this.getSql(singlePage.UrlMap()['sql']).rowId]
+
 
     initIns = () => {
         sql_app.insObj = sql_app[conf.sqlKeyName].ins

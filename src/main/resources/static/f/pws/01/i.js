@@ -17,11 +17,9 @@ const contentDoc = {}
 contentDoc.readEMR = {
     patient: { sql: 'Patient_family_name' },
     episode: { sql: 'EpisodeOfCare_Patient' },
-    encounter: {
-        sql: 'Encounter_Patient',
-        emr: ['reason', 'dgcondition'],
-    },
+    encounter: { sql: 'Encounter_Patient', emr: ['reason', 'dgcondition'], },
     mrEncounter: { sql: 'encounter_MedicationRequest_sc_doseQuantityTimingPeriod' },
+    recept: { sql: 'eReceptOfEMR', },
 }
 contentDoc.readPlanDefinitionElements = {
     pd_action: { sql: 'PlanDefinition_action_title' },

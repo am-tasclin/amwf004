@@ -7,6 +7,9 @@ a.am-0u {text-decoration: none; }
 .am-width-100pr{width: 100%;}
 .am-max-width-1{max-width: 70em;}
 
+span.am-rx {position: relative; margin: 0 3px;}
+span.am-rx span {position: absolute; left: 8px; bottom: 1px;}
+
 table.am-amk025-table tr td{
 	vertical-align: top;
 }
