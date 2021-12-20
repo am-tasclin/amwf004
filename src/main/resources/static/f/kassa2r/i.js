@@ -46,9 +46,14 @@ formData.seek.post = 'sd'
 
 conf.sqlKeyName = 'SelectKassa'
 
+
+
+
 class TestControl {
     constructor($http, dataFactory) {
         this.dataFactory = dataFactory
+        this.$http = $http
+
         console.log(dataFactory)
         this.bloodgroup = {
             list: [],
@@ -56,6 +61,7 @@ class TestControl {
             clickCount: 0,
         }
         this.listop = this.bloodgroup
+
 
         let ctrl = this
         let sql = makeSelect('SpContragents')
@@ -73,10 +79,11 @@ class TestControl {
 
 
 
-        this.click_spcontragent_seek = () => {
+        this.click_spcontragent_seek = (selectName) => {
             this.iewList = true
-            let sql = sql_app.SpContragents.sql
-            sql += ' WHERE namecontr LIKE (\'%' + formData.seek.SeekLName + '%\')' + sql_app.SpContragents.order
+            selectName = 'SpContragents'
+            let sql = sql_app[selectName].sql
+            sql += ' WHERE namecontr LIKE (\'%' + formData.seek.SeekLName + '%\')' + sql_app[selectName].order
             this.dataFactory.httpGetSql({ sql: sql }
             ).then(responceData => {
                 this.dataSeek = responceData
@@ -108,67 +115,91 @@ class TestControl {
             })
         }
 
-        this.AddKassa = () => {
-            let sql = sql_app.AddKassa_VB.sql.replace(':pr', formData.seek.PrRasx)
-                .replace(':Ld1', "'" + formData.entry.NewDateProv.toISOString().split('T')[0] + "'")
-                .replace(':ssum', formData.entry.myNumb)
-                .replace(':KassOp', "'" + formData.entry.kassop + "'")
-                .replace(':NameContr', "'" + formData.entry.selectedItem + "'")
-                .replace(':val', "'" + formData.entry.val + "'")
-                .replace(':nal', formData.entry.Nal)
+        this.Ok_button()
 
-            sql = sql + '; \n\ ' + makeSelect()
-            console.log(sql)
 
-            $http.post('/r/url_sql_read_db1', { sql: sql }
-            ).then(responce => this.data.list = responce.data.list1)
-        }
+    }
 
-        this.DeleteKassa = (a) => {
-            console.log("DeleteKassa", this.selectedRow.idnom)
-            let sql = sql_app.DeleteKassa.sql.replace(':LidNom', this.selectedRow.idnom)
-            sql = sql + '; \n\ ' + makeSelect()
 
-            console.log(sql)
-            $http.post('/r/url_sql_read_db1', { sql: sql }
-            ).then(responce => {
-                console.log(responce.data)
-                this.data.list = responce.data.list1
-            })
-            console.log('DeleteKassa')
-        }
-
-        this.Perechet = () => {
-
-            let sql = makeSelect('GroupKassa2')
-
-            $http.get('/r/url_sql_read_db1', { params: { sql: sql } }
-            ).then(responce => {
-                this.SelectGrup = responce.data.list[0]
-
-                console.log(this.SelectGrup.idnom)
-
-            })
-        }
-
-        this.Ok_button = () => {
-            console.log("Ok_button")
-            $http.get('/r/url_sql_read_db1', { params: { sql: makeSelect() } }
-            ).then(responce => {
-                this.data = responce.data
-            })
-        }
+    OK_button_Pr = () =>
+    {
+        formData.seek.PrRasx = 1
+        console.log(formData.seek.PrRasx)
         this.Ok_button()
     }
+
+    OK_button_Rasx = () =>
+    {
+        formData.seek.PrRasx = 0
+        console.log(formData.seek.PrRasx)
+        this.Ok_button()
+    }
+
+
+
+
+    Ok_button = () => {
+        console.log("Ok_button")
+        this.dataFactory.httpGetSql({ sql: makeSelect() }).then(rData => {
+            this.data = rData
+            this.Perechet()
+        })
+
+    }
+
+    Perechet = () => {
+
+        this.dataFactory.httpGetSql({ sql: makeSelect('GroupKassa2') + ' GROUP BY NameVal ' }).then(rData => {
+            this.SelectGrup = rData
+        })
+    }
+
+    AddKassa = () => {
+        let sql = sql_app.AddKassa_VB.sql.replace(':pr', formData.seek.PrRasx)
+            .replace(':Ld1', "'" + formData.entry.NewDateProv.toISOString().split('T')[0] + "'")
+            .replace(':ssum', formData.entry.myNumb)
+            .replace(':KassOp', "'" + formData.entry.kassop + "'")
+            .replace(':NameContr', "'" + formData.entry.selectedItem + "'")
+            .replace(':val', "'" + formData.entry.Val + "'")
+            .replace(':nal', formData.entry.Nal)
+        sql = sql + '; \n\ ' + makeSelect()
+
+        //$http.post('/r/url_sql_read_db1', { sql: sql }         ).then(responce => this.data.list = responce.data.list1)
+
+        this.dataFactory.httpPostSql({ sql: sql }).then(responce =>
+            this.rData.list = responce.data.list)
+
+        this.Ok_button()
+
+    }
+
+
+    DeleteKassa = (a) => {
+
+        let sql = sql_app.DeleteKassa.sql.replace(':LidNom', this.selectedRow.idnom)
+        console.log('23456',this.selectedRow.idnom)
+
+        sql = sql + '; \n\ ' + makeSelect()
+
+        this.dataFactory.httpPostSql({ sql: sql }).then(responce =>
+            this.data.list = responce.data.list)
+            this.Ok_button()
+    }
 }
+
+
+
+
 
 const makeSelect = sqlName => {
     if (!sqlName) sqlName = 'SelectKassa'
     let sql = replaceSql(sql_app[sqlName].sql)
     return sql
-        .replace(':d1', "'" + formData.seek.StartDateProv.toISOString().split('T')[0] + "'")
-        .replace(':d2', "'" + formData.seek.FinishDateProv.toISOString().split('T')[0] + "'")
-        .replace(':p', formData.seek.PrRasx)
+        .replace(':var.dateProv_start', "'" + formData.seek.StartDateProv.toISOString().split('T')[0] + "'")
+        .replace(':var.dateProv_end', "'" + formData.seek.FinishDateProv.toISOString().split('T')[0] + "'")
+        .replace(':var.p', formData.seek.PrRasx)
+
 }
 
+console.log()
 app.controller('myCtrl', TestControl)

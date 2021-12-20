@@ -27,6 +27,8 @@
                     <div>
                         <span class="w3-small am-b"> Организация: </span>
                         <input class="w3-border" type="text" data-ng-model="ctrl.formData.global.firstName">
+                    </div>
+                    <div>
                         <span class="w3-small am-b"> Оператор: </span>
                         <input class="w3-border" type="text" data-ng-model="ctrl.formData.global.lastName">
                     </div>
@@ -36,16 +38,15 @@
 
                 </div>
                 <div>
-                    <input type="radio" data-ng-model="ctrl.formData.seek.PrRasx" id="nl" value="1">
-                    <label for="nl">Приход</label>
-                    <input type="radio" data-ng-model="ctrl.formData.seek.PrRasx" id="bn" value="0">
-                    <label for="bn">Расход</label>
-                    <button style="width: 130px;" class="w3-btn w3-padding-small w3-grey w3-round am-no-print"
-                        data-ng-click="ctrl.Ok_button()">ОК</button>
+                    <button style="width: 200px;" class="w3-btn w3-padding-small w3-grey w3-round am-no-print"
+                        data-ng-click="ctrl.OK_button_Pr()">Приход</button>
+                    <button style="width: 200px;" class="w3-btn w3-padding-small w3-grey w3-round am-no-print"
+                        data-ng-click="ctrl.OK_button_Rasx()">Расход</button>
+
                 </div>
                 <!-- <div class="am-max-width-1" data-ng-view></div> -->
-                <div class="w3-col am-no-print" style="width:400px" data-ng-include="ctrl.formData.global.n1"> </div>
-                <div class="w3-rest w3-container w3-border-left" data-ng-include="ctrl.formData.global.n2"> </div>
+                <div class="w3-col am-no-print" style="width:600px" data-ng-include="ctrl.formData.global.n2"> </div>
+                <div class="w3-rest w3-container w3-border-left" data-ng-include="ctrl.formData.global.n1"> </div>
             </div>
         </div>
     </div>

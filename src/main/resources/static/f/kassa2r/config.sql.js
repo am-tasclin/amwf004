@@ -4,23 +4,23 @@ sql_app.SelectKassa = {
     name: 'Касса ',
     sql: 'SELECT idNom, DateProv, SumaProv, NameKassop, NameContr, NameVal, Nal_beznal  \n\
     FROM kassa.entry \n\
-    WHERE DateProv >=:d1 AND DateProv<=:d2 AND Pr_rasx=:p ',
+    WHERE DateProv >=:var.dateProv_start AND DateProv<=:var.dateProv_end AND Pr_rasx=:var.p ',
     sqlHtml: {
-        dateprov: "{{v | date : 'medium'}}",
+        dateprov: "{{v | date : 'shortDate'}} ",
     },
 }
 
 sql_app.GroupKassa2 = {
     name: 'Общая сума и кол-во проводок 2',
-    sql: 'SELECT COUNT(*) idNom, \'.     ∑∑\' DateProv, SUM(SumaProv) SumaProv  \n\
-    FROM  (:sql_app.SelectKassa ) x ',
+    sql: 'SELECT COUNT(*) idNom, \'.     ∑∑\' DateProv, SUM(SumaProv) SumaProv, MAX(nameval) nameval  \n\
+    FROM  (:sql_app.SelectKassa ) x  ',
 }
 
 sql_app.GroupKassa = {
     name: 'Общая сума и кол-во проводок ',
     sql: 'SELECT COUNT(*) idNom, \'.     ∑∑\' DateProv, SUM(SumaProv) SumaProv  \n\
         FROM  kassa.entry \n\
-        WHERE DateProv >=:d1 AND DateProv<=:d2 AND Pr_rasx=:p'  ,
+        WHERE DateProv >=:var.dateProv_start AND DateProv<=:var.dateProv_end AND Pr_rasx=:var.p'  ,
 }
 
 sql_app.AddKassa_VB = {
@@ -50,7 +50,13 @@ sql_app.SpContragents = {
         }
     },
     sql: ' SELECT IdNomContr, NameContr FROM   kassa.spcontragents ',
+
+    sel: ' SELECT IdNomContr, NameContr ',
+    selG: ' SELECT DICTINCT IdNomContr ',
+    from: ' FROM FROM   kassa.spcontragents ',
     order: ' ORDER BY NameContr',
+    grop: ' GROUP BY IdNomContr',
+
     rowId: 'idnomcontr',
     upd: {
         sql: '',
@@ -87,8 +93,8 @@ sql_app.Seek_LName = {
     name: 'Пошук по контрагенту',
     sql: 'SELECT idNom, DateProv, SumaProv, NameKassop, NameContr, NameVal, Nal_beznal  \n\
           FROM kassa.entry \n\
-          WHERE DateProv >=:d1 AND DateProv<=:d2 AND Pr_rasx=:p :seek ',
+          WHERE DateProv >=:var.dateProv_start AND DateProv<=:var.dateProv_end AND Pr_rasx=:var.p :seek ',
     sqlHtml: {
-        dateprov: "{{v | date : 'medium'}}",
+        dateprov: "{{v | date : 'shortDate'}}",
     },
 }
