@@ -2,41 +2,42 @@
     <thead class="w3-tiny am-b">
         <tr>
             <th class="w3-border"> Кіл-ть проводок</th>
-            <th class="w3-border"> Сума   </th>
-            <th class="w3-border">        </th>
+            <th class="w3-border"> Сума </th>
+            <th class="w3-border"> </th>
             </td>
         </tr>
         <tr>
-            <th class="w3-border"> {{ctrl.SelectGrup.list[0].idnom}} </th>
-            <th class="w3-border"> {{ctrl.SelectGrup.list[0].sumaprov}} </th>
-            <th class="w3-border"> {{ctrl.SelectGrup.list[0].nameval}}</th>
-                </td>
+            <th class="w3-border"> {{ctrl.SelectGroup.list[0].idnom}} </th>
+            <th class="w3-border"> {{ctrl.SelectGroup.list[0].sumaprov}} </th>
+            <th class="w3-border"> {{ctrl.SelectGroup.list[0].nameval}}</th>
+            </td>
         </tr>
+
         <tr>
-            <th class="w3-border"> {{ctrl.SelectGrup.list[1].idnom}} </th>
-            <th class="w3-border"> {{ctrl.SelectGrup.list[1].sumaprov}} </th>
-            <th class="w3-border"> {{ctrl.SelectGrup.list[1].nameval}}</th>
-                </td>
+            <th class="w3-border"> {{ctrl.SelectGroup.list[1].idnom}} </th>
+            <th class="w3-border"> {{ctrl.SelectGroup.list[1].sumaprov}} </th>
+            <th class="w3-border"> {{ctrl.SelectGroup.list[1].nameval}}</th>
+            </td>
 
 
         </tr>
 
-    </table>
-
+</table>
 
 <table>
     <thead class="w3-tiny am-b">
         <tr>
-
-            <th class="w3-border">"№№" </th>
-            <th class="w3-border">Дата </th>
-            <th class="w3-border">Сумма </th>
-            <th class="w3-border">Касова оп. </th>
-            <th class="w3-border">Контрагент </th>
-            <th class="w3-border">Валюта </td>
-            <th class="w3-border">Нал/БезНал </th>
+            <th class="w3-hover-shadow" data-ng-class="{'w3-green':ctrl.getSql('SelectKassa').sortColumnName == k}"
+                data-ng-repeat="(k,v) in ctrl.getSql('SelectKassa').cols" data-ng-click="ctrl.SortSelect(k)">
+                {{v}}
+                <span data-ng-if="ctrl.getSql('SelectKassa').sortColumnName == k">
+                    {{ctrl.getSql('SelectKassa').ascDesc==' '?'↓':''}}
+                    {{ctrl.getSql('SelectKassa').ascDesc=='DESC'?'↑':''}}
+                </span>
+            </th>
 
         </tr>
+
 
     </thead>
     <tbody class="w13-small">

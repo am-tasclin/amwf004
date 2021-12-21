@@ -43,6 +43,7 @@ formData.seek.FinishDateProv = new Date('2022-02-02')
 formData.seek.PrRasx = 1
 formData.seek.SeekLName = ''
 formData.seek.post = 'sd'
+formData.seek.selectgroup = 'idNom'
 
 conf.sqlKeyName = 'SelectKassa'
 
@@ -120,16 +121,15 @@ class TestControl {
 
     }
 
+    getSql = sqlName => sql_app[sqlName]
 
-    OK_button_Pr = () =>
-    {
+    OK_button_Pr = () => {
         formData.seek.PrRasx = 1
         console.log(formData.seek.PrRasx)
         this.Ok_button()
     }
 
-    OK_button_Rasx = () =>
-    {
+    OK_button_Rasx = () => {
         formData.seek.PrRasx = 0
         console.log(formData.seek.PrRasx)
         this.Ok_button()
@@ -140,21 +140,26 @@ class TestControl {
 
     Ok_button = () => {
         console.log("Ok_button")
-        this.dataFactory.httpGetSql({ sql: makeSelect() }).then(rData => {
-            this.data = rData
-            this.Perechet()
+        let sql = makeSelect()
+        sql += '; ' + makeSelect('GroupKassa2') + ' GROUP BY NameVal '
+        //   console.log('qqqqq', sql)
+
+        this.dataFactory.httpPostSql({ sql: sql }).then(rData => {
+            if (!this.data) this.data = {}
+            if (!this.SelectGroup) this.SelectGroup = {}
+
+            this.data.list = rData.list0
+            this.SelectGroup.list = rData.list1
+
+            console.log('11111', this.SelectGroup)
         })
+
 
     }
 
-    Perechet = () => {
-
-        this.dataFactory.httpGetSql({ sql: makeSelect('GroupKassa2') + ' GROUP BY NameVal ' }).then(rData => {
-            this.SelectGrup = rData
-        })
-    }
 
     AddKassa = () => {
+
         let sql = sql_app.AddKassa_VB.sql.replace(':pr', formData.seek.PrRasx)
             .replace(':Ld1', "'" + formData.entry.NewDateProv.toISOString().split('T')[0] + "'")
             .replace(':ssum', formData.entry.myNumb)
@@ -162,14 +167,12 @@ class TestControl {
             .replace(':NameContr', "'" + formData.entry.selectedItem + "'")
             .replace(':val', "'" + formData.entry.Val + "'")
             .replace(':nal', formData.entry.Nal)
+
         sql = sql + '; \n\ ' + makeSelect()
-
-        //$http.post('/r/url_sql_read_db1', { sql: sql }         ).then(responce => this.data.list = responce.data.list1)
-
-        this.dataFactory.httpPostSql({ sql: sql }).then(responce =>
-            this.rData.list = responce.data.list)
-
-        this.Ok_button()
+        this.dataFactory.httpPostSql({ sql: sql }).then(responce => {
+            console.log(responce)
+            this.data.list = responce.list1
+        })
 
     }
 
@@ -177,14 +180,61 @@ class TestControl {
     DeleteKassa = (a) => {
 
         let sql = sql_app.DeleteKassa.sql.replace(':LidNom', this.selectedRow.idnom)
-        console.log('23456',this.selectedRow.idnom)
+        console.log('23456', this.selectedRow.idnom)
 
         sql = sql + '; \n\ ' + makeSelect()
 
-        this.dataFactory.httpPostSql({ sql: sql }).then(responce =>
-            this.data.list = responce.data.list)
-            this.Ok_button()
+        this.dataFactory.httpPostSql({ sql: sql }).then(responce => {
+            console.log(responce)
+            this.data.list = responce.list1
+
+        })
     }
+
+    SortSelect = (sortColumnName) => {
+
+        if (sql_app.SelectKassa.sortColumnName != sortColumnName) {
+            sql_app.SelectKassa.sortColumnName = sortColumnName
+            sql_app.SelectKassa.ascDesc = null
+        }
+
+        if (sql_app.SelectKassa.sortColumnName == sortColumnName) {
+            if (sql_app.SelectKassa.ascDesc == null)
+                sql_app.SelectKassa.ascDesc = "DESC"
+            else if (sql_app.SelectKassa.ascDesc == "DESC") 
+                     sql_app.SelectKassa.ascDesc = " "
+                 else sql_app.SelectKassa.ascDesc = null     
+            }
+            
+
+
+
+        /*
+        if (
+            sql_app.SelectKassa.sortColumnName == sortColumnName &&
+            sql_app.SelectKassa.ascDesc == "DESC") {
+            sql_app.SelectKassa.sortColumnName = null
+            sql_app.SelectKassa.ascDesc = null
+        } else
+            sql_app.SelectKassa.sortColumnName = sortColumnName
+ 
+        if (sql_app.SelectKassa.ascDesc == "ASC")
+            sql_app.SelectKassa.ascDesc = "DESC"
+        else if (!sql_app.SelectKassa.ascDesc)
+            sql_app.SelectKassa.ascDesc = "ASC"
+
+
+*/
+
+
+
+        console.log('B1', sortColumnName, sql_app.SelectKassa.sortColumnName, sql_app.SelectKassa.ascDesc)
+
+        formData.seek.selectgroup = sortColumnName
+        this.Ok_button()
+    }
+
+
 }
 
 
@@ -192,14 +242,27 @@ class TestControl {
 
 
 const makeSelect = sqlName => {
+
     if (!sqlName) sqlName = 'SelectKassa'
+    //let sql = replaceSql(sql_app[sqlName].sql + sql_app[sqlName].order)
     let sql = replaceSql(sql_app[sqlName].sql)
-    return sql
+    sql = sql
         .replace(':var.dateProv_start', "'" + formData.seek.StartDateProv.toISOString().split('T')[0] + "'")
         .replace(':var.dateProv_end', "'" + formData.seek.FinishDateProv.toISOString().split('T')[0] + "'")
         .replace(':var.p', formData.seek.PrRasx)
+    //        .replace(':var.or', formData.seek.selectgroup)
+
+
+    if (sql_app[sqlName].sortColumnName) 
+     if (sql_app.SelectKassa.ascDesc == null)       
+         sql += '   ' 
+    else sql += ' ORDER BY ' + sql_app[sqlName].sortColumnName + ' ' + sql_app[sqlName].ascDesc
+     
+
+
+    return sql
 
 }
 
-console.log()
+
 app.controller('myCtrl', TestControl)

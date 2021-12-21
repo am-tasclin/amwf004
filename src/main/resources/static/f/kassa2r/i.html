@@ -14,14 +14,16 @@
 <script src="/f/tese/01/lib.sql002.js" type="application/javascript"></script>
 <script src="/f/kassa2r/config.sql.js" type="application/javascript"></script>
 <script src="i.js" type="application/javascript"> </script>
-
+<style>
+    .am-inner-scroll {height:92vh; overflow:auto;}
+</style>
 <body>
     <div class="w3-container am-max-width-1">
         <div class="w3-border-bottom">
             <a href="/" class="w3-btn w3-border w3-padding-small w3-small">↑</a>
             <span class="w3-small am-b">Каса експеремент 2r</span>&nbsp;⁙
         </div>
-        <div class="w3-border-bottom" style="height:92vh; overflow:auto;">
+        <div class="w3-border-bottom am-inner-scroll" s11tyle="height:92vh; overflow:auto;">
             <div data-ng-controller="myCtrl as ctrl">
                 <div class="w3-border w3-container" style="margin-top: 5px;">
                     <div>
@@ -45,10 +47,11 @@
 
                 </div>
                 <!-- <div class="am-max-width-1" data-ng-view></div> -->
-                <div class="w3-col am-no-print" style="width:600px" data-ng-include="ctrl.formData.global.n2"> </div>
-                <div class="w3-rest w3-container w3-border-left" data-ng-include="ctrl.formData.global.n1"> </div>
+                <div class="w3-col " style="width:650px" data-ng-include="ctrl.formData.global.n2"> </div>
+                <div class="w3-rest am-no-print w3-container w3-border-left"   data-ng-include="ctrl.formData.global.n1"> </div>
             </div>
         </div>
+        podval
     </div>
     </div>
 </body>

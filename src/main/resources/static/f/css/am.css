@@ -46,4 +46,5 @@ li::before {
 	.am-no-print, .am-no-print * {
 		display: none !important;
 	}
+	.am-inner-scroll * {margin-right: 0;}
 }
