@@ -27,7 +27,6 @@ class SqlController2 extends SqlAbstractController {
     isSelectedRow = r => this.selectedRowId
         && this.selectedRowId == r[this.getSql(singlePage.UrlMap()['sql']).rowId]
 
-
     initIns = () => {
         sql_app.insObj = sql_app[conf.sqlKeyName].ins
         if (!sql_app.insObj.vars) {
@@ -58,15 +57,12 @@ app.controller("SqlController2", SqlController2)
 
 angular.forEach([
     'sql_:sql',
-    'sql_:sql/upd',
-    'sql_:sql/ins',
     'sql_:sql/:key/=/:val',
-]
-    , v => singlePage[v] = {
-        templateUrl: '/f/tese/01/sqlTable.html',
-        controller: 'SqlController2',
-    }
-)
+    'sql_:sql/upd', 'sql_:sql/ins',
+], v => singlePage[v] = {
+    templateUrl: '/f/tese/01/sqlTable.html',
+    controller: 'SqlController2',
+})
 app.config(RouteProviderConfig)
 
 class InitPageController extends AbstractController {
