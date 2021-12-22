@@ -27,7 +27,7 @@
 <table>
     <thead class="w3-tiny am-b">
         <tr>
-            <th class="w3-hover-shadow" data-ng-class="{'w3-green':ctrl.getSql('SelectKassa').sortColumnName == k}"
+            <th class="w3-hover-shadow" data-ng-class="{'w3-green':ctrl.getSql('SelectKassa').sortColumnName == k && ctrl.getSql('SelectKassa').ascDesc}"
                 data-ng-repeat="(k,v) in ctrl.getSql('SelectKassa').cols" data-ng-click="ctrl.SortSelect(k)">
                 {{v}}
                 <span data-ng-if="ctrl.getSql('SelectKassa').sortColumnName == k">
