@@ -1,4 +1,5 @@
 'use strict'
+app.config(RouteProviderConfig)
 singlePage.session = {}
 
 sql_app.SelectADN = {
@@ -26,30 +27,38 @@ class InitPageController extends AbstractController {
         && this.selectedRowId == r[this.getSql(singlePage.UrlMap()['sql']).rowId]
 
 }
+app.controller('InitPageController', InitPageController)
 
-let toRouteWithController = controllerName => {
+let routeController = controllerClass => {
+    let controllerName = controllerClass.toString().split(' ')[1]
+    app.controller(controllerName, controllerClass)
     return { templateUrl: 'x.html', controller: controllerName, }
 }
 
-angular.forEach(['tree', 'tree_:lId', 'tree_:lId,:rId',]
-    , v => singlePage[v] = toRouteWithController('InitTreeController'))
+class InitChildController extends InitPageController {
+    constructor(dataFactory) {
+        super(dataFactory)
+        console.log(123)
+    }
+}
+angular.forEach(['children_:lId',]
+    , v => singlePage[v] = routeController(InitChildController))
 
 class InitTreeController extends InitPageController {
     constructor(dataFactory) {
         super(dataFactory)
         if (!singlePage.session.tree) singlePage.session.tree = {}
         if (singlePage.UrlMap()['tree'] == 'tree'
-            && !singlePage.session.tree.lId
+        && !singlePage.session.tree.lId
         ) singlePage.session.tree.lId = 45
         console.log(123, singlePage.UrlMap()['tree'], singlePage.session.tree)
-
+        
         this.dataFactory.readADN(singlePage.session.tree.lId)
-
+        
     }
 }
-
-angular.forEach(['sql_:sql', 'sql_:sql/:key1=:val1',]
-    , v => singlePage[v] = toRouteWithController('InitSqlTableController'))
+angular.forEach(['tree', 'tree_:lId', 'tree_:lId,:rId',]
+    , v => singlePage[v] = routeController(InitTreeController))
 
 class InitSqlTableController extends InitPageController {
     constructor(dataFactory) {
@@ -73,6 +82,8 @@ class InitSqlTableController extends InitPageController {
     }
 
 }
+angular.forEach(['sql_:sql', 'sql_:sql/:key1=:val1',]
+    , v => singlePage[v] = routeController(InitSqlTableController))
 
 class RWDataFactory2 extends RWDataFactory {
     constructor($http, $q) { super($http, $q) }
@@ -93,9 +104,6 @@ class RWDataFactory2 extends RWDataFactory {
     }
 
 }
-
 app.factory('dataFactory', RWDataFactory2)
-app.controller('InitPageController', InitPageController)
-app.controller('InitSqlTableController', InitSqlTableController)
-app.controller('InitTreeController', InitTreeController)
-app.config(RouteProviderConfig)
+
+
