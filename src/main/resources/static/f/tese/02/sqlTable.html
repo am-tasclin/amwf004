@@ -1,16 +1,36 @@
-<table>
-    <thead class="w3-blue-gray w3-tiny">
-        <tr>
-            <th data-ng-if="!ctrl.sql_app[ctrl.conf.sqlKeyName].noShow.includes(k)"
-                data-ng-repeat="(k,v) in ctrl.sqlTableData[0]"> {{k}} </th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr data-ng-click="ctrl.selectedRowId = r[ctrl.getSql(ctrl.singlePage.UrlMap()['sql']).rowId]"
-            data-ng-class="{'w3-card w3-light-green':ctrl.isSelectedRow(r)}" class="w3-hover-shadow"
-            data-ng-repeat="r in ctrl.sqlTableData">
-            <td data-ng-if="!ctrl.sql_app[ctrl.conf.sqlKeyName].noShow.includes(k)"
-                data-ng-repeat="(k,v) in ctrl.sqlTableData[0]" data-am:sql:html>{{r[k]}}</td>
-        </tr>
-    </tbody>
-</table>
+<div>
+    <div class="w3-right w3-white w3-border-bottom w3-hover-shadow w3-dropdown-hover">
+        &nbsp; &nbsp; ::
+        <div class="w3-dropdown-content w3-border" style="left: -125px;">
+            menu:
+            <button class="w3-btn w3-padding-small"
+                data-ng-click="ctrl.singlePage.session.menuSqls=!ctrl.singlePage.session.menuSqls">
+                sqls
+            </button>
+            <div class="w3-leftbar" data-ng-if="ctrl.singlePage.session.menuSqls">
+                <a class=" am-0u" href="#!/sql_{{sqlName}}" data-ng-repeat="sqlName in ctrl.sqlNames()">
+                    <div class="w3-hover-shadow"> {{sqlName}} </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <span class="w3-small"> {{ctrl.date | date:'medium'}} </span>
+    <span class="w3-tiny am-b"> {{ctrl.singlePage.UrlMap()['sql']}} </span>
+    {{ctrl.getSql(ctrl.singlePage.UrlMap()['sql']).name}}
+    <table>
+        <thead class="w3-blue-gray w3-tiny">
+            <tr>
+                <th data-ng-if="!ctrl.sql_app[ctrl.conf.sqlKeyName].noShow.includes(k)"
+                    data-ng-repeat="(k,v) in ctrl.conf.sqlTableData[0]"> {{k}} </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-ng-click="ctrl.selectedRowId = r[ctrl.getSql(ctrl.singlePage.UrlMap()['sql']).rowId]"
+                data-ng-class="{'w3-card w3-light-green':ctrl.isSelectedRow(r)}" class="w3-hover-shadow"
+                data-ng-repeat="r in ctrl.conf.sqlTableData">
+                <td data-ng-if="!ctrl.sql_app[ctrl.conf.sqlKeyName].noShow.includes(k)"
+                    data-ng-repeat="(k,v) in ctrl.conf.sqlTableData[0]" data-am:sql:html>{{r[k]}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
