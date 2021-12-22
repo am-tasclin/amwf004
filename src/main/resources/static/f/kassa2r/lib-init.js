@@ -6,11 +6,13 @@ angular.element(() => angular.bootstrap(document, ['app']))
 const sql_app = {}
 // for|as $scope
 const singlePage = {}/* $route fn */
-    , conf = {}/* conf page|app|content */
+    , conf = { eMap: {} }/* conf page|app|content */
 class AbstractController {
-    singlePage = singlePage; conf = conf; 
+    singlePage = singlePage; conf = conf;
     getSql = sqlName => sql_app[sqlName]
 }
+
+let add_eMap = v => conf.eMap[v.doc_id] = v
 
 conf.modalDisplay = { display: null }
 

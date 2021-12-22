@@ -25,12 +25,20 @@
         <a href="/" class="w3-btn w3-border w3-padding-small w3-small">↑</a>
         <span class="w3-small am-b">eHealth in ua terminology service</span>&nbsp;⁙
     </div>
-    <div class="w3-border-bottom am-max-width-1" style="height:90vh; overflow:auto;">
-        eHealth in ua terminology service
-        <div class="w3-border" data-ng-if="ctrl.singlePage.UrlMap()['sql']" data-ng-include="'sqlTable.html'">
-        </div>
+    <div class="w3-border-bottom am-max-width-1 am-inner-scroll">
+        eHealth in ua terminology service 
+        <span class="w3-small"> {{ctrl.date | date:'medium'}} </span>
+        <div class="ng-view"></div>
     </div>
     ⁂⁋⁝⁞⁚⁙⁜⁕
+    <style>
+        @media screen {
+            .am-inner-scroll {
+                height: 90vh;
+                overflow: auto;
+            }
+        }
+    </style>
 </body>
 
 </html>
