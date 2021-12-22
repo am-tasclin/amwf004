@@ -196,37 +196,14 @@ class TestControl {
         if (sql_app.SelectKassa.sortColumnName != sortColumnName) {
             sql_app.SelectKassa.sortColumnName = sortColumnName
             sql_app.SelectKassa.ascDesc = null
-        }
-
-        if (sql_app.SelectKassa.sortColumnName == sortColumnName) {
+        } else //if (sql_app.SelectKassa.sortColumnName == sortColumnName) 
+        {
             if (sql_app.SelectKassa.ascDesc == null)
                 sql_app.SelectKassa.ascDesc = "DESC"
-            else if (sql_app.SelectKassa.ascDesc == "DESC") 
-                     sql_app.SelectKassa.ascDesc = " "
-                 else sql_app.SelectKassa.ascDesc = null     
-            }
-            
-
-
-
-        /*
-        if (
-            sql_app.SelectKassa.sortColumnName == sortColumnName &&
-            sql_app.SelectKassa.ascDesc == "DESC") {
-            sql_app.SelectKassa.sortColumnName = null
-            sql_app.SelectKassa.ascDesc = null
-        } else
-            sql_app.SelectKassa.sortColumnName = sortColumnName
- 
-        if (sql_app.SelectKassa.ascDesc == "ASC")
-            sql_app.SelectKassa.ascDesc = "DESC"
-        else if (!sql_app.SelectKassa.ascDesc)
-            sql_app.SelectKassa.ascDesc = "ASC"
-
-
-*/
-
-
+            else if (sql_app.SelectKassa.ascDesc == "DESC")
+                sql_app.SelectKassa.ascDesc = " "
+            else sql_app.SelectKassa.ascDesc = null
+        }
 
         console.log('B1', sortColumnName, sql_app.SelectKassa.sortColumnName, sql_app.SelectKassa.ascDesc)
 
@@ -253,11 +230,11 @@ const makeSelect = sqlName => {
     //        .replace(':var.or', formData.seek.selectgroup)
 
 
-    if (sql_app[sqlName].sortColumnName) 
-     if (sql_app.SelectKassa.ascDesc == null)       
-         sql += '   ' 
-    else sql += ' ORDER BY ' + sql_app[sqlName].sortColumnName + ' ' + sql_app[sqlName].ascDesc
-     
+    if (sql_app[sqlName].sortColumnName)
+        if (sql_app.SelectKassa.ascDesc == null)
+            sql += '   '
+        else sql += ' ORDER BY ' + sql_app[sqlName].sortColumnName + ' ' + sql_app[sqlName].ascDesc
+
 
 
     return sql
