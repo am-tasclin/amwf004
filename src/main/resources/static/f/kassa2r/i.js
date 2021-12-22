@@ -196,7 +196,9 @@ class TestControl {
         if (sql_app.SelectKassa.sortColumnName != sortColumnName) {
             sql_app.SelectKassa.sortColumnName = sortColumnName
             sql_app.SelectKassa.ascDesc = null
-        } else //if (sql_app.SelectKassa.sortColumnName == sortColumnName) 
+        }
+
+        if (sql_app.SelectKassa.sortColumnName == sortColumnName) 
         {
             if (sql_app.SelectKassa.ascDesc == null)
                 sql_app.SelectKassa.ascDesc = "DESC"
