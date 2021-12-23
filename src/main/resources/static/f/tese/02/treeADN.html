@@ -1,13 +1,17 @@
-<div class="w3-hover-shadow">
-    <span class="w3-small w3-dropdown-hover w3-white">
-        [ {{adnId}}]
+<div data-ng-mouseover="ctrl.mouseover_item=adnId" data-ng-click="ctrl.selectADN(adnId, lr)" class="w3-hover-shadow"
+    data-ng-class="{'w3-card w3-light-green':ctrl.isSelectADN(adnId, lr)}">
+    <span class="w3-dropdown-hover w3-white">
+        <span class="w3-tiny"> [{{adnId}}] </span>
         <div class="w3-dropdown-content w3-border w3-container">
+            {{lr}}
             a1
         </div>
     </span>
     <a class="w3-hover-shadow am-0u" href="#!/children_{{adnId}}">
-        {{ctrl.conf.eMap[adnId].value1_22}}
+        {{ctrl.conf.eMap[adnId].value_22}}
     </a>
+    <span data-ng-if="ctrl.mouseover_item==adnId" class="w3-right" data-ng-include="'adnRmenu.html'">
+    </span>
 </div>
 <div class="w3-border-left w3-container" data-ng-if="ctrl.conf.parentChild[adnId]">
     <div data-ng-repeat="adnId in ctrl.conf.parentChild[adnId]" data-ng-include="'treeADN.html'">

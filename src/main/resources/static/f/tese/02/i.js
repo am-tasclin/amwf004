@@ -4,13 +4,13 @@ singlePage.session = {}
 
 sql_app.SelectADN = {
     name: 'Зчитати абстрактий вузел - TeSe',
-    sql: 'SELECT d.*, s.value value1_22 FROM tese.doc d \n\
+    sql: 'SELECT d.*, s.value value_22 FROM tese.doc d \n\
     LEFT JOIN string s ON s.string_id=doc_id',
     rowId: 'doc_id',
 }
 sql_app.SelectADNx = {
     name: 'Зчитати абстрактий вузел - test',
-    sql: 'SELECT d.*, s.value value1_22 FROM doc d \n\
+    sql: 'SELECT d.*, s.value value_22 FROM doc d \n\
     LEFT JOIN string s ON s.string_id=doc_id',
     rowId: 'doc_id',
 }
@@ -23,8 +23,8 @@ class InitPageController extends AbstractController {
 
     sqlNames = () => Object.keys(sql_app)
 
-    isSelectedRow = r => this.selectedRowId
-        && this.selectedRowId == r[this.getSql(singlePage.UrlMap()['sql']).rowId]
+    isSelectedRow = r => singlePage.session.selectedRowId
+        && singlePage.session.selectedRowId == r[this.getSql(singlePage.UrlMap()['sql']).rowId]
 
 }
 app.controller('InitPageController', InitPageController)
@@ -38,15 +38,21 @@ const routeController = controllerClass => {
 class InitTreeAbstractController extends InitPageController {
     constructor(dataFactory) {
         super(dataFactory)
-        if (!singlePage.session.tree) singlePage.session.tree = {}
+        if (!singlePage.session.tree) singlePage.session.tree = { l: {}, r: {} }
     }
+
+    selectADN = (adnId, lr) => singlePage.session.tree[lr].selectedId = adnId
+
+    isSelectADN = (adnId, lr) => singlePage.session.tree[lr].selectedId &&
+        singlePage.session.tree[lr].selectedId == adnId
+
 }
 
 class InitChildrenController extends InitTreeAbstractController {
     constructor(dataFactory) {
         super(dataFactory)
-        if (!singlePage.session.tree.lId)
-            singlePage.session.tree.lId = singlePage.UrlMap()['children']
+        if (!singlePage.session.tree.l.id)
+            singlePage.session.tree.l.id = singlePage.UrlMap()['children']
         console.log(123, singlePage.session, singlePage.UrlMap()['children'])
 
         this.dataFactory.getReadADN_children(singlePage.UrlMap()['children'])
@@ -59,14 +65,13 @@ class InitTreeController extends InitTreeAbstractController {
     constructor(dataFactory) {
         super(dataFactory)
         if (singlePage.UrlMap()['tree'] == 'tree'
-            && !singlePage.session.tree.lId
-        ) singlePage.session.tree.lId = 45
+            && !singlePage.session.tree.l.id
+        ) singlePage.session.tree.l.id = 45
 
         console.log(123, singlePage.UrlMap()['tree']
             , singlePage.session.tree)
 
-        // this.dataFactory.readADN(singlePage.session.tree.lId)
-        this.dataFactory.getReadADN(singlePage.session.tree.lId)
+        this.dataFactory.getReadADN(singlePage.session.tree.l.id)
 
     }
 }
