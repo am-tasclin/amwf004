@@ -29,32 +29,45 @@ class InitPageController extends AbstractController {
 }
 app.controller('InitPageController', InitPageController)
 
-let routeController = controllerClass => {
-    let controllerName = controllerClass.toString().split(' ')[1]
+const routeController = controllerClass => {
+    const controllerName = controllerClass.toString().split(' ')[1]
     app.controller(controllerName, controllerClass)
     return { templateUrl: 'x.html', controller: controllerName, }
 }
 
-class InitChildController extends InitPageController {
-    constructor(dataFactory) {
-        super(dataFactory)
-        console.log(123)
-    }
-}
-angular.forEach(['children_:lId',]
-    , v => singlePage[v] = routeController(InitChildController))
-
-class InitTreeController extends InitPageController {
+class InitTreeAbstractController extends InitPageController {
     constructor(dataFactory) {
         super(dataFactory)
         if (!singlePage.session.tree) singlePage.session.tree = {}
+    }
+}
+
+class InitChildrenController extends InitTreeAbstractController {
+    constructor(dataFactory) {
+        super(dataFactory)
+        if (!singlePage.session.tree.lId)
+            singlePage.session.tree.lId = singlePage.UrlMap()['children']
+        console.log(123, singlePage.session, singlePage.UrlMap()['children'])
+
+        this.dataFactory.getReadADN_children(singlePage.UrlMap()['children'])
+    }
+}
+angular.forEach(['children_:lId',]
+    , v => singlePage[v] = routeController(InitChildrenController))
+
+class InitTreeController extends InitTreeAbstractController {
+    constructor(dataFactory) {
+        super(dataFactory)
         if (singlePage.UrlMap()['tree'] == 'tree'
-        && !singlePage.session.tree.lId
+            && !singlePage.session.tree.lId
         ) singlePage.session.tree.lId = 45
-        console.log(123, singlePage.UrlMap()['tree'], singlePage.session.tree)
-        
-        this.dataFactory.readADN(singlePage.session.tree.lId)
-        
+
+        console.log(123, singlePage.UrlMap()['tree']
+            , singlePage.session.tree)
+
+        // this.dataFactory.readADN(singlePage.session.tree.lId)
+        this.dataFactory.getReadADN(singlePage.session.tree.lId)
+
     }
 }
 angular.forEach(['tree', 'tree_:lId', 'tree_:lId,:rId',]
@@ -85,25 +98,30 @@ class InitSqlTableController extends InitPageController {
 angular.forEach(['sql_:sql', 'sql_:sql/:key1=:val1',]
     , v => singlePage[v] = routeController(InitSqlTableController))
 
-class RWDataFactory2 extends RWDataFactory {
+class RWADNDataFactory extends RWDataFactory {
     constructor($http, $q) { super($http, $q) }
 
+    // readSql = (sql, fn) => this.httpGetSql({ sql: sql }).then(rD => { fn(rD) })
     readSql = (sql, fn) => this.httpGetSql({ sql: sql }).then(fn)
-
     readSqlTable = sql => this.readSql(sql
         , responceData => conf.sqlTableData = responceData.list)
 
-    readADN = docId => {
-        let sql = sql_app.SelectADN.sql
-        sql += ' WHERE doc_id= ' + docId
-        console.log(sql, docId)
-
-        this.readSql(sql
-            , responceData => angular.forEach(responceData.list
-                , v => add_eMap(v)))
+    //ADN - Abstract Data Node
+    getReadADN = docId => {
+        let deferred = this.$q.defer()
+        conf.eMap[docId] ? deferred.resolve(conf.eMap[docId]) : this.readSql(
+            sql_app.SelectADN.sql + ' WHERE doc_id = ' + docId,
+            responceADN_Data => deferred.resolve(add_eMap(responceADN_Data.list[0]))
+        )
+        return deferred.promise
     }
 
+    getReadADN_children = docId => this.getReadADN(docId).then(() => this.readSql(
+        sql_app.SelectADN.sql + ' WHERE parent = ' + docId
+        , responceChildren => angular.forEach(responceChildren.list
+            , child => addParentChild(add_eMap(child)))))
+
 }
-app.factory('dataFactory', RWDataFactory2)
+app.factory('dataFactory', RWADNDataFactory)
 
 

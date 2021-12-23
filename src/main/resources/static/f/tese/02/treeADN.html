@@ -1,13 +1,15 @@
 <div class="w3-hover-shadow">
     <span class="w3-small w3-dropdown-hover w3-white">
         [ {{adnId}}]
-        <div class="w3-dropdown-content w3-border">
+        <div class="w3-dropdown-content w3-border w3-container">
             a1
         </div>
     </span>
-    <a class="w3-hover-shadow am-0u" href="#!/children_{{adnId}}"> 
-        _
+    <a class="w3-hover-shadow am-0u" href="#!/children_{{adnId}}">
         {{ctrl.conf.eMap[adnId].value1_22}}
-        _
     </a>
+</div>
+<div class="w3-border-left w3-container" data-ng-if="ctrl.conf.parentChild[adnId]">
+    <div data-ng-repeat="adnId in ctrl.conf.parentChild[adnId]" data-ng-include="'treeADN.html'">
+    </div>
 </div>
