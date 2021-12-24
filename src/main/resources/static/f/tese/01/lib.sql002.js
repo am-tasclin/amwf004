@@ -72,7 +72,7 @@ class DataFactory {
 }
 
 singlePage.Url = () => window.location.href.split('#!')[1]
-console.log(singlePage.Url())
+// console.log(singlePage.Url())
 // singlePage.PseudoREST = singlePage.Url
 singlePage.UrlList = () => singlePage.Url().split('/')
 // singlePage.PseudoRESTKey = key => singlePage.UrlList().filter(w => w.includes(key))

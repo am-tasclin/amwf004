@@ -25,7 +25,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-click="ctrl.singlePage.session.selectedRowId = r[ctrl.getSql(ctrl.singlePage.UrlMap()['sql']).rowId]"
+            <tr data-ng-click="ctrl.singlePage.session.selectedRowId = r[ctrl.getSql(ctrl.singlePage.session.sql).rowId]"
                 data-ng-class="{'w3-card w3-light-green':ctrl.isSelectedRow(r)}" class="w3-hover-shadow"
                 data-ng-repeat="r in ctrl.conf.sqlTableData">
                 <td data-ng-if="!ctrl.sql_app[ctrl.conf.sqlKeyName].noShow.includes(k)"

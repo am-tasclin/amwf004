@@ -1,6 +1,6 @@
 'use strict'
 app.config(RouteProviderConfig)
-singlePage.session = {}
+singlePage.session = { tree: { l: {}, r: {} } }
 
 sql_app.SelectADN = {
     name: 'Зчитати абстрактий вузел - TeSe',
@@ -24,10 +24,43 @@ class InitPageController extends AbstractController {
     sqlNames = () => Object.keys(sql_app)
 
     isSelectedRow = r => singlePage.session.selectedRowId
-        && singlePage.session.selectedRowId == r[this.getSql(singlePage.UrlMap()['sql']).rowId]
+        && singlePage.session.selectedRowId == r[this.getSql(singlePage.session.sql).rowId]
 
-}
-app.controller('InitPageController', InitPageController)
+    selectADN = (adnId, lr) => {
+        singlePage.session.tree[lr].selectedId = adnId
+        if (!singlePage.session.tree[lr].openIds)
+            singlePage.session.tree[lr].openIds = []
+        if (singlePage.session.tree[lr].openIds.includes(adnId))
+            singlePage.session.tree[lr].openIds
+                .splice(singlePage.session.tree[lr].openIds.indexOf(adnId), 1)
+        else
+            singlePage.session.tree[lr].openIds.push(adnId)
+    }
+
+    isSelectADN = (adnId, lr) => singlePage.session.tree[lr].selectedId &&
+        singlePage.session.tree[lr].selectedId == adnId
+
+    hasADNClosedChild = (adnId, lr) => singlePage.session.tree[lr]
+        .openIds && !singlePage.session.tree[lr].openIds
+            .includes(adnId) && conf.parentChild[adnId] && conf
+                .parentChild[adnId].length > 0
+
+    initSession = () => JSON.stringify(singlePage.session)
+
+    initRL = () => {
+        this.dataFactory.getReadADN(singlePage.session.tree.l.id)
+        if (singlePage.session.tree.r.id)
+            this.dataFactory.getReadADN(singlePage.session.tree.r.id)
+    }
+
+    readSessionSqlTable = () => {
+        if (singlePage.session.sql) {
+            let sql = sql_app[singlePage.session.sql].sql
+            this.dataFactory.readSqlTable(sql)
+        }
+    }
+
+}; app.controller('InitPageController', InitPageController)
 
 const routeController = controllerClass => {
     const controllerName = controllerClass.toString().split(' ')[1]
@@ -35,20 +68,22 @@ const routeController = controllerClass => {
     return { templateUrl: 'x.html', controller: controllerName, }
 }
 
-class InitTreeAbstractController extends InitPageController {
+class InitSessionController extends InitPageController {
     constructor(dataFactory) {
         super(dataFactory)
-        if (!singlePage.session.tree) singlePage.session.tree = { l: {}, r: {} }
+        let iS = JSON.parse(decodeURI(singlePage.UrlMap()['init']))
+        singlePage.session = iS
+        this.initRL()
+        this.readSessionSqlTable()
+
+        angular.forEach(['l', 'r'], lr => angular.forEach(singlePage.session
+            .tree[lr].openIds, parent => this.dataFactory.getReadADN_children(parent)
+        ))
     }
+}; angular.forEach(['init_:json',]
+    , v => singlePage[v] = routeController(InitSessionController))
 
-    selectADN = (adnId, lr) => singlePage.session.tree[lr].selectedId = adnId
-
-    isSelectADN = (adnId, lr) => singlePage.session.tree[lr].selectedId &&
-        singlePage.session.tree[lr].selectedId == adnId
-
-}
-
-class InitChildrenController extends InitTreeAbstractController {
+class InitChildrenController extends InitPageController {
     constructor(dataFactory) {
         super(dataFactory)
         if (!singlePage.session.tree.l.id)
@@ -56,12 +91,12 @@ class InitChildrenController extends InitTreeAbstractController {
         console.log(123, singlePage.session, singlePage.UrlMap()['children'])
 
         this.dataFactory.getReadADN_children(singlePage.UrlMap()['children'])
+
     }
-}
-angular.forEach(['children_:lId',]
+}; angular.forEach(['children_:lId',]
     , v => singlePage[v] = routeController(InitChildrenController))
 
-class InitTreeController extends InitTreeAbstractController {
+class InitTreeController extends InitPageController {
     constructor(dataFactory) {
         super(dataFactory)
         singlePage.session.tree.l.id = singlePage.UrlMap()['tree']
@@ -76,13 +111,11 @@ class InitTreeController extends InitTreeAbstractController {
         console.log(123, singlePage.UrlMap()['tree']
             , singlePage.session.tree)
 
-        this.dataFactory.getReadADN(singlePage.session.tree.l.id)
-        if (singlePage.session.tree.r.id)
-            this.dataFactory.getReadADN(singlePage.session.tree.r.id)
+        this.initRL()
 
     }
-}
-angular.forEach(['tree', 'tree_:lId', 'tree_:lId,:rId',]
+
+}; angular.forEach(['tree', 'tree_:lId', 'tree_:lId,:rId',]
     , v => singlePage[v] = routeController(InitTreeController))
 
 class InitSqlTableController extends InitPageController {
@@ -106,8 +139,7 @@ class InitSqlTableController extends InitPageController {
         }
     }
 
-}
-angular.forEach(['sql_:sql', 'sql_:sql/:key1=:val1',]
+}; angular.forEach(['sql_:sql', 'sql_:sql/:key1=:val1',]
     , v => singlePage[v] = routeController(InitSqlTableController))
 
 class RWADNDataFactory extends RWDataFactory {
@@ -133,7 +165,6 @@ class RWADNDataFactory extends RWDataFactory {
         , responceChildren => angular.forEach(responceChildren.list
             , child => addParentChild(add_eMap(child)))))
 
-}
-app.factory('dataFactory', RWADNDataFactory)
+}; app.factory('dataFactory', RWADNDataFactory)
 
 
