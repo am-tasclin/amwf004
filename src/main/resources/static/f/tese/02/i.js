@@ -64,14 +64,21 @@ angular.forEach(['children_:lId',]
 class InitTreeController extends InitTreeAbstractController {
     constructor(dataFactory) {
         super(dataFactory)
+        singlePage.session.tree.l.id = singlePage.UrlMap()['tree']
+        if (singlePage.UrlMap()['tree'].includes(',')) {
+            singlePage.session.tree.l.id = singlePage.UrlMap()['tree'].split(',')[0]
+            singlePage.session.tree.r.id = singlePage.UrlMap()['tree'].split(',')[1]
+        }
         if (singlePage.UrlMap()['tree'] == 'tree'
-            && !singlePage.session.tree.l.id
+            && isNaN(singlePage.session.tree.l.id)
         ) singlePage.session.tree.l.id = 45
 
         console.log(123, singlePage.UrlMap()['tree']
             , singlePage.session.tree)
 
         this.dataFactory.getReadADN(singlePage.session.tree.l.id)
+        if (singlePage.session.tree.r.id)
+            this.dataFactory.getReadADN(singlePage.session.tree.r.id)
 
     }
 }
