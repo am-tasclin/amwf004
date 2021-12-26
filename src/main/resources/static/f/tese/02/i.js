@@ -4,8 +4,12 @@ singlePage.session = { tree: { l: {}, r: {} } }
 
 sql_app.SelectADN = {
     name: 'Зчитати абстрактий вузел - TeSe',
-    sql: 'SELECT d.*, s.value value_22 FROM tese.doc d \n\
-    LEFT JOIN string s ON s.string_id=doc_id',
+    sql: 'SELECT d.*, s.value value_22, su.value value_u_22 \n\
+    FROM tese.doc d \n\
+     LEFT JOIN sort o ON sort_id=doc_id \n\
+     LEFT JOIN string_u su ON su.string_u_id=doc_id \n\
+     LEFT JOIN string s ON s.string_id=doc_id',
+    oderBy: 'sort',
     rowId: 'doc_id',
 }
 sql_app.SelectADNx = {
@@ -150,21 +154,26 @@ class RWADNDataFactory extends RWDataFactory {
     readSqlTable = sql => this.readSql(sql
         , responceData => conf.sqlTableData = responceData.list)
 
+    buildKeyValueSql = (sqlName, key, value) => {
+        let sql = sql_app[sqlName].sql
+        sql += ' WHERE ' + key + ' = ' + value
+        if (sql_app[sqlName].oderBy) sql += ' ORDER BY ' + sql_app[sqlName].oderBy
+        return sql
+    }
+
     //ADN - Abstract Data Node
     getReadADN = docId => {
         let deferred = this.$q.defer()
         conf.eMap[docId] ? deferred.resolve(conf.eMap[docId]) : this.readSql(
-            sql_app.SelectADN.sql + ' WHERE doc_id = ' + docId,
-            responceADN_Data => deferred.resolve(add_eMap(responceADN_Data.list[0]))
+            this.buildKeyValueSql('SelectADN', 'doc_id', docId)
+            , responceADN_Data => deferred.resolve(add_eMap(responceADN_Data.list[0]))
         )
         return deferred.promise
     }
 
     getReadADN_children = docId => this.getReadADN(docId).then(() => this.readSql(
-        sql_app.SelectADN.sql + ' WHERE parent = ' + docId
+        this.buildKeyValueSql('SelectADN', 'parent', docId)
         , responceChildren => angular.forEach(responceChildren.list
             , child => addParentChild(add_eMap(child)))))
 
 }; app.factory('dataFactory', RWADNDataFactory)
-
-

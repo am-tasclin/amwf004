@@ -8,7 +8,10 @@
         </div>
     </span>
     <a class="w3-hover-shadow am-0u" href="#!/children_{{adnId}}">
-        {{ctrl.conf.eMap[adnId].value_22}}
+        {{ctrl.conf.eMap[adnId].doc_id
+        && (ctrl.conf.eMap[adnId].value_22
+        ||ctrl.conf.eMap[adnId].value_u_22)?'':'--?--'}}
+        {{ctrl.conf.eMap[adnId].value_22||ctrl.conf.eMap[adnId].value_u_22}}
         <sup class="w3-tiny am-b" data-ng-if="ctrl.hasADNClosedChild(adnId, lr)">
             [{{ctrl.conf.parentChild[adnId].length}}]
         </sup>
