@@ -24,9 +24,26 @@
     <div class="w3-border-bottom am-max-width-1">
         <a href="/" class="w3-btn w3-border w3-padding-small w3-small">↑</a>
         <span class="w3-small am-b">eHealth in ua terminology service</span>
-        <a class="w3-btn w3-padding-small w3-border w3-small" href="#!/tree">
-            <i class="fas fa-project-diagram"></i>
-        </a>
+        <span class="w3-dropdown-hover">
+            <a class="w3-btn w3-padding-small w3-border w3-small" href="#!/tree">
+                <i class="fas fa-project-diagram"></i>
+            </a>
+            <div class="w3-dropdown-content w3-leftbar w3-border w3-container">
+                <div>
+                    <div class="w3-hover-shadow" data-ng-click="menu_tree=menu_tree=='leftViewType'?'':'leftViewType'">
+                        тип: <span class="w3-leftbar w3-container" data-ng-if="menu_tree=='leftViewType'">|
+                            <span class="w3-hover-shadow" data-ng-repeat="t in ['nrValType','objKeyVal'] ">
+                                {{t}}|
+                            </span>
+                        </span>
+                    </div>
+                </div>
+                <p class="w3-hover-shadow">
+                    a2
+                </p>
+                a3
+            </div>
+        </span>
         <a class="w3-btn w3-padding-small w3-border w3-small" href="#!/sql_SelectADN">
             <i class="fas fa-database"></i>
         </a>
