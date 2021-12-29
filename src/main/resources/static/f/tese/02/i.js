@@ -1,6 +1,7 @@
 'use strict'
 app.config(RouteProviderConfig)
 singlePage.session = { tree: { l: {}, r: {} } }
+singlePage.index_template = 'index_template.html'
 
 sql_app.SelectADN = {
     name: 'Зчитати абстрактий вузел - TeSe',
@@ -11,8 +12,7 @@ sql_app.SelectADN = {
      LEFT JOIN string s ON s.string_id=doc_id',
     oderBy: 'sort',
     rowId: 'doc_id',
-}
-sql_app.SelectADNx = {
+}; sql_app.SelectADNx = {
     name: 'Зчитати абстрактий вузел - test',
     sql: 'SELECT d.*, s.value value_22 FROM doc d \n\
     LEFT JOIN string s ON s.string_id=doc_id',
