@@ -1,7 +1,5 @@
 <span class=" w3-dropdown-hover w3-hover-shadow w3-white">
-    <span class="w3-opacity w3-small"> &nbsp; &nbsp;<i class="fas fa-ellipsis-v"></i>
-    </span> &nbsp;
-    <div class="w3-dropdown-content w3-card-4 w3-left w3-right-align w3-small" style="right: 1px;">
+    <span class="w3-small" data-ng-if="adnId==ctrl.singlePage.session.tree[lr].id">
         <a data-ng-if="lr=='l'" href="#!/tree_{{ctrl.conf.eMap[adnId].parent}},{{ctrl.singlePage.session.tree.r.id}}"
             class="w3-btn w3-ripple w3-padding-small am-0u">
             <i class="fas fa-level-down-alt"></i>
@@ -10,6 +8,10 @@
             class="w3-btn w3-ripple w3-padding-small am-0u">
             <i class="fas fa-level-down-alt"></i>
         </a>
+    </span>
+    <span class="w3-opacity w3-small"> &nbsp; &nbsp;<i class="fas fa-ellipsis-v"></i>
+    </span> &nbsp;
+    <div class="w3-dropdown-content w3-card-4 w3-left w3-right-align w3-small" style="right: 1px;">
         <a href="#!/tree_{{adnId}},{{ctrl.singlePage.session.tree.r.id}}"
             class="w3-btn w3-ripple w3-padding-small am-0u">
             <i class="fas fa-level-up-alt fa-flip-horizontal"></i>

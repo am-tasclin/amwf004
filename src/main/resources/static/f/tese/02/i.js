@@ -64,6 +64,18 @@ class InitPageController extends AbstractController {
         }
     }
 
+    sqlParent = docId => {
+        const sqlO = sql_app[singlePage.session.sql]
+        const sql =
+            'SELECT * FROM (:sql_app.innerSql \n\
+                ) x WHERE parent = :var.parent '
+                .replace(':var.parent', docId)
+                .replace(':sql_app.innerSql', sqlO.sql)
+        console.log(docId, sqlO)
+        console.log(sql)
+        this.dataFactory.readSqlTable(sql)
+    }
+
 }; app.controller('InitPageController', InitPageController)
 
 const routeController = controllerClass => {

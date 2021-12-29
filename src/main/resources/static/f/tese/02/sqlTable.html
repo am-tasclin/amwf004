@@ -12,11 +12,18 @@
                     <div class="w3-hover-shadow"> {{sqlName}} </div>
                 </a>
             </div>
+            <div>
+                <span class="w3-tiny am-b">parent:</span>
+                <button data-ng-click="ctrl.sqlParent(ctrl.singlePage.session.tree.l.selectedId)"
+                    class="w3-btn w3-padding-small"> L </button> |
+                <button data-ng-click="ctrl.sqlParent(ctrl.singlePage.session.tree.r.selectedId)"
+                    class="w3-btn w3-padding-small"> R </button>
+            </div>
         </div>
     </div>
     <span class="w3-small"> {{ctrl.date | date:'medium'}} </span>
-    <span class="w3-tiny am-b"> {{ctrl.singlePage.UrlMap()['sql']}} </span>
-    {{ctrl.getSql(ctrl.singlePage.UrlMap()['sql']).name}}
+    <span class="w3-tiny am-b"> {{ctrl.singlePage.session.sql}} </span>
+    {{ctrl.getSql(ctrl.singlePage.session.sql).name}}
     <table>
         <thead class="w3-blue-gray w3-tiny">
             <tr>
