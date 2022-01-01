@@ -12,6 +12,12 @@ sql_app.SelectADN = {
      LEFT JOIN string s ON s.string_id=doc_id',
     oderBy: 'sort',
     rowId: 'doc_id',
+}; sql_app.SelectADNi18n = {
+    name: 'TeSe абстрактий вузел з перекладом',
+    sql: 'SELECT d.*, i18n FROM (:sql_app.SelectADN ) d \n\
+    LEFT JOIN (SELECT reference r1, value i18n FROM (SELECT d.* FROM doc d, doc p \n\
+        WHERE d.parent=p.doc_id AND p.reference=285596 ) x \n\
+    LEFT JOIN string ON string_id=doc_id) dv ON d.doc_id=dv.r1',
 }; sql_app.SelectADNx = {
     name: 'Зчитати абстрактий вузел - test',
     sql: 'SELECT d.*, s.value value_22 FROM doc d \n\
@@ -59,19 +65,14 @@ class InitPageController extends AbstractController {
 
     readSessionSqlTable = () => {
         if (singlePage.session.sql) {
-            let sql = sql_app[singlePage.session.sql].sql
+            let sql = readSql2R(singlePage.session.sql)
             this.dataFactory.readSqlTable(sql)
         }
     }
 
     sqlParent = docId => {
-        const sqlO = sql_app[singlePage.session.sql]
-        const sql =
-            'SELECT * FROM (:sql_app.innerSql \n\
-                ) x WHERE parent = :var.parent '
-                .replace(':var.parent', docId)
-                .replace(':sql_app.innerSql', sqlO.sql)
-        console.log(docId, sqlO)
+        const sql = this.dataFactory
+            .buildKeyValueSql('SelectADNi18n', 'parent', docId)
         console.log(sql)
         this.dataFactory.readSqlTable(sql)
     }
@@ -135,10 +136,7 @@ class InitTreeController extends InitPageController {
     , v => singlePage[v] = routeController(InitTreeController))
 
 class InitSqlTableController extends InitPageController {
-    constructor(dataFactory) {
-        super(dataFactory)
-        this.readSqlTable()
-    }
+    constructor(dataFactory) { super(dataFactory); this.readSqlTable() }
 
     readSqlTable = () => {
         console.log(123, singlePage.UrlMap()['sql'])
@@ -147,9 +145,10 @@ class InitSqlTableController extends InitPageController {
             && singlePage.session.sql != singlePage.UrlMap()['sql']
         ) {
             console.log(singlePage, conf)
-            singlePage.session.sql = singlePage.UrlMap()['sql']
             if (sql_app[singlePage.UrlMap()['sql']]) {
-                let sql = sql_app[singlePage.UrlMap()['sql']].sql
+                singlePage.session.sql = singlePage.UrlMap()['sql']
+                let sql = readSql2R(singlePage.UrlMap()['sql'])
+                console.log(sql)
                 this.dataFactory.readSqlTable(sql)
             }
         }
@@ -167,7 +166,7 @@ class RWADNDataFactory extends RWDataFactory {
         , responceData => conf.sqlTableData = responceData.list)
 
     buildKeyValueSql = (sqlName, key, value) => {
-        let sql = sql_app[sqlName].sql
+        let sql = readSql2R(sqlName)
         sql += ' WHERE ' + key + ' = ' + value
         if (sql_app[sqlName].oderBy) sql += ' ORDER BY ' + sql_app[sqlName].oderBy
         return sql
