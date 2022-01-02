@@ -5,7 +5,7 @@ singlePage.index_template = 'index_template.html'
 
 sql_app.SelectADN = {
     name: 'Зчитати абстрактий вузел - TeSe',
-    sql: 'SELECT d.*, s.value value_22, su.value value_u_22 \n\
+    sql: 'SELECT d.*, s.value value_22, su.value value_u_22, o.sort \n\
     FROM tese.doc d \n\
      LEFT JOIN sort o ON sort_id=doc_id \n\
      LEFT JOIN string_u su ON su.string_u_id=doc_id \n\
@@ -18,6 +18,7 @@ sql_app.SelectADN = {
     LEFT JOIN (SELECT reference r1, value i18n FROM (SELECT d.* FROM doc d, doc p \n\
         WHERE d.parent=p.doc_id AND p.reference=285596 ) x \n\
     LEFT JOIN string ON string_id=doc_id) dv ON d.doc_id=dv.r1',
+    oderBy: 'sort',
 }; sql_app.SelectADNx = {
     name: 'Зчитати абстрактий вузел - test',
     sql: 'SELECT d.*, s.value value_22 FROM doc d \n\
@@ -33,8 +34,12 @@ class InitPageController extends AbstractController {
 
     sqlNames = () => Object.keys(sql_app)
 
+    sqlKeyValue = () => singlePage.session.sqlUrl.split(replaceSlash)[2]
+
     isSelectedRow = r => singlePage.session.selectedRowId
-        && singlePage.session.selectedRowId == r[this.getSql(singlePage.session.sql).rowId]
+        && (singlePage.session.selectedRowId == r[this.getSql(singlePage.session.sql).rowId]
+            || singlePage.session.selectedRowId == r.doc_id
+        )
 
     selectADN = (adnId, lr) => {
         singlePage.session.tree[lr].selectedId = adnId
@@ -65,16 +70,11 @@ class InitPageController extends AbstractController {
 
     readSessionSqlTable = () => {
         if (singlePage.session.sql) {
-            let sql = readSql2R(singlePage.session.sql)
+            //let sql = readSql2R(singlePage.session.sql)
+            const sql = this.dataFactory.buildSqlWithKeyValue(singlePage.session.sql
+                , singlePage.session.sqlKey, singlePage.session.sqlValue)
             this.dataFactory.readSqlTable(sql)
         }
-    }
-
-    sqlParent = docId => {
-        const sql = this.dataFactory
-            .buildKeyValueSql('SelectADNi18n', 'parent', docId)
-        console.log(sql)
-        this.dataFactory.readSqlTable(sql)
     }
 
 }; app.controller('InitPageController', InitPageController)
@@ -89,6 +89,7 @@ class InitSessionController extends InitPageController {
     constructor(dataFactory) {
         super(dataFactory)
         let iS = JSON.parse(decodeURI(singlePage.UrlMap()['init']))
+        console.log(iS)
         singlePage.session = iS
         this.initRL()
         this.readSessionSqlTable()
@@ -135,22 +136,25 @@ class InitTreeController extends InitPageController {
 }; angular.forEach(['tree', 'tree_:lId', 'tree_:lId,:rId',]
     , v => singlePage[v] = routeController(InitTreeController))
 
+const replaceSlash = ';'
+
 class InitSqlTableController extends InitPageController {
     constructor(dataFactory) { super(dataFactory); this.readSqlTable() }
 
     readSqlTable = () => {
-        console.log(123, singlePage.UrlMap()['sql'])
+        if (singlePage.session.sqlUrl != singlePage.Url()) {
+            singlePage.session.sqlUrl = singlePage.Url().replace(/\//g, replaceSlash)
+            singlePage.session.sql = singlePage.UrlMap()['sql']
 
-        if (singlePage.UrlMap()['sql']
-            && singlePage.session.sql != singlePage.UrlMap()['sql']
-        ) {
-            console.log(singlePage, conf)
-            if (sql_app[singlePage.UrlMap()['sql']]) {
-                singlePage.session.sql = singlePage.UrlMap()['sql']
-                let sql = readSql2R(singlePage.UrlMap()['sql'])
-                console.log(sql)
-                this.dataFactory.readSqlTable(sql)
+            if (singlePage.UrlList()[2]) {
+                let sqlWhereKV = singlePage.UrlList()[2].split('=')
+                singlePage.session.sqlKey = sqlWhereKV[0]
+                singlePage.session.sqlValue = sqlWhereKV[1]
             }
+
+            let sql = this.dataFactory.buildSqlWithKeyValue(singlePage.session.sql
+                , singlePage.session.sqlKey, singlePage.session.sqlValue)
+            this.dataFactory.readSqlTable(sql)
         }
     }
 
@@ -165,9 +169,10 @@ class RWADNDataFactory extends RWDataFactory {
     readSqlTable = sql => this.readSql(sql
         , responceData => conf.sqlTableData = responceData.list)
 
-    buildKeyValueSql = (sqlName, key, value) => {
+    buildSqlWithKeyValue = (sqlName, key, value) => {
         let sql = readSql2R(sqlName)
-        sql += ' WHERE ' + key + ' = ' + value
+        if (key && value)
+            sql += ' WHERE ' + key + ' = ' + value
         if (sql_app[sqlName].oderBy) sql += ' ORDER BY ' + sql_app[sqlName].oderBy
         return sql
     }
@@ -176,14 +181,14 @@ class RWADNDataFactory extends RWDataFactory {
     getReadADN = docId => {
         let deferred = this.$q.defer()
         conf.eMap[docId] ? deferred.resolve(conf.eMap[docId]) : this.readSql(
-            this.buildKeyValueSql('SelectADN', 'doc_id', docId)
+            this.buildSqlWithKeyValue('SelectADN', 'doc_id', docId)
             , responceADN_Data => deferred.resolve(add_eMap(responceADN_Data.list[0]))
         )
         return deferred.promise
     }
 
     getReadADN_children = docId => this.getReadADN(docId).then(() => this.readSql(
-        this.buildKeyValueSql('SelectADN', 'parent', docId)
+        this.buildSqlWithKeyValue('SelectADN', 'parent', docId)
         , responceChildren => angular.forEach(responceChildren.list
             , child => addParentChild(add_eMap(child)))))
 

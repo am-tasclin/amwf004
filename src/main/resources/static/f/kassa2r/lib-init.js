@@ -12,9 +12,13 @@ class AbstractController {
     getSql = sqlName => sql_app[sqlName]
 }
 
+const getSetList = (o, n) => o[n] ? o[n] : o[n] = []
+
 const add_eMap = v => conf.eMap[v.doc_id] = v
-const getSetParentChild = v => conf.parentChild[v.parent] ?
-    conf.parentChild[v.parent] : conf.parentChild[v.parent] = []
+const getSetParentChild = v => getSetList(conf.parentChild, v.parent)
+
+// const getSetParentChild = v => conf.parentChild[v.parent] ?
+//     conf.parentChild[v.parent] : conf.parentChild[v.parent] = []
 const addParentChild = v => !getSetParentChild(v).includes(v.doc_id) ?
     getSetParentChild(v).push(v.doc_id) : null
 

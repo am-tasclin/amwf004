@@ -14,15 +14,17 @@
             </div>
             <div>
                 <span class="w3-tiny am-b">parent:</span>
-                <button data-ng-click="ctrl.sqlParent(ctrl.singlePage.session.tree.l.selectedId)"
-                    class="w3-btn w3-padding-small"> L </button> |
-                <button data-ng-click="ctrl.sqlParent(ctrl.singlePage.session.tree.r.selectedId)"
-                    class="w3-btn w3-padding-small"> R </button>
+                <a class="w3-btn w3-padding-small am-0u" href="#!/sql_{{ctrl.singlePage.session.sql}}/parent={{
+                    ctrl.singlePage.session.tree.l.selectedId}}">L</a>|
+                <a class="w3-btn w3-padding-small am-0u" href="#!/sql_{{ctrl.singlePage.session.sql}}/parent={{
+                    ctrl.singlePage.session.tree.r.selectedId}}">R</a>
             </div>
         </div>
     </div>
     <span class="w3-small"> {{ctrl.date | date:'medium'}} </span>
-    <span class="w3-tiny am-b"> {{ctrl.singlePage.session.sql}} </span>
+    <span class="w3-tiny am-b"> {{ctrl.singlePage.session.sql
+        }}<span data-ng-if="ctrl.sqlKeyValue()">/{{ctrl.sqlKeyValue()}} </span>
+    </span>
     {{ctrl.getSql(ctrl.singlePage.session.sql).name}}
     <table>
         <thead class="w3-blue-gray w3-tiny">
@@ -32,7 +34,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-click="ctrl.singlePage.session.selectedRowId = r[ctrl.getSql(ctrl.singlePage.session.sql).rowId]"
+            <tr data-ng-click="ctrl.singlePage.session.selectedRowId = r[ctrl.getSql(ctrl.singlePage.session.sql).rowId]||r.doc_id"
                 data-ng-class="{'w3-card w3-light-green':ctrl.isSelectedRow(r)}" class="w3-hover-shadow"
                 data-ng-repeat="r in ctrl.conf.sqlTableData">
                 <td data-ng-if="!ctrl.sql_app[ctrl.conf.sqlKeyName].noShow.includes(k)"
