@@ -6,12 +6,16 @@
             {{lr}}
             a1
         </div>
-    </span>
-    <a class="w3-hover-shadow am-0u" href="#!/children_{{adnId}}">
-        {{ctrl.conf.eMap[adnId].doc_id
+    </span> <a class="w3-hover-shadow am-0u" href="#!/children_{{adnId}}">{{
+        ctrl.conf.eMap[adnId].doc_id
         && (ctrl.conf.eMap[adnId].value_22
-        ||ctrl.conf.eMap[adnId].value_u_22)?'':'--?--'}}
-        {{ctrl.conf.eMap[adnId].value_22||ctrl.conf.eMap[adnId].value_u_22}}
+        ||ctrl.conf.eMap[adnId].reference
+        ||ctrl.conf.eMap[adnId].value_u_22) ? '':'--?--'
+        }}{{ctrl.conf.eMap[adnId].value_22||ctrl.conf.eMap[adnId].value_u_22
+        }}<span class="w3-small" data-ng-if="ctrl.conf.eMap[adnId]
+        .reference">, r:{{ctrl.conf.eMap[adnId].reference
+            }}</span><span class="w3-small" data-ng-if="ctrl.conf.eMap[adnId]
+        .reference2">, r2:{{ctrl.conf.eMap[adnId].reference2}} </span>
         <sup class="w3-tiny am-b" data-ng-if="ctrl.hasADNClosedChild(adnId, lr)">
             [{{ctrl.conf.parentChild[adnId].length}}]
         </sup>

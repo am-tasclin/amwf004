@@ -34,7 +34,8 @@ class InitPageController extends AbstractController {
 
     sqlNames = () => Object.keys(sql_app)
 
-    sqlKeyValue = () => singlePage.session.sqlUrl.split(replaceSlash)[2]
+    sqlKeyValue = () => singlePage.session.sqlUrl ?
+        singlePage.session.sqlUrl.split(replaceSlash)[2] : null
 
     isSelectedRow = r => singlePage.session.selectedRowId
         && (singlePage.session.selectedRowId == r[this.getSql(singlePage.session.sql).rowId]
