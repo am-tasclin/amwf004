@@ -6,12 +6,18 @@ singlePage.index_template = 'index_template.html'
 sql_app.SelectADN = {
     name: 'Зчитати абстрактий вузел - TeSe',
     sql: 'SELECT d.*, s.value value_22, su.value value_u_22, o.sort \n\
+    , srr.value rr_value_22 \n\
+    , sr.value r_value_22, dr.doctype r_doctype \n\
     FROM tese.doc d \n\
-     LEFT JOIN sort o ON sort_id=doc_id \n\
-     LEFT JOIN string_u su ON su.string_u_id=doc_id \n\
-     LEFT JOIN string s ON s.string_id=doc_id',
+     LEFT JOIN sort o ON sort_id=d.doc_id \n\
+     LEFT JOIN string_u su ON su.string_u_id=d.doc_id \n\
+     LEFT JOIN string sr ON sr.string_id=d.reference \n\
+     LEFT JOIN doc dr ON dr.doc_id=d.reference \n\
+     LEFT JOIN string srr ON srr.string_id=dr.reference \n\
+     LEFT JOIN string s ON s.string_id=d.doc_id',
     oderBy: 'sort',
     rowId: 'doc_id',
+    whereDocAlias: 'd',
 }; sql_app.SelectADNi18n = {
     name: 'TeSe абстрактий вузел з перекладом',
     sql: 'SELECT d.*, i18n FROM (:sql_app.SelectADN ) d \n\
@@ -70,10 +76,11 @@ class InitPageController extends AbstractController {
     }
 
     readSessionSqlTable = () => {
+        console.log(singlePage.session.sql)
         if (singlePage.session.sql) {
-            //let sql = readSql2R(singlePage.session.sql)
             const sql = this.dataFactory.buildSqlWithKeyValue(singlePage.session.sql
                 , singlePage.session.sqlKey, singlePage.session.sqlValue)
+            console.log(sql)
             this.dataFactory.readSqlTable(sql)
         }
     }
@@ -153,9 +160,7 @@ class InitSqlTableController extends InitPageController {
                 singlePage.session.sqlValue = sqlWhereKV[1]
             }
 
-            let sql = this.dataFactory.buildSqlWithKeyValue(singlePage.session.sql
-                , singlePage.session.sqlKey, singlePage.session.sqlValue)
-            this.dataFactory.readSqlTable(sql)
+            this.readSessionSqlTable()
         }
     }
 
@@ -171,9 +176,11 @@ class RWADNDataFactory extends RWDataFactory {
         , responceData => conf.sqlTableData = responceData.list)
 
     buildSqlWithKeyValue = (sqlName, key, value) => {
+        const whereDocAlias = sql_app[sqlName].whereDocAlias ?
+            (sql_app[sqlName].whereDocAlias + '.') : ''
         let sql = readSql2R(sqlName)
         if (key && value)
-            sql += ' WHERE ' + key + ' = ' + value
+            sql += ' WHERE ' + whereDocAlias + key + ' = ' + value
         if (sql_app[sqlName].oderBy) sql += ' ORDER BY ' + sql_app[sqlName].oderBy
         return sql
     }
