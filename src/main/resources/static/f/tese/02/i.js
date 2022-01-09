@@ -114,7 +114,8 @@ class InitChildrenController extends InitPageController {
         super(dataFactory)
         if (!singlePage.session.tree.l.id)
             singlePage.session.tree.l.id = singlePage.UrlMap()['children']
-        console.log(123, singlePage.session, singlePage.UrlMap()['children'])
+        console.log( singlePage.UrlMap()['children'])
+        // console.log(singlePage.session)
 
         this.dataFactory.getReadADN_children(singlePage.UrlMap()['children'])
 

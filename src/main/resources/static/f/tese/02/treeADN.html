@@ -22,7 +22,7 @@
         ||ctrl.conf.eMap[adnId].reference
         ||ctrl.conf.eMap[adnId].value_u_22) ? '':'--?--'
         }}{{ctrl.conf.eMap[adnId].value_22||ctrl.conf.eMap[adnId].value_u_22
-        }}<span class="w3-small" data-ng-if="ctrl.conf.eMap[adnId]
+        }}{{ctrl.conf.eMap[adnId].doctype==37?'[]':''}}<span class="w3-small" data-ng-if="ctrl.conf.eMap[adnId]
         .reference">, r:{{ctrl.conf.eMap[adnId].reference
             }}</span><span class="w3-small" data-ng-if="ctrl.conf.eMap[adnId]
         .reference2">, r2:{{ctrl.conf.eMap[adnId].reference2}} </span>
