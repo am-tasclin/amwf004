@@ -25,14 +25,16 @@ let formData = {}
 
 formData.entry = {}
 formData.entry.LName = 'Iванов'
-formData.entry.myNumb = 1234
+formData.entry.myNumb = 155
 formData.entry.NewDateProv = new Date()
 formData.entry.Nal = -1
-formData.entry.val = 'грн'
+formData.entry.SNal = ''
+formData.entry.Val = -1
+formData.entry.SVal = ''
 formData.entry.KassOp = 'за товар'
 
 formData.global = {}
-formData.global.firstName = 'ФОП Глобус'
+formData.global.firstName = 'ФОП- Глобус'
 formData.global.lastName = 'Сидоренко М.Н.'
 formData.global.n1 = 'insert-kassa.html'
 formData.global.n2 = 'table-kassa.html'
@@ -98,8 +100,10 @@ class TestControl {
             this.dataFactory.httpGetSql({ sql: sql }
             ).then(responceData => {
                 this.dataSeek = responceData
-            })
+            }
+            )
         }
+
 
 
 
@@ -125,38 +129,52 @@ class TestControl {
 
     OK_button_Pr = () => {
         formData.seek.PrRasx = 1
-        console.log(formData.seek.PrRasx)
         this.Ok_button()
     }
 
     OK_button_Rasx = () => {
         formData.seek.PrRasx = 0
-        console.log(formData.seek.PrRasx)
         this.Ok_button()
     }
-
 
 
 
     Ok_button = () => {
         console.log("Ok_button")
         let sql = makeSelect()
+        let sqlDist= sql_app.SelectKassa.dist
+        sqlDist = sqlDist
+        .replace(':var.dateProv_start', "'" + formData.seek.StartDateProv.toISOString().split('T')[0] + "'")
+        .replace(':var.dateProv_end', "'" + formData.seek.FinishDateProv.toISOString().split('T')[0] + "'")
+        .replace(':var.p', formData.seek.PrRasx)
+
+         console.log('11111', sqlDist)
+
         sql += '; ' + makeSelect('GroupKassa2') + ' GROUP BY NameVal '
-        //   console.log('qqqqq', sql)
+        sql += '; ' +sqlDist
+     
+
+          console.log('qqqqq', sql)
 
         this.dataFactory.httpPostSql({ sql: sql }).then(rData => {
             if (!this.data) this.data = {}
             if (!this.SelectGroup) this.SelectGroup = {}
+            if (!this.poisk) this.poisk = {}
 
             this.data.list = rData.list0
             this.SelectGroup.list = rData.list1
+             this.poisk.list = rData.list2
 
-            console.log('11111', this.SelectGroup)
+console.log('zzzz', rData.list2)
+
         })
 
 
     }
 
+
+    Snal = () => { formData.entry.SNal = "нал" }
+    SBeznal = () => { formData.entry.SNal = "Безнал" }
 
     AddKassa = () => {
 
@@ -165,13 +183,16 @@ class TestControl {
             .replace(':ssum', formData.entry.myNumb)
             .replace(':KassOp', "'" + formData.entry.kassop + "'")
             .replace(':NameContr', "'" + formData.entry.selectedItem + "'")
-            .replace(':val', "'" + formData.entry.Val + "'")
+            .replace(':sval', "'" + formData.entry.SVal + "'")
+            .replace(':svalz', "'" + formData.entry.SVal + "'")
             .replace(':nal', formData.entry.Nal)
+            .replace(':snal', "'" + formData.entry.SNal + "'")
 
-        sql = sql + '; \n\ ' + makeSelect()
         this.dataFactory.httpPostSql({ sql: sql }).then(responce => {
             console.log(responce)
             this.data.list = responce.list1
+
+            this.Ok_button()
         })
 
     }
@@ -187,8 +208,10 @@ class TestControl {
         this.dataFactory.httpPostSql({ sql: sql }).then(responce => {
             console.log(responce)
             this.data.list = responce.list1
-
+        this.Ok_button()
         })
+
+
     }
 
     SortSelect = (sortColumnName) => {
@@ -198,8 +221,7 @@ class TestControl {
             sql_app.SelectKassa.ascDesc = null
         }
 
-        if (sql_app.SelectKassa.sortColumnName == sortColumnName) 
-        {
+        if (sql_app.SelectKassa.sortColumnName == sortColumnName) {
             if (sql_app.SelectKassa.ascDesc == null)
                 sql_app.SelectKassa.ascDesc = "DESC"
             else if (sql_app.SelectKassa.ascDesc == "DESC")
@@ -224,7 +246,7 @@ const makeSelect = sqlName => {
 
     if (!sqlName) sqlName = 'SelectKassa'
     //let sql = replaceSql(sql_app[sqlName].sql + sql_app[sqlName].order)
-    let sql = replaceSql(sql_app[sqlName].sql)
+        let sql = replaceSql(sql_app[sqlName].sql)
     sql = sql
         .replace(':var.dateProv_start', "'" + formData.seek.StartDateProv.toISOString().split('T')[0] + "'")
         .replace(':var.dateProv_end', "'" + formData.seek.FinishDateProv.toISOString().split('T')[0] + "'")
