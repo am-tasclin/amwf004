@@ -2,15 +2,20 @@
 
 sql_app.SelectKassa = {
     name: 'Касса ',
-    sql: 'SELECT idNom, DateProv, SumaProv, NameKassop, NameContr, NameVal, Nal_beznal  \n\
-    FROM kassa.entry \n\
+    sql: ' SELECT idNom, DateProv, SumaProv, NameKassop, NameContr, NameVal, SNal  \n\
+           FROM kassa.entry \n\
     WHERE DateProv >=:var.dateProv_start AND DateProv<=:var.dateProv_end AND Pr_rasx=:var.p ',
     order: ' ORDER BY  :var.or',
     sqlHtml: {
         dateprov: "{{v | date : 'shortDate'}} ",
     },
+
+    dist: ' SELECT DISTINCT NameContr NameContr  FROM kassa.entry \n\
+        WHERE DateProv >=:var.dateProv_start AND DateProv<=:var.dateProv_end AND Pr_rasx=:var.p ',
+
+
     sortColumnName: null,
-    ascDesc:null,
+    ascDesc: null,
     cols: {
         idNom: '№№',
         DateProv: 'Дата',
@@ -41,9 +46,9 @@ sql_app.AddKassa_VB = {
     name: 'Добавление кассового ордера',
     sql: 'INSERT INTO kassa.entry \n\
     (pr_rasx, idNom \n\
-    , DateProv, SumaProv, NameKassOp, NameContr, nameval, nal_beznal) \n\
+    , DateProv, SumaProv, NameKassOp, NameContr, spvalut_id,  nameval, nal_beznal, snal) \n\
     VALUES (:pr, (SELECT max(idnom)+1 FROM kassa.entry), \n\
-    :Ld1, :ssum, :KassOp, :NameContr, :val, :nal)' ,
+    :Ld1, :ssum, :KassOp, :NameContr, (SELECT idnomval FROM kassa.spvalut WHERE nameval=:sval), :svalz, :nal, :snal)' ,
     order: '  ',
 }
 
@@ -97,8 +102,8 @@ sql_app.SpGrupKassOp = {
 
 sql_app.SpKassOp = {
     name: 'Справочник кассових операций',
-    sql: 'SELECT IdNomKassOP, NameKassOp, IdNomGrupKassOp,Pr_rasx \n\
-    FROM kassa.SpKassOp ORDER BY  Pr_rasx,  NameKassOp, IdNomGrupKassOp',
+    sql: 'SELECT IdNomKassOP, NameKassOp, spGrupKassOp_id,Pr_rasx \n\
+    FROM kassa.SpKassOp ORDER BY  Pr_rasx,  NameKassOp, spGrupKassOp_id',
     order: '  '
 }
 

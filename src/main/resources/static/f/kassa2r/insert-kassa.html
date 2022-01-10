@@ -1,9 +1,7 @@
 <table>
     <tbody>
 
-        <td> <button class="w3-btn w3-grey" data-ng-click="ctrl.Perechet()">Пересчитать
-            </button>
-        </td>
+
         <td> <button class="w3-btn w3-grey" data-ng-click="ctrl.DeleteKassa()">Удалить
                 проводку
             </button>
@@ -26,20 +24,22 @@
         <tr>
             <td>Валюта</td>
             <td>
-                <input type="radio" data-ng-model="ctrl.formData.entry.Val" id="nl1" value="грн">
+                <input type="radio" data-ng-model="ctrl.formData.entry.SVal" id="nl1" value="грн">
                 <label for="nl1">Грн</label>
-                <input type="radio" data-ng-model="ctrl.formData.entry.Val" id="bn1" value="$$">
-                <label for="bn1">$$</label> 
-
+                <input type="radio" data-ng-model="ctrl.formData.entry.SVal" id="bn1" value="$$">
+                <label for="bn1">$</label>
             </td>
         </tr>
         <tr>
             <td></td>
             <td>
-                <input type="radio" data-ng-model="ctrl.formData.entry.Nal" id="nl" value="0">
+                <input type="radio" data-ng-model="ctrl.formData.entry.Nal" data-ng-click="ctrl.Snal()" id="nl"
+                    value="0">
                 <label for="nl">Нал</label>
-                <input type="radio" data-ng-model="ctrl.formData.entry.Nal" id="bn" value="1">
+                <input type="radio" data-ng-model="ctrl.formData.entry.Nal" data-ng-click="ctrl.SBeznal()" id="nl"
+                    id="bn" value="1">
                 <label for="bn">БезНал</label>
+
             </td>
 
         </tr>
@@ -47,8 +47,7 @@
             <td>Контрагент </td>
             <td>
                 <select data-ng-model="ctrl.formData.entry.selectedItem">
-                    <option data-ng-repeat="be in ctrl.bloodgroup.list"
-                        value="{{be.namecontr}}">
+                    <option data-ng-repeat="be in ctrl.bloodgroup.list" value="{{be.namecontr}}">
                         {{be.namecontr}}
                     </option>
                 </select>
@@ -56,12 +55,11 @@
             </td>
         </tr>
         <tr>
-            <td>Кассовая операция  </td>
+            <td>Кассовая операция </td>
 
             <td>
                 <select data-ng-model="ctrl.formData.entry.kassop">
-                    <option data-ng-repeat="ko in ctrl.listop.list"
-                        value="{{ko.namekassop}}">
+                    <option data-ng-repeat="ko in ctrl.listop.list" value="{{ko.namekassop}}">
                         {{ko.namekassop}}
                     </option>
                 </select>
@@ -88,16 +86,11 @@
     <tbody>
         <tr>
             <td>
-                <input class="w3-border" data-ng-model="ctrl.formData.seek.SeekLName"
-                    data-ng-focus="ctrl.viewList=!ctrl.viewList"
-                    data-ng-keydown="[13].includes($event.keyCode) && ctrl.click_spcontragent_seek()">
-
-                <div data-ng-if="ctrl.viewList" class="w3-leftbar w3-card">
-                    <div data-ng-repeat="d in ctrl.dataSeek.list" class="w3-hover-shadow">
-                        {{d.namecontr}}
-                    </div>
-                </div>
-                </div>
+                <select data-ng-model="ctrl.formData.entry.poisk">
+                    <option data-ng-repeat="poisk in ctrl.poisk.list" value="{{poisk.namecontr}}">
+                        {{poisk.namecontr}}
+                    </option>
+                </select>
             </td>
         </tr>
     </tbody>
