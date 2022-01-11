@@ -109,7 +109,7 @@ sql_app.SpKassOp = {
 
 sql_app.SpValut = {
     name: 'Справочник валют',
-    sql: 'SELECT IdNomVal, NameVal FROM kassa.SpValut ',
+    sql: ' SELECT IdNomVal, NameVal FROM kassa.SpValut ',
     order: ' ORDER BY NameVal  ',
 }
 

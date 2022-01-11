@@ -80,6 +80,12 @@ class TestControl {
             console.log(this.listop)
         })
 
+        //Cправочник валют
+        sql = "SELECT IdNomVal, NameVal FROM kassa.SpValut"
+        dataFactory.httpGetSql({ sql: sql }).then(rData => {
+            ctrl.listVal = rData
+            console.log(this.listVal)
+        })        
 
 
         this.click_spcontragent_seek = (selectName) => {
@@ -142,19 +148,19 @@ class TestControl {
     Ok_button = () => {
         console.log("Ok_button")
         let sql = makeSelect()
-        let sqlDist= sql_app.SelectKassa.dist
+        let sqlDist = sql_app.SelectKassa.dist
         sqlDist = sqlDist
-        .replace(':var.dateProv_start', "'" + formData.seek.StartDateProv.toISOString().split('T')[0] + "'")
-        .replace(':var.dateProv_end', "'" + formData.seek.FinishDateProv.toISOString().split('T')[0] + "'")
-        .replace(':var.p', formData.seek.PrRasx)
+            .replace(':var.dateProv_start', "'" + formData.seek.StartDateProv.toISOString().split('T')[0] + "'")
+            .replace(':var.dateProv_end', "'" + formData.seek.FinishDateProv.toISOString().split('T')[0] + "'")
+            .replace(':var.p', formData.seek.PrRasx)
 
-         console.log('11111', sqlDist)
+        console.log('11111', sqlDist)
 
         sql += '; ' + makeSelect('GroupKassa2') + ' GROUP BY NameVal '
-        sql += '; ' +sqlDist
-     
+        sql += '; ' + sqlDist
 
-          console.log('qqqqq', sql)
+
+        console.log('qqqqq', sql)
 
         this.dataFactory.httpPostSql({ sql: sql }).then(rData => {
             if (!this.data) this.data = {}
@@ -163,9 +169,9 @@ class TestControl {
 
             this.data.list = rData.list0
             this.SelectGroup.list = rData.list1
-             this.poisk.list = rData.list2
+            this.poisk.list = rData.list2
 
-console.log('zzzz', rData.list2)
+            console.log('zzzz', rData.list2)
 
         })
 
@@ -198,6 +204,12 @@ console.log('zzzz', rData.list2)
     }
 
 
+Seek_post = () => {
+    console.log('Seek')
+
+}
+
+
     DeleteKassa = (a) => {
 
         let sql = sql_app.DeleteKassa.sql.replace(':LidNom', this.selectedRow.idnom)
@@ -208,7 +220,7 @@ console.log('zzzz', rData.list2)
         this.dataFactory.httpPostSql({ sql: sql }).then(responce => {
             console.log(responce)
             this.data.list = responce.list1
-        this.Ok_button()
+            this.Ok_button()
         })
 
 
@@ -246,7 +258,7 @@ const makeSelect = sqlName => {
 
     if (!sqlName) sqlName = 'SelectKassa'
     //let sql = replaceSql(sql_app[sqlName].sql + sql_app[sqlName].order)
-        let sql = replaceSql(sql_app[sqlName].sql)
+    let sql = replaceSql(sql_app[sqlName].sql)
     sql = sql
         .replace(':var.dateProv_start', "'" + formData.seek.StartDateProv.toISOString().split('T')[0] + "'")
         .replace(':var.dateProv_end', "'" + formData.seek.FinishDateProv.toISOString().split('T')[0] + "'")
