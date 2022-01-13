@@ -1,6 +1,6 @@
 'use strict'
 app.config(RouteProviderConfig)
-singlePage.session = { tree: { l: {}, r: {} } }
+singlePage.session = { tree: { l: {id:45}, r: {id:45} } }
 singlePage.index_template = 'index_template.html'
 
 sql_app.SelectADN = {
@@ -72,8 +72,6 @@ class InitPageController extends AbstractController {
     initSession = () => JSON.stringify(singlePage.session)
 
     initRL = () => {
-        console.log(this.dataFactory
-            .buildSqlWithKeyValue('SelectADN', 'doc_id', singlePage.session.tree.l.id))
         this.dataFactory.getReadADN(singlePage.session.tree.l.id)
         if (singlePage.session.tree.r.id)
             this.dataFactory.getReadADN(singlePage.session.tree.r.id)
@@ -84,7 +82,6 @@ class InitPageController extends AbstractController {
         if (singlePage.session.sql) {
             const sql = this.dataFactory.buildSqlWithKeyValue(singlePage.session.sql
                 , singlePage.session.sqlKey, singlePage.session.sqlValue)
-            console.log(sql)
             this.dataFactory.readSqlTable(sql)
         }
     }

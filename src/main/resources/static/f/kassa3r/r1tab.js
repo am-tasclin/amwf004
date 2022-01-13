@@ -90,5 +90,4 @@ class InitPageController extends AbstractController {
 
 console.log(InitPageController.sqlConfig)
 
-
 app.controller("InitPageController", InitPageController)

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="uk-UA" data-ng-controller="InitPageController as ctrl">
+
+<meta charset="utf-8" />
+<link rel="shortcut icon" href="/f/img/algoritmed.ico" type="image/x-icon">
+<link rel="stylesheet" href="/webjars/font-awesome/5.15.2/css/all.min.css">
+<link rel="stylesheet" href="/f/css/w3.css">
+<link rel="stylesheet" href="/f/css/am.css">
+
+<script src="/webjars/angular/1.8.2/angular.min.js" type="application/javascript"></script>
+<script src="/webjars/angular-i18n/1.8.2/angular-locale_uk-ua.js" type="application/javascript"></script>
+<script src="/webjars/angular-route/1.8.2/angular-route.min.js" type="application/javascript"></script>
+<script src="/webjars/angular-resource/1.8.2/angular-resource.min.js" type="application/javascript"></script>
+<script src="/webjars/angular-sanitize/1.8.2/angular-sanitize.min.js" type="application/javascript"></script>
+
+<script src="/f/kassa2r/lib-init.js" type="application/javascript"></script>
+<!--
+<script src="/f/kassa2r/config.sql.js" type="application/javascript"></script>
+-->
+<script src="/f/tese/02/config.sql.js" type="application/javascript"></script>
+<script src="/f/tese/01/lib.sql002.js" type="application/javascript"></script>
+<script src="r1tab.js" type="application/javascript"> </script>
+
+<body data-ng-keydown="[27].includes($event.keyCode) && ctrl.keyDownEsc()">
+    <div class="w3-container am-max-width-1">
+        <div class="w3-border-bottom">
+            <a href="/" class="w3-btn w3-border w3-padding-small w3-small">↑</a>
+            <span class="w3-small am-b">Редактор таблиць</span>
+            <button class="w3-tiny w3-border w3-btn w3-padding-small"
+                data-ng-click="ctrl.conf.modalDisplay.display = 'block'">
+                sqlTable</button>
+            <a href="#!{{ctrl.singlePage.UrlOnOff('ins',2)}}" class="am-u0 w3-tiny w3-border w3-btn w3-padding-small">
+                ins
+            </a>
+            <a href="#!{{ctrl.singlePage.UrlOnOff('upd',2)}}" class="am-u0 w3-tiny w3-border w3-btn w3-padding-small">
+                upd
+            </a>
+            ⁙
+            <a class="w3-right w3-small" href="/f/tese/02/i.html#!/sql_SelectADN">tese</a>
+            <span class="am-i"> {{ctrl.getSql(ctrl.singlePage.UrlMap()['sql']).name}} </span>
+            <span class="w3-tiny am-b"> - {{ctrl.singlePage.UrlMap()['sql']}} </span>
+        </div>
+        <div class="w13-border-bottom" style="height:10vh; overflow:auto;">
+            <pre class="w3-tiny" data-ng-if="!ctrl.singlePage.Url().includes('upd')
+            && !ctrl.singlePage.Url().includes('ins')
+            " data-ng-bind-html="ctrl.conf.sqlAppToLink2(ctrl.getSql(ctrl.singlePage.UrlMap()['sql']).sql)">
+            </pre>
+            <div data-ng-if="ctrl.singlePage.Url().includes('upd')">
+                upd
+            </div>
+            <div data-ng-if="ctrl.singlePage.Url().includes('ins')" data-ng-include="'ins.html'">
+            </div>
+        </div>
+        <div class="w3-border-bottom" style="height:70vh; overflow:auto;">
+            <div data-ng-view></div>
+        </div>⁙
+        <span class="w3-tiny am-b">
+            sql table editor :
+        </span>
+        <span data-ng-repeat="table in ctrl.conf.sql_app.tableList">
+            <a data-ng-class="{'w3-green':table==ctrl.conf.sqlKeyName}" class="w3-hover-shadow am-0u"
+                href="#!/sql_{{table}}">
+                &nbsp;{{table}} </a> |
+        </span>
+    </div>
+
+    <div class="w3-modal" data-ng-style="ctrl.conf.modalDisplay">
+        <div class="w3-modal-content w3-container">
+            <span data-ng-click="ctrl.conf.modalDisplay.display=null"
+                class="w3-button w3-display-topright">&times;</span>
+            <div data-ng-include="'sqlModal.html'"></div>
+        </div>
+    </div>
+
+</body>
+
+</html>
