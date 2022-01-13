@@ -87,11 +87,18 @@
         <tr>
             <td>
                 <select data-ng-model="ctrl.formData.entry.poisk">
-                    <option data-ng-repeat="poisk in ctrl.poisk.list" value="{{poisk.namecontr}}">
+                    <option  data-ng-repeat="poisk in ctrl.poisk.list" value="{{poisk.namecontr}}">
                         {{poisk.namecontr}}
                     </option>
                 </select>
             </td>
         </tr>
+        <tr>
+            <td>
+                <button class="w3-btn w3-grey"  data-ng-click="ctrl.Ok_button()">Отмена
+                    поиска
+                </button>      
+            </td>
+           </tr> 
     </tbody>
 </table>
