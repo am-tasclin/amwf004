@@ -1,8 +1,7 @@
 <!--    <span class="w3-small"> {{ctrl.date | date:'medium'}} </span> -->
 <div class="w3-row">
-    <div data-ng-include="'treeADN.html'" data-ng-repeat="adnId in [ctrl.singlePage.session.tree.l.id]"
-        style="height: 49vh; overflow: auto;" class="w3-half w3-border-right" data-ng-init="lr='l'"> </div>
-    <div data-ng-include="'treeADN.html'" data-ng-repeat="adnId in [ctrl.singlePage.session.tree.r.id]"
-        style="height: 49vh; overflow: auto;" data-ng-init="lr='r'" class="w3-half">
+    <div class="w3-half" style="height: 49vh; overflow: auto;" data-ng-repeat="lr in ['l','r']">
+        <div data-ng-include="'treeADN.html'" data-ng-repeat="(k,adnId) in ctrl.singlePage.session.tree[lr].id">
+        </div>
     </div>
 </div>

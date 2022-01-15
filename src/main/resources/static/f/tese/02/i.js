@@ -1,6 +1,6 @@
 'use strict'
 app.config(RouteProviderConfig)
-singlePage.session = { tree: { l: { id: 45 }, r: { id: 45 } } }
+singlePage.session = { tree: { l: { id: [45] }, r: { id: [45] } } }
 singlePage.index_template = 'index_template.html'
 
 class InitPageController extends AbstractController {
@@ -11,7 +11,8 @@ class InitPageController extends AbstractController {
 
     sqlNames = () => Object.keys(sql_app)
     delSqlKeyValue = () => {
-        console.log(123)
+        delete singlePage.session.sqlKey
+        delete singlePage.session.sqlValue
     }
     isSelectedRow = r => singlePage.session.selectedRowId
         && (singlePage.session.selectedRowId == r[this.getSql(singlePage.session.sql).rowId]
@@ -39,11 +40,10 @@ class InitPageController extends AbstractController {
 
     initSession = () => JSON.stringify(singlePage.session)
 
-    initRL = () => {
-        this.dataFactory.getReadADN(singlePage.session.tree.l.id)
-        if (singlePage.session.tree.r.id)
-            this.dataFactory.getReadADN(singlePage.session.tree.r.id)
-    }
+    initRL = () => angular.forEach(['l', 'r']
+        , lr => angular.forEach(singlePage.session.tree[lr].id
+            , id => this.dataFactory.getReadADN(id)))
+
 
     readSessionSqlTable = () => {
         console.log(singlePage.session.sql)
@@ -95,11 +95,8 @@ class InitChildrenController extends InitPageController {
 class InitTreeController extends InitPageController {
     constructor(dataFactory) {
         super(dataFactory)
-        singlePage.session.tree.l.id = singlePage.UrlMap()['tree']
-        if (singlePage.UrlMap()['tree'].includes(',')) {
-            singlePage.session.tree.l.id = singlePage.UrlMap()['tree'].split(',')[0]
-            singlePage.session.tree.r.id = singlePage.UrlMap()['tree'].split(',')[1]
-        }
+        angular.forEach(singlePage.UrlMap()['tree'].split(','), (t, tk) => angular.forEach(t.split('_')
+            , (v, k) => singlePage.session.tree[!tk ? 'l' : 'r'].id[k] = v))
         if (singlePage.UrlMap()['tree'] == 'tree'
             && isNaN(singlePage.session.tree.l.id)
         ) singlePage.session.tree.l.id = 45

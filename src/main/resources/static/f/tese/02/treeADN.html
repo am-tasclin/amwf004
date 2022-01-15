@@ -1,6 +1,6 @@
 <div data-ng-mouseover="ctrl.mouseover_item=adnId" data-ng-click="ctrl.selectADN(adnId, lr)" class="w3-hover-shadow"
-    data-ng-class="{'w3-card w3-light-green':ctrl.isSelectADN(adnId, lr),
-        'w3-light-gray':ctrl.singlePage.session.tree[lr].id==adnId,}">
+    data-ng-class="{'w3-card w3-light-green':ctrl.isSelectADN(adnId, lr, k),
+        'w3-light-gray':ctrl.singlePage.session.tree[lr].id[k]==adnId,}">
     <span class="w3-dropdown-hover w3-white">
         <span class="w3-tiny"> [{{adnId}}] </span>
         <div class="w3-dropdown-content w3-border w3-container">
