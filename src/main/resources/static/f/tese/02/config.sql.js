@@ -1,3 +1,4 @@
+console.log(123)
 sql_app.FHIR_CodeSystem_concept_code_parent = {
     name: 'системи кодування задані рекурсивно',
     sql: 'SELECT d.*, dp.reference2 concept_code_parent, s.value concept_code_parent_value \n\

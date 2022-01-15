@@ -1,38 +1,7 @@
 'use strict'
 app.config(RouteProviderConfig)
-singlePage.session = { tree: { l: {id:45}, r: {id:45} } }
+singlePage.session = { tree: { l: { id: 45 }, r: { id: 45 } } }
 singlePage.index_template = 'index_template.html'
-
-sql_app.SelectADN = {
-    name: 'Зчитати абстрактий вузел - TeSe',
-    sql: 'SELECT d.*, s.value value_22, su.value value_u_22, o.sort \n\
-    , srr.value rr_value_22 \n\
-    , sr.value r_value_22, dr.doctype r_doctype \n\
-    , sr2.value r2_value_22 \n\
-    FROM tese.doc d \n\
-     LEFT JOIN sort o ON sort_id=d.doc_id \n\
-     LEFT JOIN string_u su ON su.string_u_id=d.doc_id \n\
-     LEFT JOIN string sr ON sr.string_id=d.reference \n\
-     LEFT JOIN string sr2 ON sr2.string_id=d.reference2 \n\
-     LEFT JOIN doc dr ON dr.doc_id=d.reference \n\
-     LEFT JOIN string srr ON srr.string_id=dr.reference \n\
-     LEFT JOIN string s ON s.string_id=d.doc_id',
-    oderBy: 'sort',
-    rowId: 'doc_id',
-    whereDocAlias: 'd',
-}; sql_app.SelectADNi18n = {
-    name: 'TeSe абстрактий вузел з перекладом',
-    sql: 'SELECT d.*, i18n FROM (:sql_app.SelectADN ) d \n\
-    LEFT JOIN (SELECT reference r1, value i18n FROM (SELECT d.* FROM doc d, doc p \n\
-        WHERE d.parent=p.doc_id AND p.reference=285596 ) x \n\
-    LEFT JOIN string ON string_id=doc_id) dv ON d.doc_id=dv.r1',
-    oderBy: 'sort',
-}; sql_app.SelectADNx = {
-    name: 'Зчитати абстрактий вузел - test',
-    sql: 'SELECT d.*, s.value value_22 FROM doc d \n\
-    LEFT JOIN string s ON s.string_id=doc_id',
-    rowId: 'doc_id',
-}
 
 class InitPageController extends AbstractController {
     constructor(dataFactory) {
@@ -41,10 +10,9 @@ class InitPageController extends AbstractController {
     }
 
     sqlNames = () => Object.keys(sql_app)
-
-    sqlKeyValue = () => singlePage.session.sqlUrl ?
-        singlePage.session.sqlUrl.split(replaceSlash)[2] : null
-
+    delSqlKeyValue = () => {
+        console.log(123)
+    }
     isSelectedRow = r => singlePage.session.selectedRowId
         && (singlePage.session.selectedRowId == r[this.getSql(singlePage.session.sql).rowId]
             || singlePage.session.selectedRowId == r.doc_id
