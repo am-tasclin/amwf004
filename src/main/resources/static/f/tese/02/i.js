@@ -46,7 +46,7 @@ class InitPageController extends AbstractController {
 
 
     readSessionSqlTable = () => {
-        console.log(singlePage.session.sql)
+        console.log(singlePage.session.sql, sql_app[singlePage.session.sql])
         if (singlePage.session.sql) {
             const sql = this.dataFactory.buildSqlWithKeyValue(singlePage.session.sql
                 , singlePage.session.sqlKey, singlePage.session.sqlValue)
@@ -83,10 +83,17 @@ class InitChildrenController extends InitPageController {
         super(dataFactory)
         if (!singlePage.session.tree.l.id)
             singlePage.session.tree.l.id = singlePage.UrlMap()['children']
-        console.log(singlePage.UrlMap()['children'])
+        console.log(singlePage.UrlMap()['children'], singlePage.session.sqlKey)
         // console.log(singlePage.session)
-
-        this.dataFactory.getReadADN_children(singlePage.UrlMap()['children'])
+        if (singlePage.session.sqlKey == 'parent') {
+            singlePage.session.sqlValue = singlePage.UrlMap()['children'].split('_')[0]
+            singlePage.session.sqlLR = singlePage.UrlMap()['children'].split('_')[1]
+            console.log(singlePage.session)
+            this.readSessionSqlTable()
+        }
+        
+        console.log(singlePage.UrlMap()['children'].split('_')[0])
+        this.dataFactory.getReadADN_children(singlePage.UrlMap()['children'].split('_')[0])
 
     }
 }; angular.forEach(['children_:lId',]
@@ -95,8 +102,9 @@ class InitChildrenController extends InitPageController {
 class InitTreeController extends InitPageController {
     constructor(dataFactory) {
         super(dataFactory)
-        angular.forEach(singlePage.UrlMap()['tree'].split(','), (t, tk) => angular.forEach(t.split('_')
-            , (v, k) => singlePage.session.tree[!tk ? 'l' : 'r'].id[k] = v))
+        angular.forEach(singlePage.UrlMap()['tree'].split(',')
+            , (t, tk) => angular.forEach(t.split('_')
+                , (v, k) => singlePage.session.tree[!tk ? 'l' : 'r'].id[k] = v))
         if (singlePage.UrlMap()['tree'] == 'tree'
             && isNaN(singlePage.session.tree.l.id)
         ) singlePage.session.tree.l.id = 45
@@ -124,7 +132,8 @@ class InitSqlTableController extends InitPageController {
             if (singlePage.UrlList()[2]) {
                 let sqlWhereKV = singlePage.UrlList()[2].split('=')
                 singlePage.session.sqlKey = sqlWhereKV[0]
-                singlePage.session.sqlValue = sqlWhereKV[1]
+                singlePage.session.sqlValue = sqlWhereKV[1].split('_')[0]
+                singlePage.session.sqlLR = sqlWhereKV[1].split('_')[1]
             }
 
             this.readSessionSqlTable()
@@ -143,11 +152,13 @@ class RWADNDataFactory extends RWDataFactory {
         , responceData => conf.sqlTableData = responceData.list)
 
     buildSqlWithKeyValue = (sqlName, key, value) => {
-        const whereDocAlias = sql_app[sqlName].whereDocAlias ?
-            (sql_app[sqlName].whereDocAlias + '.') : ''
         let sql = readSql2R(sqlName)
-        if (key && value)
-            sql += ' WHERE ' + whereDocAlias + key + ' = ' + value
+        if (key && value) {
+            // const whereDocAlias = sql_app[sqlName].whereDocAlias ?
+            //     (sql_app[sqlName].whereDocAlias + '.') : ''
+            // sql += ' WHERE ' + whereDocAlias + key + ' = ' + value
+            sql = 'SELECT * FROM (' + sql + ') x WHERE ' + key + ' = ' + value
+        }
         if (sql_app[sqlName].oderBy) sql += ' ORDER BY ' + sql_app[sqlName].oderBy
         return sql
     }

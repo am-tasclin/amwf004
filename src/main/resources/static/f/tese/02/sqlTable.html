@@ -1,15 +1,17 @@
 <div>
     <div class="w3-right w3-white w3-border-bottom w3-hover-shadow w3-dropdown-hover">
         &nbsp; &nbsp; ::
-        <div class="w3-dropdown-content w3-border" style="left: -125px;">
+        <div class="w3-dropdown-content w3-border" style="left: -245px;min-width: 275px;">
             menu:
             <button class="w3-btn w3-padding-small"
                 data-ng-click="ctrl.singlePage.session.menuSqls=!ctrl.singlePage.session.menuSqls">
                 sqls
             </button>
             <div class="w3-leftbar" data-ng-if="ctrl.singlePage.session.menuSqls">
-                <a class=" am-0u" href="#!/sql_{{sqlName}}" data-ng-repeat="sqlName in ctrl.sqlNames()">
-                    <div class="w3-hover-shadow"> {{sqlName}} </div>
+                <a title="{{sqlName}}" class="am-0u" href="#!/sql_{{sqlName}}"
+                    data-ng-repeat="sqlName in ctrl.sqlNames()">
+                    <div data-ng-class="{'w3-green':ctrl.singlePage.session.sql==sqlName}" class="w3-hover-shadow">
+                        {{sqlName}} </div>
                 </a>
             </div>
             <div>
@@ -18,12 +20,12 @@
                     'w3-green':ctrl.singlePage.session.tree.l.selectedId
                 ==ctrl.singlePage.session.sqlValue
             }" href="#!/sql_{{ctrl.singlePage.session.sql}}/parent={{
-                    ctrl.singlePage.session.tree.l.selectedId}}">L</a>|
+                    ctrl.singlePage.session.tree.l.selectedId}}_l">L</a>|
                 <a class="w3-btn w3-padding-small am-0u" data-ng-class="{
                     'w3-green':ctrl.singlePage.session.tree.r.selectedId
                 ==ctrl.singlePage.session.sqlValue
             }" href="#!/sql_{{ctrl.singlePage.session.sql}}/parent={{
-                    ctrl.singlePage.session.tree.r.selectedId}}">R</a>
+                    ctrl.singlePage.session.tree.r.selectedId}}_r">R</a>
                 <span class="w3-btn w3-padding-small" data-ng-click="ctrl.delSqlKeyValue()"
                     data-ng-if="ctrl.singlePage.session.sqlValue">
                     ⌫
