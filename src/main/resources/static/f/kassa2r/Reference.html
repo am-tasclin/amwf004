@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="uk-UA">
+<meta charset="utf-8" />
+<link rel="stylesheet" href="/webjars/font-awesome/5.15.2/css/all.min.css">
+<link rel="stylesheet" href="/f/css/w3.css">
+<link rel="stylesheet" href="/f/css/am.css">
+<link rel="shortcut icon" href="/f/img/algoritmed.ico" type="image/x-icon">
+<script src="/webjars/angular/1.8.2/angular.min.js" type="application/javascript"></script>
+<script src="/webjars/angular-i18n/1.8.2/angular-locale_uk-ua.js" type="application/javascript"></script>
+<script src="/webjars/angular-route/1.8.2/angular-route.min.js" type="application/javascript"></script>
+<script src="/webjars/angular-resource/1.8.2/angular-resource.min.js" type="application/javascript"></script>
+<script src="/webjars/angular-sanitize/1.8.2/angular-sanitize.min.js" type="application/javascript"></script>
+<script src="lib-init.js" type="application/javascript"></script>
+<!--
+    <script src="/f/tese/01/lib.sql002.js" type="application/javascript"></script>
+    <script src="/f/kassa2r/config.sql.js" type="application/javascript"></script>
+-->
+<script src="config.sql.js" type="application/javascript"> </script>
+<script src="SpValut.js" type="application/javascript"> </script>
+<style>
+    .am-inner-scroll {
+        height: 92vh;
+        overflow: auto;
+    }
+</style>
+
+<body data-ng-controller="CustomCtrl as ctrl">
+    <div class="w3-container am-max-width-1">
+        <div class="w3-border-bottom">
+            <a href="/" class="w3-btn w3-border w3-padding-small w3-small">↑</a>
+            <span class="w3-small am-b">Справочники </span>&nbsp;⁙
+        </div>
+        <div class="w3-border-bottom am-inner-scroll" s11tyle="height:92vh; overflow:auto;">
+
+            <div data-ng-repeat="dN in ctrl.dictionaryNames">
+                <span class="w3-btn w3-border" style="width: 200px;" data-ng-click="ctrl.Ok_button(dN)">
+                    {{ctrl.getSqlApp(dN).name}} </span>
+            </div>
+
+
+
+            <div>
+                <table>
+                    <td>№№ </td>
+                    <td>Валюта </td>
+
+
+                    <tr class="w3-hover-shadow" data-ng-repeat="(k,r) in ctrl.listVal.list">
+                        <td data-ng-repeat="(k,v) in r" class="w3-border" data-am-sql-html>
+                            {{v}}
+
+                        </td>
+
+                    </tr>
+
+                </table>
+
+                <span class="w3-small am-b"> Новий</span>
+                <table class="w3-light-gray w3-card">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div>
+                                    <span class="w3-small am-b"> </span>
+                                    <input class="w3-border" type="text" data-ng-model="ctrl.SpData.LName">
+
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <button class="w3-btn w3-grey" data-ng-click="ctrl.add_button() ">ОК
+
+                                </button>
+                            </td>
+                            <td>
+                                <button class="w3-btn w3-grey" data-ng-click="ctrl.seek_button() ">Пошук
+
+                                </button>
+                            </td>
+
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+        podval
+    </div>
+    </div>
+
+</body>
+
+
+</html>
