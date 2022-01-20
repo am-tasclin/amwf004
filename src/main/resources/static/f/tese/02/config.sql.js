@@ -1,4 +1,11 @@
-console.log(123)
+sql_app.FHIR_CodeSystem_parent = {
+    name: 'Зчитування child-of',
+    sql: 'SELECT su.value code, d.*, sort FROM string_u su, doc d \n\
+    LEFT JOIN sort ON sort_id=d.doc_id \n\
+    WHERE su.string_u_id=d.doc_id',
+    oderBy: 'sort',
+}
+
 sql_app.FHIR_CodeSystem_concept_code_parent = {
     name: 'системи кодування задані рекурсивно',
     sql: 'SELECT d.*, dp.reference2 concept_code_parent, s.value concept_code_parent_value \n\
