@@ -1,3 +1,15 @@
+sql_app.FHIR_ValueSet_concept_code_display = {
+    name: 'Значення код-прояв',
+    sql: 'SELECT s.value code, sd.value display, d.doc_id code_id, dd.doc_id display_id, d.parent FROM doc d \n\
+    LEFT JOIN sort ON sort_id=d.doc_id \n\
+    LEFT JOIN string s ON s.string_id=d.doc_id \n\
+    LEFT JOIN (SELECT * FROM doc WHERE reference = 372053) dd \n\
+    LEFT JOIN string sd ON sd.string_id=dd.doc_id \n\
+    ON dd.parent=d.doc_id \n\
+    WHERE d.reference=372051 \n\
+    ORDER BY sort',
+}
+
 sql_app.FHIR_CodeSystem_parent = {
     name: 'Зчитування child-of',
     sql: 'SELECT su.value code, d.*, sort FROM string_u su, doc d \n\

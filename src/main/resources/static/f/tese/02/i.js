@@ -180,11 +180,24 @@ class RWADNDataFactory extends RWDataFactory {
 }; app.factory('dataFactory', RWADNDataFactory)
 
 
-CarePlan = {
+let CarePlan_1 = {
     // fdf
-    title: “Доступні Вакцини і способи їх застосування.”,
+    title: "Доступні Вакцини і способи їх застосування.",
     activity: [
 
     ]
 }
-x = CarePlan
+let x = CarePlan_1
+// вибірка з https://build.fhir.org/valueset-vaccine-code.html
+let ValueSet_1 = {
+    system: "http://hl7.org/fhir/sid/cvx",
+    compose: {
+        include: [{
+            concept: [
+                {
+                    code: "207",
+                    display: "SARS-COV-2 (COVID-19) vaccine, mRNA, spike protein, LNP, preservative free, 100 mcg/0.5mL dose"
+                }]
+        }]
+    }
+}
