@@ -44,7 +44,6 @@ class InitPageController extends AbstractController {
         , lr => angular.forEach(singlePage.session.tree[lr].id
             , id => this.dataFactory.getReadADN(id)))
 
-
     readSessionSqlTable = () => {
         console.log(singlePage.session.sql, sql_app[singlePage.session.sql])
         if (singlePage.session.sql) {
@@ -91,7 +90,7 @@ class InitChildrenController extends InitPageController {
             console.log(singlePage.session)
             this.readSessionSqlTable()
         }
-        
+
         console.log(singlePage.UrlMap()['children'].split('_')[0])
         this.dataFactory.getReadADN_children(singlePage.UrlMap()['children'].split('_')[0])
 
@@ -179,3 +178,13 @@ class RWADNDataFactory extends RWDataFactory {
             , child => addParentChild(add_eMap(child)))))
 
 }; app.factory('dataFactory', RWADNDataFactory)
+
+
+CarePlan = {
+    // fdf
+    title: “Доступні Вакцини і способи їх застосування.”,
+    activity: [
+
+    ]
+}
+x = CarePlan
