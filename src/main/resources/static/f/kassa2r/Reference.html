@@ -11,9 +11,12 @@
 <script src="/webjars/angular-resource/1.8.2/angular-resource.min.js" type="application/javascript"></script>
 <script src="/webjars/angular-sanitize/1.8.2/angular-sanitize.min.js" type="application/javascript"></script>
 <script src="lib-init.js" type="application/javascript"></script>
-<script src="/f/tese/01/lib.sql002.js" type="application/javascript"></script>
-<script src="/f/kassa2r/config.sql.js" type="application/javascript"></script>
-<script src="i.js" type="application/javascript"> </script>
+<!--
+    <script src="/f/tese/01/lib.sql002.js" type="application/javascript"></script>
+    <script src="/f/kassa2r/config.sql.js" type="application/javascript"></script>
+-->
+<script src="config.sql.js" type="application/javascript"> </script>
+<script src="SpValut.js" type="application/javascript"> </script>
 <style>
     .am-inner-scroll {
         height: 92vh;
@@ -21,26 +24,31 @@
     }
 </style>
 
-<body>
+<body data-ng-controller="CustomCtrl as ctrl">
     <div class="w3-container am-max-width-1">
         <div class="w3-border-bottom">
             <a href="/" class="w3-btn w3-border w3-padding-small w3-small">↑</a>
-            <span class="w3-small am-b">Справочник валют</span>&nbsp;⁙
+            <span class="w3-small am-b">Справочники </span>&nbsp;⁙
         </div>
         <div class="w3-border-bottom am-inner-scroll" s11tyle="height:92vh; overflow:auto;">
 
+            <div data-ng-repeat="dN in ctrl.dictionaryNames">
+                <span class="w3-btn w3-border" style="width: 200px;" data-ng-click="ctrl.Ok_button(dN)">
+                    {{ctrl.getSqlApp(dN).name}} </span>
+            </div>
 
 
 
-
-
-            <div data-ng-app="myApp" data-ng-controller="customersCtrl">
+            <div>
                 <table>
                     <td>№№ </td>
                     <td>Валюта </td>
-                    <tr class="w3-hover-shadow" data-ng-repeat="(k,r) in customersCtrl.listVal.list">
+
+
+                    <tr class="w3-hover-shadow" data-ng-repeat="(k,r) in ctrl.listVal.list">
                         <td data-ng-repeat="(k,v) in r" class="w3-border" data-am-sql-html>
                             {{v}}
+
                         </td>
 
                     </tr>
@@ -54,17 +62,23 @@
                             <td>
                                 <div>
                                     <span class="w3-small am-b"> </span>
-                                    <input class="w3-border" type="text"
-                                        data-ng-model="customersCtrl.formData.newvaluta">
+                                    <input class="w3-border" type="text" data-ng-model="ctrl.SpData.LName">
 
                                 </div>
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                <button class="w3-btn w3-grey" data-ng-click="customersCtrl.Ok_button()">ОК
+                                <button class="w3-btn w3-grey" data-ng-click="ctrl.add_button() ">ОК
+
                                 </button>
                             </td>
+                            <td>
+                                <button class="w3-btn w3-grey" data-ng-click="ctrl.seek_button() ">Пошук
+
+                                </button>
+                            </td>
+
                         </tr>
                     </tbody>
                 </table>
@@ -75,23 +89,7 @@
     </div>
     </div>
 
-
-
-    <script>
-        var app = angular.module('myApp', []);
-        app.controller('customersCtrl', function ($http) {
-            let formData = {}
-            formData.newvaluta = ''
-            Ok_button = () => {
-                sql = "SELECT IdNomVal, NameVal FROM kassa.SpValut"
-                dataFactory.httpGetSql({ sql: sql }).then(rData => {
-                    if (!this.listVal) this.listVal = {}
-                    this.customersCtrl.listVal = rData
-
-                    console.log('zzzz', rData.list)
-                } 
-            }
-    </script>
-
-
 </body>
+
+
+</html>

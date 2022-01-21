@@ -12,6 +12,7 @@ singlePage.rl = {
     templateUrl: 'rl.html',
     controller: 'LRLController',
 }
+ 
 
 class LRLController extends AbstractController {
     constructor($scope, $route, $routeParams) {
