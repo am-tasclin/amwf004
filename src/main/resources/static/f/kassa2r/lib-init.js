@@ -10,6 +10,7 @@ const singlePage = {}/* $route fn */
 class AbstractController {
     singlePage = singlePage; conf = conf;
     getSql = sqlName => sql_app[sqlName]
+    getConf = confName => conf[confName]
 }
 
 const getSetList = (o, n) => o[n] ? o[n] : o[n] = []

@@ -3,6 +3,11 @@ app.config(RouteProviderConfig)
 singlePage.session = { tree: { l: { id: [45] }, r: { id: [45] } } }
 singlePage.index_template = 'index_template.html'
 
+conf.doctype_fa = {
+    14: 'far fa-folder',
+    17: 'far fa-file',
+}
+
 class InitPageController extends AbstractController {
     constructor(dataFactory) {
         super(); this.dataFactory = dataFactory
