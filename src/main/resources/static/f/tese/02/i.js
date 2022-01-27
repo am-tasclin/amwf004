@@ -50,7 +50,7 @@ class InitPageController extends AbstractController {
             , id => this.dataFactory.getReadADN(id)))
 
     readSessionSqlTable = () => {
-        console.log(singlePage.session.sql, sql_app[singlePage.session.sql])
+        // console.log(singlePage.session.sql, sql_app[singlePage.session.sql])
         if (singlePage.session.sql) {
             const sql = this.dataFactory.buildSqlWithKeyValue(singlePage.session.sql
                 , singlePage.session.sqlKey, singlePage.session.sqlValue)
@@ -75,6 +75,11 @@ class InitSessionController extends InitPageController {
         this.initRL()
         this.readSessionSqlTable()
 
+        angular.forEach(['l', 'r'], lr => angular.forEach(singlePage.session
+            .tree[lr].openIds, parent => {
+                console.log(parent)
+            }
+        ))
         angular.forEach(['l', 'r'], lr => angular.forEach(singlePage.session
             .tree[lr].openIds, parent => this.dataFactory.getReadADN_children(parent)
         ))
@@ -147,38 +152,27 @@ class InitSqlTableController extends InitPageController {
 }; angular.forEach(['sql_:sql', 'sql_:sql/:key1=:val1',]
     , v => singlePage[v] = routeController(InitSqlTableController))
 
-class RWADNDataFactory extends RWDataFactory {
+class RWADNDataFactory extends RWADN01DataFactory {
     constructor($http, $q) { super($http, $q) }
 
     // readSql = (sql, fn) => this.httpGetSql({ sql: sql }).then(rD => { fn(rD) })
-    readSql = (sql, fn) => this.httpGetSql({ sql: sql }).then(fn)
+    // readSql = (sql, fn) => this.httpGetSql({ sql: sql }).then(fn)
     readSqlTable = sql => this.readSql(sql
         , responceData => conf.sqlTableData = responceData.list)
 
-    buildSqlWithKeyValue = (sqlName, key, value) => {
-        let sql = readSql2R(sqlName)
-        if (key && value) {
-            // const whereDocAlias = sql_app[sqlName].whereDocAlias ?
-            //     (sql_app[sqlName].whereDocAlias + '.') : ''
-            // sql += ' WHERE ' + whereDocAlias + key + ' = ' + value
-            sql = 'SELECT * FROM (' + sql + ') x WHERE ' + key + ' = ' + value
-        }
-        if (sql_app[sqlName].oderBy) sql += ' ORDER BY ' + sql_app[sqlName].oderBy
-        return sql
-    }
 
     //ADN - Abstract Data Node
     getReadADN = docId => {
-        let deferred = this.$q.defer()
+        const deferred = this.$q.defer()
         conf.eMap[docId] ? deferred.resolve(conf.eMap[docId]) : this.readSql(
-            this.buildSqlWithKeyValue('SelectADN', 'doc_id', docId)
+            buildSqlWithKeyValue('SelectADN', 'doc_id', docId)
             , responceADN_Data => deferred.resolve(add_eMap(responceADN_Data.list[0]))
         )
         return deferred.promise
     }
 
     getReadADN_children = docId => this.getReadADN(docId).then(() => this.readSql(
-        this.buildSqlWithKeyValue('SelectADN', 'parent', docId)
+        buildSqlWithKeyValue('SelectADN', 'parent', docId)
         , responceChildren => angular.forEach(responceChildren.list
             , child => addParentChild(add_eMap(child)))))
 

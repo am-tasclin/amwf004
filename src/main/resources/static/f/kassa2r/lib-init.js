@@ -13,11 +13,9 @@ class AbstractController {
     getConf = confName => conf[confName]
 }
 
-const getSetList = (o, n) => o[n] ? o[n] : o[n] = []
-
 const add_eMap = v => conf.eMap[v.doc_id] = v
+const getSetList = (o, n) => o[n] ? o[n] : o[n] = []
 const getSetParentChild = v => getSetList(conf.parentChild, v.parent)
-
 // const getSetParentChild = v => conf.parentChild[v.parent] ?
 //     conf.parentChild[v.parent] : conf.parentChild[v.parent] = []
 const addParentChild = v => !getSetParentChild(v).includes(v.doc_id) ?
