@@ -28,17 +28,31 @@
         <span class="w3-small am-b">{{ctrl.page.head.title}}</span>&nbsp;⁙
     </div>
     <span class="w3-tiny">
-        {{ctrl.page}}
+        {{ctrl.page.fhir-1}}
     </span>
-    <div data-ng-repeat="h1 in ctrl.page.H1">
-        <h1> {{h1}} </h1>
-        <div data-ng-if="$index==3" class="w3-small">
-            <pre>ValueSet: {{ctrl.jsonToString(ctrl.page.fhir.structureEl.ValueSet)}}
-            </pre>
+    <div class="am-max-width-1">
+        <div data-ng-repeat="h1 in ctrl.page.H1">
+            <h1> {{h1}} </h1>
+            <div class="w3-row" data-ng-if="$index==3">
+                <div class="w3-half">
+                    <div class="w3-small">
+                        <pre>ValueSet: {{ctrl.jsonToString(ctrl.page.fhir.structureEl.ValueSet)}}
+                        </pre>
+                    </div>
+                </div>
+                <div class="w3-half w3-container w3-border-left">
+                    <div style="height: 49vh; overflow: auto;" data-ng-repeat="lr in ['H1_3_r_id_0']">
+                        <div data-ng-include="'/f/tese/02/treeADN.html'"
+                            data-ng-repeat="(k,adnId) in ctrl.singlePage.session.tree[lr].id">
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
         </div>
     </div>
     <hr>
-    -☚-
+    -☚-,-👉- 
 </body>
 
 </html>

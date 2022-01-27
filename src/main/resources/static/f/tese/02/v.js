@@ -8,6 +8,22 @@ page.H1 = [
 ]
 page.fhir = { structureIds: [359249], structureEl: {}, }
 
+singlePage.session = {
+    tree: {
+        H1: {
+            3: {
+                l: {}, r: {
+                    id: [359249],
+                    openIds: [359249, 372042,372043],
+                }
+            }
+        }
+    }
+}
+
+// for data-ng-include="'treeADN.html'"
+singlePage.session.tree.H1_3_r_id_0 = singlePage.session.tree.H1[3].r
+
 class RWADNDataFactory extends RWADN01DataFactory {
     constructor($http, $q, $timeout) { super($http, $q) }
     readADNDeep = (a, inSql) => {
@@ -40,29 +56,35 @@ class InitPageController extends AbstractController {
         super(); this.dataFactory = dataFactory; this.$timeout = $timeout
         this.date = new Date()
         angular.forEach(page.fhir.structureIds, docId => this.readADNDeep(docId))
-        const to = 255
-        $timeout(() => {
-            this.buildFhirStructure(page.fhir.structureIds[0])
-        }, to)
+        let to = 270 //ms
+        $timeout(() => this.buildFhirStructure(page.fhir.structureIds[0]), to)
         console.log(this)
     }
 
     jsonToString = o => JSON.stringify(o, ' ', 2)
 
     buildFhirStructure = docId => {
-        let e = this.conf.eMap[docId]
+        let e = conf.eMap[docId]
         console.log(docId, e)
-        let bE = { fhirStructureName: e.value_22 }
-        let rootEl = page.fhir.structureEl[e.value_22] = bE[e.value_22] = {}
         console.log(conf.parentChild[docId])
-        angular.forEach(conf.parentChild[docId], id => {
-            let e = conf.eMap[id]
-            let k = e.value_22; k = k ? k : e.r_value_22
-            rootEl[k] = ['BackboneElement'].includes(e.r_value_22) ? {} : 'String'
-            console.log(id, k, e, ['BackboneElement'].includes(e.r_value_22))
-        })
-        console.log(bE)
+        let bE = { fhirStructureName: e.value_22 }
+        let parentEl = page.fhir.structureEl[e.value_22] = bE[e.value_22] = {}
+        this.buildFhirChildren(docId, parentEl)
     }
+
+    buildFhirChildren = (docId, parentEl) => angular.forEach(conf.parentChild[docId], id => {
+        let e = conf.eMap[id]
+        let k = e.value_22; k = k ? k : e.r_value_22
+        let isChildObj = ['BackboneElement'].includes(e.r_value_22)
+        let childObj = parentEl[k] = isChildObj ? {} : 'String'
+        let isChildList = [37].includes(e.doctype || e.r_doctype)
+        parentEl[k] = isChildList ? [{}] : parentEl[k]
+        childObj = isChildList ? parentEl[k][0] : childObj
+        if (373674 == id)
+            console.log(id, k, isChildObj, childObj, e)
+        if (isChildObj || isChildList) this.buildFhirChildren(id, childObj)
+    })
+
     readADNDeep = docId => this.dataFactory.readADNDeep({ id: docId, deep: 7 })
 
 }; app.controller('InitPageController', InitPageController)
