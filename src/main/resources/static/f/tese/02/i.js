@@ -50,9 +50,9 @@ class InitPageController extends AbstractController {
             , id => this.dataFactory.getReadADN(id)))
 
     readSessionSqlTable = () => {
-        // console.log(singlePage.session.sql, sql_app[singlePage.session.sql])
+         console.log(singlePage.session.sql, sql_app[singlePage.session.sql])
         if (singlePage.session.sql) {
-            const sql = this.dataFactory.buildSqlWithKeyValue(singlePage.session.sql
+            const sql = buildSqlWithKeyValue(singlePage.session.sql
                 , singlePage.session.sqlKey, singlePage.session.sqlValue)
             this.dataFactory.readSqlTable(sql)
         }
@@ -63,7 +63,7 @@ class InitPageController extends AbstractController {
 const routeController = controllerClass => {
     const controllerName = controllerClass.toString().split(' ')[1]
     app.controller(controllerName, controllerClass)
-    return { templateUrl: 'x.html', controller: controllerName, }
+    return { templateUrl: '/f/tese/02/x.html', controller: controllerName, }
 }
 
 class InitSessionController extends InitPageController {

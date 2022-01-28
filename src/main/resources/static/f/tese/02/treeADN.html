@@ -6,7 +6,7 @@
             .doctype]" class="{{ctrl.getConf('doctype_fa')
                 [ctrl.conf.eMap[adnId].doctype]}} w3-opacity"></i>
         </span>
-        <div class="w3-dropdown-content w3-border" data-ng-include="'node_content_menu.html'"></div>
+        <div class="w3-dropdown-content w3-border" data-ng-include="'/f/tese/02/node_content_menu.html'"></div>
     </span>
     <span data-ng-click="ctrl.selectADN(adnId, lr)">
         <a class="w3-hover-shadow am-0u" href="#!/children_{{adnId}}_{{lr}}">
@@ -38,12 +38,12 @@
         <sup class="w3-tiny am-b" data-ng-if="ctrl.hasADNClosedChild(adnId, lr)">
             [{{ctrl.conf.parentChild[adnId].length}}]
         </sup>
-        <span data-ng-if="ctrl.mouseover_item==adnId" class="w3-right" data-ng-include="'adnRmenu.html'">
+        <span data-ng-if="ctrl.mouseover_item==adnId" class="w3-right" data-ng-include="'/f/tese/02/adnRmenu.html'">
         </span>
     </span>
 </div>
 <div class="w3-border-left w3-container" data-ng-if="ctrl.singlePage.session.tree[lr]
         .openIds.includes(adnId) && ctrl.conf.parentChild[adnId]">
-    <div data-ng-repeat="adnId in ctrl.conf.parentChild[adnId]" data-ng-include="'treeADN.html'">
+    <div data-ng-repeat="adnId in ctrl.conf.parentChild[adnId]" data-ng-include="'/f/tese/02/treeADN.html'">
     </div>
 </div>

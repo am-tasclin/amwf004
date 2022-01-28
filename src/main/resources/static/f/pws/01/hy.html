@@ -23,6 +23,9 @@
 
 				<span data-emrid="{{er.reason_id}}" data-p="2" data-am:emr:link>{{er.reason_code}}:
 					{{er.reason_i18n}}</span>
+				<span class="w3-tiny am-no-print"> [{{er.encounter_id}},ec={{er.episodeofcare_id}}] 
+					a1
+				</span>
 
 				<div class="w3-container w3-border-left " data-ng-if="er.dgcondition_id"
 					data-ng-click="ctrl.clicDiagnose(er)">

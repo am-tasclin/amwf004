@@ -6,7 +6,7 @@ page.H1 = [
     'Словники даних',
     'FHIR структури',
 ]
-page.fhir = { structureIds: [359249, 368788, 372925], structureEl: {}, }
+page.fhir = { structureIds: [359249, 368788, 372925, 368833], structureEl: {}, }
 
 singlePage.session = {
     tree: {
@@ -60,6 +60,7 @@ class InitPageController extends AbstractController {
         $timeout(() => buildFhir.structure(page.fhir.structureIds[0]), to)
         $timeout(() => buildFhir.structure(page.fhir.structureIds[1]), to * 2)
         $timeout(() => buildFhir.structure(page.fhir.structureIds[2]), to * 2)
+        $timeout(() => buildFhir.structure(page.fhir.structureIds[3]), to * 4)
     }
 
     jsonToString = o => JSON.stringify(o, ' ', 2)
