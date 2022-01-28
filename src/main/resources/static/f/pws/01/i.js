@@ -49,6 +49,7 @@ class PWSDataFactory extends DataFactory {
             , v => addEMap(conf[confKey], v))
     })
     readPatient = () => {
+        console.log(conf, conf.patient)
         if (!conf.patient) {
             console.log(55, singlePage.UrlMap()['hy'], contentDoc.readEMR)
             angular.forEach(contentDoc.readEMR, (v, k) => {

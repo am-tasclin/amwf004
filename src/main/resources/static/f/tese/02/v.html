@@ -33,26 +33,41 @@
     <div class="am-max-width-1">
         <div data-ng-repeat="h1 in ctrl.page.H1">
             <h1> {{h1}} </h1>
-            <div class="w3-row" data-ng-if="$index==3">
-                <div class="w3-half">
-                    <div class="w3-small">
-                        <pre>ValueSet: {{ctrl.jsonToString(ctrl.page.fhir.structureEl.ValueSet)}}
+            <div data-ng-if="$index==3">
+                <div class="w3-row">
+                    <div class="w3-half w3-border-bottom" style="height: 49vh; overflow: auto;">
+                        <div class="w3-small">
+                            <pre>ValueSet: {{ctrl.jsonToString(ctrl.page.fhir.structureEl.ValueSet)}}
                         </pre>
+                        </div>
                     </div>
-                </div>
-                <div class="w3-half w3-container w3-border-left">
-                    <div style="height: 49vh; overflow: auto;" data-ng-repeat="lr in ['H1_3_r_id_0']">
-                        <div data-ng-include="'/f/tese/02/treeADN.html'"
-                            data-ng-repeat="(k,adnId) in ctrl.singlePage.session.tree[lr].id">
+                    <div class="w3-half w3-container w3-border-left" style="height: 49vh; overflow: auto;">
+                        <div data-ng-repeat="lr in ['H1_3_r_id_0']">
+                            <div data-ng-include="'/f/tese/02/treeADN.html'"
+                                data-ng-repeat="(k,adnId) in ctrl.singlePage.session.tree[lr].id">
+                            </div>
                         </div>
                     </div>
                 </div>
+                <div class="w3-row w3-small" style="height: 49vh; overflow: auto;">
+                    <div class="w3-third">
+                        <pre>Goal: {{ctrl.jsonToString(ctrl.page.fhir.structureEl.Goal)}}
+                        </pre>
+                    </div>
+                    <div class="w3-third w3-border-left">
+                        <pre>CarePlan: {{ctrl.jsonToString(ctrl.page.fhir.structureEl.CarePlan)}}
+                        </pre>
+                    </div>
+                    <div class="w3-third w3-border-left">
+                        a1
+                    </div>
+                </div>
             </div>
-    
+
         </div>
     </div>
     <hr>
-    -☚-,-👉- 
+    -☚-,-👉-
 </body>
 
 </html>
