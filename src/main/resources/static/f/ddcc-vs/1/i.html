@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="uk-UA" data-ng-controller="InitPageController as ctrl">
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="shortcut icon" href="/f/img/algoritmed.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/webjars/font-awesome/5.15.2/css/all.min.css">
+    <link rel="stylesheet" href="/f/css/w3.css">
+    <link rel="stylesheet" href="/f/css/am.css">
+
+    <script src="/webjars/angular/1.8.2/angular.min.js" type="application/javascript"></script>
+    <script src="/webjars/angular-i18n/1.8.2/angular-locale_uk-ua.js" type="application/javascript"></script>
+    <script src="/webjars/angular-route/1.8.2/angular-route.min.js" type="application/javascript"></script>
+    <script src="/webjars/angular-resource/1.8.2/angular-resource.min.js" type="application/javascript"></script>
+    <script src="/webjars/angular-sanitize/1.8.2/angular-sanitize.min.js" type="application/javascript"></script>
+
+    <script src="i.js" type="application/javascript"></script>
+
+</head>
+
+<body class="w3-container am-max-width-1">
+    <div class="w3-border-bottom">
+        <a href="/" class="w3-btn w3-border w3-padding-small w3-small">↑</a>
+        <a href="api.medzakupivli.com.json" target="_blank" class="w3-small am-b">api.medzakupivli.com.json</a>
+        ⁙
+        <span class="w3-tiny">
+            {{ctrl.ddccData.document_set.description[1].desc}}
+        </span>
+    </div>
+    <div class="w3-border-bottom">
+        <span class="am-i"> document_set </span>
+        / {{ctrl.ddccData.document_set.identifier}}
+        / {{ctrl.ddccData.document_set.content_changed}}
+        / {{ctrl.ddccData.document_set.number_of_vaccines_and_lots}}
+        / {{ctrl.ddccData.document_set.d_last_content_changed | date:'medium'}}
+
+    </div>
+    <div class=" w3-threequarte-r">
+        <span class="am-i"> vaccines </span>
+        <div data-ng-repeat="d in ctrl.ddccData.vaccines">
+            <div data-ng-click="ctrl.selected_uuid_vaccine = d.uuid_vaccine" class="w3-hover-shadow"
+                data-ng-class="{'w3-green':ctrl.selected_uuid_vaccine == d.uuid_vaccine}">
+                {{$index}}
+                <span class="w3-tiny am-b">
+                    {{d.display_name}}</span>:{{d.international_non_proprietary_name}}
+            </div>
+            <div class="w3-leftbar w3-container" data-ng-if="ctrl.selected_uuid_vaccine == d.uuid_vaccine">
+                <div class="w3-row">
+                    <div class="w3-half">
+                        <div data-ng-repeat="u in d.usable_after_vaccine_with_id" class="w3-hover-shadow">
+                            {{$index}} -☞ {{u.quantity_per_dose}} {{u.unit_of_dose}}/ {{u.method_of_administerting}}
+                            рекомендована доз {{u.recommended_doses}}
+                            <div class="w3-container">
+                                -☞ дійсна з {{u.valid_in_day}} по {{u.valid_days}} день,
+                                повторна вакцінація
+                                між {{u.recommended_time_between_doses_min}}-{{u.recommended_time_between_doses_max}}
+                                днями (допустимо
+                                між {{u.min_days_beetwen_doses}}-{{u.max_days_beetwen_doses}} )
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w3-half w3-container w3-border-left">
+                        lots
+                        <div data-ng-repeat="l in d.lots" class="w3-hover-shadow" data-ng-click="selected_uuid_vaccine">
+                            {{$index}}
+                            № {{l.number}}
+                            <div>
+                                дата випуску {{l.date_of_manufacture}},
+                                дійсний до {{l.expire_date}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="w3-border-top">
+                    <span class="w3-tiny am-b">
+                        active_substance:
+                    </span>
+                    <span class="w3-small">
+                        {{d.active_substance}}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <span class="am-i"> dictionaries </span>
+    <div data-ng-repeat="d in ctrl.ddccData.dictionaries">
+        {{$index}}
+        <span class="w3-tiny am-b"> {{d.id}}</span>:
+        {{d.description}}
+    </div>
+    <hr>
+
+    <div data-ng-repeat="d in ctrl.ddccData.document_set">
+        {{$index}}
+        <span class="w3-tiny am-b"> {{d.id}}</span>:
+        {{d.description}}
+    </div>
+    <div class="w3-container w3-quarte-r w3-border-left">
+        <div data-ng-repeat="(k, v) in ctrl.ddccData">
+            {{k}}
+        </div>
+    </div>
+    ⛏
+</body>

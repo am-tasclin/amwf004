@@ -1,0 +1,70 @@
+<div> mc-sql-design
+    <div class="w3-right w3-white w3-border-bottom w3-hover-shadow w3-dropdown-hover">
+        &nbsp; &nbsp; ::
+        <div class="w3-dropdown-content w3-border" style="left: -245px;min-width: 275px;">
+            menu:
+            <button class="w3-btn w3-padding-small"
+                data-ng-click="ctrl.singlePage.session.menuSqls=!ctrl.singlePage.session.menuSqls">
+                sqls
+            </button>
+            <div class="w3-leftbar" data-ng-if="ctrl.singlePage.session.menuSqls">
+                <a title="{{sqlName}}" class="am-0u" href="#!/sql_{{sqlName}}"
+                    data-ng-repeat="sqlName in ctrl.sqlNames()">
+                    <div data-ng-class="{'w3-green':ctrl.singlePage.session.sql==sqlName}" class="w3-hover-shadow">
+                        {{sqlName}} </div>
+                </a>
+            </div>
+            <div>
+                <span class="w3-tiny am-b">parent:</span>
+                <a class="w3-btn w3-padding-small am-0u" data-ng-class="{
+                    'w3-green':ctrl.singlePage.session.tree.l.selectedId
+                ==ctrl.singlePage.session.sqlValue
+            }" href="#!/sql_{{ctrl.singlePage.session.sql}}/parent={{
+                    ctrl.singlePage.session.tree.l.selectedId}}_l">L</a>|
+                <a class="w3-btn w3-padding-small am-0u" data-ng-class="{
+                    'w3-green':ctrl.singlePage.session.tree.r.selectedId
+                ==ctrl.singlePage.session.sqlValue
+            }" href="#!/sql_{{ctrl.singlePage.session.sql}}/parent={{
+                    ctrl.singlePage.session.tree.r.selectedId}}_r">R</a>
+                <span class="w3-btn w3-padding-small" data-ng-click="ctrl.delSqlKeyValue()"
+                    data-ng-if="ctrl.singlePage.session.sqlValue">
+                    ⌫
+                </span>
+            </div>
+        </div>
+    </div>
+    <span class="w3-small"> {{ctrl.date | date:'medium'}} </span>
+    <span class="w3-tiny am-b"> {{ctrl.singlePage.session.sql
+        }}<span data-ng-if="ctrl.singlePage.session
+        .sqlKey">/{{ctrl.singlePage.session.sqlKey
+            }}={{ctrl.singlePage.session.sqlValue}}</span>
+    </span>
+    {{ctrl.getSql(ctrl.singlePage.session.sql).name}}
+    <div data-ng-if="true||ctrl.conf.eMap[ctrl.singlePage.session.tree.l.selectedId].reference==369358">
+        <span class="w3-tiny am-b"> auto sql:</span>
+        sql_app.autoSql.parent_{{ctrl.singlePage.session.tree.l.selectedId}}
+        --
+        <button class="w3-btn w3-padding-small w3-border" data-ng-click="ctrl.createRowSql()">
+            rowSql
+        </button>
+        <button data-ng-if="ctrl.rowSql" class="w3-btn w3-padding-small w3-border"
+            data-ng-click="ctrl.exeSql()">exe</button>
+        <pre class="w3-tiny">{{ctrl.rowSql}}</pre>
+    </div>
+    <table>
+        <thead class="w3-blue-gray w3-tiny">
+            <tr>
+                <th data-ng-if="!ctrl.sql_app[ctrl.conf.sqlKeyName].noShow.includes(k)"
+                    data-ng-repeat="(k,v) in ctrl.conf.sqlTableData[0]"> {{k}} </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-ng-click="ctrl.singlePage.session.selectedRowId = r[ctrl.getSql(ctrl.singlePage.session.sql).rowId]||r.doc_id"
+                data-ng-class="{'w3-card w3-light-green':ctrl.isSelectedRow(r)}" class="w3-hover-shadow"
+                data-ng-repeat="r in ctrl.conf.sqlTableData">
+                <td data-ng-if="!ctrl.sql_app[ctrl.conf.sqlKeyName].noShow.includes(k)"
+                    data-ng-repeat="(k,v) in ctrl.conf.sqlTableData[0]" data-am:sql:html>{{r[k]}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

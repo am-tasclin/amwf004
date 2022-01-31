@@ -3,11 +3,6 @@ app.config(RouteProviderConfig)
 singlePage.session = { tree: { l: { id: [45] }, r: { id: [45] } } }
 singlePage.index_template = 'index_template.html'
 
-conf.doctype_fa = {
-    14: 'far fa-folder',
-    17: 'far fa-file',
-}
-
 class InitPageController extends AbstractController {
     constructor(dataFactory) {
         super(); this.dataFactory = dataFactory
@@ -50,12 +45,27 @@ class InitPageController extends AbstractController {
             , id => this.dataFactory.getReadADN(id)))
 
     readSessionSqlTable = () => {
-         console.log(singlePage.session.sql, sql_app[singlePage.session.sql])
+        console.log(singlePage.session.sql, sql_app[singlePage.session.sql])
         if (singlePage.session.sql) {
             const sql = buildSqlWithKeyValue(singlePage.session.sql
                 , singlePage.session.sqlKey, singlePage.session.sqlValue)
             this.dataFactory.readSqlTable(sql)
         }
+    }
+    
+    exeSql = () => {
+        console.log(123)
+        this.dataFactory.readSqlTable(this.rowSql)
+        console.log(123)
+    }
+    
+    createTabSql = () => {
+        console.log(123)
+    }
+
+    createRowSql = () => {
+        console.log('-> click autoSql \n----\n', sql_app.autoSql.sql)
+        this.rowSql = sql_app.autoSql.createRowSql({ parent: singlePage.session.tree.l.selectedId })
     }
 
 }; app.controller('InitPageController', InitPageController)
@@ -63,7 +73,7 @@ class InitPageController extends AbstractController {
 const routeController = controllerClass => {
     const controllerName = controllerClass.toString().split(' ')[1]
     app.controller(controllerName, controllerClass)
-    return { templateUrl: '/f/tese/02/x.html', controller: controllerName, }
+    return { templateUrl: 'mc-sql-design.html', controller: controllerName, }
 }
 
 class InitSessionController extends InitPageController {
@@ -75,11 +85,11 @@ class InitSessionController extends InitPageController {
         this.initRL()
         this.readSessionSqlTable()
 
+        let parents = ''
         angular.forEach(['l', 'r'], lr => angular.forEach(singlePage.session
-            .tree[lr].openIds, parent => {
-                console.log(parent)
-            }
-        ))
+            .tree[lr].openIds, parent => parents += ',' + parent))
+        console.log(parents)
+
         angular.forEach(['l', 'r'], lr => angular.forEach(singlePage.session
             .tree[lr].openIds, parent => this.dataFactory.getReadADN_children(parent)
         ))
@@ -199,4 +209,9 @@ let ValueSet_1 = {
                 }]
         }]
     }
+}
+
+conf.doctype_fa = {
+    14: 'far fa-folder',
+    17: 'far fa-file',
 }

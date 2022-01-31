@@ -1,23 +1,15 @@
 <div data-ng-mouseover="ctrl.mouseover_item=adnId" class="w3-hover-shadow" data-ng-class="{'w3-card w3-light-green':ctrl.isSelectADN(adnId, lr, k),
         'w3-light-gray':ctrl.singlePage.session.tree[lr].id[k]==adnId,}">
-    <span class="w3-dropdown-hover w3-white">
-        <span class="w3-tiny"> [{{adnId}}] </span>
-        <div class="w3-dropdown-content w3-border" data-ng-include="'node_content_menu.html'"></div>
+        <span class="w3-dropdown-hover w3-white">
+        <span class="w3-tiny"> [{{adnId}}]
+            <i data-ng-if="ctrl.getConf('doctype_fa')[ctrl.conf.eMap[adnId]
+            .doctype]" class="{{ctrl.getConf('doctype_fa')
+                [ctrl.conf.eMap[adnId].doctype]}} w3-opacity"></i>
+        </span>
+        <div class="w3-dropdown-content w3-border" data-ng-include="'/f/tese/02/node_content_menu.html'"></div>
     </span>
     <span data-ng-click="ctrl.selectADN(adnId, lr)">
         <a class="w3-hover-shadow am-0u" href="#!/children_{{adnId}}_{{lr}}">
-            <span class="w3-tiny" title="r:{{ctrl.conf.eMap[adnId].reference
-    }}" data-ng-if="ctrl.conf.eMap[adnId]
-    .rr_value_22">{{ctrl.conf.eMap[adnId].rr_value_22}}:{{
-                ctrl.conf.eMap[adnId].r_doctype == 37?'[]':''
-                }}</span>
-            <span class="w3-tiny" title="r:{{ctrl.conf.eMap[adnId].reference
-        }}" data-ng-if="ctrl.conf.eMap[adnId]
-        .r_value_22">{{ctrl.conf.eMap[adnId].r_value_22}}:{{
-                ctrl.conf.eMap[adnId].r_doctype == 37?'[]':''}} </span>
-            <span class="w3-small am-i" title="r:{{ctrl.conf.eMap[adnId].reference2
-            }}" data-ng-if="ctrl.conf.eMap[adnId]
-            .r2_value_22">{{ctrl.conf.eMap[adnId].r2_value_22}}</span>
             {{
             ctrl.conf.eMap[adnId].doc_id
             && (ctrl.conf.eMap[adnId].value_22
@@ -25,6 +17,17 @@
             ||ctrl.conf.eMap[adnId].value_u_22) ? '':'--?--'
             }}{{ctrl.conf.eMap[adnId].value_22||ctrl.conf.eMap[adnId].value_u_22
             }}{{ctrl.conf.eMap[adnId].doctype==37?'[]':''}}
+            <span class="w3-tiny" title="r:{{ctrl.conf.eMap[adnId].reference
+    }}" data-ng-if="ctrl.conf.eMap[adnId]
+    .rr_value_22">{{ctrl.conf.eMap[adnId].rr_value_22}}::{{
+                ctrl.conf.eMap[adnId].r_doctype == 37?'[]':''
+                }}</span><span class="w3-tiny" title="r:{{ctrl.conf.eMap[adnId].reference
+        }}" data-ng-if="ctrl.conf.eMap[adnId]
+        .r_value_22">{{ctrl.conf.eMap[adnId].r_value_22}}:{{
+                ctrl.conf.eMap[adnId].r_doctype == 37?'[]':''}} </span>
+            <span class="w3-small am-i" title="r:{{ctrl.conf.eMap[adnId].reference2
+                }}" data-ng-if="ctrl.conf.eMap[adnId]
+                .r2_value_22">{{ctrl.conf.eMap[adnId].r2_value_22}}</span>
         </a>
         <sub class="w3-tiny" data-ng-if="ctrl.conf.eMap[adnId].reference
         ||ctrl.conf.eMap[adnId].reference2">(<span data-ng-if="ctrl
@@ -35,12 +38,12 @@
         <sup class="w3-tiny am-b" data-ng-if="ctrl.hasADNClosedChild(adnId, lr)">
             [{{ctrl.conf.parentChild[adnId].length}}]
         </sup>
-        <span data-ng-if="ctrl.mouseover_item==adnId" class="w3-right" data-ng-include="'adnRmenu.html'">
+        <span data-ng-if="ctrl.mouseover_item==adnId" class="w3-right" data-ng-include="'/f/tese/02/adnRmenu.html'">
         </span>
     </span>
 </div>
 <div class="w3-border-left w3-container" data-ng-if="ctrl.singlePage.session.tree[lr]
         .openIds.includes(adnId) && ctrl.conf.parentChild[adnId]">
-    <div data-ng-repeat="adnId in ctrl.conf.parentChild[adnId]" data-ng-include="'treeADN.html'">
+    <div data-ng-repeat="adnId in ctrl.conf.parentChild[adnId]" data-ng-include="'/f/tese/02/treeADN.html'">
     </div>
 </div>

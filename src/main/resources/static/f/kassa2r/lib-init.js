@@ -10,13 +10,12 @@ const singlePage = {}/* $route fn */
 class AbstractController {
     singlePage = singlePage; conf = conf;
     getSql = sqlName => sql_app[sqlName]
+    getConf = confName => conf[confName]
 }
 
-const getSetList = (o, n) => o[n] ? o[n] : o[n] = []
-
 const add_eMap = v => conf.eMap[v.doc_id] = v
+const getSetList = (o, n) => o[n] ? o[n] : o[n] = []
 const getSetParentChild = v => getSetList(conf.parentChild, v.parent)
-
 // const getSetParentChild = v => conf.parentChild[v.parent] ?
 //     conf.parentChild[v.parent] : conf.parentChild[v.parent] = []
 const addParentChild = v => !getSetParentChild(v).includes(v.doc_id) ?
@@ -51,9 +50,7 @@ class AmSqlHtml {
 }
 
 class RWDataFactory {
-    constructor($http, $q) {
-        this.$http = $http; this.$q = $q
-    }
+    constructor($http, $q) { this.$http = $http; this.$q = $q }
     urlSql = '/r/url_sql_read_db1'
     sqlRowLimit = 50
 

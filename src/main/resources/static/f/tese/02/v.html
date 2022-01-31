@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="uk-UA" data-ng-controller="InitPageController as ctrl">
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="shortcut icon" href="/f/img/algoritmed.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/webjars/font-awesome/5.15.2/css/all.min.css">
+    <link rel="stylesheet" href="/f/css/w3.css">
+    <link rel="stylesheet" href="/f/css/am.css">
+
+    <script src="/webjars/angular/1.8.2/angular.min.js" type="application/javascript"></script>
+    <script src="/webjars/angular-i18n/1.8.2/angular-locale_uk-ua.js" type="application/javascript"></script>
+    <script src="/webjars/angular-route/1.8.2/angular-route.min.js" type="application/javascript"></script>
+    <script src="/webjars/angular-resource/1.8.2/angular-resource.min.js" type="application/javascript"></script>
+    <script src="/webjars/angular-sanitize/1.8.2/angular-sanitize.min.js" type="application/javascript"></script>
+
+    <script src="/f/kassa2r/lib-init.js" type="application/javascript"></script>
+    <script src="/f/tese/01/lib.sql002.js" type="application/javascript"></script>
+    <script src="/f/tese/02/config.sql.js" type="application/javascript"></script>
+    <script src="v.js" type="application/javascript"></script>
+
+</head>
+
+<body class="w3-container">
+
+    <div class="w3-border-bottom am-max-width-1">
+        <a href="/" class="w3-btn w3-border w3-padding-small w3-small">↑</a>
+        <span class="w3-small am-b">{{ctrl.page.head.title}}</span>&nbsp;⁙
+    </div>
+    <span class="w3-tiny">
+        {{ctrl.page.fhir-1}}
+    </span>
+    <div class="am-max-width-1">
+        <div data-ng-repeat="h1 in ctrl.page.H1">
+            <h1> {{h1}} </h1>
+            <div data-ng-if="$index==3">
+                <div class="w3-row">
+                    <div class="w3-half w3-border-bottom" style="height: 49vh; overflow: auto;">
+                        <div class="w3-small">
+                            <pre>ValueSet: {{ctrl.jsonToString(ctrl.page.fhir.structureEl.ValueSet)}}
+                        </pre>
+                        </div>
+                    </div>
+                    <div class="w3-half w3-container w3-border-left" style="height: 49vh; overflow: auto;">
+                        <div data-ng-repeat="lr in ['H1_3_r_id_0']">
+                            <div data-ng-include="'/f/tese/02/treeADN.html'"
+                                data-ng-repeat="(k,adnId) in ctrl.singlePage.session.tree[lr].id">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="w3-row w3-small" style="height: 49vh; overflow: auto;">
+                    <div class="w3-third">
+                        <pre>Goal: {{ctrl.jsonToString(ctrl.page.fhir.structureEl.Goal)}}
+                        </pre>
+                    </div>
+                    <div class="w3-third w3-border-left">
+                        <pre>CarePlan: {{ctrl.jsonToString(ctrl.page.fhir.structureEl.CarePlan)}}
+                        </pre>
+                    </div>
+                    <div class="w3-third w3-border-left">
+                        a1
+                        <pre>MedicationRequest: {{ctrl.jsonToString(ctrl.page.fhir.structureEl.MedicationRequest)}}
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <hr>
+    -☚-,-👉-
+    <span class="w3-opacity">
+        <svg width="24" height="24" viewBox="0 0 24 24" focusable="false" class="TYVfy NMm5M">
+            <path
+                d="M4 4v2.01C5.83 3.58 8.73 2 12.01 2 17.53 2 22 6.48 22 12s-4.47 10-9.99 10C6.48 22 2 17.52 2 12h2c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8C9.04 4 6.47 5.61 5.09 8H8v2H2V4h2z">
+            </path>
+            <path d="M13 12V6h-2v7l4.97 3.49 1.26-1.55z"></path>
+        </svg>
+    </span>
+    <i class="fas fa-pencil-ruler"></i>
+</body>
+
+</html>

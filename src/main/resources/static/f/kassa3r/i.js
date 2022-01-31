@@ -81,6 +81,7 @@ class TestControl {
 
     Ok_button = sql => {
         if (!sql) sql = makeSelect()
+
         this.dataFactory.httpGetSql({ sql: sql }
         ).then(responceData => this.data = responceData)
     }
@@ -88,6 +89,30 @@ class TestControl {
 }
 
 const makeSelect = sqlName => {
+
+    if (!sqlName) sqlName = 'SelectKassa'
+    //let sql = replaceSql(sql_app[sqlName].sql + sql_app[sqlName].order)
+    let sql = replaceSql(sql_app[sqlName].sql)
+
+    sql = sql
+        .replace(':var.dateProv_start', "'" + formData.seek.StartDateProv.toISOString().split('T')[0] + "'")
+        .replace(':var.dateProv_end', "'" + formData.seek.FinishDateProv.toISOString().split('T')[0] + "'")
+        .replace(':var.p', formData.seek.PrRasx)
+    //        .replace(':var.or', formData.seek.selectgroup)
+
+
+    if (sql_app[sqlName].sortColumnName)
+        if (sql_app.SelectKassa.ascDesc == null)
+            sql += '   '
+        else sql += ' ORDER BY ' + sql_app[sqlName].sortColumnName + ' ' + sql_app[sqlName].ascDesc
+
+
+
+    return sql
+
+}
+
+const makeSelectDumm = sqlName => {
     if (!sqlName) sqlName = 'SelectKassa'
     let sql = replaceSql(sql_app[sqlName].sql)
     return sql

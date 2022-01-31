@@ -1,3 +1,55 @@
+sql_app.FHIR_Organization_name_alias = {
+    name:"Організація ім'я і аліас",
+    sql:'SELECT s.value name_, sd.value alias, d.doc_id name_id, dd.doc_id alias_id, d.parent FROM doc d \n\
+    LEFT JOIN sort ON sort_id=d.doc_id \n\
+    LEFT JOIN string s ON s.string_id=d.doc_id \n\
+    LEFT JOIN (SELECT * FROM doc WHERE reference = 373650) dd \n\
+    LEFT JOIN string sd ON sd.string_id=dd.doc_id \n\
+    ON dd.parent=d.doc_id \n\
+    WHERE d.reference=371291 \n\
+    ORDER BY sort'
+}
+
+sql_app.FHIR_ValueSet_concept_code_display_uk = {
+    name:'',
+    sql:'SELECT x.*, sl.value value_uk, dl.doc_id value_uk_id \n\
+    FROM (:sql_app.FHIR_ValueSet_concept_code_display ) x \n\
+        LEFT JOIN doc dl \n\
+    LEFT JOIN string sl ON sl.string_id=dl.doc_id \n\
+ON dl.parent=x.code_id AND dl.reference=373676 \n\
+, doc ds, doc dsl, doc dct \n\
+WHERE x.parent=dct.doc_id AND dct.parent=ds.parent AND ds.reference=373674 \n\
+AND dsl.parent=ds.doc_id AND dsl.reference2=373581',
+}
+
+sql_app.FHIR_ValueSet_concept_code_display_en = {
+    name: 'Значення код-прояв (en)',
+    sql: 'SELECT s.value code, sd.value display, sv_en.value value_en \n\
+    , d.doc_id code_id, dd.doc_id display_id, dv.doc_id value_en_id, d.parent FROM doc d \n\
+    LEFT JOIN sort ON sort_id=d.doc_id \n\
+    LEFT JOIN string s ON s.string_id=d.doc_id \n\
+    LEFT JOIN (SELECT * FROM doc WHERE reference2 = 373680) dv \n\
+    LEFT JOIN string sv_en ON sv_en.string_id=dv.doc_id \n\
+    ON dv.parent=d.doc_id  \n\
+    LEFT JOIN (SELECT * FROM doc WHERE reference = 372053) dd \n\
+    LEFT JOIN string sd ON sd.string_id=dd.doc_id \n\
+    ON dd.parent=d.doc_id \n\
+    WHERE d.reference=372051 \n\
+    ORDER BY sort',
+}
+
+sql_app.FHIR_ValueSet_concept_code_display = {
+    name: 'Значення код-прояв',
+    sql: 'SELECT s.value code, sd.value display, d.doc_id code_id, dd.doc_id display_id, d.parent FROM doc d \n\
+    LEFT JOIN sort ON sort_id=d.doc_id \n\
+    LEFT JOIN string s ON s.string_id=d.doc_id \n\
+    LEFT JOIN (SELECT * FROM doc WHERE reference = 372053) dd \n\
+    LEFT JOIN string sd ON sd.string_id=dd.doc_id \n\
+    ON dd.parent=d.doc_id \n\
+    WHERE d.reference=372051 \n\
+    ORDER BY sort',
+}
+
 sql_app.FHIR_CodeSystem_parent = {
     name: 'Зчитування child-of',
     sql: 'SELECT su.value code, d.*, sort FROM string_u su, doc d \n\
