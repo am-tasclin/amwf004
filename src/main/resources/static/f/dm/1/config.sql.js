@@ -11,23 +11,24 @@ sql_app.autoSql = {
 
     createRowSql: (param) => {
         let rowPattern = conf.eMap[conf.parentChild[param.parent][0]]
-        let rowFieldName = rowPattern.r_value_22 || rowPattern.rr_value_22
         let createTable = conf.eMap[conf.eMap[param.parent].reference2]
+
+        let rowFieldName = rowPattern.r_value_22 || rowPattern.rr_value_22
         rowFieldName = createTable.value_22 + '_' + rowFieldName
 
-        console.log(rowPattern)
-        console.log(rowFieldName + '\n', sql_app.autoSql.rowSql)
+        // console.log(rowPattern)
+        // console.log(rowFieldName + '\n', sql_app.autoSql.rowSql)
         let rowSql = sql_app.autoSql.rowSql
             .replace(':rowPattern.reference', rowPattern.reference)
-        console.log(rowSql)
+        // console.log(rowSql)
         let rowFields = 'value ' + rowFieldName
             + ', d.doc_id ' + rowFieldName + '_id'
-        console.log(rowFields, 1)
+        // console.log(rowFields, 1)
         rowSql = rowSql
             .replace('SELECT d.', 'SELECT ' + rowFields + ', d.')
             .replace(', d.*', '')
             + ' AND d.parent=' + param.parent
-        console.log(rowSql)
+        // console.log(rowSql)
         return rowSql
     },
 
