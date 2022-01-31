@@ -1,4 +1,3 @@
-console.log(123)
 class RWADN01DataFactory extends RWDataFactory {
     constructor($http, $q) { super($http, $q) }
     readSql = (sql, fn) => this.httpGetSql({ sql: sql }).then(fn)

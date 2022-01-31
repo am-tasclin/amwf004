@@ -12,7 +12,7 @@ singlePage.rl = {
     templateUrl: 'rl.html',
     controller: 'LRLController',
 }
- 
+
 
 class LRLController extends AbstractController {
     constructor($scope, $route, $routeParams) {
@@ -50,9 +50,6 @@ formData.seek.selectgroup = 'idNom'
 
 conf.sqlKeyName = 'SelectKassa'
 
-
-
-
 class TestControl {
     constructor($http, dataFactory) {
         this.dataFactory = dataFactory
@@ -65,7 +62,6 @@ class TestControl {
             clickCount: 0,
         }
         this.listop = this.bloodgroup
-
 
         let ctrl = this
         let sql = makeSelect('SpContragents')
@@ -86,7 +82,7 @@ class TestControl {
         dataFactory.httpGetSql({ sql: sql }).then(rData => {
             ctrl.listVal = rData
             console.log(this.listVal)
-        })        
+        })
 
 
         this.click_spcontragent_seek = (selectName) => {
@@ -107,12 +103,8 @@ class TestControl {
             this.dataFactory.httpGetSql({ sql: sql }
             ).then(responceData => {
                 this.dataSeek = responceData
-            }
-            )
+            })
         }
-
-
-
 
         this.formData = formData
         this.selectRow = row => this.selectedRow = row
@@ -129,7 +121,6 @@ class TestControl {
 
         this.Ok_button()
 
-
     }
 
     getSql = sqlName => sql_app[sqlName]
@@ -144,8 +135,6 @@ class TestControl {
         this.Ok_button()
     }
 
-
-
     Ok_button = () => {
         console.log("Ok_button")
         let sql = makeSelect()
@@ -155,13 +144,10 @@ class TestControl {
             .replace(':var.dateProv_end', "'" + formData.seek.FinishDateProv.toISOString().split('T')[0] + "'")
             .replace(':var.p', formData.seek.PrRasx)
 
-        console.log('11111', sqlDist)
-
         sql += '; ' + makeSelect('GroupKassa2') + ' GROUP BY NameVal '
+        console.log(sql)
+
         sql += '; ' + sqlDist
-
-
-        console.log('qqqqq', sql)
 
         this.dataFactory.httpPostSql({ sql: sql }).then(rData => {
             if (!this.data) this.data = {}
@@ -175,8 +161,6 @@ class TestControl {
             console.log('zzzz', rData.list2)
 
         })
-
-
     }
 
 
@@ -201,14 +185,11 @@ class TestControl {
 
             this.Ok_button()
         })
-
     }
 
-
-Seek_post = () => {
-    console.log('Seek')
-
-}
+    Seek_post = () => {
+        console.log('Seek')
+    }
 
 
     DeleteKassa = (a) => {
@@ -223,8 +204,6 @@ Seek_post = () => {
             this.data.list = responce.list1
             this.Ok_button()
         })
-
-
     }
 
     SortSelect = (sortColumnName) => {
@@ -247,32 +226,24 @@ Seek_post = () => {
         formData.seek.selectgroup = sortColumnName
         this.Ok_button()
     }
-
-
 }
-
-
-
-
 
 const makeSelect = sqlName => {
 
     if (!sqlName) sqlName = 'SelectKassa'
     //let sql = replaceSql(sql_app[sqlName].sql + sql_app[sqlName].order)
     let sql = replaceSql(sql_app[sqlName].sql)
+
     sql = sql
         .replace(':var.dateProv_start', "'" + formData.seek.StartDateProv.toISOString().split('T')[0] + "'")
         .replace(':var.dateProv_end', "'" + formData.seek.FinishDateProv.toISOString().split('T')[0] + "'")
         .replace(':var.p', formData.seek.PrRasx)
     //        .replace(':var.or', formData.seek.selectgroup)
 
-
     if (sql_app[sqlName].sortColumnName)
         if (sql_app.SelectKassa.ascDesc == null)
             sql += '   '
         else sql += ' ORDER BY ' + sql_app[sqlName].sortColumnName + ' ' + sql_app[sqlName].ascDesc
-
-
 
     return sql
 

@@ -129,9 +129,9 @@ sql_app.SpContragents = {
     sqlHtml: {
         dateprov: "{{v | date : 'shortDate'}} ",
     }
-
-
 }
+sql_app.SpContragents.sql = sql_app.SpContragents.select
+
 sql_app.Seek_LName = {
     name: 'Пошук по контрагенту',
     sql: 'SELECT idNom, DateProv, SumaProv, NameKassop, NameContr, NameVal, Nal_beznal  \n\
