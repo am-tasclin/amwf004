@@ -69,18 +69,57 @@ sql_app.DeleteKassa = {
 
 
 sql_app.SpGrupKassOp = {
-    name: 'Группи кассових операций',
+    type:1,
+    SelectDubl: 'SpKassOp',
+    childTableName: 'SpKassOp',
+    cols: {
+        idnomgrupkassop: '№№',
+        namegrupkassop: 'Группи кассових операций'
+    },   
+ 
+    rowIdName: 'idnomgrupkassop',
+     
+    name: 'Кассовие операции',
+    sql: 'SELECT IdNomgrupKassOP, NameKassgrupOp \n\
+    FROM kkassa.Spgrupkassop  ORDER BY  spGrupKassOp',
 
-    sql: ' SELECT IdNomGrupKassOp, NameGrupKassOp, Pr_Rasx \n\
-    FROM kassa.SpGrupKassOp',
-    order: '  ORDER BY NameGrupKassOP ',
+    select: ' SELECT IdNomgrupKassOP, NamegrupKassOp  FROM kassa.Spgrupkassop   ',
+
+    where: " WHERE NamegrupKassOp  LIKE ('%:var.m%') ",
+
+    order: '  ORDER BY NamegrupKassOp  ',
+    group: '   ',
+    insert: ' INSERT INTO kassa.Spgrupkassop (idnomgrupkassop, Namegrupkassop) VALUES ((select max(idnomgrupkassop)+1 from kassa.Spgrupkassop), :var.m)',
+    
+    delete: ' DELETE FROM kassa.Spgrupkassop WHERE idnomgrupkassop =:var.m ; \n\
+              DELETE FROM kassa.Spkassop     WHERE  spgrupkassop_id =:var.m  ',
 }
 
 sql_app.SpKassOp = {
+    type:1,
+    cols: {
+        idnomkassop: '№№',
+        namekassop: 'Кассоая операция',
+        spgrupkassop_id: 'Группа кассових операций',
+        pr_rasx: 'Приход-расход'
+    },   
+    rowIdName: 'idnomkassop',
+
     name: 'Кассовие операции',
     sql: 'SELECT IdNomKassOP, NameKassOp, spGrupKassOp_id,Pr_rasx \n\
     FROM kassa.SpKassOp ORDER BY  Pr_rasx,  NameKassOp, spGrupKassOp_id',
-    order: '  '
+
+
+    select: ' SELECT IdNomKassOP, NameKassOp \n\
+    FROM kassa.SpKassOp  WHERE  spGrupKassOp_id=:var.m',
+
+    where: " and NameKassOp LIKE ('%:var.w%') ",
+
+    order: '  ORDER BY Pr_rasx,  NameKassOp, spGrupKassOp_id  ',
+    group: '   ',
+    insert: ' INSERT INTO kassa.Spkassop (idnomkassop, Namekassop,spgrupkassop_id) VALUES ((select max(idnomkassop)+1 from kassa.Spkassop), :var.m,:var.g)',
+    
+    delete: ' DELETE FROM kassa.Spkassop WHERE idnomkassop =:var.m ',
 }
 
 sql_app.SpValut = {
@@ -90,15 +129,22 @@ sql_app.SpValut = {
         idnomval: '№№',
         nameval: 'Валюта',
     },
+    rowIdName: 'idnomval',
+    sql: ' SELECT IdNomVal, NameVal  \n\
+    FROM kassa.SpValut ',
+
     select: ' SELECT IdNomVal, NameVal  \n\
     FROM kassa.SpValut ',
+
+
+
     where: " WHERE nameval LIKE ('%:var.m%') ",
 
     order: ' ORDER BY NameVal  ',
     group: '   ',
     insert: ' INSERT INTO kassa.SpValut (idnomval, NameVal) VALUES ((select max(idnomval)+1 from kassa.Spvalut), :var.m)',
-    delete: ' DELETE kassa.SpValut WHERE idNomVal =:var.m ',
-    selGroup: ' select max(idnomval) MaxPole  ', 
+    delete: ' DELETE FROM kassa.SpValut WHERE idNomVal =:var.m ',
+    selGroup: ' select max(idnomval) MaxPole  ',
 
     sqlHtml: {
         dateprov: "{{v | date : 'shortDate'}} "
@@ -113,6 +159,8 @@ sql_app.SpContragents = {
         IdNomContr: '№№',
         NameContr: 'Контрагенти',
     },
+    rowIdName: 'idnomcontr',
+    sql: ' SELECT * FROM   kassa.spcontragents ',
 
     select: ' SELECT * FROM   kassa.spcontragents ',
     where: " WHERE NameContr LIKE ('%:var.m%') ",
@@ -124,7 +172,7 @@ sql_app.SpContragents = {
     insert: 'INSERT INTO kassa.SpContragents (namecontr, idnomcontr) \n\
         VALUES (:var.m , (SELECT max(IdNomContr)+1 FROM kassa.SpContragents))',
 
-    delete: 'DELETE kassa.SpContragents WHERE idnomcontr =:var.idnomcontr ',
+    delete: 'DELETE FROM kassa.SpContragents WHERE idnomcontr =:var.m ',
 
     sqlHtml: {
         dateprov: "{{v | date : 'shortDate'}} ",
@@ -141,4 +189,57 @@ sql_app.Seek_LName = {
     sqlHtml: {
         dateprov: "{{v | date : 'shortDate'}}",
     },
+}
+
+sql_app.SpOdVim = {
+    type:1,
+    cols: {
+        idodvim: '№№',
+        nameodvim: 'Одиниця виміру'
+        
+    },   
+    rowIdName: 'idodvim',
+
+    name: 'Одиниці виміру',
+    sql: 'SELECT Idodvim, NameOdvim \n\
+    FROM kassa.SpOdVim ORDER BY  Nameodvim',
+
+
+    select: ' SELECT idodvim, nameodvim \n\
+    FROM kassa.Spodvim  ',
+
+    where: " WHERE Nameodvim LIKE ('%:var.m%') ",
+
+    order: '  ORDER BY NameOdVim  ',
+    group: '   ',
+    insert: ' INSERT INTO kassa.spodvim (nameodvim) VALUES (:var.m)',
+    
+    delete: ' DELETE FROM kassa.SpOdVim WHERE idodvim =:var.m ',
+}
+
+sql_app.SpTovar = {
+    type:1,
+    cols: {
+        idtovar: '№№',
+        nametovar: 'Товар',
+        idgruptovar_id: 'Товарнай группа ',
+        idodvim_id: 'Одиниця виміру'
+    },   
+    rowIdName: 'idtovar',
+
+    name: 'Товар',
+    sql: 'SELECT idtovar, nametovar\n\
+    FROM kassa.SpTovar  WHERE  idgruptovar_id=:var.m',
+
+
+    select: ' SELECT idtovar, nametovar \n\
+    FROM kassa.SpTovar  WHERE  idgruptovar_id=:var.m',
+
+    where: " and nametovar LIKE ('%:var.w%') ",
+
+    order: '  ORDER BY nametovar ',
+    group: '   ',
+    insert: ' INSERT INTO kassa.SpTovar (idtovar,nametovar,idgruptovar_id) VALUES ((select max(idtovar)+1 from kassa.Sptovar), :var.m,:var.g)',
+    
+    delete: ' DELETE FROM kassa.SpTovar WHERE idtovar =:var.m ',
 }
