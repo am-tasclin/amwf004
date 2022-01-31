@@ -16,7 +16,9 @@
     <script src="/f/kassa2r/config.sql.js" type="application/javascript"></script>
 -->
 <script src="config.sql.js" type="application/javascript"> </script>
-<script src="SpValut.js" type="application/javascript"> </script>
+<script src="dov2.js" type="application/javascript"> </script>
+
+
 <style>
     .am-inner-scroll {
         height: 92vh;
@@ -28,16 +30,18 @@
     <div class="w3-container am-max-width-1">
         <div class="w3-border-bottom">
             <a href="/" class="w3-btn w3-border w3-padding-small w3-small">↑</a>
-            <span class="w3-small am-b">Справочники 111 уровня</span>&nbsp;⁙
+            <span class="w3-small am-b">Справочники 21 уровня</span>&nbsp;⁙
         </div>
         <div class="w3-border-bottom am-inner-scroll" s11tyle="height:92vh; overflow:auto;">
 
             <div data-ng-repeat="dN in ctrl.dictionaryNames">
                 <span class="w3-btn w3-border" style="width: 200px;" data-ng-click="ctrl.Ok_button(dN)">
-                    {{ctrl.getSql(dN).name}} </span>
+                    {{ctrl.getSql(dN).name}}
+
+                </span>
             </div>
 
-            <span class="w3-small am-b"> Новий</span>
+            <span class="w3-small am-b"> Новая группа </span>
             <table class="w3-light-gray w3-card">
                 <tbody>
                     <tr>
@@ -51,7 +55,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <button class="w3-btn w3-grey" data-ng-click="ctrl.add_button() ">ОК
+                            <button class="w3-btn w3-grey" data-ng-click="ctrl.add_button() ">Создать
                             </button>
                         </td>
                         <td>
@@ -59,7 +63,7 @@
                             </button>
                         </td>
                         <td>
-                            <button class="w3-btn w3-grey" data-ng-click="ctrl.del_button() ">Удалить
+                            <button class="w3-btn w3-grey" data-ng-click="ctrl.del_button()">Удалить
                             </button>
                         </td>
                     </tr>
@@ -71,6 +75,7 @@
                     <thead class="w3-tiny am-b">
                         <tr>
 
+
                             <th class="w3-hover-shadow" data-ng-class="w3-green"
                                 data-ng-repeat="(k,v) in ctrl.getSql(ctrl.selectedDictionary).cols"> {{v}}
                             </th>
@@ -79,7 +84,59 @@
                     </thead>
 
                     <tr class="w3-hover-shadow" data-ng-repeat="r in ctrl.listVal.list"
-                        data-ng-click="ctrl.selectRow(r)" data-ng-class="{'w3-red':ctrl.isSelectedRow(r)}">
+                        data-ng-click="ctrl.selectRow(r,'')" data-ng-class="{'w3-red':ctrl.isSelectedRow(r)}">
+
+                        <td data-ng-repeat="(k,v) in r" class="w3-border" data-am-sql-html>
+                            {{v}}
+
+                        </td>
+
+                    </tr>
+
+                </table>
+                <span class="w3-small am-b"> Новий </span>
+                <table class="w3-light-gray w3-card">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div>
+                                    <span class="w3-small am-b"> </span>
+                                    <input class="w3-border" type="text" data-ng-model="ctrl.SpData.LNameD">
+
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <button class="w3-btn w3-grey" data-ng-click="ctrl.add_button_dubl() ">Создать
+                                </button>
+                            </td>
+                            <td>
+                                <button class="w3-btn w3-grey" data-ng-click="ctrl.seek_button_dubl() ">Пошук
+                                </button>
+                            </td>
+                            <td>
+                                <button class="w3-btn w3-grey" data-ng-click="ctrl.del_button_dubl()">Удалить
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table>
+                    <thead class="w3-tiny am-b">
+                        <tr>
+
+
+                            <th class="w3-hover-shadow" data-ng-class="w3-green"
+                                data-ng-repeat="(k,v) in ctrl.getSql(ctrl.sql_app[selectedDictionary].SelectChildren).cols">
+                                {{v}}
+
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tr class="w3-hover-shadow" data-ng-repeat="r in ctrl.listVald.list"
+                        data-ng-click="ctrl.selectRowD(r)" data-ng-class="{'w3-green':ctrl.isSelectedRowD(r)}">
 
                         <td data-ng-repeat="(k,v) in r" class="w3-border" data-am-sql-html>
                             {{v}}
@@ -90,13 +147,19 @@
 
                 </table>
 
-
-
             </div>
         </div>
+
+
+
+
         podval
     </div>
     </div>
+
+
+
+
 
 </body>
 

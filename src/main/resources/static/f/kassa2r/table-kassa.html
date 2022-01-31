@@ -42,7 +42,8 @@
     </thead>
     <tbody class="w13-small">
         <tr class="w3-hover-shadow" data-ng-repeat="(k,r) in ctrl.data.list"
-            data-ng-class="{'w3-red':ctrl.selectedRow.idnom==r.idnom}" data-ng-click="ctrl.selectRow(r)">
+            data-ng-class="{'w3-red':ctrl.selectedRow.idnom==r.idnom}" 
+            data-ng-click="ctrl.selectRow(r)">
 
 
             <td data-ng-repeat="(k,v) in r" class="w3-border" data-am-sql-html>
