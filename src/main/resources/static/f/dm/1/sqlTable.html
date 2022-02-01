@@ -8,7 +8,9 @@
                 sqls
             </button>
             <div class="w3-leftbar" data-ng-if="ctrl.singlePage.session.menuSqls">
+                a1
                 <a title="{{sqlName}}" class="am-0u" href="#!/sql_{{sqlName}}"
+                 data-ng-if="ctrl.getSql(sqlName).sql"
                     data-ng-repeat="sqlName in ctrl.sqlNames()">
                     <div data-ng-class="{'w3-green':ctrl.singlePage.session.sql==sqlName}" class="w3-hover-shadow">
                         {{sqlName}} </div>

@@ -5,6 +5,12 @@ angular.element(() => angular.bootstrap(document, ['app']))
 // not for $scope
 const sql_app = {}
 // for|as $scope
+
+sql_app.cmd = {}
+sql_app.cmd.addGroup = (group) => sql_app.group[group]
+    .add() && console.log(group, sql_app.group[group])
+
+
 const singlePage = {}/* $route fn */
     , conf = { eMap: {}, parentChild: {}, }/* conf page|app|content */
 class AbstractController {

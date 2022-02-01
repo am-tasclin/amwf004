@@ -1,5 +1,4 @@
 'use strict'
-console.log(144441)
 sql_app.EpisodeOfCare_Patient = {
 	name:'Епізод',
 	sql:'SELECT ee.doc_id episode_id, ee.reference2 patient_id, tsps.value tsps_v, ps.doc_id tsps_id, \n\

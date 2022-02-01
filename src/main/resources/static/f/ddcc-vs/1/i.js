@@ -13,7 +13,6 @@ class InitPageController {
                 .d_last_content_changed
                 = new Date(ctrl.ddccData.document_set.last_content_changed)
             console.log(ctrl.ddccData.document_set.d_last_content_changed)
-
         })
     }
 }

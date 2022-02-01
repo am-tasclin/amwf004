@@ -2,6 +2,7 @@
 app.config(RouteProviderConfig)
 singlePage.session = { tree: { l: { id: [45] }, r: { id: [45] } } }
 singlePage.index_template = 'index_template.html'
+sql_app.group.gp_ADN02.add()
 
 class InitPageController extends AbstractController {
     constructor(dataFactory) {
@@ -52,13 +53,13 @@ class InitPageController extends AbstractController {
             this.dataFactory.readSqlTable(sql)
         }
     }
-    
+
     exeSql = () => {
         console.log(123)
         this.dataFactory.readSqlTable(this.rowSql)
         console.log(123)
     }
-    
+
     createTabSql = () => {
         console.log(123)
     }

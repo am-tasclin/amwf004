@@ -2,6 +2,9 @@
 
 app.factory("dataFactory", RWDataFactory)
 
+// sql_app.group.gp_001.add()
+sql_app.group.gp_002.add()
+
 conf.sql_app = {}
 conf.sql_app.tableList = ['SpContragents', 'SpKassOp', 'SpValut',]
 

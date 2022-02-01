@@ -46,14 +46,14 @@ class PWSDataFactory extends DataFactory {
         conf[confKey] = dataSqlRequest.list
         addEMap(conf[confKey], confKey)
         angular.forEach(contentDoc.readEMR[confKey].emr
-            , v => addEMap(conf[confKey], v))
+            , v => { addEMap(conf[confKey], v) })
     })
     readPatient = () => {
         console.log(conf, conf.patient)
         if (!conf.patient) {
             console.log(55, singlePage.UrlMap()['hy'], contentDoc.readEMR)
             angular.forEach(contentDoc.readEMR, (v, k) => {
-                console.log(57, k, v)
+                console.log(57, k, v.sql)
                 this.read(v.sql, k)
             })
             timeoutMs = 200

@@ -2,6 +2,14 @@
 app.config(RouteProviderConfig)
 singlePage.session = { tree: { l: { id: [45] }, r: { id: [45] } } }
 singlePage.index_template = 'index_template.html'
+sql_app.group.gp_ADN01.add()
+
+if (window.location.href.includes('davw'))
+    sql_app.SelectADN.sql = sql_app.SelectADN.sql
+        .replace('FROM tese.', 'FROM ')
+
+// console.log(sql_app.SelectADN.sql)
+
 
 conf.doctype_fa = {
     14: 'far fa-folder',
@@ -50,7 +58,7 @@ class InitPageController extends AbstractController {
             , id => this.dataFactory.getReadADN(id)))
 
     readSessionSqlTable = () => {
-         console.log(singlePage.session.sql, sql_app[singlePage.session.sql])
+        console.log(singlePage.session.sql, sql_app[singlePage.session.sql])
         if (singlePage.session.sql) {
             const sql = buildSqlWithKeyValue(singlePage.session.sql
                 , singlePage.session.sqlKey, singlePage.session.sqlValue)
