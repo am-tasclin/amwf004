@@ -29,6 +29,33 @@ const addParentChild = v => !getSetParentChild(v).includes(v.doc_id) ?
 
 conf.modalDisplay = { display: null }
 
+conf.adn = { cr: {} }
+conf.adn.cr.tree = { r: {}, l: {}, }
+conf.adn.cr.tree.urlGo = () => window.location.href = '#!/tree_' + conf.adn.cr.tree.url()
+conf.adn.cr.tree.url = () => singlePage.session.tree.l.id.join('_') + ',' + singlePage.session.tree.r.id.join('_')
+
+conf.adn.cr.tree.r.minus = id => lFn.minus(singlePage.session.tree.r.id
+    , singlePage.session.tree.r.id.indexOf(id)) && conf.adn.cr.tree.urlGo()
+conf.adn.cr.tree.l.minus = id => lFn.minus(singlePage.session.tree.l.id
+    , singlePage.session.tree.l.id.indexOf(id)) && conf.adn.cr.tree.urlGo()
+
+conf.adn.cr.tree.r.up = id => lFn.up(singlePage.session.tree.r.id
+    , singlePage.session.tree.r.id.indexOf(id)) && conf.adn.cr.tree.urlGo()
+conf.adn.cr.tree.l.up = id => lFn.up(singlePage.session.tree.l.id
+    , singlePage.session.tree.l.id.indexOf(id)) && conf.adn.cr.tree.urlGo()
+conf.adn.cr.tree.r.dn = id => lFn.dn(singlePage.session.tree.r.id
+    , singlePage.session.tree.r.id.indexOf(id)) && conf.adn.cr.tree.urlGo()
+conf.adn.cr.tree.l.dn = id => lFn.dn(singlePage.session.tree.l.id
+    , singlePage.session.tree.l.id.indexOf(id)) && conf.adn.cr.tree.urlGo()
+
+const lFn = {}
+lFn.minus = (ids, p) => ids.splice(p, 1)
+lFn.dn = (ids, p) => (p + 1 == ids.length) && ids.splice(0, 0, ids.splice(ids.length - 1, 1)[0])
+    || ([ids[p], ids[p + 1]] = [ids[p + 1], ids[p]])
+lFn.up = (ids, p) => (p == 0 && ids.splice(ids.length, 0, ids.splice(0, 1)[0])
+    || ([ids[p - 1], ids[p]] = [ids[p], ids[p - 1]]))
+
+
 // Get sql from our name
 const readSql2R = sqlN => {
     console.log(sqlN)
