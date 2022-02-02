@@ -1,16 +1,13 @@
 'use strict';
-
+app.directive('amSqlHtml', AmSqlHtml)
 app.factory("dataFactory", RWDataFactory)
 
-// sql_app.group.gp_001.add()
-sql_app.group.gp_002.add()
+// sql_app.group.gp_002.add()
+sql_app.group.gp_PWS01.add()
 
-conf.sql_app = {}
-conf.sql_app.tableList = ['SpContragents', 'SpKassOp', 'SpValut',]
-
-conf.sql_app.tableList = []
-angular.forEach(sql_app
-    , (sqlObj, k) => { if (sqlObj.sql) conf.sql_app.tableList.push(k) })
+conf.sql_app = { tableList: [] }
+// conf.sql_app.tableList = ['SpContragents', 'SpKassOp', 'SpValut',]
+angular.forEach(sql_app, (sqlObj, k) => sqlObj.sql && conf.sql_app.tableList.push(k))
 
 // app.controller("SqlController", SqlController)
 class SqlController2 extends SqlAbstractController {
@@ -20,7 +17,7 @@ class SqlController2 extends SqlAbstractController {
             delete this.data
         conf.sqlKeyName = $routeParams.sql
         console.log(conf.sqlKeyName)
-        console.log(this)
+        // console.log(this)
         if (singlePage.Url().includes('ins')) this.initIns()
 
         this.readSql()
@@ -45,11 +42,15 @@ class SqlController2 extends SqlAbstractController {
     readSql = () => {
         if (!this.data) {
             conf.sql = readSql2R(conf.sqlKeyName)
-            console.log(conf.sqlKeyName, conf.sql1)
+            // if (singlePage.UrlList()[1].includes('sql_'))
+            if (singlePage.UrlList()[3]=='=')
+                conf.sql = 'SELECT * FROM (' + conf.sql
+                    + ') x WHERE ' + singlePage.UrlList()[2] + '=' + singlePage.UrlList()[4]
+            console.log(conf.sqlKeyName, conf.sql, 1)
+
             this.dataFactory.httpGetSql({ sql: conf.sql }
             ).then(responceData => {
-                this.data = responceData
-                conf.data = this.data
+                conf.data = this.data = responceData
                 console.log(this.data)
             })
         }
@@ -73,7 +74,7 @@ class InitPageController extends AbstractController {
     constructor($routeParams, dataFactory) {
         super()
         this.dataFactory = dataFactory
-        console.log(22, $routeParams, this.dataFactory, this)
+        // console.log(22, $routeParams, this.dataFactory, this)
     }
 
     keyDownEsc = () => { if (conf.modalDisplay.display == 'block') conf.modalDisplay.display = null }

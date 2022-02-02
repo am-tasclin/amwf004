@@ -13,6 +13,7 @@
 			{{e.tsps_v | date : 'mediumDate'}}, {{e.tsps_v | date : 'shortTime'}}
 		</span>
 		<span class="w3-tiny am-i"> {{e.dmtitle}} </span>
+		<span class="w3-tiny am-no-print"> [dev⇰]</span>
 		<div class="w3-container w3-border-left">
 			<div data-ng-repeat="er in ctrl.conf.encounter" data-ng-if="e.episode_id==er.episodeofcare_r2">
 
@@ -23,10 +24,7 @@
 
 				<span data-emrid="{{er.reason_id}}" data-p="2" data-am:emr:link>{{er.reason_code}}:
 					{{er.reason_i18n}}</span>
-				<span class="w3-tiny am-no-print"> [{{er.encounter_id}},ec={{er.episodeofcare_id}}] 
-					a1
-				</span>
-
+				<span class="w3-tiny am-no-print"> [dev⇰er={{er.encounter_id}},ec={{er.episodeofcare_id}}]</span>
 				<div class="w3-container w3-border-left " data-ng-if="er.dgcondition_id"
 					data-ng-click="ctrl.clicDiagnose(er)">
 					<span class="w3-small am-b">Дз:</span>

@@ -1,4 +1,5 @@
 'use strict'
+sql_app.group.gp_PWS.add()
 app.config(RouteProviderConfig)
 angular.forEach({
     amSqlHtml: AmSqlHtml,

@@ -4,6 +4,24 @@ singlePage.session = { tree: { l: { id: [45] }, r: { id: [45] } } }
 singlePage.index_template = 'index_template.html'
 sql_app.group.gp_ADN02.add()
 
+conf.adn = { cr: {} }
+conf.adn.cr.tree = {}
+conf.adn.cr.tree.urlGo = () => window.location.href = conf.adn.cr.tree.url()
+conf.adn.cr.tree.url = () => '#!/tree_' + singlePage.session.tree.l.id.join('_') + ',' + singlePage.session.tree.r.id.join('_')
+// conf.adn.cr.tree.url = () => singlePage.session.tree.l.id.join('_') + ',' + singlePage.session.tree.r.id.join('_')
+
+conf.adn.cr.tree.r = {}
+conf.adn.cr.tree.r.up = id => lFn.up(id, singlePage.session.tree.r.id
+    , singlePage.session.tree.r.id.indexOf(id)) && conf.adn.cr.tree.urlGo()
+
+    const lFn = {}
+lFn.up = (id, ids, p) => (p == 0 && ids.splice(ids.length, 0, ids.splice(0, 1)[0])
+    || ([ids[p - 1], ids[p]] = [ids[p], ids[p - 1]]))
+
+conf.adn.cr.tree.dmIds = (adnId) => {
+    return adnId
+}
+
 class InitPageController extends AbstractController {
     constructor(dataFactory) {
         super(); this.dataFactory = dataFactory
@@ -124,7 +142,7 @@ class InitTreeController extends InitPageController {
         super(dataFactory)
         angular.forEach(singlePage.UrlMap()['tree'].split(',')
             , (t, tk) => angular.forEach(t.split('_')
-                , (v, k) => singlePage.session.tree[!tk ? 'l' : 'r'].id[k] = v))
+                , (v, k) => singlePage.session.tree[!tk ? 'l' : 'r'].id[k] = 1 * v))
         if (singlePage.UrlMap()['tree'] == 'tree'
             && isNaN(singlePage.session.tree.l.id)
         ) singlePage.session.tree.l.id = 45
@@ -189,6 +207,7 @@ class RWADNDataFactory extends RWADN01DataFactory {
 
 }; app.factory('dataFactory', RWADNDataFactory)
 
+// console.log(buildSqlWithKeyValue('SelectADN', 'doc_id', 373458))
 
 let CarePlan_1 = {
     // fdf

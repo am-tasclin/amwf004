@@ -30,7 +30,11 @@ const addParentChild = v => !getSetParentChild(v).includes(v.doc_id) ?
 conf.modalDisplay = { display: null }
 
 // Get sql from our name
-const readSql2R = sqlN => replaceSql(sql_app[sqlN].sql)
+const readSql2R = sqlN => {
+    console.log(sqlN)
+    // console.log(sqlN, sql_app[sqlN])
+    return replaceSql(sql_app[sqlN].sql)
+}
 // Named structured SQL to native SQL
 const replaceSql = sql => {
     while (sql.includes(':sql_app.')) {

@@ -1,3 +1,5 @@
+'use strict'
+sql_app.group.gp_ADN01.add()
 const page = {}
 page.head = { title: 'DDCC:VS' }
 page.H1 = [

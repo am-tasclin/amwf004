@@ -10,7 +10,6 @@ if (window.location.href.includes('davw'))
 
 // console.log(sql_app.SelectADN.sql)
 
-
 conf.doctype_fa = {
     14: 'far fa-folder',
     17: 'far fa-file',
