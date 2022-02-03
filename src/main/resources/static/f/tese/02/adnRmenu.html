@@ -1,13 +1,14 @@
 <span class=" w3-dropdown-hover w3-hover-shadow w3-white">
     <span class="w3-opacity w3-small"> &nbsp; &nbsp;<i class="fas fa-ellipsis-v"></i>
     </span> &nbsp;
-    <div class="w3-dropdown-content w3-card-4 w3-left w3-right-align w3-small" style="right: 1px;">
+    <div class="w3-dropdown-content w3-card-4 w3-left w3-right-align w3-small11" style="right: 1px;">
         <button data-ng-click="ctrl.conf.adn.cr.tree.l.plus(adnId)" class="w3-btn w3-ripple w3-padding-small"><i
                 class="fas fa-level-up-alt fa-flip-horizontal"></i></button>
         [{{adnId}}]
         <button data-ng-click="ctrl.conf.adn.cr.tree.r.plus(adnId)" class="w3-btn w3-ripple w3-padding-small"><i
                 class="fas fa-level-up-alt"></i></button>
         <button title="{{ctrl.conf.eMap[adnId].parent}}" data-ng-click="ctrl.conf.adn.cr.tree[lr].parent(adnId)"
+            data-ng-if="ctrl.singlePage.session.tree[lr].id.includes(adnId)"
             class="w3-btn w3-ripple w3-padding-small w3-left"><i class="fas fa-level-down-alt"></i>
         </button>
         <div data-ng-if="ctrl.conf.eMap[adnId].reference" class="w3-left">
