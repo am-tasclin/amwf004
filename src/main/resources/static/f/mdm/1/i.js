@@ -3,6 +3,7 @@ app.config(RouteProviderConfig)
 singlePage.session = { tree: { l: { id: [45] }, r: { id: [45] } } }
 singlePage.index_template = 'index_template.html'
 sql_app.group.gp_ADN02.add()
+sql_app.group.gp_MedicationRequest.add()
 
 class InitPageController extends AbstractController {
     constructor(dataFactory) {

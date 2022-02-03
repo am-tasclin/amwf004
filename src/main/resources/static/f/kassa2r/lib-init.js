@@ -10,7 +10,6 @@ sql_app.cmd = {}
 sql_app.cmd.addGroup = (group) => sql_app.group[group]
     .add() && console.log(group, sql_app.group[group])
 
-
 const singlePage = {}/* $route fn */
     , conf = { eMap: {}, parentChild: {}, }/* conf page|app|content */
 class AbstractController {
@@ -57,9 +56,9 @@ conf.adn.cr.tree.l.dn = id => lFn.dn(singlePage.session.tree.l.id
 const lFn = {}
 lFn.parent = (ids, id) => ids.includes(conf.eMap[id].parent) && lFn.minus(ids, ids.indexOf(id)) ||
     (ids[ids.indexOf(id)] = conf.eMap[id].parent)
-
-lFn.plus = (ids, id) => !ids.includes(id) && ids.splice(0, 0, ids.indexOf(id) > 0 ? ids.splice(ids.indexOf(id), 1)[0] : id)
 lFn.minus = (ids, p) => ids.splice(p, 1)
+lFn.plus = (ids, id) => !ids.includes(id) && ids.splice(0, 0, ids.indexOf(id) > 0 ? ids
+    .splice(ids.indexOf(id), 1)[0] : id)
 lFn.dn = (ids, p) => (p + 1 == ids.length) && ids.splice(0, 0, ids.splice(ids.length - 1, 1)[0])
     || ([ids[p], ids[p + 1]] = [ids[p + 1], ids[p]])
 lFn.up = (ids, p) => (p == 0 && ids.splice(ids.length, 0, ids.splice(0, 1)[0])

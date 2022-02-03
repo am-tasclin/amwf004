@@ -229,9 +229,62 @@ sql_app.group.gp_TeseCOVID19 = {
     }
 }
 
+sql_app.group.gp_MedicationRequest = {
+    name: 'SQL collection - Призначення ліків',
+    add: () => {
+
+        sql_app.Quantity = {
+            name: 'Кількість',
+            sql: 'SELECT i.value quantity_value, f.value quantity_valuef, quantityCode.value quantity_code, quantityCode.reference2 quantity_code_id, quantityNum.doc_id quantity_id  \n\
+            , quantityNum.* FROM doc quantityNum \n\
+            LEFT JOIN integer i ON i.integer_id=quantityNum.doc_id \n\
+            LEFT JOIN double f ON f.double_id=quantityNum.doc_id \n\
+            LEFT JOIN ( SELECT d.*, value FROM doc d,string WHERE reference2=string_id \n\
+            ) quantityCode ON quantityCode.parent=quantityNum.doc_id AND quantityCode.reference = 368641 \n\
+            WHERE quantityNum.reference=368637 AND quantityNum.reference2=368636',
+        }
+
+        sql_app.Ratio = {
+            name: 'Співвідношення',
+            sql: 'SELECT n.quantity_value n_quantity_value, n.quantity_code n_quantity_code  \n\
+            , numerator.doc_id  ratio_id, numerator.doc_id  numerator_id, numerator.reference2 n_quantity_id --, n.*  \n\
+            , dn.quantity_value dn_quantity_value, dn.quantity_code dn_quantity_code --, dn.* \n\
+            , denominator.doc_id denominator_id, denominator.reference2 dn_quantity_id --, denominator.* \n\
+            FROM doc numerator \n\
+            LEFT JOIN ( :sql_app.Quantity ) n ON n.doc_id= numerator.reference2 \n\
+            LEFT JOIN doc denominator \n\
+            LEFT JOIN ( :sql_app.Quantity ) dn ON dn.doc_id= denominator.reference2 \n\
+            ON denominator.parent = numerator.doc_id \n\
+            WHERE  numerator.reference = 368676',
+        }
+
+        sql_app.Substance_code = {
+            name: 'Субстанція код',
+            sql: 'SELECT value substance_code, d.doc_id substance_id \n\
+            FROM doc d, string \n\
+            WHERE reference = 370024 AND string_id=reference2',
+        }
+
+        sql_app.Medication_sc = {
+            name: 'Медикамент субстанція',
+            sql: 'SELECT d.doc_id medication_id, item.doc_id item_id, strength.doc_id strength_ratio_id, substance.*, ratio.* FROM doc d \n\
+            LEFT JOIN (SELECT * FROM doc,sort WHERE doc_id=sort_id AND sort=1) item \n\
+            LEFT JOIN (:sql_app.Substance_code ) substance ON substance_id=item.reference2 \n\
+            LEFT JOIN doc strength \n\
+            LEFT JOIN (:sql_app.Ratio ) ratio ON ratio.numerator_id=strength.reference2 \n\
+            ON strength.parent=item.doc_id \n\
+            ON item.parent=d.doc_id \n\
+            WHERE d.reference=369998 and d.reference2=369993',
+        }
+
+        return true
+    }
+
+}
 sql_app.group.gp_PWS01 = {
     name: 'SQL collection 01 - Physician work station',
     add: () => {
+        sql_app.group.gp_MedicationRequest.add()
         sql_app.group.gp_ValueSet.add()
 
         sql_app.encounter_MedicationRequest_sc_doseQuantityTimingPeriod = {
@@ -263,37 +316,6 @@ sql_app.group.gp_PWS01 = {
             ON medication.medication_id=d.reference2 \n\
             WHERE d.reference=371469 ',
         }
-        sql_app.Medication_sc = {
-            name: 'Медикамент субстанція',
-            sql: 'SELECT d.doc_id medication_id, item.doc_id item_id, strength.doc_id strength_ratio_id, substance.*, ratio.* FROM doc d \n\
-            LEFT JOIN (SELECT * FROM doc,sort WHERE doc_id=sort_id AND sort=1) item \n\
-            LEFT JOIN (:sql_app.Substance_code ) substance ON substance_id=item.reference2 \n\
-            LEFT JOIN doc strength \n\
-            LEFT JOIN (:sql_app.Ratio ) ratio ON ratio.numerator_id=strength.reference2 \n\
-            ON strength.parent=item.doc_id \n\
-            ON item.parent=d.doc_id \n\
-            WHERE d.reference=369998 and d.reference2=369993',
-        }
-        sql_app.Substance_code = {
-            name: 'Субстанція код',
-            sql: 'SELECT value substance_code, d.doc_id substance_id \n\
-            FROM doc d, string \n\
-            WHERE reference = 370024 AND string_id=reference2',
-        }
-        sql_app.Ratio = {
-            name: 'Співвідношення',
-            sql: 'SELECT n.quantity_value n_quantity_value, n.quantity_code n_quantity_code  \n\
-            , numerator.doc_id  ratio_id, numerator.doc_id  numerator_id, numerator.reference2 n_quantity_id --, n.*  \n\
-            , dn.quantity_value dn_quantity_value, dn.quantity_code dn_quantity_code --, dn.* \n\
-            , denominator.doc_id denominator_id, denominator.reference2 dn_quantity_id --, denominator.* \n\
-            FROM doc numerator \n\
-            LEFT JOIN ( :sql_app.Quantity ) n ON n.doc_id= numerator.reference2 \n\
-            LEFT JOIN doc denominator \n\
-            LEFT JOIN ( :sql_app.Quantity ) dn ON dn.doc_id= denominator.reference2 \n\
-            ON denominator.parent = numerator.doc_id \n\
-            WHERE  numerator.reference = 368676',
-        }
-
 
         sql_app.DoseQuantity_timingPeriod = {
             name: 'Доза кількість, хронометраж період',
@@ -313,17 +335,6 @@ sql_app.group.gp_PWS01 = {
             FROM doc doseQuantity \n\
             LEFT JOIN (:sql_app.Quantity ) q ON q.doc_id=doseQuantity.reference2 \n\
             WHERE doseQuantity.reference=369975',
-        }
-
-        sql_app.Quantity = {
-            name: 'Кількість',
-            sql: 'SELECT i.value quantity_value, f.value quantity_valuef, quantityCode.value quantity_code, quantityCode.reference2 quantity_code_id, quantityNum.doc_id quantity_id  \n\
-            , quantityNum.* FROM doc quantityNum \n\
-            LEFT JOIN integer i ON i.integer_id=quantityNum.doc_id \n\
-            LEFT JOIN double f ON f.double_id=quantityNum.doc_id \n\
-            LEFT JOIN ( SELECT d.*, value FROM doc d,string WHERE reference2=string_id \n\
-            ) quantityCode ON quantityCode.parent=quantityNum.doc_id AND quantityCode.reference = 368641 \n\
-            WHERE quantityNum.reference=368637 AND quantityNum.reference2=368636',
         }
 
         sql_app.MedicationRequest_expectedSupplyDuration = {
