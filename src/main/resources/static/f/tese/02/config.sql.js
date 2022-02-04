@@ -229,10 +229,30 @@ sql_app.group.gp_TeseCOVID19 = {
     }
 }
 
+sql_app.group.gp_AdminModule = {
+    name: 'SQL collection - Адміністративний модуль',
+    add: () => {
+        sql_app.Immunication_encounter = {
+            name: 'Взаємодія пацієнта 01',
+            sql:'SELECT en.*, vaccineCode.doc_id er_vaccineCode_id, vaccineCode.reference2 vaccineCode_id \n\
+            , vcvs.*, immunication.doc_id immunication_id FROM doc immunication \n\
+            LEFT JOIN (SELECT * FROM doc where reference=84808) vaccineCode ON vaccineCode.parent=immunication.doc_id \n\
+            LEFT JOIN (:sql_app.FHIR_ValueSet_concept_code_display ) vcvs ON vcvs.code_id=vaccineCode.reference2 \n\
+            LEFT JOIN (:sql_app.Encounter_Patient01 ) en ON en.encounter_subject_id=immunication.reference2 \n\
+            WHERE immunication.reference=373793',
+        }
+        sql_app.Encounter_Patient01 = {
+            name: 'Взаємодія пацієнта 01',
+            sql:'SELECT doc_id encounter_subject_id, reference2 patient_id FROM \n\
+            doc er WHERE er.reference=373432',
+        }
+    }
+}
+
 sql_app.group.gp_MedicationRequest = {
     name: 'SQL collection - Призначення ліків',
     add: () => {
-
+        sql_app.group.gp_AdminModule.add()
         sql_app.Quantity = {
             name: 'Кількість',
             sql: 'SELECT i.value quantity_value, f.value quantity_valuef, quantityCode.value quantity_code, quantityCode.reference2 quantity_code_id, quantityNum.doc_id quantity_id  \n\
