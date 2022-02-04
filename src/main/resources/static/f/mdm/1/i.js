@@ -74,7 +74,7 @@ class InitPageController extends AbstractController {
     }
 
     createRowSql = () => {
-        console.log('-> click autoSql \n----\n', sql_app.autoSql.sql)
+        console.log('-> click autoSql \n----\n', sql_app.autoSql.rowSql)
         this.rowSql = sql_app.autoSql.createRowSql({ parent: singlePage.session.tree.l.selectedId })
     }
 
