@@ -11,118 +11,153 @@ sql_app.group.gp_ADN02 = {
         sql_app.autoSql = {
             name: 'зганарувати SQL через клік і зміст моделера даних',
 
-            rowSql: 'SELECT d.doc_id row_id, d.parent table_id, d.* \n\
-FROM doc d LEFT JOIN string ON string_id=doc_id \n\
-WHERE reference=:rowPattern.reference ',
-
-            createAdnSql: (id) => {
-                if (!singlePage.session.selectedLR) singlePage.session.selectedLR = 'l'
+            createAdnSql: id => {
+                const adnId = sql_app.autoSql.adnId(id), colName = sql_app.autoSql.colName(adnId)
                 let sql = 'SELECT * FROM doc :colName WHERE reference = :colNameId '
-                console.log(sql)
-                const adnId = id || singlePage.session.tree[singlePage.session.selectedLR].selectedId
-                const colNameId = conf.eMap[adnId].reference
-                console.log(adnId, singlePage.session.selectedLR, colNameId)
-                const colName = conf.eMap[colNameId].value_22
-                    || conf.eMap[colNameId].r_value_22 || conf.eMap[colNameId].rr_value_22
                 sql = sql.replace(':colName', colName)
-                    .replace(':colNameId', colNameId)
+                    .replace(':colNameId', conf.eMap[adnId].reference)
                     .replace('SELECT ', 'SELECT doc_id ' + colName + '_id, ')
                     .replace('SELECT ', 'SELECT parent ' + colName + '_parent, ')
-                console.log(adnId, singlePage.session.selectedLR, colNameId, colName, '\n', sql)
-                const strVal = '\n LEFT JOIN string ON string_id=doc_id'
+                if (conf.eMap[adnId].reference2)
+                    sql = sql.replace('SELECT ', 'SELECT reference2 r2_' + colName + '_id, ')
+                let contentVal = '\n LEFT JOIN string ON string_id=doc_id'
                 if (conf.eMap[adnId].r2_value_22) {
                     sql = sql
-                        .replace('doc ' + colName, 'doc ' + colName + strVal.replace('=doc_id', '=reference2'))
+                        .replace('doc ' + colName, 'doc ' + colName + contentVal.replace('=doc_id', '=reference2'))
                         .replace('SELECT ', 'SELECT value ' + colName + '_22, ')
                 } else if (conf.eMap[adnId].value_22) {
-                    console.log(strVal, sql.includes('doc ' + colName))
                     sql = sql
-                        .replace('doc ' + colName, 'doc ' + colName + strVal)
+                        .replace('doc ' + colName, 'doc ' + colName + contentVal)
                         .replace('SELECT ', 'SELECT value ' + colName + '_22, ')
+                } else if (conf.eMap[adnId].value_24) {
+                    contentVal = contentVal.replace('string', 'double').replace('string_', 'double_')
+                    sql = sql
+                        .replace('doc ' + colName, 'doc ' + colName + contentVal)
+                        .replace('SELECT ', 'SELECT value ' + colName + '_24, ')
                 }
                 sql = sql.replace(', *', '')
-                //sql_app.autoSql.sql = sql
-                return sql
+                return sql_app.autoSql.sql = sql
             },
 
-            createTableSql: (param) => {
-                console.log(param)
-                let tableSql = sql_app.autoSql.createRowSql(param)
-                const rowPatternEl = conf.eMap[conf.parentChild[param.parent][0]]
-                console.log(tableSql, rowPatternEl)
-                let selectColumnLJ = '', selectColumnName = ''
-                angular.forEach(conf.parentChild[rowPatternEl.doc_id], id => {
-                    let colName = conf.eMap[id].r_value_22 || conf.eMap[id].rr_value_22
-                    console.log(id, colName, sql_app.autoSql.createAdnSql(id))
-                    selectColumnLJ += '\n LEFT JOIN (' + sql_app.autoSql.createAdnSql(id) + ') '
-                        + colName + ' ON ' + colName + '_parent=d.doc_id '
-                    selectColumnName += ', ' + colName + '.* '
+            createTableRow2AdnSql: id => {
+                const adnId = sql_app.autoSql.adnId(id)
+                console.log(id, adnId, singlePage.session.selectedLR)
+                let selectColumnLJ = '', selectColumnName = '',
+                    sqlTable = sql_app.autoSql.createRowAdnSql(adnId)
+                sqlTable = 'SELECT * FROM (' + sqlTable + ') row'
+                angular.forEach(conf.parentChild[adnId], id => {
+                    const colName = sql_app.autoSql.colName(id)
+                    const sqlCol = sql_app.autoSql.createAdnSql(id)
+                    console.log(sqlCol, 1)
+                    selectColumnLJ += '\n LEFT JOIN (' + sqlCol + ') '
+                        + colName + ' ON ' + colName + '_parent=row_id '
+                    selectColumnName += sql_app.autoSql.colNames(sqlCol, colName)
+                    console.log(colName, id,)
                 })
-                console.log(selectColumnLJ)
-                tableSql = tableSql
-                    .replace('table_id', 'table_id' + selectColumnName)
-                    .replace('doc d ', 'doc d ' + selectColumnLJ)
-                return tableSql
+                sqlTable += selectColumnLJ
+                if (selectColumnName)
+                    sqlTable = sqlTable.replace('*', 'row.*, ' + selectColumnName)
+                return sql_app.autoSql.sql = sqlTable
             },
 
-            createRowSql: (param) => {
-                let rowPattern = conf.eMap[conf.parentChild[param.parent][0]]
-                // console.log(param.parent, sql_app.autoSql.rowSql, 1)
-                let tableName = conf.eMap[param.parent].r2_value_22
-                // let createRowTable = conf.eMap[conf.eMap[param.parent].reference2]
-
-                let rowFieldName = rowPattern.r_value_22 || rowPattern.rr_value_22
-                rowFieldName = tableName + '_' + rowFieldName
-                // rowFieldName = createRowTable.value_22 + '_' + rowFieldName
-
-                // console.log(rowPattern)
-                // console.log(rowFieldName + '\n', sql_app.autoSql.rowSql)
-                let rowSql = sql_app.autoSql.rowSql
-                    .replace(':rowPattern.reference', rowPattern.reference)
-                // console.log(rowSql)
-                let rowFields = 'value ' + rowFieldName
-                    + ', d.doc_id ' + rowFieldName + '_id'
-                // console.log(rowFields, 1)
-                rowSql = rowSql
-                    .replace('SELECT d.', 'SELECT ' + rowFields + ', d.')
-                    .replace(', d.*', '')
-                    + ' AND d.parent=' + param.parent
-                // console.log(rowSql)
-                return rowSql
+            createRowAdnSql: id => {
+                const adnId = sql_app.autoSql.adnId(id), colName = sql_app.autoSql.colName(adnId)
+                let sqlCol = sql_app.autoSql.createAdnSql(adnId)
+                let sql = 'SELECT * FROM (' + sqlCol + ') row'
+                sqlCol = sql_app.autoSql.colNames(sqlCol, colName)
+                sql = sql.replace('SELECT', 'SELECT ' + colName + '_id row_id,')
+                sql = sql.replace('SELECT', 'SELECT ' + colName + '_parent table_id,')
+                sql = sql.replace('*', sqlCol)
+                return sql_app.autoSql.sql = sql
             },
 
-            create: (param) => {
-                console.log(param)
-                let createTable = conf.eMap[conf.eMap[param.parent].reference2]
-                let virtualTableName = createTable.value_22
-                console.log(virtualTableName)
-
-                let rowSql = sql_app.autoSql.createRowSql(param)
-                console.log(rowSql)
-
-                sql = sql_app.autoSql.sql
-                    .replace(':param.parent', param.parent)
-                    .replace(':col.virtualTableName', virtualTableName)
-                    .replace(':doc.virtualTableName', virtualTableName)
-
-                console.log(sql)
-                sql = sql.replace(' WHERE'
-                    , '\n LEFT JOIN (' + rowSql
-                    + ') row ON row.row_id=' + virtualTableName + '.doc_id \n WHERE')
-                    .replace(virtualTableName + '.*', 'row.*')
-                console.log(sql)
-            },
+            adnId: id => id || singlePage.session.tree[singlePage.session.selectedLR].selectedId,
+            colName: id => conf.eMap[id].r_value_22 || conf.eMap[id].rr_value_22,
+            colNames: (sqlCol, colName) => sqlCol.split('FROM')[0]
+                .replace('SELECT value', '')
+                .replace('parent ' + colName + '_parent,', '')
+                .replace('reference2 ', '')
+                .replace('doc_id ', ''),
 
         }
     }
 }
+const toDel = {
+    rowSql: 'SELECT d.doc_id row_id, d.parent table_id, d.* \n\
+    FROM doc d LEFT JOIN string ON string_id=doc_id \n\
+    WHERE reference=:rowPattern.reference ',
+    createRowSql: (param) => {
+        let rowPattern = conf.eMap[conf.parentChild[param.parent][0]]
+        // console.log(param.parent, sql_app.autoSql.rowSql, 1)
+        let tableName = conf.eMap[param.parent].r2_value_22
+        // let createRowTable = conf.eMap[conf.eMap[param.parent].reference2]
 
+        let rowFieldName = rowPattern.r_value_22 || rowPattern.rr_value_22
+        rowFieldName = tableName + '_' + rowFieldName
+        // rowFieldName = createRowTable.value_22 + '_' + rowFieldName
+
+        // console.log(rowPattern)
+        // console.log(rowFieldName + '\n', sql_app.autoSql.rowSql)
+        let rowSql = sql_app.autoSql.rowSql
+            .replace(':rowPattern.reference', rowPattern.reference)
+        // console.log(rowSql)
+        let rowFields = 'value ' + rowFieldName
+            + ', d.doc_id ' + rowFieldName + '_id'
+        // console.log(rowFields, 1)
+        rowSql = rowSql
+            .replace('SELECT d.', 'SELECT ' + rowFields + ', d.')
+            .replace(', d.*', '')
+            + ' AND d.parent=' + param.parent
+        // console.log(rowSql)
+        return rowSql
+    },
+    createTableSql: (param) => {
+        console.log(param)
+        let tableSql = sql_app.autoSql.createRowSql(param)
+        const rowPatternEl = conf.eMap[conf.parentChild[param.parent][0]]
+        console.log(tableSql, rowPatternEl)
+        let selectColumnLJ = '', selectColumnName = ''
+        angular.forEach(conf.parentChild[rowPatternEl.doc_id], id => {
+            let colName = conf.eMap[id].r_value_22 || conf.eMap[id].rr_value_22
+            console.log(id, colName, sql_app.autoSql.createAdnSql(id))
+            selectColumnLJ += '\n LEFT JOIN (' + sql_app.autoSql.createAdnSql(id) + ') '
+                + colName + ' ON ' + colName + '_parent=d.doc_id '
+            selectColumnName += ', ' + colName + '.* '
+        })
+        console.log(selectColumnLJ)
+        tableSql = tableSql
+            .replace('table_id', 'table_id' + selectColumnName)
+            .replace('doc d ', 'doc d ' + selectColumnLJ)
+        return tableSql
+    },
+    create: (param) => {
+        console.log(param)
+        let createTable = conf.eMap[conf.eMap[param.parent].reference2]
+        let virtualTableName = createTable.value_22
+        console.log(virtualTableName)
+
+        let rowSql = sql_app.autoSql.createRowSql(param)
+        console.log(rowSql)
+
+        sql = sql_app.autoSql.sql
+            .replace(':param.parent', param.parent)
+            .replace(':col.virtualTableName', virtualTableName)
+            .replace(':doc.virtualTableName', virtualTableName)
+
+        console.log(sql)
+        sql = sql.replace(' WHERE'
+            , '\n LEFT JOIN (' + rowSql
+            + ') row ON row.row_id=' + virtualTableName + '.doc_id \n WHERE')
+            .replace(virtualTableName + '.*', 'row.*')
+        console.log(sql)
+    },
+}
 sql_app.group.gp_ADN01 = {
     name: 'ADN SQL collection',
     add: () => {
         sql_app.SelectADN = {
             name: 'Зчитати абстрактий вузел - TeSe',
-            sql: 'SELECT d.*, s.value value_22, su.value value_u_22, o.sort \n\
+            sql: 'SELECT d.*, s.value value_22, su.value value_u_22, f.value value_24, o.sort \n\
             , srr.value rr_value_22 \n\
             , sr.value r_value_22, dr.doctype r_doctype \n\
             , sr2.value r2_value_22 \n\
@@ -133,6 +168,7 @@ sql_app.group.gp_ADN01 = {
              LEFT JOIN string sr2 ON sr2.string_id=d.reference2 \n\
              LEFT JOIN doc dr ON dr.doc_id=d.reference \n\
              LEFT JOIN string srr ON srr.string_id=dr.reference \n\
+             LEFT JOIN double f ON f.double_id=d.doc_id \n\
              LEFT JOIN string s ON s.string_id=d.doc_id',
             oderBy: 'sort',
             rowId: 'doc_id',

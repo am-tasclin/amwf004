@@ -67,7 +67,6 @@ lFn.up = (ids, p) => (p == 0 && ids.splice(ids.length, 0, ids.splice(0, 1)[0])
 
 // Get sql from our name
 const readSql2R = sqlN => {
-    console.log(sqlN)
     // console.log(sqlN, sql_app[sqlN])
     return replaceSql(sql_app[sqlN].sql)
 }
