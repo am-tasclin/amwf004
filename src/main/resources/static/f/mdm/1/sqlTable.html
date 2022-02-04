@@ -49,8 +49,15 @@
         <button class="w3-btn w3-padding-small w3-border" data-ng-click="ctrl.createRowSql()">
             rowSql
         </button>
-        <button data-ng-if="ctrl.rowSql" class="w3-btn w3-padding-small w3-border"
+        <button class="w3-btn w3-padding-small w3-border" data-ng-click="ctrl.createTableSql()">
+            tableSql
+        </button>
+        <button class="w3-btn w3-padding-small w3-border" data-ng-click="ctrl.getSql('autoSql').createAdnSql()">
+            adnSql
+        </button>
+        <button data-ng-if="ctrl.rowSql||ctrl.getSql('autoSql').sql" class="w3-btn w3-padding-small w3-border"
             data-ng-click="ctrl.exeSql()">exe</button>
+        <pre class="w3-tiny">{{ctrl.getSql('autoSql').sql}}</pre>
         <pre class="w3-tiny">{{ctrl.rowSql}}</pre>
     </div>
     <table>

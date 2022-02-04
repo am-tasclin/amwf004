@@ -57,12 +57,20 @@ class InitPageController extends AbstractController {
 
     exeSql = () => {
         console.log(123)
-        this.dataFactory.readSqlTable(this.rowSql)
+        const sql = this.rowSql||sql_app.autoSql.sql
+        this.dataFactory.readSqlTable(sql)
         console.log(123)
     }
 
     createTabSql = () => {
         console.log(123)
+    }
+
+    createTableSql = () => {
+        const param = { parent: singlePage.session.tree.l.selectedId }
+        console.log('-> click createTableSql/autoSql \n----\n', sql_app.autoSql.sql)
+        this.rowSql = sql_app.autoSql.createTableSql(param)
+        console.log(this.rowSql)
     }
 
     createRowSql = () => {
@@ -102,6 +110,7 @@ class InitSessionController extends InitPageController {
 class InitChildrenController extends InitPageController {
     constructor(dataFactory) {
         super(dataFactory)
+        singlePage.session.selectedLR = singlePage.UrlMap()['children'].split('_')[1]
         if (!singlePage.session.tree.l.id)
             singlePage.session.tree.l.id = singlePage.UrlMap()['children']
         console.log(singlePage.UrlMap()['children'], singlePage.session.sqlKey)

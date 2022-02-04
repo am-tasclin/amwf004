@@ -11,19 +11,59 @@ sql_app.group.gp_ADN02 = {
         sql_app.autoSql = {
             name: 'зганарувати SQL через клік і зміст моделера даних',
 
-            sql: 'SELECT :col.virtualTableName.* \n\
+            sql1: 'SELECT :col.virtualTableName.* \n\
                 FROM doc :doc.virtualTableName WHERE parent = :param.parent ',
 
             rowSql: 'SELECT d.doc_id row_id, d.parent table_id, d.* \n\
                 FROM doc d LEFT JOIN string ON string_id=doc_id \n\
                 WHERE reference=:rowPattern.reference ',
 
+            createAdnSql: () => {
+                if (!singlePage.session.selectedLR) singlePage.session.selectedLR = 'l'
+                let sql = 'SELECT * FROM doc :colName WHERE reference = :colNameId '
+                console.log(sql)
+                const adnId = singlePage.session.tree[singlePage.session.selectedLR].selectedId
+                const colNameId = conf.eMap[adnId].reference
+                console.log(adnId, singlePage.session.selectedLR, colNameId)
+                const colName = conf.eMap[colNameId].value_22
+                    || conf.eMap[colNameId].r_value_22 || conf.eMap[colNameId].rr_value_22
+                // const colName = conf.eMap[colNameId].value_22 || (!!conf.eMap[conf.eMap[colNameId].reference]
+                //     && conf.eMap[conf.eMap[colNameId].reference].value_22)
+                sql = sql.replace(':colName', colName)
+                    .replace(':colNameId', colNameId)
+                    .replace('SELECT ', 'SELECT doc_id ' + colName + '_id, ')
+                    .replace('SELECT ', 'SELECT parent ' + colName + '_parent, ')
+                console.log(adnId, singlePage.session.selectedLR, colNameId, colName, '\n', sql)
+                const strVal = '\n LEFT JOIN string ON string_id=doc_id'
+                if (conf.eMap[adnId].r2_value_22) {
+                    sql = sql
+                        .replace('doc ' + colName, 'doc ' + colName + strVal.replace('=doc_id', '=reference2'))
+                        .replace('SELECT ', 'SELECT value ' + colName + '_22, ')
+                } else if (conf.eMap[adnId].value_22) {
+                    console.log(strVal, sql.includes('doc ' + colName))
+                    sql = sql
+                        .replace('doc ' + colName, 'doc ' + colName + strVal)
+                        .replace('SELECT ', 'SELECT value ' + colName + '_22, ')
+                }
+                sql = sql.replace(', *', '')
+                sql_app.autoSql.sql = sql
+            },
+            createTableSql: (param) => {
+                console.log(param)
+                let tableSql = sql_app.autoSql.createRowSql(param)
+                console.log(tableSql)
+                return tableSql
+            },
+
             createRowSql: (param) => {
                 let rowPattern = conf.eMap[conf.parentChild[param.parent][0]]
-                let createTable = conf.eMap[conf.eMap[param.parent].reference2]
+                console.log(param.parent, sql_app.autoSql.rowSql, 1)
+                let tableName = conf.eMap[param.parent].r2_value_22
+                // let createRowTable = conf.eMap[conf.eMap[param.parent].reference2]
 
                 let rowFieldName = rowPattern.r_value_22 || rowPattern.rr_value_22
-                rowFieldName = createTable.value_22 + '_' + rowFieldName
+                rowFieldName = tableName + '_' + rowFieldName
+                // rowFieldName = createRowTable.value_22 + '_' + rowFieldName
 
                 // console.log(rowPattern)
                 // console.log(rowFieldName + '\n', sql_app.autoSql.rowSql)
@@ -234,7 +274,7 @@ sql_app.group.gp_AdminModule = {
     add: () => {
         sql_app.Immunication_encounter = {
             name: 'Взаємодія пацієнта 01',
-            sql:'SELECT en.*, vaccineCode.doc_id er_vaccineCode_id, vaccineCode.reference2 vaccineCode_id \n\
+            sql: 'SELECT en.*, vaccineCode.doc_id er_vaccineCode_id, vaccineCode.reference2 vaccineCode_id \n\
             , vcvs.*, immunication.doc_id immunication_id FROM doc immunication \n\
             LEFT JOIN (SELECT * FROM doc where reference=84808) vaccineCode ON vaccineCode.parent=immunication.doc_id \n\
             LEFT JOIN (:sql_app.FHIR_ValueSet_concept_code_display ) vcvs ON vcvs.code_id=vaccineCode.reference2 \n\
@@ -243,7 +283,7 @@ sql_app.group.gp_AdminModule = {
         }
         sql_app.Encounter_Patient01 = {
             name: 'Взаємодія пацієнта 01',
-            sql:'SELECT doc_id encounter_subject_id, reference2 patient_id FROM \n\
+            sql: 'SELECT doc_id encounter_subject_id, reference2 patient_id FROM \n\
             doc er WHERE er.reference=373432',
         }
     }
