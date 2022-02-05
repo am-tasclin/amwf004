@@ -66,10 +66,8 @@ lFn.up = (ids, p) => (p == 0 && ids.splice(ids.length, 0, ids.splice(0, 1)[0])
 
 
 // Get sql from our name
-const readSql2R = sqlN => {
-    // console.log(sqlN, sql_app[sqlN])
-    return replaceSql(sql_app[sqlN].sql)
-}
+const readSql2R = sqlN => sql_app[sqlN] && replaceSql(sql_app[sqlN].sql)
+
 // Named structured SQL to native SQL
 const replaceSql = sql => {
     while (sql.includes(':sql_app.')) {
@@ -112,14 +110,14 @@ class RWDataFactory {
 
     httpGetSql = params => {
         let deferred = this.$q.defer()
-        if (params.limit) sqlRowLimit = params.limit
-        params.sql = params.sql + ' LIMIT ' + this.sqlRowLimit
-
-        this.$http.get(this.urlSql, { params: params }
-        ).then(response => deferred.resolve(response.data)
-            , response => console.error(response.status)
-        )
-
+        if (params.sql) {
+            if (params.limit) sqlRowLimit = params.limit
+            params.sql = params.sql + ' LIMIT ' + this.sqlRowLimit
+            this.$http.get(this.urlSql, { params: params }
+            ).then(response => deferred.resolve(response.data)
+                , response => console.error(response.status)
+            )
+        }else deferred.resolve({hello:'Hello World! no SQL'})
         return deferred.promise
     }
     // deferred.reject(response.status)

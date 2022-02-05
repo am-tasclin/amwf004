@@ -11,7 +11,8 @@ const buildSqlWithKeyValue = (sqlName, key, value) => {
         // sql += ' WHERE ' + whereDocAlias + key + ' = ' + value
         sql = 'SELECT * FROM (' + sql + ') x WHERE ' + key + ' = ' + value
     }
-    if (sql_app[sqlName].oderBy) sql += ' ORDER BY ' + sql_app[sqlName].oderBy
+    
+    if (sql_app[sqlName] && sql_app[sqlName].oderBy) sql += ' ORDER BY ' + sql_app[sqlName].oderBy
     return sql
 }
 
