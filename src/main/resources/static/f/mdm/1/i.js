@@ -55,12 +55,19 @@ class InitPageController extends AbstractController {
         }
     }
 
-    exeSql = () => {
-        console.log(123)
-        const sql = this.rowSql || sql_app.autoSql.sql
-        this.dataFactory.readSqlTable(sql)
-        console.log(123)
+    clickRow = row => {
+        singlePage.session.selectedRow = row
+        const rowMeta = conf.eMap[singlePage.session.sql.split('_')[1]]
+        console.log(123, rowMeta)
     }
+
+    editRow = () => {
+        console.log(123)
+        singlePage.session.CRUD = 'U'
+    }
+
+    exeSql = () => (singlePage.session.CRUD = 'R') && this.dataFactory.readSqlTable(sql_app.autoSql.sql)
+
 
     createTabSql = () => {
         console.log(123)

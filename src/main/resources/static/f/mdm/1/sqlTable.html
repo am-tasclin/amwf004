@@ -8,13 +8,12 @@
                 sqls
             </button>
             <div class="w3-leftbar" data-ng-if="ctrl.singlePage.session.menuSqls">
-                a1
-                <a title="{{sqlName}}" class="am-0u" href="#!/sql_{{sqlName}}"
-                 data-ng-if="ctrl.getSql(sqlName).sql"
+                <a title="{{sqlName}}" class="am-0u" href="#!/sql_{{sqlName}}" data-ng-if="ctrl.getSql(sqlName).sql"
                     data-ng-repeat="sqlName in ctrl.sqlNames()">
                     <div data-ng-class="{'w3-green':ctrl.singlePage.session.sql==sqlName}" class="w3-hover-shadow">
                         {{sqlName}} </div>
                 </a>
+                &nbsp;
             </div>
             <div>
                 <span class="w3-tiny am-b">parent:</span>
@@ -43,31 +42,39 @@
     </span>
     {{ctrl.getSql(ctrl.singlePage.session.sql).name}}
     <div data-ng-if="true||ctrl.conf.eMap[ctrl.singlePage.session.tree.l.selectedId].reference==369358">
-        <span class="w3-tiny am-b"> auto sql:</span>
-        sql_app.autoSql.parent_{{ctrl.singlePage.session.tree.l.selectedId}}
-        --
-        <!--
-            <button class="w3-btn w3-padding-small w3-border" data-ng-click="ctrl.createTableSql()">
-                tableSql
-            </button>
-            <button class="w3-btn w3-padding-small w3-border" data-ng-click="ctrl.createRowSql()">
-                rowSql
-            </button>
-        -->
-        <button class="w3-btn w3-padding-small w3-border" data-ng-click="ctrl.getSql('autoSql').createTableRow2AdnSql()">
+        <span class="w3-hover-shadow w3-dropdown-hover w3-white w3-border-top">
+            <span class="w3-tiny am-b"> auto sql:</span> autoSql_{{ctrl.singlePage.session.tree.l.selectedId}}
+            <div class="w3-dropdown-content w3-border" style="width: 750px;">
+                <pre class="w3-tiny">{{ctrl.getSql('autoSql').sql}}</pre>
+            </div>
+        </span>
+        <button class="w3-btn w3-padding-small w3-border"
+            data-ng-click="ctrl.getSql('autoSql').createTableRow2AdnSql()">
             tableRow2AdnSql
         </button>
         <button class="w3-btn w3-padding-small w3-border" data-ng-click="ctrl.getSql('autoSql').createRowAdnSql()">
             rowAdnSql
         </button>
-        <button class="w3-btn w3-padding-small w3-border" 
-        data-ng-click="ctrl.getSql('autoSql').createAdnSql()">
+        <button class="w3-btn w3-padding-small w3-border" data-ng-click="ctrl.getSql('autoSql').createAdnSql()">
             adnSql
         </button>
-        <button data-ng-if="ctrl.rowSql||ctrl.getSql('autoSql').sql" class="w3-btn w3-padding-small w3-border"
-            data-ng-click="ctrl.exeSql()">exe</button>
-        <pre class="w3-tiny">{{ctrl.getSql('autoSql').sql}}</pre>
-        <pre class="w3-tiny">{{ctrl.rowSql}}</pre>
+        <span data-ng-if="ctrl.rowSql||ctrl.getSql('autoSql').sql"> |
+            <button class="w3-btn w3-padding-small w3-border" data-ng-click="ctrl.exeSql()">play&nbsp;<i
+                    class="fas fa-play"></i></button>
+            <button class="w3-btn w3-padding-small w3-border" data-ng-click="ctrl.editRow()">edit&nbsp;<i
+                    class="fas fa-edit"></i></button>
+        </span>
+        <div data-ng-if="ctrl.singlePage.session.CRUD == 'U'" class="w3-card-4">&nbsp;
+            <i class="fas fa-edit"></i>&nbsp;edit
+            <span data-ng-repeat="m in [ctrl.conf.eMap[ctrl.singlePage.session.sql.split('_')[1]]]">
+                type={{m.reference}}/{{m.r_value_22}}
+                <span data-ng-repeat="(k,v) in m" data-ng-if="v">
+                    |{{k}}|
+                </span>
+            </span>
+        </div>
+        <pre data-ng-if="!ctrl.singlePage.session.CRUD || ctrl.singlePage.session.CRUD == 'R'" class="w3-tiny"
+            style="max-height: 5vh; overflow: auto; ">{{ctrl.getSql('autoSql').sql}}</pre>
     </div>
     <table>
         <thead class="w3-blue-gray w3-tiny">
@@ -77,7 +84,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-click="ctrl.singlePage.session.selectedRowId = r[ctrl.getSql(ctrl.singlePage.session.sql).rowId]||r.doc_id"
+            <tr data-ng-click="(ctrl.singlePage.session.selectedRowId = r[ctrl.getSql(ctrl.singlePage.session.sql).rowId]||r.doc_id) && ctrl.clickRow(r)"
                 data-ng-class="{'w3-card w3-light-green':ctrl.isSelectedRow(r)}" class="w3-hover-shadow"
                 data-ng-repeat="r in ctrl.conf.sqlTableData">
                 <td data-ng-if="!ctrl.sql_app[ctrl.conf.sqlKeyName].noShow.includes(k)"

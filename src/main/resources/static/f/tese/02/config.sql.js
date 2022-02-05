@@ -51,12 +51,14 @@ sql_app.group.gp_ADN02 = {
                     console.log(sqlCol, 1)
                     selectColumnLJ += '\n LEFT JOIN (' + sqlCol + ') '
                         + colName + ' ON ' + colName + '_parent=row_id '
-                    selectColumnName += sql_app.autoSql.colNames(sqlCol, colName)
+                    selectColumnName += ', ' + sql_app.autoSql.colNames(sqlCol, colName)
                     console.log(colName, id,)
                 })
                 sqlTable += selectColumnLJ
                 if (selectColumnName)
-                    sqlTable = sqlTable.replace('*', 'row.*, ' + selectColumnName)
+                    sqlTable = sqlTable.replace('*', 'row.* ' + selectColumnName)
+                sql_app['TableRow2Adn_' + adnId] = { sql: sqlTable, rowId: 'row_id' }
+                singlePage.session.sql = 'TableRow2Adn_' + adnId
                 return sql_app.autoSql.sql = sqlTable
             },
 
@@ -369,6 +371,7 @@ sql_app.group.gp_MedicationRequest = {
             sql: 'SELECT value substance_code, d.doc_id substance_id \n\
             FROM doc d, string \n\
             WHERE reference = 370024 AND string_id=reference2',
+            rowId: 'substance_id',
         }
 
         sql_app.Medication_sc = {
