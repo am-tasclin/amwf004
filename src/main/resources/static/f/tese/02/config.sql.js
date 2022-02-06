@@ -57,7 +57,7 @@ sql_app.group.gp_ADN02 = {
                 sqlTable += selectColumnLJ
                 if (selectColumnName)
                     sqlTable = sqlTable.replace('*', 'row.* ' + selectColumnName)
-                sql_app['TableRow2Adn_' + adnId] = { sql: sqlTable, rowId: 'row_id' }
+                sql_app['TableRow2Adn_' + adnId] = { sql: sqlTable, rowId: 'row_id',parentId:'table_id' }
                 singlePage.session.sql = 'TableRow2Adn_' + adnId
                 return sql_app.autoSql.sql = sqlTable
             },

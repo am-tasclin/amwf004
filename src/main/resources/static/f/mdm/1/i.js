@@ -66,7 +66,18 @@ class InitPageController extends AbstractController {
         singlePage.session.CRUD = 'U'
     }
 
-    exeSql = () => (singlePage.session.CRUD = 'R') && this.dataFactory.readSqlTable(sql_app.autoSql.sql)
+    exeSql = () => {
+        const sessionSqlObj = sql_app[singlePage.session.sql]
+        console.log(singlePage.session.sql, '\n', sessionSqlObj)
+        let sql = sessionSqlObj.sql
+        if (sessionSqlObj.parentId && sessionSqlObj.parentIn) {
+            sql = 'SELECT * FROM (' + sql + ') x WHERE ' + sessionSqlObj.parentId + ' IN (' + sessionSqlObj.parentIn + ')'
+            console.log(sql)
+        }
+        // (
+        singlePage.session.CRUD = 'R' //) && 
+        this.dataFactory.readSqlTable(sql)
+    }
 
 
     createTabSql = () => {
