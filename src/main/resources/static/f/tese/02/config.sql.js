@@ -13,6 +13,7 @@ sql_app.group.gp_ADN02 = {
 
             createAdnSql: id => {
                 const adnId = sql_app.autoSql.adnId(id), colName = sql_app.autoSql.colName(adnId)
+                console.log(adnId, id, colName)
                 let sql = 'SELECT * FROM doc :colName WHERE reference = :colNameId '
                 sql = sql.replace(':colName', colName)
                     .replace(':colNameId', conf.eMap[adnId].reference)
@@ -36,7 +37,18 @@ sql_app.group.gp_ADN02 = {
                         .replace('SELECT ', 'SELECT value ' + colName + '_24, ')
                 }
                 sql = sql.replace(', *', '')
+                console.log(colName + '_id')
+                sql_app['AdnSql_' + adnId] = { sql: sql, rowId: colName + '_id', parentId: colName + '_parent' }
+                singlePage.session.sql = 'AdnSql_' + adnId
                 return sql_app.autoSql.sql = sql
+            },
+
+            createSessioSql: id => {
+                const adnId = sql_app.autoSql.adnId(id)
+                console.log(id, adnId, singlePage.session.sql
+                    , sql_app[singlePage.session.sql], 'create' + singlePage.session.sql.split('_')[0])
+                if (!sql_app[singlePage.session.sql])
+                    sql_app.autoSql['create' + singlePage.session.sql.split('_')[0]](adnId)
             },
 
             createTableRow2AdnSql: id => {
@@ -57,26 +69,37 @@ sql_app.group.gp_ADN02 = {
                 sqlTable += selectColumnLJ
                 if (selectColumnName)
                     sqlTable = sqlTable.replace('*', 'row.* ' + selectColumnName)
-                sql_app['TableRow2Adn_' + adnId] = { sql: sqlTable, rowId: 'row_id',parentId:'table_id' }
+                sql_app['TableRow2Adn_' + adnId] = { sql: sqlTable, rowId: 'row_id', parentId: 'table_id' }
                 singlePage.session.sql = 'TableRow2Adn_' + adnId
                 return sql_app.autoSql.sql = sqlTable
             },
 
             createRowAdnSql: id => {
                 const adnId = sql_app.autoSql.adnId(id), colName = sql_app.autoSql.colName(adnId)
+                // console.log(id, adnId, colName)
                 let sqlCol = sql_app.autoSql.createAdnSql(adnId)
+                // console.log(sqlCol)
                 let sql = 'SELECT * FROM (' + sqlCol + ') row'
+                // console.log(sql)
                 sqlCol = sql_app.autoSql.colNames(sqlCol, colName)
+                // console.log(sqlCol)
                 sql = sql.replace('SELECT', 'SELECT ' + colName + '_id row_id,')
                 sql = sql.replace('SELECT', 'SELECT ' + colName + '_parent table_id,')
                 sql = sql.replace('*', sqlCol)
+                sql_app['RowAdnSql_' + adnId] = { sql: sql, rowId: 'row_id', parentId: 'table_id' }
+                singlePage.session.sql = 'RowAdnSql_' + adnId
                 return sql_app.autoSql.sql = sql
             },
 
             adnId: id => id || singlePage.session.tree[singlePage.session.selectedLR].selectedId,
-            colName: id => conf.eMap[id].r_value_22 || conf.eMap[id].rr_value_22,
+
+            colName: id => conf.eMap[id].r_value_22 && conf.eMap[id].rr_value_22
+                && (conf.eMap[id].r_value_22 + '_' + conf.eMap[id].rr_value_22)
+                || conf.eMap[id].r_value_22 || conf.eMap[id].rr_value_22,
+
             colNames: (sqlCol, colName) => sqlCol.split('FROM')[0]
                 .replace('SELECT value', '')
+                .replace('SELECT ', '')
                 .replace('parent ' + colName + '_parent,', '')
                 .replace('reference2 ', '')
                 .replace('doc_id ', ''),

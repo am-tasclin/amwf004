@@ -79,10 +79,7 @@ class InitPageController extends AbstractController {
         this.dataFactory.readSqlTable(sql)
     }
 
-
-    createTabSql = () => {
-        console.log(123)
-    }
+    getSqlAppNames = () => Object.keys(sql_app)
 
     createTableSql = () => {
         const param = { parent: singlePage.session.tree.l.selectedId }
