@@ -1,8 +1,10 @@
 <div data-ng-mouseover="ctrl.mouseover_item=adnId" class="w3-hover-shadow" data-ng-class="{'w3-card w3-light-green':ctrl.isSelectADN(adnId, lr, k),
         'w3-light-gray':ctrl.singlePage.session.tree[lr].id[k]==adnId,}">
     <span class="w3-dropdown-hover w3-white">
-        <span class="w3-tiny"> [{{adnId}}{{ctrl.conf.eMap[adnId].doctype
-            && (24==ctrl.conf.eMap[adnId].doctype ? ',f':
+        <span class="w3-tiny" title="{{ctrl.conf.eMap[adnId].doctype}}"> [{{adnId}}{{
+            ctrl.conf.eMap[adnId].doctype && (
+            24==ctrl.conf.eMap[adnId].doctype ? ',f':
+            25==ctrl.conf.eMap[adnId].doctype ? ',ts':
             22==ctrl.conf.eMap[adnId].doctype ? ',s':'')
             }}]
             <i data-ng-if="ctrl.getConf('doctype_fa')[ctrl.conf.eMap[adnId]
@@ -21,7 +23,9 @@
             }}{{ctrl.conf.eMap[adnId].value_22
             ||ctrl.conf.eMap[adnId].value_u_22
             ||ctrl.conf.eMap[adnId].value_24
-            }}{{ctrl.conf.eMap[adnId].doctype==37?'[]':''}}
+            }}{{ctrl.conf.eMap[adnId].doctype==37?'[]':''
+            }}{{ctrl.conf.eMap[adnId].value_25|date:'shortDate'}}{{ctrl.conf.eMap[adnId].value_25&&','
+            }}{{ctrl.conf.eMap[adnId].value_25|date:'shortTime'}}
             <span class="w3-tiny" title="r:{{ctrl.conf.eMap[adnId].reference
     }}" data-ng-if="ctrl.conf.eMap[adnId]
     .rr_value_22">{{ctrl.conf.eMap[adnId].rr_value_22}}::{{

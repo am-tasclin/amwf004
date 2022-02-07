@@ -182,10 +182,10 @@ sql_app.group.gp_ADN01 = {
     add: () => {
         sql_app.SelectADN = {
             name: 'Зчитати абстрактий вузел - TeSe',
-            sql: 'SELECT d.*, s.value value_22, su.value value_u_22, f.value value_24, o.sort \n\
-            , srr.value rr_value_22 \n\
+            sql: 'SELECT d.*, s.value value_22, su.value value_u_22, f.value value_24 \n\
+            , ts.value value_25, srr.value rr_value_22 \n\
             , sr.value r_value_22, dr.doctype r_doctype \n\
-            , sr2.value r2_value_22 \n\
+            , sr2.value r2_value_22, o.sort \n\
             FROM tese.doc d \n\
              LEFT JOIN sort o ON sort_id=d.doc_id \n\
              LEFT JOIN string_u su ON su.string_u_id=d.doc_id \n\
@@ -193,6 +193,7 @@ sql_app.group.gp_ADN01 = {
              LEFT JOIN string sr2 ON sr2.string_id=d.reference2 \n\
              LEFT JOIN doc dr ON dr.doc_id=d.reference \n\
              LEFT JOIN string srr ON srr.string_id=dr.reference \n\
+             LEFT JOIN timestamp ts ON ts.timestamp_id=d.doc_id \n\
              LEFT JOIN double f ON f.double_id=d.doc_id \n\
              LEFT JOIN string s ON s.string_id=d.doc_id',
             oderBy: 'sort',
