@@ -47,8 +47,18 @@ class InitPageController extends AbstractController {
             , id => this.dataFactory.getReadADN(id)))
 
     readSessionSqlTable = () => {
-        console.log('sql', singlePage.session.sql, sql_app[singlePage.session.sql])
-        if (singlePage.session.sql) {
+        // console.log('sql', singlePage.session.sql, sql_app[singlePage.session.sql])
+        console.log('sql', singlePage.session.sql,)
+        const sqlColumnsPattern = 'LEFT JOIN (:columnSql ) :columnName ON :columnName_parent=row_id '
+        if (singlePage.session.sql && sql_app[singlePage.session.sql]) {
+            let sqlColumns = ''
+            angular.forEach(sql_app[singlePage.session.sql].columns, (v, k) => {
+                sqlColumns += '\n' + sqlColumnsPattern
+                    .replace(':columnSql', sql_app[v.sqlName + '_' + k].sql)
+                    .replaceAll(':columnName', sql_app[v.sqlName + '_' + k].colName)
+                console.log(k, v.sqlName,)
+            })
+            // console.log(sqlColumns, 1)
             const sql = buildSqlWithKeyValue(singlePage.session.sql
                 , singlePage.session.sqlKey, singlePage.session.sqlValue)
             this.dataFactory.readSqlTable(sql)

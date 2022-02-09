@@ -64,18 +64,63 @@ lFn.dn = (ids, p) => (p + 1 == ids.length) && ids.splice(0, 0, ids.splice(ids.le
 lFn.up = (ids, p) => (p == 0 && ids.splice(ids.length, 0, ids.splice(0, 1)[0])
     || ([ids[p - 1], ids[p]] = [ids[p], ids[p - 1]]))
 
-
 // Get sql from our name
-const readSql2R = sqlN => sql_app[sqlN] && replaceSql(sql_app[sqlN].sql)
+const pathValue = (o, a) => a.length == 0 ? o : pathValue(o[a.shift()], a),
+    firstFunctionObj = (o, a) => a[0].includes('(') ? o[a[0].split('(')[0]] : a.length == 0 ? o : firstFunctionObj(o[a.shift()], a),
+    firstFunctionName = a => a[0].includes('(') ? a[0].split('(')[0] : a.length == 0 ? null : a.shift() && firstFunctionName(a)
 
 // Named structured SQL to native SQL
 const replaceSql = sql => {
+
+    while (sql.includes(':fn_sql_app.')) {
+        const sql_fnStr = sql.split(':fn_sql_app.')[1].split(' ')[0]
+        let sql_fnPath = sql_fnStr.split('.')
+        const fnName = firstFunctionName(sql_fnPath)
+        // console.log(sql_fnStr, fnName)
+        const fnParamsStr = sql_fnStr.split(fnName + '(')[1].split(')')[0]
+        console.log(sql_fnStr, fnName, '\n-fn(PARAMS)->\n', fnParamsStr)
+        sql_fnPath = sql_fnStr.split('.')
+        console.log(sql_fnStr, sql_fnPath, 1)
+        const fnObj = firstFunctionObj(sql_app[sql_fnPath.shift()], sql_fnPath)
+        sql_fnPath = fnParamsStr.split('.')
+        // console.log(sql_fnPath)
+        const fnParamObj = pathValue(sql_app[sql_fnPath.shift()], sql_fnPath)
+        // console.log(fnObj, fnParamObj)
+        let fnSql = fnObj(fnParamObj)
+        sql = sql.replace(':fn_sql_app.' + sql_fnStr, fnSql)
+        console.log(sql)
+    }
+
+    while (sql.includes(':var_sql_app.')) {
+        const sql_varName = sql.split(':var_sql_app.')[1].split(' ')[0],
+            sql_varPath = sql_varName.split('.'),
+            sql_varVal = pathValue(sql_app[sql_varPath.shift()], sql_varPath)
+        // console.log(sql_varName, '=', sql_varVal)
+        sql = sql.replace(':var_sql_app.' + sql_varName, sql_varVal)
+    }
+
     while (sql.includes(':sql_app.')) {
         let sql_name = sql.split(':sql_app.')[1].split(' ')[0]
+        console.log(sql_name)
         let sql_inner = readSql2R(sql_name)
         sql = sql.replace(':sql_app.' + sql_name, sql_inner)
     }
     return '' + sql
+}
+
+const readSql2R = sqlN => sql_app[sqlN] && replaceSql(sql_app[sqlN].sql)
+
+const buildSqlWithKeyValue = (sqlName, key, value) => {
+    let sql = readSql2R(sqlName)
+    if (key && value) {
+        // const whereDocAlias = sql_app[sqlName].whereDocAlias ?
+        //     (sql_app[sqlName].whereDocAlias + '.') : ''
+        // sql += ' WHERE ' + whereDocAlias + key + ' = ' + value
+        sql = 'SELECT * FROM (' + sql + ') x WHERE ' + key + ' = ' + value
+    }
+
+    if (sql_app[sqlName] && sql_app[sqlName].oderBy) sql += ' ORDER BY ' + sql_app[sqlName].oderBy
+    return sql
 }
 
 class AmSqlHtml {
@@ -117,7 +162,7 @@ class RWDataFactory {
             ).then(response => deferred.resolve(response.data)
                 , response => console.error(response.status)
             )
-        }else deferred.resolve({hello:'Hello World! no SQL'})
+        } else deferred.resolve({ hello: 'Hello World! no SQL' })
         return deferred.promise
     }
     // deferred.reject(response.status)

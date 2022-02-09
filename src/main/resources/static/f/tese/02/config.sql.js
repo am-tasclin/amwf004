@@ -11,34 +11,89 @@ sql_app.group.gp_ADN02 = {
         sql_app.autoSql = {
             name: 'зганарувати SQL через клік і зміст моделера даних',
 
+            doctypeName: {
+                25: 'timestamp',
+            },
+
+            joinColumnNames: o => {
+                let sqlColumns = ''
+                angular.forEach(o, (v, k) => sqlColumns
+                    += ', ' + sql_app[v.sqlName + '_' + k].columnNames)
+                return sqlColumns
+            },
+
+            sqlColumnsPattern: 'LEFT JOIN (:columnSql ) :columnName ON :columnName_parent = row_id ',
+            joinColumnsSql: o => {
+                let sqlColumns = ''
+                angular.forEach(o, (v, k) => sqlColumns += '\n' + sql_app.autoSql.sqlColumnsPattern
+                    .replace(':columnSql', sql_app[v.sqlName + '_' + k].sql)
+                    .replaceAll(':columnName', sql_app[v.sqlName + '_' + k].colName))
+                return sqlColumns
+            },
+
+            createR2ValueSql: id => {
+                let sql = 'SELECT d.* FROM doc r2, doc d \n\
+ WHERE d.reference2=:r2adn AND d.reference=:r1adn AND r2.doc_id=d.reference2'
+                    , subSql = 'LEFT JOIN :content v ON v.:content_id=d.doc_id', content = 'string'
+                const adnId = sql_app.autoSql.adnId(id), adnObj = conf.eMap[adnId]
+                    , colName = adnObj.r_value_22 + '_' + adnObj.r2_value_22
+                console.log(id, adnId, colName, adnObj, adnObj.r2_doctype, '\n', subSql)
+                sql = sql.replace(':r2adn', adnObj.reference2).replace(':r1adn', adnObj.reference)
+                content = sql_app.autoSql.doctypeName[adnObj.r2_doctype]
+                subSql = subSql.replaceAll(':content', content)
+                console.log(sql, '\n', content, '\n', subSql)
+                sql = sql
+                    .replace('doc d', 'doc d \n' + subSql)
+                    .replace('SELECT ', 'SELECT d.parent ' + colName + '_parent, ')
+                    .replace('SELECT ', 'SELECT d.doc_id ' + colName + '_id, ')
+                    .replace('SELECT ', 'SELECT v.value ' + colName + '_' + adnObj.r2_doctype + ', ')
+                    .replace(', d.* ', ' ')
+                console.log(sql,)
+                sql_app['R2ValueSql_' + adnId] = {
+                    rowId: colName + '_id', parentId: colName + '_parent', sql: sql
+                }
+                singlePage.session.sql = 'R2ValueSql_' + adnId
+                return sql_app.autoSql.sql = sql
+            },
+
             createAdnSql: id => {
                 const adnId = sql_app.autoSql.adnId(id), colName = sql_app.autoSql.colName(adnId)
                 console.log(adnId, id, colName)
                 let sql = 'SELECT * FROM doc :colName WHERE reference = :colNameId '
+                let columnNames = colName + '_id, '
                 sql = sql.replace(':colName', colName)
                     .replace(':colNameId', conf.eMap[adnId].reference)
                     .replace('SELECT ', 'SELECT doc_id ' + colName + '_id, ')
                     .replace('SELECT ', 'SELECT parent ' + colName + '_parent, ')
-                if (conf.eMap[adnId].reference2)
+                if (conf.eMap[adnId].reference2) {
                     sql = sql.replace('SELECT ', 'SELECT reference2 r2_' + colName + '_id, ')
+                    columnNames += 'r2_' + colName + '_id, '
+                }
                 let contentVal = '\n LEFT JOIN string ON string_id=doc_id'
                 if (conf.eMap[adnId].r2_value_22) {
                     sql = sql
                         .replace('doc ' + colName, 'doc ' + colName + contentVal.replace('=doc_id', '=reference2'))
                         .replace('SELECT ', 'SELECT value ' + colName + '_22, ')
+                    columnNames += colName + '_22, '
                 } else if (conf.eMap[adnId].value_22) {
                     sql = sql
                         .replace('doc ' + colName, 'doc ' + colName + contentVal)
                         .replace('SELECT ', 'SELECT value ' + colName + '_22, ')
+                    columnNames += colName + '_22, '
                 } else if (conf.eMap[adnId].value_24) {
                     contentVal = contentVal.replace('string', 'double').replace('string_', 'double_')
                     sql = sql
                         .replace('doc ' + colName, 'doc ' + colName + contentVal)
                         .replace('SELECT ', 'SELECT value ' + colName + '_24, ')
+                    columnNames += colName + '_24, '
                 }
                 sql = sql.replace(', *', '')
                 console.log(colName + '_id')
-                sql_app['AdnSql_' + adnId] = { sql: sql, rowId: colName + '_id', parentId: colName + '_parent' }
+                columnNames = columnNames.split('').reverse().join('').substring(2).split('').reverse().join('')
+                sql_app['AdnSql_' + adnId] = {
+                    sql: sql, rowId: colName + '_id', parentId: colName + '_parent',
+                    colName: colName, columnNames: columnNames,
+                }
                 singlePage.session.sql = 'AdnSql_' + adnId
                 return sql_app.autoSql.sql = sql
             },
@@ -180,22 +235,25 @@ const toDel = {
 sql_app.group.gp_ADN01 = {
     name: 'ADN SQL collection',
     add: () => {
+
         sql_app.SelectADN = {
             name: 'Зчитати абстрактий вузел - TeSe',
             sql: 'SELECT d.*, s.value value_22, su.value value_u_22, f.value value_24 \n\
             , ts.value value_25, srr.value rr_value_22 \n\
-            , sr.value r_value_22, dr.doctype r_doctype \n\
+            , sr.value r_value_22, dr2.doctype r2_doctype \n\
             , sr2.value r2_value_22, o.sort \n\
             FROM tese.doc d \n\
-             LEFT JOIN sort o ON sort_id=d.doc_id \n\
+             LEFT JOIN string s ON s.string_id=d.doc_id \n\
              LEFT JOIN string_u su ON su.string_u_id=d.doc_id \n\
-             LEFT JOIN string sr ON sr.string_id=d.reference \n\
-             LEFT JOIN string sr2 ON sr2.string_id=d.reference2 \n\
-             LEFT JOIN doc dr ON dr.doc_id=d.reference \n\
-             LEFT JOIN string srr ON srr.string_id=dr.reference \n\
-             LEFT JOIN timestamp ts ON ts.timestamp_id=d.doc_id \n\
              LEFT JOIN double f ON f.double_id=d.doc_id \n\
-             LEFT JOIN string s ON s.string_id=d.doc_id',
+             LEFT JOIN timestamp ts ON ts.timestamp_id=d.doc_id \n\
+             LEFT JOIN doc dr ON dr.doc_id=d.reference \n\
+             LEFT JOIN string sr ON sr.string_id=d.reference \n\
+             LEFT JOIN string srr ON srr.string_id=dr.reference \n\
+             LEFT JOIN doc dr2 ON dr2.doc_id=d.reference2 \n\
+             LEFT JOIN string sr2 ON sr2.string_id=d.reference2 \n\
+             LEFT JOIN sort o ON sort_id=d.doc_id \n\
+             ',
             oderBy: 'sort',
             rowId: 'doc_id',
             whereDocAlias: 'd',
@@ -364,6 +422,7 @@ sql_app.group.gp_AdminModule = {
 sql_app.group.gp_MedicationRequest = {
     name: 'SQL collection - Призначення ліків',
     add: () => {
+        sql_app.group.gp_AutoTest001.add()
         sql_app.group.gp_AdminModule.add()
         sql_app.Quantity = {
             name: 'Кількість',
@@ -412,8 +471,102 @@ sql_app.group.gp_MedicationRequest = {
 
         return true
     }
-
 }
+
+sql_app.group.gp_AutoTest001 = {
+    name: 'SQL collection - Test AutoSQL code part',
+    add: () => {
+        console.log(123)
+
+        sql_app.sTableRow2Adn_373458 = {
+            name: 'Епізод auto001',
+            //sql: 'SELECT row.* ,  period_Period_22, r2_period_Period_id,  period_Period_id ,  text_Narrative_22,  text_Narrative_id \n\
+            //LEFT JOIN (:sql_app.sAdnSql_373459 ) period_Period ON period_Period_parent=row_id \n\
+            // sql: 'SELECT row.*, period_start_25, period_start_id, text_Narrative_22,  text_Narrative_id \n\
+            sql: 'SELECT row.*, :var_sql_app.sR2ValueSql_373459.columnNames text_Narrative_22,  text_Narrative_id \n\
+            FROM (SELECT patient_Patient_parent table_id, patient_Patient_id row_id, r2_patient_Patient_id,  patient_Patient_id \n\
+            FROM (SELECT reference2 r2_patient_Patient_id, parent patient_Patient_parent, doc_id patient_Patient_id FROM doc patient_Patient WHERE reference = 368896 ) row) row \n\
+             LEFT JOIN (:sql_app.sR2ValueSql_373459 ) period_start ON period_start_parent=row_id \n\
+             LEFT JOIN (SELECT value text_Narrative_22, parent text_Narrative_parent, doc_id text_Narrative_id FROM doc text_Narrative \n\
+             LEFT JOIN string ON string_id=doc_id WHERE reference = 372927 ) text_Narrative ON text_Narrative_parent=row_id ',
+        }
+
+        sql_app.sR2ValueSql_373459 = {
+            name: 'Епізод період значенння в r2',
+            columnNames: 'period_start_25, period_start_id, ',
+            insertBefore: 'row.*,',
+            sql: 'SELECT v.value period_start_25, d.doc_id period_start_id, d.parent period_start_parent FROM doc r2, doc d \n\
+             LEFT JOIN timestamp v ON v.timestamp_id=d.doc_id \n\
+             WHERE d.reference2=368679 AND d.reference=368894 AND r2.doc_id=d.reference2 ',
+        }
+
+        sql_app.sAdnSql_373459 = {
+            name: 'Епізод період не ADN прямі дані',
+            sql: 'SELECT value period_Period_22, reference2 r2_period_Period_id, \n\
+            parent period_Period_parent, doc_id period_Period_id FROM doc period_Period \n\
+             LEFT JOIN string ON string_id=reference2 WHERE reference = 368894',
+        }
+
+        sql_app.AdnSql_373799 = {
+            sql: "SELECT value cash1nocash_22, reference2 r2_cash1nocash_id, parent cash1nocash_parent, doc_id cash1nocash_id FROM doc cash1nocash \n\
+ LEFT JOIN string ON string_id=reference2 WHERE reference = 373761 ",
+            rowId: "cash1nocash_id",
+            parentId: "cash1nocash_parent",
+            colName: "cash1nocash",
+            columnNames: "cash1nocash_id, r2_cash1nocash_id, cash1nocash_22",
+        }
+
+        sql_app.AdnSql_373796 = {
+            sql: "SELECT value kassop_22, reference2 r2_kassop_id, parent kassop_parent, doc_id kassop_id FROM doc kassop \n\
+ LEFT JOIN string ON string_id=reference2 WHERE reference = 373742 ",
+            rowId: "kassop_id",
+            parentId: "kassop_parent",
+            colName: "kassop",
+            columnNames: "kassop_id, r2_kassop_id, kassop_22",
+        }
+
+        sql_app.RowCCAdnSql_373750 = {
+            "sql": "SELECT sumaprov_parent table_id, sumaprov_id row_id, :var_sql_app.AdnSql_373750.columnNames \n\
+ FROM (:sql_app.AdnSql_373750 ) row",
+            "rowId": "row_id",
+            "parentId": "table_id"
+        }
+
+        sql_app.AdnSql_373750 = {
+            "sql": "SELECT value sumaprov_24, parent sumaprov_parent, doc_id sumaprov_id FROM doc sumaprov \n\
+ LEFT JOIN double ON double_id=doc_id WHERE reference = 373762 ",
+            "rowId": "sumaprov_id",
+            "parentId": "sumaprov_parent",
+            "colName": "sumaprov",
+            "columnNames": "sumaprov_id, sumaprov_24"
+        }
+
+        sql_app.TableRowCCR2Adn_373750 = {
+            sql: "SELECT row.* :fn_sql_app.autoSql.joinColumnNames(TableRowCC2Adn_373750.columns) \n\
+ FROM (:sql_app.RowCCAdnSql_373750 ) row :fn_sql_app.autoSql.joinColumnsSql(TableRowCC2Adn_373750.columns) ",
+        }
+
+        sql_app.TableRowCC2Adn_373750 = {
+            // sql: "SELECT row.* , kassop_22, r2_kassop_id,  kassop_id ,  cash1nocash_22, r2_cash1nocash_id, cash1nocash_id \n\
+            sql: "SELECT row.* :fn_sql_app.autoSql.joinColumnNames(TableRowCC2Adn_373750.columns) \n\
+             FROM (SELECT sumaprov_parent table_id, sumaprov_id row_id, sumaprov_24, sumaprov_id \n\
+             FROM (:sql_app.AdnSql_373750 ) row ) row :fn_sql_app.autoSql.joinColumnsSql(TableRowCC2Adn_373750.columns) ",
+            //  LEFT JOIN(SELECT value kassop_22, reference2 r2_kassop_id, parent kassop_parent, doc_id kassop_id FROM doc kassop \n\
+            //     LEFT JOIN string ON string_id = reference2 WHERE reference = 373742) kassop ON kassop_parent=row_id \n\
+            // LEFT JOIN(SELECT value cash1nocash_22, reference2 r2_cash1nocash_id, parent cash1nocash_parent, doc_id cash1nocash_id FROM doc cash1nocash\n\
+            //     LEFT JOIN string ON string_id = reference2 WHERE reference = 373761) cash1nocash ON cash1nocash_parent=row_id ",
+            rowId: "row_id",
+            parentId: "table_id",
+            columns: {
+                373796: { sqlName: 'AdnSql' },
+                373799: { sqlName: 'AdnSql' },
+            },
+        }
+
+        return true
+    }
+}
+
 sql_app.group.gp_PWS01 = {
     name: 'SQL collection 01 - Physician work station',
     add: () => {

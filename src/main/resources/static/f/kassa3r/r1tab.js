@@ -4,6 +4,7 @@ app.factory("dataFactory", RWDataFactory)
 
 // sql_app.group.gp_002.add()
 sql_app.group.gp_PWS01.add()
+sql_app.group.gp_ADN02.add()
 
 conf.sql_app = { tableList: [] }
 // conf.sql_app.tableList = ['SpContragents', 'SpKassOp', 'SpValut',]
@@ -40,13 +41,15 @@ class SqlController2 extends SqlAbstractController {
     }
 
     readSql = () => {
+        console.log(conf.sqlKeyName, this.data)
         if (!this.data) {
             conf.sql = readSql2R(conf.sqlKeyName)
+            // console.log(conf.sql)
             // if (singlePage.UrlList()[1].includes('sql_'))
-            if (singlePage.UrlList()[3]=='=')
-                conf.sql = 'SELECT * FROM (' + conf.sql
-                    + ') x WHERE ' + singlePage.UrlList()[2] + '=' + singlePage.UrlList()[4]
-            console.log(conf.sqlKeyName, conf.sql, 1)
+            if (singlePage.UrlList()[3] == '=')
+                conf.sql = 'SELECT * FROM (' + conf.sql + ') x \n\
+ WHERE ' + singlePage.UrlList()[2] + '=' + singlePage.UrlList()[4]
+            console.log(conf.sqlKeyName, conf.sql.length )
 
             this.dataFactory.httpGetSql({ sql: conf.sql }
             ).then(responceData => {
@@ -56,8 +59,7 @@ class SqlController2 extends SqlAbstractController {
         }
     }
 
-}
-app.controller("SqlController2", SqlController2)
+}; app.controller("SqlController2", SqlController2)
 
 angular.forEach([
     'sql_:sql',

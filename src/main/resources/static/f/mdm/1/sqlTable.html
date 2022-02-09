@@ -62,7 +62,7 @@
             </svg>⇋<a class=" w3-text-blue " href="https://cql.hl7.org/" target="_blank"
                 title="Clinical Query Language">CQL</a>
 
-            <div class="w3-dropdown-content w3-border w3-leftbar am-max-width-1" >
+            <div class="w3-dropdown-content w3-border w3-leftbar am-max-width-1">
                 <pre class="w3-tiny">{{ctrl.getSql(ctrl.singlePage.session.sql).sql}}</pre>
             </div>
         </span>
@@ -74,12 +74,11 @@
             <div class="w3-dropdown-content w3-card-4 w3-leftbar w3-container w3-small" style="width: 550px;">
                 <div class="w3-row">
                     <div class="w3-twothird"> subSQL:
-                        <button class="w3-btn w3-padding-small w3-border w3-white"
-                            data-ng-click="ctrl.getSql('autoSql').createTableRow2AdnSql()"> tableRow2AdnSql </button>
-                        <button class="w3-btn w3-padding-small w3-border"
-                            data-ng-click="ctrl.getSql('autoSql').createRowAdnSql()"> rowAdnSql </button>
-                        <button class="w3-btn w3-padding-small w3-border"
-                            data-ng-click="ctrl.getSql('autoSql').createAdnSql()"> adnSql </button>
+                        <button class="w3-hover-shadow  w3-left-align w3-border" data-ng-class="{
+                            'w3-green':fale, 'w3-white':true,}"
+                            data-ng-click="ctrl.getSql('autoSql')['create'+actName]()"
+                            data-ng-repeat="actName in ['TableRow2AdnSql','RowAdnSql','AdnSql','R2ValueSql']">{{actName}}</button>
+                        <br> <br>
                         <div>
                             pattern
                         </div>

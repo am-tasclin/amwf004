@@ -3,19 +3,6 @@ class RWADN01DataFactory extends RWDataFactory {
     readSql = (sql, fn) => this.httpGetSql({ sql: sql }).then(fn)
 }; app.factory('dataFactory', RWADN01DataFactory)
 
-const buildSqlWithKeyValue = (sqlName, key, value) => {
-    let sql = readSql2R(sqlName)
-    if (key && value) {
-        // const whereDocAlias = sql_app[sqlName].whereDocAlias ?
-        //     (sql_app[sqlName].whereDocAlias + '.') : ''
-        // sql += ' WHERE ' + whereDocAlias + key + ' = ' + value
-        sql = 'SELECT * FROM (' + sql + ') x WHERE ' + key + ' = ' + value
-    }
-    
-    if (sql_app[sqlName] && sql_app[sqlName].oderBy) sql += ' ORDER BY ' + sql_app[sqlName].oderBy
-    return sql
-}
-
 // const singlePage = {}, conf = {}, sql_app = {}
 // const conf = {} // see lib-init.js
 
