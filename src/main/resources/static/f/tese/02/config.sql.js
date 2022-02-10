@@ -115,7 +115,7 @@ sql_app.group.gp_ADN02 = {
                 const sqlAppName = 'TableA1Row2Adn_' + adnId
                     , sqlAppObj = sql_app[sqlAppName] = { columns: {} }
                 sqlTable = 'SELECT * FROM (' + sqlTable
-                    + ') row :fn_sql_app.autoSql.joinColumnsSql(' + sqlAppName + '.columns) '
+                    + '\n ) row :fn_sql_app.autoSql.joinColumnsSql(' + sqlAppName + '.columns) '
                 angular.forEach(conf.parentChild[adnId], id => (sqlAppObj
                     .columns[id] = { sqlName: 'AdnSql' }) && sql_app.autoSql.createAdnSql(id))
                 sqlAppObj.sql = sqlTable

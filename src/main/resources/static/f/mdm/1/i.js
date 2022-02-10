@@ -78,6 +78,23 @@ class InitPageController extends AbstractController {
         console.log(123, rowMeta)
     }
 
+    buildSqlApp = () => {
+        if (this.add_sql_app) return this.add_sql_app = null
+        const sessionSqlAppObj = sql_app[singlePage.session.sql]
+        console.log(sessionSqlAppObj)
+        let add_sql_app = 'sql_app.' + singlePage.session.sql + ' = '
+        add_sql_app += JSON.stringify(sessionSqlAppObj, ' ', 2)
+        add_sql_app += '\n // ' + sessionSqlAppObj.sql + '\n\n '
+        angular.forEach(sessionSqlAppObj.columns, (v, k) => {
+            const sqlAppName = v.sqlName + '_' + k, sqlAppObj = sql_app[sqlAppName]
+            add_sql_app += 'sql_app.' + sqlAppName + ' = '
+            add_sql_app += JSON.stringify(sqlAppObj, ' ', 2) + '\n'
+            console.log(k, v, sqlAppName, sqlAppObj, 1)
+        })
+        add_sql_app += '\n // END: buildSqlApp - sql_app.'+singlePage.session.sql+' \n '
+        this.add_sql_app = add_sql_app
+    }
+
     editRow = () => {
         console.log(123)
         singlePage.session.CRUD = 'U'

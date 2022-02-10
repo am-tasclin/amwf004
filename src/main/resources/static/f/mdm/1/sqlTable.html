@@ -134,7 +134,10 @@
             </span>
             <button class="w3-btn w3-padding-small w3-border" data-ng-click="ctrl.editRow()">edit&nbsp;<i
                     class="fas fa-edit"></i></button>
+            <button class="w3-btn w3-padding-small w3-border" data-ng-click="ctrl.buildSqlApp()">sql-app&nbsp;<i
+                    class="fas fa-pen"></i></button>
         </span>
+        <pre class="w3-small">{{ctrl.add_sql_app}}</pre>
         <div data-ng-if="ctrl.singlePage.session.CRUD == 'U'" class="w3-card-4">&nbsp;
             <i class="fas fa-edit"></i>&nbsp;edit
             <span data-ng-repeat="m in [ctrl.conf.eMap[ctrl.singlePage.session.sql.split('_')[1]]]">
