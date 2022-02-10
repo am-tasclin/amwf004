@@ -75,9 +75,11 @@
                 <div class="w3-row">
                     <div class="w3-twothird"> subSQL:
                         <button class="w3-hover-shadow  w3-left-align w3-border" data-ng-class="{
-                            'w3-green':fale, 'w3-white':true,}"
-                            data-ng-click="ctrl.getSql('autoSql')['create'+actName]()"
-                            data-ng-repeat="actName in ['TableRow2AdnSql','RowAdnSql','AdnSql','R2ValueSql']">{{actName}}</button>
+                            'w3-green':fale, 'w3-white':true,}" data-ng-click="ctrl.getSql('autoSql')
+                            ['create'+actName]()" data-ng-repeat="actName in [
+                            'TableRow2AdnSql',
+                            'TableA1Row2AdnSql',
+                            'RowAdnSql','AdnSql','R2ValueSql']">{{actName}}</button>
                         <br> <br>
                         <div>
                             <div class="w3-hover-shadow"
@@ -96,15 +98,25 @@
                     </div>
                     <div class="w3-third">
                         autoSqls:
-                        <div data-ng-repeat="sqlName in ctrl.getSqlAppNames()"
-                            data-ng-if="(sqlName.includes('Sql_')||sqlName.includes('Adn_'))
+                        <div class="w3-row">
+                            <div data-ng-repeat="sqlName in ctrl.getSqlAppNames()"
+                                data-ng-if="(sqlName.includes('Sql_')||sqlName.includes('Adn_'))
                             &&(!ctrl.singlePage.session.sqlSelectedColumnId||sqlName.includes(ctrl.singlePage.session.sqlSelectedColumnId))">
-                            <Button data-ng-click="ctrl.singlePage.session.sql=sqlName"
-                                class="w3-hover-shadow  am-width-100pr w3-left-align w3-border" data-ng-class="{
-                                    'w3-green':ctrl.singlePage.session.sql==sqlName,
-                                    'w3-white':ctrl.singlePage.session.sql!=sqlName,}">
-                                {{sqlName}}
-                            </Button>
+                                <div class="w3-col" style="width:20px">
+                                    <span data-ng-if="ctrl.singlePage.session.sqlSelectedColumnId">
+                                        <button data-ng-click="ctrl.setSessionTableColumnSqlName(sqlName)"
+                                            class="w3-hover-shadow w3-left-align w3-border"> ← </button>
+                                    </span>
+                                </div>
+                                <div class="w3-rest">
+                                    <button data-ng-click="ctrl.singlePage.session.sql=sqlName"
+                                        class="w3-hover-shadow w3-left-align w3-border" data-ng-class="{
+                                                'w3-green':ctrl.singlePage.session.sql==sqlName,
+                                                'w3-white':ctrl.singlePage.session.sql!=sqlName,}">
+                                        {{sqlName}}
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

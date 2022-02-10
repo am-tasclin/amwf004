@@ -50,7 +50,9 @@ sql_app.group.gp_ADN02 = {
                     .replace(', d.* ', ' ')
                 console.log(sql,)
                 sql_app['R2ValueSql_' + adnId] = {
-                    rowId: colName + '_id', parentId: colName + '_parent', sql: sql
+                    rowId: colName + '_id', parentId: colName + '_parent',
+                    colName: colName,
+                    sql: sql,
                 }
                 singlePage.session.sql = 'R2ValueSql_' + adnId
                 return sql_app.autoSql.sql = sql
@@ -104,6 +106,22 @@ sql_app.group.gp_ADN02 = {
                     , sql_app[singlePage.session.sql], 'create' + singlePage.session.sql.split('_')[0])
                 if (!sql_app[singlePage.session.sql])
                     sql_app.autoSql['create' + singlePage.session.sql.split('_')[0]](adnId)
+            },
+
+            createTableA1Row2AdnSql: id => {
+                const adnId = sql_app.autoSql.adnId(id)
+                console.log(id, adnId, singlePage.session.selectedLR)
+                let sqlTable = sql_app.autoSql.createRowAdnSql(adnId)
+                const sqlAppName = 'TableA1Row2Adn_' + adnId
+                    , sqlAppObj = sql_app[sqlAppName] = { columns: {} }
+                sqlTable = 'SELECT * FROM (' + sqlTable
+                    + ') row :fn_sql_app.autoSql.joinColumnsSql(' + sqlAppName + '.columns) '
+                angular.forEach(conf.parentChild[adnId], id => (sqlAppObj
+                    .columns[id] = { sqlName: 'AdnSql' }) && sql_app.autoSql.createAdnSql(id))
+                sqlAppObj.sql = sqlTable
+                console.log(sqlAppName, sqlAppObj)
+                singlePage.session.sql = sqlAppName
+                return sql_app.autoSql.sql = sqlTable
             },
 
             createTableRow2AdnSql: id => {
@@ -476,7 +494,6 @@ sql_app.group.gp_MedicationRequest = {
 sql_app.group.gp_AutoTest001 = {
     name: 'SQL collection - Test AutoSQL code part',
     add: () => {
-        console.log(123)
 
         sql_app.sTableRow2Adn_373458 = {
             name: 'Епізод auto001',

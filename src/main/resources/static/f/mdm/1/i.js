@@ -65,6 +65,13 @@ class InitPageController extends AbstractController {
         }
     }
 
+    setSessionTableColumnSqlName = sqlName => {
+        const columnObj = sql_app[singlePage.session.sql]
+            .columns[singlePage.session.sqlSelectedColumnId]
+        console.log(sqlName, columnObj)
+        columnObj.sqlName = sqlName.split('_')[0]
+    }
+
     clickRow = row => {
         singlePage.session.selectedRow = row
         const rowMeta = conf.eMap[singlePage.session.sql.split('_')[1]]
@@ -77,15 +84,22 @@ class InitPageController extends AbstractController {
     }
 
     exeSql = () => {
+        let sql = buildSqlWithKeyValue(singlePage.session.sql)
+        console.log(sql)
+        this.dataFactory.readSqlTable(sql)
+    }
+
+    exeSqlX = () => {
         const sessionSqlObj = sql_app[singlePage.session.sql]
         console.log(singlePage.session.sql, '\n', sessionSqlObj)
         let sql = sessionSqlObj.sql
         if (sessionSqlObj.parentId && sessionSqlObj.parentIn) {
             sql = 'SELECT * FROM (' + sql + ') x WHERE ' + sessionSqlObj.parentId + ' IN (' + sessionSqlObj.parentIn + ')'
-            console.log(sql)
         }
         // (
         singlePage.session.CRUD = 'R' //) && 
+        sql = buildSqlWithKeyValue(sql)
+        console.log(sql)
         this.dataFactory.readSqlTable(sql)
     }
 
