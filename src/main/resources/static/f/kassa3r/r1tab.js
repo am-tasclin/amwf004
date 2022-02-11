@@ -3,6 +3,7 @@ app.directive('amSqlHtml', AmSqlHtml)
 app.factory("dataFactory", RWDataFactory)
 
 // sql_app.group.gp_002.add()
+sql_app.group.gp_EmrAutoSql01.add()
 sql_app.group.gp_PWS01.add()
 sql_app.group.gp_ADN02.add()
 

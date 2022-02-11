@@ -731,6 +731,7 @@ sql_app.group.gp_PWS01 = {
             LEFT JOIN (:sql_app.HumanName_family_name ) hn ON hn.family_id = p.reference2  \n\
             WHERE p.reference=373423',
         }
+
         sql_app.HumanName_family_name = {
             name: "Ім'я Призвище",
             sql: 'SELECT n.value name_v, f.value family_v, d.doc_id family_id, dn.doc_id name_id FROM doc d \n\

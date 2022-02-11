@@ -121,10 +121,11 @@ conf.modalDisplay = { display: null }
 // app.config(RouteProviderConfig)
 class RouteProviderConfig {
     constructor($routeProvider) {
-        // console.log('RouteProviderConfig', Object.keys(singlePage))
+        console.log('RouteProviderConfig', Object.keys(singlePage))
         angular.forEach(singlePage, (v, k) => {
             if (v.controller) {
                 if (!v.controllerAs) v.controllerAs = 'ctrl'
+                console.log(k)
                 $routeProvider.when("/" + k, v)
             }
         })

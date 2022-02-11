@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="uk-UA" data-ng-controller="InitPageController as ctrl">
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/webjars/font-awesome/5.15.2/css/all.min.css">
+    <link rel="stylesheet" href="/f/css/w3.css">
+    <link rel="stylesheet" href="/f/css/am.css">
+    <link rel="shortcut icon" href="/f/img/algoritmed.ico" type="image/x-icon">
+    <script src="/webjars/angular/1.8.2/angular.min.js" type="application/javascript"></script>
+    <script src="/webjars/angular-i18n/1.8.2/angular-locale_uk-ua.js" type="application/javascript"></script>
+    <script src="/webjars/angular-route/1.8.2/angular-route.min.js" type="application/javascript"></script>
+    <script src="/webjars/angular-resource/1.8.2/angular-resource.min.js" type="application/javascript"></script>
+    <script src="/webjars/angular-sanitize/1.8.2/angular-sanitize.min.js" type="application/javascript"></script>
+
+    <style>
+        .a1m-no-print {
+            visibility: hidden;
+        }
+    </style>
+    <script src="/f/kassa2r/lib-init.js" type="application/javascript"></script>
+    <!-- 
+        <script src="/f/sql/04/lib-init.js" type="application/javascript"></script>
+    <script src="/f/tese/01/config.sql.js" type="application/javascript"></script>
+-->
+    <script src="/f/tese/01/lib.sql002.js" type="application/javascript"></script>
+    <script src="/f/tese/02/config.sql.js" type="application/javascript"></script>
+    <script src="/f/pws/02/config.sql.js" type="application/javascript"></script>
+    <script src="i.js" type="application/javascript"></script>
+</head>
+
+<body class="w3-container" data-ng-keydown="[27].includes($event.keyCode) && ctrl.keyDownEsc()">
+    <div class="w3-border-bottom am-max-width-1">
+        <a href="/" class="w3-btn w3-border w3-padding-small w3-small">↑</a>
+        <span class="w3-small am-b">Робочий кабінет лікаря</span>&nbsp;⁙
+        <span class="w13-small" data-ng-repeat="(k,v) in ctrl.conf.pws.topMenu">
+            <a href="#!/{{k}}" class="w3-hover-shadow"
+                data-ng-class="{'w3-green':ctrl.singlePage.UrlList()[1].includes(k)}">
+                {{v}}</a>
+            >
+        </span>
+    </div>
+    <div class="am-max-width-1" data-ng-view></div>
+    <div class="am-max-width-1">
+        a1
+    </div>
+</body>
+
+</html>
