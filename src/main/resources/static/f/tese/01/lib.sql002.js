@@ -76,6 +76,11 @@ class DataFactory {
     }
 }
 
+// FHIR element name to FHIR element_id
+const name2id = n => n.toLowerCase() + '_id'
+// Add element to element_id to element map.
+const addEMap = (l, n) => l.forEach(e => conf.eMap[e[name2id(n)]] = e)
+
 singlePage.Url = () => window.location.href.split('#!')[1]
 // console.log(singlePage.Url())
 // singlePage.PseudoREST = singlePage.Url
@@ -86,9 +91,9 @@ singlePage.UrlParams = () => singlePage.Url().includes('?') ? singlePage.Url().s
 singlePage.UrlParamKey = (key) => singlePage.UrlParams().filter(word => word.includes(key + '='))
 singlePage.UrlParamKeyValue = (key) => singlePage.UrlParamKey(key).length > 0 ? singlePage.UrlParamKey(key)[0].split('=')[1] : ''
 
-// singlePage.FirstUrl = () => singlePage.Url() ? singlePage.Url().split('/')[1] : ''
+singlePage.FirstUrl = () => singlePage.Url() ? singlePage.Url().split('/')[1] : ''
 // singlePage.FirstUrlTag = () => singlePage.FirstUrl().split('_')[0]
-// singlePage.FirstUrlId = () => singlePage.FirstUrl().split('_')[1]
+singlePage.FirstUrlId = () => singlePage.FirstUrl().split('_')[1]
 
 // singlePage.LastUrl = () => singlePage.Url() ? singlePage.Url().split('/')[singlePage.Url().split('/').length - 1] : ''
 // singlePage.LastUrlTag = () => singlePage.LastUrl().split('_')[0]

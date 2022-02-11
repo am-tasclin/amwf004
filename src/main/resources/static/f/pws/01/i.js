@@ -110,6 +110,7 @@ singlePage['pl'] = {
     templateUrl: '/f/tese/01/sql.html',
     controller: 'PatientListController',
 }
+
 // app.controller("PlanDefinitionController", PlanDefinitionController)
 class PlanDefinitionController extends AbstractController {
     constructor(dataFactory, $timeout) {

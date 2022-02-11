@@ -26,9 +26,9 @@ metal.init = (metalInit) => {
 }
 
 // FHIR element name to FHIR element_id
-const name2id = n => n.toLowerCase() + '_id'
+// const name2id = n => n.toLowerCase() + '_id'
 // Add element to element_id to element map.
-const addEMap = (l, n) => l.forEach(e => conf.eMap[e[name2id(n)]] = e)
+// const addEMap = (l, n) => l.forEach(e => conf.eMap[e[name2id(n)]] = e)
 // Get sql from our name
 const readSql2R = sqlN => replaceSql(sql_app[sqlN].sql)
 // Named structured SQL to native SQL

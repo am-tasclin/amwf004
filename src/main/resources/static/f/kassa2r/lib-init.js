@@ -78,9 +78,9 @@ const replaceSql = sql => {
         const fnName = firstFunctionName(sql_fnPath)
         // console.log(sql_fnStr, fnName)
         const fnParamsStr = sql_fnStr.split(fnName + '(')[1].split(')')[0]
-        console.log(sql_fnStr, fnName, '\n-fn(PARAMS)->\n', fnParamsStr)
+        // console.log(sql_fnStr, fnName, '\n-fn(PARAMS)->\n', fnParamsStr)
         sql_fnPath = sql_fnStr.split('.')
-        console.log(sql_fnStr, sql_fnPath, 1)
+        // console.log(sql_fnStr, sql_fnPath, 1)
         const fnObj = firstFunctionObj(sql_app[sql_fnPath.shift()], sql_fnPath)
         sql_fnPath = fnParamsStr.split('.')
         // console.log(sql_fnPath)
@@ -88,7 +88,7 @@ const replaceSql = sql => {
         // console.log(fnObj, fnParamObj)
         let fnSql = fnObj(fnParamObj)
         sql = sql.replace(':fn_sql_app.' + sql_fnStr, fnSql)
-        console.log(sql)
+        // console.log(sql)
     }
 
     while (sql.includes(':var_sql_app.')) {

@@ -12,12 +12,12 @@
     <script src="/webjars/angular-route/1.8.2/angular-route.min.js" type="application/javascript"></script>
     <script src="/webjars/angular-resource/1.8.2/angular-resource.min.js" type="application/javascript"></script>
     <script src="/webjars/angular-sanitize/1.8.2/angular-sanitize.min.js" type="application/javascript"></script>
-
     <style>
         .a1m-no-print {
             visibility: hidden;
         }
     </style>
+
     <script src="/f/kassa2r/lib-init.js" type="application/javascript"></script>
     <!-- 
         <script src="/f/sql/04/lib-init.js" type="application/javascript"></script>
@@ -40,7 +40,19 @@
             >
         </span>
     </div>
-    <div class="am-max-width-1" data-ng-view></div>
+    <div class="w3-border-bottom" style="height:90vh; overflow:auto;">
+        <span class="w3-small am-b">Пацієнт</span>:
+        <span class="am-u1 am-i">
+            <span data-ng-if="ctrl.conf.patient">
+                {{ctrl.conf.patient[0].given_22}},
+                {{ctrl.conf.patient[0].family_22}}
+            </span>
+            {{ctrl.conf.patient?'':"<Ім'я Пацієнта>"}}
+        </span>
+        <span class="w3-tiny am-no-print">[dev⇰<span class="am-b">development MODE!</span>]</span>
+
+        <div class="am-max-width-1" data-ng-view></div>
+    </div>
     <div class="am-max-width-1">
         a1
     </div>

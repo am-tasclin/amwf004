@@ -5,7 +5,7 @@ sql_app.group.gp_EmrAutoSql01 = {
 
         sql_app.PatientHumanName = {
             name: 'Паціент людське ім\'я',
-            sql: 'SELECT dp.doc_id patient_name_id, hn.* hn \n\
+            sql: 'SELECT dp.doc_id patient_id, hn.* hn \n\
             FROM doc dp, (:sql_app.TableA1Row2Adn_373406 ) hn \n\
             WHERE dp.reference=373423 AND hn.row_id=reference2',
         }

@@ -1,4 +1,6 @@
 'use strict'
+
+sql_app.group.gp_ADN02.add()
 sql_app.group.gp_EmrAutoSql01.add()
 sql_app.group.gp_PWS.add()
 app.config(RouteProviderConfig)
@@ -17,12 +19,35 @@ conf.pws.topMenu = {
     emz: 'ЕМЗ-документація'
 }
 
+const contentDoc = {}
+contentDoc.readEMR = {
+    patient: { sql: 'PatientHumanName' },
+}
+
+const sqlForOnePatient = 'SELECT * FROM (:sql ) p WHERE patient_id = :patient_id'
+let timeoutMs = 0
 class PWSDataFactory extends DataFactory {
     constructor($http, $q, $timeout, $resource) {
         super($http, $q)
     }
+    read = (sql2Name, confKey) => this.httpGetSql({
+        sql: sqlForOnePatient.replace(':sql ', readSql2R(sql2Name))
+            .replace(':patient_id', singlePage.FirstUrlId() || singlePage.UrlParamKeyValue('pt'))
+    }).then(dataSqlRequest => {
+        conf[confKey] = dataSqlRequest.list
+        addEMap(conf[confKey], confKey)
+        angular.forEach(contentDoc.readEMR[confKey].emr
+            , v => addEMap(conf[confKey], v))
+    })
     readPatient = () => {
-        console.log(conf, conf.patient)
+        // console.log(conf, conf.patient)
+        if (!conf.patient) {
+            // console.log(55, singlePage.UrlMap()['hy'], contentDoc.readEMR)
+            angular.forEach(contentDoc.readEMR, (v, k) => {
+                //console.log(k, v, v.sql, '\n', readSql2R(v.sql))
+                 this.read(v.sql, k)
+            })
+        }
     }
 }; app.factory("dataFactory", PWSDataFactory)
 
