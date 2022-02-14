@@ -7,5 +7,12 @@
 </div>
 
 <div>
-    a2
+	<div data-ng-repeat="e in ctrl.conf.episode">
+		<span class="w3-small w3-hover-shadow" data-ng-click="ctrl.clicEpisode(e)"
+			data-ng-class="{'w3-green':ctrl.conf.clickedElement.episode_id==e.row_id}">
+			{{e.period_start_25 | date : 'mediumDate'}}, {{e.period_start_25 | date : 'shortTime'}}
+		</span>
+		<span class="w3-tiny am-i"> {{e.text_narrative_22}} </span>
+		<span class="w3-tiny am-no-print"> [dev⇰ec={{e.row_id}}]</span>
+	</div>
 </div>

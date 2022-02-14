@@ -22,14 +22,14 @@ conf.pws.topMenu = {
 const contentDoc = {}
 contentDoc.readEMR = {
     patient: { sql: 'PatientHumanName' },
+    episode: { sql: 'PatientEpisodeOfCare' },
 }
-
 const sqlForOnePatient = 'SELECT * FROM (:sql ) p WHERE patient_id = :patient_id'
+
 let timeoutMs = 0
 class PWSDataFactory extends DataFactory {
-    constructor($http, $q, $timeout, $resource) {
-        super($http, $q)
-    }
+    constructor($http, $q, $timeout, $resource) { super($http, $q) }
+
     read = (sql2Name, confKey) => this.httpGetSql({
         sql: sqlForOnePatient.replace(':sql ', readSql2R(sql2Name))
             .replace(':patient_id', singlePage.FirstUrlId() || singlePage.UrlParamKeyValue('pt'))
@@ -39,13 +39,15 @@ class PWSDataFactory extends DataFactory {
         angular.forEach(contentDoc.readEMR[confKey].emr
             , v => addEMap(conf[confKey], v))
     })
+
     readPatient = () => {
         // console.log(conf, conf.patient)
         if (!conf.patient) {
             // console.log(55, singlePage.UrlMap()['hy'], contentDoc.readEMR)
             angular.forEach(contentDoc.readEMR, (v, k) => {
                 //console.log(k, v, v.sql, '\n', readSql2R(v.sql))
-                 this.read(v.sql, k)
+                console.log(57, k, v.sql)
+                this.read(v.sql, k)
             })
         }
     }
