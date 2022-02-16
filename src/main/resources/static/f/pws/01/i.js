@@ -22,6 +22,7 @@ contentDoc.readEMR = {
     mrEncounter: { sql: 'encounter_MedicationRequest_sc_doseQuantityTimingPeriod' },
     recept: { sql: 'eReceptOfEMR', },
 }
+
 contentDoc.readPlanDefinitionElements = {
     pd_action: { sql: 'PlanDefinition_action_title' },
     pd_action_ad: { sql: 'pd_action_ActivityDefinition_title_name' },

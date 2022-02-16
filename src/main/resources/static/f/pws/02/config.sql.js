@@ -3,6 +3,65 @@ sql_app.group.gp_EmrAutoSql01 = {
     add: () => {
         console.log(123)
 
+        sql_app.TableRow2Adn_373794 = {
+            "sql": "SELECT row.* ,  vaccineCode_22, r2_vaccineCode_id,  vaccineCode_id  FROM (SELECT encounter_Encounter_parent table_id, encounter_Encounter_id row_id, r2_encounter_Encounter_id,  encounter_Encounter_id  FROM (SELECT reference2 r2_encounter_Encounter_id, parent encounter_Encounter_parent, doc_id encounter_Encounter_id FROM doc encounter_Encounter WHERE reference = 373793 ) row) row\n LEFT JOIN (SELECT value vaccineCode_22, reference2 r2_vaccineCode_id, parent vaccineCode_parent, doc_id vaccineCode_id FROM doc vaccineCode\n LEFT JOIN string ON string_id=reference2 WHERE reference = 84808 ) vaccineCode ON vaccineCode_parent=row_id ",
+            "rowId": "row_id",
+            "parentId": "table_id"
+        }
+        // SELECT row.* ,  vaccineCode_22, r2_vaccineCode_id,  vaccineCode_id  FROM (SELECT encounter_Encounter_parent table_id, encounter_Encounter_id row_id, r2_encounter_Encounter_id,  encounter_Encounter_id  FROM (SELECT reference2 r2_encounter_Encounter_id, parent encounter_Encounter_parent, doc_id encounter_Encounter_id FROM doc encounter_Encounter WHERE reference = 373793 ) row) row
+        //    LEFT JOIN (SELECT value vaccineCode_22, reference2 r2_vaccineCode_id, parent vaccineCode_parent, doc_id vaccineCode_id FROM doc vaccineCode
+        //    LEFT JOIN string ON string_id=reference2 WHERE reference = 84808 ) vaccineCode ON vaccineCode_parent=row_id 
+
+
+        // END: buildSqlApp - sql_app.TableRow2Adn_373794 
+
+
+        sql_app.ImmunusationEncounterPatient = {
+            name: 'Імунізація взаємодія пацієнт',
+            sql: 'SELECT * FROM (:sql_app.TableRow2Adn_373794 ) im \n\
+            , (:sql_app.TableA1Row2Adn_373784 ) ee \n\
+            WHERE ee.subject_patient_id=im.r2_encounter_encounter_id ',
+            patientIdName: 'r2_subject_patient_id',
+        }
+
+        sql_app.EncounterEpisodeOfCare = {
+            name: 'Взаємодія Епізоди паціента',
+            patientIdName: 'r2_subject_patient_id',
+            sql: ':sql_app.TableA1Row2Adn_373784 ',
+        }
+
+        sql_app.TableA1Row2Adn_373784 = { // buildSqlApp - sql_app.TableA1Row2Adn_373784 
+            "columns": {
+                "373785": {
+                    "sqlName": "AdnSql"
+                },
+                "373786": {
+                    "sqlName": "R2ValueSql"
+                }
+            },
+            "sql": "SELECT * FROM (SELECT subject_Patient_parent table_id, subject_Patient_id row_id, r2_subject_Patient_id,  subject_Patient_id  FROM (SELECT reference2 r2_subject_Patient_id, parent subject_Patient_parent, doc_id subject_Patient_id FROM doc subject_Patient WHERE reference = 373432 ) row\n ) row :fn_sql_app.autoSql.joinColumnsSql(TableA1Row2Adn_373784.columns) "
+        }
+
+        // SELECT * FROM (SELECT subject_Patient_parent table_id, subject_Patient_id row_id, r2_subject_Patient_id,  subject_Patient_id  FROM (SELECT reference2 r2_subject_Patient_id, parent subject_Patient_parent, doc_id subject_Patient_id FROM doc subject_Patient WHERE reference = 373432 ) row
+        //   ) row :fn_sql_app.autoSql.joinColumnsSql(TableA1Row2Adn_373784.columns) 
+
+        sql_app.AdnSql_373785 = {
+            "sql": "SELECT reference2 r2_episodeOfCare_EpisodeOfCare_id, parent episodeOfCare_EpisodeOfCare_parent, doc_id episodeOfCare_EpisodeOfCare_id FROM doc episodeOfCare_EpisodeOfCare WHERE reference = 373446 ",
+            "rowId": "episodeOfCare_EpisodeOfCare_id",
+            "parentId": "episodeOfCare_EpisodeOfCare_parent",
+            "colName": "episodeOfCare_EpisodeOfCare",
+            "columnNames": "episodeOfCare_EpisodeOfCare_id, r2_episodeOfCare_EpisodeOfCare_id"
+        }
+        sql_app.R2ValueSql_373786 = {
+            "rowId": "period_start_id",
+            "parentId": "period_start_parent",
+            "colName": "period_start",
+            "sql": "SELECT v.value period_start_25, d.doc_id period_start_id, d.parent period_start_parent FROM doc r2, doc d \nLEFT JOIN timestamp v ON v.timestamp_id=d.doc_id \n WHERE d.reference2=368679 AND d.reference=373442 AND r2.doc_id=d.reference2"
+        }
+
+        // END: buildSqlApp - sql_app.TableA1Row2Adn_373784 
+
+
         sql_app.PatientEpisodeOfCare = {
             name: 'Епізоди паціента',
             sql: 'SELECT x.r2_patient_patient_id patient_id, x.* hn \n\

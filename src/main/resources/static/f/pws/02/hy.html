@@ -14,5 +14,34 @@
 		</span>
 		<span class="w3-tiny am-i"> {{e.text_narrative_22}} </span>
 		<span class="w3-tiny am-no-print"> [dev⇰ec={{e.row_id}}]</span>
+		<div class="w3-container w3-border-left">
+			<div data-ng-repeat="er in ctrl.conf.encounter" data-ng-if="e.row_id==er.r2_episodeofcare_episodeofcare_id">
+				<span title="{{er.encounter_id}}" class="am-u w3-small w3-hover-shadow"
+					data-ng-click="ctrl.clicEncounter(er)"
+					data-ng-class="{'w3-green':ctrl.conf.clickedElement.encounter_id==er.row_id}">
+					{{er.period_start_25 | date : 'shortTime'}}{{er.period_start_25 | date : ' EEE, d'}}</span>:
+				<span class="w3-tiny am-no-print"> [dev⇰er={{er.row_id}}]</span>
+
+				<div data-ng-repeat="im in ctrl.conf.imEncounter" data-ng-if="im.subject_patient_id==er.row_id">
+					<span class="w3-tiny am-b">код вакцини:</span>
+					<span class="w3-hover-shadow"> {{im.vaccinecode_22}} </span>
+				</div>
+				<div data-ng-repeat="mr in ctrl.conf.mrEncounter" data-ng-if="mr.mrencounter_r2==er.row_id">
+					<span class="w3-tiny am-b">призначено:</span>
+					<span class="w3-hover-shadow" data-emrid="{{mr.mrencounter_id}}" data-p="2" data-am:emr:link>
+						{{mr.substance_code}}
+						{{mr.n_quantity_value}}
+						{{mr.n_quantity_code}}
+						{{mr.dn_quantity_value}}
+						{{mr.dn_quantity_code}}
+					</span>
+					<span data-ng-repeat="rx in ctrl.conf.recept" data-ng-if="rx.mr_emr_id==mr.mr_emr_id">
+						<span title="{{rx.recept_id}}"
+							class="am-rx w3-border w3-border-green w3-hover-shadow">R<span>x</span>&nbsp;.</span>
+					</span>
+				</div>
+
+			</div>
+		</div>
 	</div>
 </div>

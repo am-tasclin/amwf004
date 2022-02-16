@@ -23,8 +23,12 @@ const contentDoc = {}
 contentDoc.readEMR = {
     patient: { sql: 'PatientHumanName' },
     episode: { sql: 'PatientEpisodeOfCare' },
+    encounter: { sql: 'EncounterEpisodeOfCare' },
+    imEncounter: { sql: 'ImmunusationEncounterPatient' },
+    mrEncounter: { sql: 'encounter_MedicationRequest_sc_doseQuantityTimingPeriod' },
 }
-const sqlForOnePatient = 'SELECT * FROM (:sql ) p WHERE patient_id = :patient_id'
+
+const sqlForOnePatient = 'SELECT * FROM (:sql ) p WHERE :patientIdName = :patient_id'
 
 let timeoutMs = 0
 class PWSDataFactory extends DataFactory {
@@ -32,6 +36,7 @@ class PWSDataFactory extends DataFactory {
 
     read = (sql2Name, confKey) => this.httpGetSql({
         sql: sqlForOnePatient.replace(':sql ', readSql2R(sql2Name))
+            .replace(':patientIdName', sql_app[sql2Name].patientIdName || 'patient_id')
             .replace(':patient_id', singlePage.FirstUrlId() || singlePage.UrlParamKeyValue('pt'))
     }).then(dataSqlRequest => {
         conf[confKey] = dataSqlRequest.list
@@ -45,8 +50,10 @@ class PWSDataFactory extends DataFactory {
         if (!conf.patient) {
             // console.log(55, singlePage.UrlMap()['hy'], contentDoc.readEMR)
             angular.forEach(contentDoc.readEMR, (v, k) => {
-                //console.log(k, v, v.sql, '\n', readSql2R(v.sql))
                 console.log(57, k, v.sql)
+                if ('EncounterEpisodeOfCare' == v.sql) {
+                    // console.log(singlePage.FirstUrlId(), sql_app[v.sql].patientIdName, k, v, v.sql, '\n', readSql2R(v.sql))
+                }
                 this.read(v.sql, k)
             })
         }

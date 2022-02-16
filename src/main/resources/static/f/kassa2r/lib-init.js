@@ -101,7 +101,7 @@ const replaceSql = sql => {
 
     while (sql.includes(':sql_app.')) {
         let sql_name = sql.split(':sql_app.')[1].split(' ')[0]
-        console.log(sql_name)
+        // console.log(sql_name)
         let sql_inner = readSql2R(sql_name)
         sql = sql.replace(':sql_app.' + sql_name, sql_inner)
     }
