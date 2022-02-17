@@ -3,8 +3,45 @@ sql_app.group.gp_EmrAutoSql01 = {
     add: () => {
         console.log(123)
 
+        sql_app.PatientImmunizationDirect = {
+            name: 'FHIR імунізація пацієнта без Encounter',
+            sql: ':sql_app.TableRow2Adn_373791',
+            patientIdName: 'r2_patient_patient_id',
+        }
+
+        sql_app.TableRow2Adn_373791 = {
+            "sql": "SELECT row.* ,  vaccineCode_22, r2_vaccineCode_id,  vaccineCode_id ,  text_Narrative_22,  text_Narrative_id \n\
+             FROM (SELECT patient_Patient_parent table_id, patient_Patient_id row_id, r2_patient_Patient_id,  patient_Patient_id \n\
+             FROM (SELECT reference2 r2_patient_Patient_id, parent patient_Patient_parent, doc_id patient_Patient_id FROM doc patient_Patient \n\
+             WHERE reference = 373792 ) row) row \n\
+             LEFT JOIN (SELECT value vaccineCode_22, reference2 r2_vaccineCode_id, parent vaccineCode_parent, doc_id vaccineCode_id FROM doc vaccineCode\n LEFT JOIN string ON string_id=reference2 WHERE reference = 84808 ) vaccineCode ON vaccineCode_parent=row_id \n LEFT JOIN (SELECT value text_Narrative_22, parent text_Narrative_parent, doc_id text_Narrative_id FROM doc text_Narrative\n LEFT JOIN string ON string_id=doc_id WHERE reference = 372927 ) text_Narrative ON text_Narrative_parent=row_id ",
+            "rowId": "row_id",
+            "parentId": "table_id"
+        }
+
+        // SELECT row.* ,  vaccineCode_22, r2_vaccineCode_id,  vaccineCode_id  FROM (SELECT patient_Patient_parent table_id, patient_Patient_id row_id, r2_patient_Patient_id,  patient_Patient_id  FROM (SELECT reference2 r2_patient_Patient_id, parent patient_Patient_parent, doc_id patient_Patient_id FROM doc patient_Patient WHERE reference = 373792 ) row) row
+        //    LEFT JOIN(SELECT value vaccineCode_22, reference2 r2_vaccineCode_id, parent vaccineCode_parent, doc_id vaccineCode_id FROM doc vaccineCode
+        //    LEFT JOIN string ON string_id = reference2 WHERE reference = 84808) vaccineCode ON vaccineCode_parent = row_id
+
+        // END: buildSqlApp - sql_app.TableRow2Adn_373791 
+
+        sql_app.ImmunusationEncounterPatient = {
+            name: 'Імунізація взаємодія пацієнт',
+            sql: 'SELECT * FROM (:sql_app.TableRow2Adn_373794 ) im \n\
+            , (:sql_app.TableA1Row2Adn_373784 ) ee \n\
+            WHERE ee.subject_patient_id=im.r2_encounter_encounter_id ',
+            patientIdName: 'r2_subject_patient_id',
+        }
+
         sql_app.TableRow2Adn_373794 = {
-            "sql": "SELECT row.* ,  vaccineCode_22, r2_vaccineCode_id,  vaccineCode_id  FROM (SELECT encounter_Encounter_parent table_id, encounter_Encounter_id row_id, r2_encounter_Encounter_id,  encounter_Encounter_id  FROM (SELECT reference2 r2_encounter_Encounter_id, parent encounter_Encounter_parent, doc_id encounter_Encounter_id FROM doc encounter_Encounter WHERE reference = 373793 ) row) row\n LEFT JOIN (SELECT value vaccineCode_22, reference2 r2_vaccineCode_id, parent vaccineCode_parent, doc_id vaccineCode_id FROM doc vaccineCode\n LEFT JOIN string ON string_id=reference2 WHERE reference = 84808 ) vaccineCode ON vaccineCode_parent=row_id ",
+            "sql": "SELECT row.* , vaccineCode_22, r2_vaccineCode_id,  vaccineCode_id ,  text_Narrative_22,  text_Narrative_id \n\
+             FROM (SELECT encounter_Encounter_parent table_id, encounter_Encounter_id row_id, r2_encounter_Encounter_id,  encounter_Encounter_id \n\
+             FROM (SELECT reference2 r2_encounter_Encounter_id, parent encounter_Encounter_parent, doc_id encounter_Encounter_id \n\
+             FROM doc encounter_Encounter WHERE reference = 373793 ) row) row \n\
+              LEFT JOIN (SELECT value vaccineCode_22, reference2 r2_vaccineCode_id, parent vaccineCode_parent, doc_id vaccineCode_id \n\
+             FROM doc vaccineCode LEFT JOIN string ON string_id=reference2 WHERE reference = 84808 ) vaccineCode ON vaccineCode_parent=row_id \n\
+             LEFT JOIN (SELECT value text_Narrative_22, parent text_Narrative_parent, doc_id text_Narrative_id FROM doc text_Narrative \n\
+             LEFT JOIN string ON string_id=doc_id WHERE reference = 372927 ) text_Narrative ON text_Narrative_parent=row_id ",
             "rowId": "row_id",
             "parentId": "table_id"
         }
@@ -14,15 +51,6 @@ sql_app.group.gp_EmrAutoSql01 = {
 
 
         // END: buildSqlApp - sql_app.TableRow2Adn_373794 
-
-
-        sql_app.ImmunusationEncounterPatient = {
-            name: 'Імунізація взаємодія пацієнт',
-            sql: 'SELECT * FROM (:sql_app.TableRow2Adn_373794 ) im \n\
-            , (:sql_app.TableA1Row2Adn_373784 ) ee \n\
-            WHERE ee.subject_patient_id=im.r2_encounter_encounter_id ',
-            patientIdName: 'r2_subject_patient_id',
-        }
 
         sql_app.EncounterEpisodeOfCare = {
             name: 'Взаємодія Епізоди паціента',

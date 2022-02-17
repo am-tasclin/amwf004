@@ -1,3 +1,9 @@
+<div data-ng-repeat="im in ctrl.conf.imDirect">
+	<span class="w3-tiny am-b">код вакцини:</span>
+	<span class="w3-hover-shadow"> {{im.vaccinecode_22}} </span>
+	<span class="w3-tiny am-i"> {{im.text_narrative_22}} </span>
+</div>
+
 <div class="w3-small w3-light-grey">
 	Історія ⁙
 	<span data-ng-class="{'w3-green':ctrl.conf.clickedElement.episode_id}">епізод</span>
@@ -25,6 +31,7 @@
 				<div data-ng-repeat="im in ctrl.conf.imEncounter" data-ng-if="im.subject_patient_id==er.row_id">
 					<span class="w3-tiny am-b">код вакцини:</span>
 					<span class="w3-hover-shadow"> {{im.vaccinecode_22}} </span>
+					<span class="w3-tiny am-i"> {{im.text_narrative_22}} </span>
 				</div>
 				<div data-ng-repeat="mr in ctrl.conf.mrEncounter" data-ng-if="mr.mrencounter_r2==er.row_id">
 					<span class="w3-tiny am-b">призначено:</span>

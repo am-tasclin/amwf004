@@ -25,6 +25,7 @@ contentDoc.readEMR = {
     episode: { sql: 'PatientEpisodeOfCare' },
     encounter: { sql: 'EncounterEpisodeOfCare' },
     imEncounter: { sql: 'ImmunusationEncounterPatient' },
+    imDirect: { sql: 'PatientImmunizationDirect' },
     mrEncounter: { sql: 'encounter_MedicationRequest_sc_doseQuantityTimingPeriod' },
 }
 
