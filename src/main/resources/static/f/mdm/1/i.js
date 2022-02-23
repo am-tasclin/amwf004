@@ -5,10 +5,47 @@ singlePage.index_template = 'index_template.html'
 sql_app.group.gp_ADN02.add()
 sql_app.group.gp_MedicationRequest.add()
 
+
+let content_menu = {} //left in MDM
+content_menu.field_name_focus = adnId => {
+    if (!conf.eMap[adnId].valueToEdit) {
+        conf.eMap[adnId].valueToEdit = conf.eMap[adnId].value_22
+    }
+}
+
+sql_app.autoSQL_CU = {
+    c: 'INSERT INTO :table_name (:table_name_id, value) VALUES (:doc_id, :value) ',
+    u: 'UPDATE :table_name SET value = :value WHERE :table_name_id=:doc_id ',
+}
+
+content_menu.field_name_save = adnId => {
+    const el = conf.eMap[adnId], so = {
+        doc_id: el.doc_id, value: "'" + el.valueToEdit + "'"
+        , table_name: 'string', isInsert: !el.value_22
+    }
+
+    console.log(123, el, adnId, so)
+    if (so.isInsert) {
+        so.sql = sql_app.autoSQL_CU.c
+            .replaceAll(':table_name', so.table_name)
+            .replace(':doc_id', so.doc_id)
+            .replace(':value', so.value)
+            
+    } else {
+
+    }
+}
+
+content_menu.typeElement = (type, adnId) => {
+    content_menu.subSepMenuName = type + '_' + conf.eMap[adnId].doc_id
+}
+
 class InitPageController extends AbstractController {
     constructor(dataFactory) {
         super(); this.dataFactory = dataFactory
         this.date = new Date()
+        this.content_menu = content_menu
+        console.log(123)
     }
 
     sqlNames = () => Object.keys(sql_app)
@@ -91,7 +128,7 @@ class InitPageController extends AbstractController {
             add_sql_app += JSON.stringify(sqlAppObj, ' ', 2) + '\n'
             console.log(k, v, sqlAppName, sqlAppObj, 1)
         })
-        add_sql_app += '\n // END: buildSqlApp - sql_app.'+singlePage.session.sql+' \n '
+        add_sql_app += '\n // END: buildSqlApp - sql_app.' + singlePage.session.sql + ' \n '
         this.add_sql_app = add_sql_app
     }
 

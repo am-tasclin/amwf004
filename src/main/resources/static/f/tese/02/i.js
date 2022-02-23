@@ -120,7 +120,7 @@ class InitTreeController extends InitPageController {
         super(dataFactory)
         angular.forEach(singlePage.UrlMap()['tree'].split(',')
             , (t, tk) => angular.forEach(t.split('_')
-                , (v, k) => singlePage.session.tree[!tk ? 'l' : 'r'].id[k] = 1*v))
+                , (v, k) => singlePage.session.tree[!tk ? 'l' : 'r'].id[k] = 1 * v))
         if (singlePage.UrlMap()['tree'] == 'tree'
             && isNaN(singlePage.session.tree.l.id)
         ) singlePage.session.tree.l.id = 45

@@ -419,7 +419,8 @@ var initDataModel = function(){
 				el['value_1_'+doctype] = el.value_1_edit
 				if(fn) fn()
 			}
-			writeSql(so)
+			console.log(so)
+			 writeSql(so)
 		}
 	}
 
