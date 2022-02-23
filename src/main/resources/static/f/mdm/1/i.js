@@ -5,47 +5,54 @@ singlePage.index_template = 'index_template.html'
 sql_app.group.gp_ADN02.add()
 sql_app.group.gp_MedicationRequest.add()
 
-
-let content_menu = {} //left in MDM
-content_menu.field_name_focus = adnId => {
-    if (!conf.eMap[adnId].valueToEdit) {
-        conf.eMap[adnId].valueToEdit = conf.eMap[adnId].value_22
-    }
-}
-
 sql_app.autoSQL_CU = {
     c: 'INSERT INTO :table_name (:table_name_id, value) VALUES (:doc_id, :value) ',
     u: 'UPDATE :table_name SET value = :value WHERE :table_name_id=:doc_id ',
+    r: 'SELECT * FROM (:sql_app.SelectADN )x WHERE doc_id=:doc_id',
 }
 
-content_menu.field_name_save = adnId => {
-    const el = conf.eMap[adnId], so = {
-        doc_id: el.doc_id, value: "'" + el.valueToEdit + "'"
-        , table_name: 'string', isInsert: !el.value_22
+// let content_menu = {} //left in MDM
+class Content_menu { //left in MDM
+    constructor(dataFactory) { this.dataFactory = dataFactory }
+
+    typeElement = (type, adnId) => {
+        console.log(type, adnId)
+        this.subSepMenuName = type + '_' + conf.eMap[adnId].doc_id
     }
 
-    console.log(123, el, adnId, so)
-    if (so.isInsert) {
-        so.sql = sql_app.autoSQL_CU.c
+    field_name_save = adnId => {
+        const el = conf.eMap[adnId], so = {
+            doc_id: el.doc_id, value: "'" + el.valueToEdit + "'"
+            , table_name: 'string', cuName: !el.value_22 ? 'c' : 'u'
+        }
+
+        so.sql = sql_app.autoSQL_CU[so.cuName]
             .replaceAll(':table_name', so.table_name)
             .replace(':doc_id', so.doc_id)
             .replace(':value', so.value)
-            
-    } else {
 
+        so.sql += ';\n ' + sql_app.autoSQL_CU.r
+        so.sql = so.sql.replace(':doc_id', so.doc_id)
+        so.sql = replaceSql(so.sql)
+        this.dataFactory.writeSql(so.sql, r => {
+            console.log(r)
+            conf.eMap[r.list1[0].doc_id] = r.list1[0]
+        })
     }
-}
 
-content_menu.typeElement = (type, adnId) => {
-    content_menu.subSepMenuName = type + '_' + conf.eMap[adnId].doc_id
+    field_name_focus = adnId => {
+        if (!conf.eMap[adnId].valueToEdit) {
+            conf.eMap[adnId].valueToEdit = conf.eMap[adnId].value_22
+        }
+    }
+
 }
 
 class InitPageController extends AbstractController {
     constructor(dataFactory) {
         super(); this.dataFactory = dataFactory
         this.date = new Date()
-        this.content_menu = content_menu
-        console.log(123)
+        this.content_menu = new Content_menu(dataFactory)
     }
 
     sqlNames = () => Object.keys(sql_app)
