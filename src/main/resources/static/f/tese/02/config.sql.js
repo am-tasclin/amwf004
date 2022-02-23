@@ -1,6 +1,40 @@
 'use strict'
 sql_app.group = {}
 
+sql_app.group.gp_ADN03 = {
+    name: 'ADN SQL collection migration from crud004.js',
+    add: () => {
+
+        sql_app.INSERT_doc = so => {
+            if (!so.doc_id) so.doc_id = ':nextDbId1'
+            var vars = '', vals = ''
+            angular.forEach(['doc_id', 'parent', 'reference', 'reference2', 'doctype'], function (k) {
+                var v = so[k]
+                if (v) {
+                    if (vars.length > 0) {vars += ', '; vals += ', '}
+                    vars += k
+                    if (!Number.isInteger(v) && (!v || v.indexOf(':') == 0)
+                    ) vals += v
+                    else vals += "'" + v + "'"
+                }
+            })
+            if (vars.length > 0) {
+                so.sql = "INSERT INTO doc (" + vars + ") VALUES (" + vals + ");\n"
+            }
+            if (so.uuid) {
+                so.sql += "INSERT INTO uuid (uuid_id, value) VALUES (" +
+                    so.doc_id + ", '" + so.uuid + "');\n"
+            }
+            if (so.s1value) {
+                so.sql += "INSERT INTO string (string_id, value) VALUES (" +
+                    so.doc_id + ", '" + so.s1value + "');\n"
+            }
+            return so.sql
+        }
+
+    },
+}
+
 sql_app.group.gp_ADN02 = {
     name: 'ADN SQL collection',
     add: () => {
@@ -180,6 +214,7 @@ sql_app.group.gp_ADN02 = {
         }
     }
 }
+
 const toDel = {
     rowSql: 'SELECT d.doc_id row_id, d.parent table_id, d.* \n\
     FROM doc d LEFT JOIN string ON string_id=doc_id \n\

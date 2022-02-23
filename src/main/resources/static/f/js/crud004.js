@@ -1009,6 +1009,7 @@ sql_app.INSERT_doc = function(so){
 	}
 	return so.sql
 }
+
 sql_app.SELECT_doc_id = function(){
 	var sql = "SELECT * FROM doc WHERE doc_id=:nextDbId1; \n"
 	return sql

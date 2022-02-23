@@ -3,6 +3,7 @@ app.config(RouteProviderConfig)
 singlePage.session = { tree: { l: { id: [45] }, r: { id: [45] } } }
 singlePage.index_template = 'index_template.html'
 sql_app.group.gp_ADN02.add()
+sql_app.group.gp_ADN03.add()
 sql_app.group.gp_MedicationRequest.add()
 
 sql_app.autoSQL_CU = {
@@ -12,14 +13,20 @@ sql_app.autoSQL_CU = {
 }
 
 // let content_menu = {} //left in MDM
-class Content_menu { //left in MDM
+class AdnContent_menu { //left in MDM
     constructor(dataFactory) { this.dataFactory = dataFactory }
 
-    typeElement = (type, adnId) => {
-        console.log(type, adnId)
-        this.subSepMenuName = type + '_' + conf.eMap[adnId].doc_id
-    }
+    typeElement = (type, adnId) => this.subSepMenuName = type + '_' + conf.eMap[adnId].doc_id
 
+    addElement = adnId => {
+        const el = conf.eMap[adnId], so = { parent: el.doc_id }
+        so.sql = sql_app.INSERT_doc(so)
+        console.log(adnId, 21)
+        this.dataFactory.writeSql(so.sql, r => {
+            console.log(r)
+            // conf.eMap[r.list1[0].doc_id] = r.list1[0]
+        })
+    }
     field_name_save = adnId => {
         const el = conf.eMap[adnId], so = {
             doc_id: el.doc_id, value: "'" + el.valueToEdit + "'"
@@ -34,10 +41,8 @@ class Content_menu { //left in MDM
         so.sql += ';\n ' + sql_app.autoSQL_CU.r
         so.sql = so.sql.replace(':doc_id', so.doc_id)
         so.sql = replaceSql(so.sql)
-        this.dataFactory.writeSql(so.sql, r => {
-            console.log(r)
-            conf.eMap[r.list1[0].doc_id] = r.list1[0]
-        })
+        this.dataFactory.writeSql(so.sql
+            , r => conf.eMap[r.list1[0].doc_id] = r.list1[0])
     }
 
     field_name_focus = adnId => {
@@ -52,7 +57,7 @@ class InitPageController extends AbstractController {
     constructor(dataFactory) {
         super(); this.dataFactory = dataFactory
         this.date = new Date()
-        this.content_menu = new Content_menu(dataFactory)
+        this.content_menu = new AdnContent_menu(dataFactory)
     }
 
     sqlNames = () => Object.keys(sql_app)
@@ -152,7 +157,7 @@ class InitPageController extends AbstractController {
 
     exeSqlX = () => {
         const sessionSqlObj = sql_app[singlePage.session.sql]
-        console.log(singlePage.session.sql, '\n', sessionSqlObj)
+        //console.log(singlePage.session.sql, '\n', sessionSqlObj)
         let sql = sessionSqlObj.sql
         if (sessionSqlObj.parentId && sessionSqlObj.parentIn) {
             sql = 'SELECT * FROM (' + sql + ') x WHERE ' + sessionSqlObj.parentId + ' IN (' + sessionSqlObj.parentIn + ')'
