@@ -291,7 +291,7 @@ sql_app.group.gp_ADN01 = {
 
         sql_app.SelectADN = {
             name: 'Зчитати абстрактий вузел - TeSe',
-            sql: 'SELECT d.*, s.value value_22, su.value value_u_22, f.value value_24 \n\
+            sql: 'SELECT d.*, dr.doctype r_doctype, s.value value_22, su.value value_u_22, f.value value_24 \n\
             , ts.value value_25, srr.value rr_value_22 \n\
             , sr.value r_value_22, dr2.doctype r2_doctype \n\
             , sr2.value r2_value_22, o.sort \n\

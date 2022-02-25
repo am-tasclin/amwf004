@@ -12,6 +12,7 @@
             .doctype]" class="{{ctrl.getConf('doctype_fa')
                 [ctrl.conf.eMap[adnId].doctype]}} w3-opacity"></i>
         </span>
+        <i class="fas fa-edit w3-text-blue w3-tiny" data-ng-if="ctrl.conf.subSepMenuName.indexOf(adnId)>=0"></i>
         <div class="w3-dropdown-content w3-border" data-ng-include="'/f/tese/02/node_content_menu.html'"></div>
     </span>
     <span data-ng-click="ctrl.selectADN(adnId, lr)">

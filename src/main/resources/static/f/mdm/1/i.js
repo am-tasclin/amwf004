@@ -6,39 +6,68 @@ sql_app.group.gp_ADN02.add()
 sql_app.group.gp_ADN03.add()
 sql_app.group.gp_MedicationRequest.add()
 
-sql_app.autoSQL_CU = {
+sql_app.autoSQL_AdnCRUD = {
     c: 'INSERT INTO :table_name (:table_name_id, value) VALUES (:doc_id, :value) ',
+    r: 'SELECT * FROM (:sql_app.SelectADN ) x WHERE doc_id=:doc_id',
     u: 'UPDATE :table_name SET value = :value WHERE :table_name_id=:doc_id ',
-    r: 'SELECT * FROM (:sql_app.SelectADN )x WHERE doc_id=:doc_id',
+    uDoc: 'UPDATE doc SET :filedName = :value WHERE doc_id=:doc_id ',
+    d: 'DELETE FROM doc WHERE doc_id = :doc_id ',
 }
 
 // let content_menu = {} //left in MDM
 class AdnContent_menu { //left in MDM
     constructor(dataFactory) { this.dataFactory = dataFactory }
 
-    typeElement = (type, adnId) => this.subSepMenuName = type + '_' + conf.eMap[adnId].doc_id
+    minusElement = adnId => {
+        const sql = sql_app.autoSQL_AdnCRUD.d.replace(':doc_id', adnId)
+        this.dataFactory.writeSql(sql, r => {
+            if (1 == r.update_0) {
+                const parentChildren = conf.parentChild[conf.eMap[adnId].parent],
+                    childPosition = parentChildren.indexOf(adnId)
+                parentChildren.splice(parentChildren, 1)
+                delete conf.eMap[adnId]
+            }
+        })
+    }
+
+    copyElement = adnId => conf.copyAdnId = adnId
+    cutElement = adnId => conf.cutAdnId = adnId
+    typeElement = (type, adnId) => conf.subSepMenuName = type + '_' + adnId
+    pasteElement = adnId => this.typeElement('paste', adnId)
+    pasteElementContent = adnId => {
+        console.log(adnId)
+    }
+    pasteElementReference1 = adnId => {
+        console.log(adnId)
+    }
+    pasteElementReference2 = adnId => {
+        console.log(adnId)
+    }
 
     addElement = adnId => {
         const el = conf.eMap[adnId], so = { parent: el.doc_id }
         so.sql = sql_app.INSERT_doc(so)
-        console.log(adnId, 21)
+        so.sql += replaceSql(sql_app.autoSQL_AdnCRUD.r)
+        so.sql = so.sql.replace(':doc_id', ':nextDbId1')
+        console.log(adnId, so)
         this.dataFactory.writeSql(so.sql, r => {
             console.log(r)
             // conf.eMap[r.list1[0].doc_id] = r.list1[0]
         })
     }
+
     field_name_save = adnId => {
         const el = conf.eMap[adnId], so = {
             doc_id: el.doc_id, value: "'" + el.valueToEdit + "'"
             , table_name: 'string', cuName: !el.value_22 ? 'c' : 'u'
         }
 
-        so.sql = sql_app.autoSQL_CU[so.cuName]
+        so.sql = sql_app.autoSQL_AdnCRUD[so.cuName]
             .replaceAll(':table_name', so.table_name)
             .replace(':doc_id', so.doc_id)
             .replace(':value', so.value)
 
-        so.sql += ';\n ' + sql_app.autoSQL_CU.r
+        so.sql += ';\n ' + sql_app.autoSQL_AdnCRUD.r
         so.sql = so.sql.replace(':doc_id', so.doc_id)
         so.sql = replaceSql(so.sql)
         this.dataFactory.writeSql(so.sql
@@ -46,8 +75,9 @@ class AdnContent_menu { //left in MDM
     }
 
     field_name_focus = adnId => {
-        if (!conf.eMap[adnId].valueToEdit) {
-            conf.eMap[adnId].valueToEdit = conf.eMap[adnId].value_22
+        const el = conf.eMap[adnId]
+        if (!el.valueToEdit) {
+            el.valueToEdit = el.r_doctype ? el['value_' + el.r_doctype] : el.value_22
         }
     }
 
