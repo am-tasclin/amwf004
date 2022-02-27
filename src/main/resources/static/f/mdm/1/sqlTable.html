@@ -138,14 +138,7 @@
                     class="fas fa-pen"></i></button>
         </span>
         <pre class="w3-small">{{ctrl.add_sql_app}}</pre>
-        <div data-ng-if="ctrl.singlePage.session.CRUD == 'U'" class="w3-card-4">&nbsp;
-            <i class="fas fa-edit"></i>&nbsp;edit
-            <span data-ng-repeat="m in [ctrl.conf.eMap[ctrl.singlePage.session.sql.split('_')[1]]]">
-                type={{m.reference}}/{{m.r_value_22}}
-                <span data-ng-repeat="(k,v) in m" data-ng-if="v">
-                    |{{k}}|
-                </span>
-            </span>
+        <div data-ng-if="ctrl.singlePage.session.CRUD == 'U'" class="w3-card-4" data-ng-include="'editRow.html'">
         </div>
         <pre data-ng-if="!ctrl.singlePage.session.CRUD || ctrl.singlePage.session.CRUD == 'R'" class="w3-tiny"
             style="max-height: 5vh; overflow: auto; ">{{ctrl.getSql(ctrl.singlePage.session.sql).sql}}</pre>

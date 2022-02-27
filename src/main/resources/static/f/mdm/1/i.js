@@ -37,9 +37,18 @@ class AdnContent_menu { //left in MDM
     pasteElementContent = adnId => {
         console.log(adnId)
     }
+
     pasteElementReference1 = adnId => {
-        console.log(adnId)
+        const sql = sql_app.autoSQL_AdnCRUD.uDoc
+            .replace(':filedName', 'reference')
+            .replace(':value', conf.copyAdnId)
+            .replace(':doc_id', adnId) + ';\n '
+            + replaceSql(sql_app.autoSQL_AdnCRUD.r)
+                .replace(':doc_id', adnId)
+        console.log(adnId, sql)
+        this.dataFactory.writeSql(sql, r => conf.eMap[r.list1[0].doc_id] = r.list1[0])
     }
+
     pasteElementReference2 = adnId => {
         console.log(adnId)
     }
@@ -151,6 +160,16 @@ class InitPageController extends AbstractController {
         columnObj.sqlName = sqlName.split('_')[0]
     }
 
+
+    editRow = () => singlePage.session.CRUD = singlePage.session.CRUD != 'U' ? 'U' : ''
+    saveEditRow = () => {
+        console.log(singlePage.session.selectedRow)
+        angular.forEach(singlePage.session.selectedRow, (v, k) => {
+            if (k.split('_')[1] != id) {
+                console.log(k, v, 11)
+            }
+        })
+    }
     clickRow = row => {
         singlePage.session.selectedRow = row
         const rowMeta = conf.eMap[singlePage.session.sql.split('_')[1]]
@@ -174,10 +193,6 @@ class InitPageController extends AbstractController {
         this.add_sql_app = add_sql_app
     }
 
-    editRow = () => {
-        console.log(123)
-        singlePage.session.CRUD = 'U'
-    }
 
     exeSql = () => {
         let sql = buildSqlWithKeyValue(singlePage.session.sql)
