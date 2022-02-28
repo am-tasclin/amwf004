@@ -14,6 +14,15 @@ sql_app.autoSQL_AdnCRUD = {
     d: 'DELETE FROM doc WHERE doc_id = :doc_id ',
 }
 
+sql_app.doctype_content_table_name = {
+    22: 'string',
+    23: 'integer',
+    24: 'double',
+    25: 'timestamp',
+    26: 'date',
+    30: 'uuid',
+}
+
 // let content_menu = {} //left in MDM
 class AdnContent_menu { //left in MDM
     constructor(dataFactory) { this.dataFactory = dataFactory }
@@ -93,8 +102,8 @@ class AdnContent_menu { //left in MDM
 }
 
 class InitPageController extends AbstractController {
-    constructor(dataFactory) {
-        super(); this.dataFactory = dataFactory
+    constructor(dataFactory, $timeout) {
+        super(); this.dataFactory = dataFactory; this.$timeout = $timeout;
         this.date = new Date()
         this.content_menu = new AdnContent_menu(dataFactory)
     }
@@ -136,20 +145,33 @@ class InitPageController extends AbstractController {
 
     readSessionSqlTable = () => {
         // console.log('sql', singlePage.session.sql, sql_app[singlePage.session.sql])
-        console.log('sql', singlePage.session.sql,)
+        // console.log('sql', singlePage.session.sql,)
         const sqlColumnsPattern = 'LEFT JOIN (:columnSql ) :columnName ON :columnName_parent=row_id '
-        if (singlePage.session.sql && sql_app[singlePage.session.sql]) {
-            let sqlColumns = ''
-            angular.forEach(sql_app[singlePage.session.sql].columns, (v, k) => {
-                sqlColumns += '\n' + sqlColumnsPattern
-                    .replace(':columnSql', sql_app[v.sqlName + '_' + k].sql)
-                    .replaceAll(':columnName', sql_app[v.sqlName + '_' + k].colName)
-                console.log(k, v.sqlName,)
-            })
-            // console.log(sqlColumns, 1)
-            const sql = buildSqlWithKeyValue(singlePage.session.sql
-                , singlePage.session.sqlKey, singlePage.session.sqlValue)
-            this.dataFactory.readSqlTable(sql)
+        if (singlePage.session.sql) {
+            if (sql_app[singlePage.session.sql]) {
+                let sqlColumns = ''
+                angular.forEach(sql_app[singlePage.session.sql].columns, (v, k) => {
+                    sqlColumns += '\n' + sqlColumnsPattern
+                        .replace(':columnSql', sql_app[v.sqlName + '_' + k].sql)
+                        .replaceAll(':columnName', sql_app[v.sqlName + '_' + k].colName)
+                    console.log(k, v.sqlName,)
+                })
+                const sql = buildSqlWithKeyValue(singlePage.session.sql
+                    , singlePage.session.sqlKey, singlePage.session.sqlValue)
+                this.dataFactory.readSqlTable(sql)
+            } else {
+                const autoSql = sql_app.autoSql
+                    , createAutoSqlName = singlePage.session.sql.split('_')[0]
+                    , ontologyId = singlePage.session.sql.split('_')[1]
+                if (sql_app.autoSql['create' + createAutoSqlName + 'Sql']) {
+                    const ctrl = this
+                    this.$timeout(() => {
+                        sql_app.autoSql['create' + createAutoSqlName + 'Sql'](ontologyId)
+                        ctrl.exeSql()
+                    }, 400)
+
+                }
+            }
         }
     }
 
@@ -164,9 +186,25 @@ class InitPageController extends AbstractController {
     editRow = () => singlePage.session.CRUD = singlePage.session.CRUD != 'U' ? 'U' : ''
     saveEditRow = () => {
         console.log(singlePage.session.selectedRow)
-        angular.forEach(singlePage.session.selectedRow, (v, k) => {
-            if (k.split('_')[1] != id) {
-                console.log(k, v, 11)
+        let sql = ''
+        angular.forEach(singlePage.session.selectedRow, (value, key) => {
+            if (key.split('_')[1] != 'id') {
+                const cellName = key.split('_')[0]
+                    , cellTypeNumber = key.split('_')[1]
+                    , cellId = singlePage.session.selectedRow[cellName + '_id']
+                    , contentTableName = sql_app.doctype_content_table_name[cellTypeNumber]
+                console.log(key, cellId, cellName, cellId, contentTableName)
+
+                if (cellId) {
+                    sql += sql.length > 0 ? ';\n\ ' : ''
+                    sql += sql_app.autoSQL_AdnCRUD.u
+                        .replaceAll(':table_name', contentTableName)
+                        .replace(':value', "'" + value + "'")
+                        .replace(':doc_id', cellId)
+                    console.log(sql)
+                } else if (value) {
+                    console.log('insert')
+                }
             }
         })
     }
@@ -196,7 +234,7 @@ class InitPageController extends AbstractController {
 
     exeSql = () => {
         let sql = buildSqlWithKeyValue(singlePage.session.sql)
-        console.log(sql)
+        // console.log(sql)
         this.dataFactory.readSqlTable(sql)
     }
 
@@ -237,8 +275,8 @@ const routeController = controllerClass => {
 }
 
 class InitSessionController extends InitPageController {
-    constructor(dataFactory) {
-        super(dataFactory)
+    constructor(dataFactory, $timeout) {
+        super(dataFactory, $timeout)
         singlePage.session = JSON.parse(decodeURI(singlePage.UrlMap()['init']))
         if (!singlePage.session.selectedLR) singlePage.session.selectedLR = 'l'
 
@@ -248,7 +286,8 @@ class InitSessionController extends InitPageController {
         let parents = ''
         angular.forEach(['l', 'r'], lr => angular.forEach(singlePage.session
             .tree[lr].openIds, parent => parents += ',' + parent))
-        console.log(parents)
+
+        // console.log(parents)
 
         angular.forEach(['l', 'r'], lr => angular.forEach(singlePage.session
             .tree[lr].openIds, parent => this.dataFactory.getReadADN_children(parent)

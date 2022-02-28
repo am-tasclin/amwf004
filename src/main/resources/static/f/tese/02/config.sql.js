@@ -11,7 +11,7 @@ sql_app.group.gp_ADN03 = {
             angular.forEach(['doc_id', 'parent', 'reference', 'reference2', 'doctype'], function (k) {
                 var v = so[k]
                 if (v) {
-                    if (vars.length > 0) {vars += ', '; vals += ', '}
+                    if (vars.length > 0) { vars += ', '; vals += ', ' }
                     vars += k
                     if (!Number.isInteger(v) && (!v || v.indexOf(':') == 0)
                     ) vals += v
@@ -166,8 +166,8 @@ sql_app.group.gp_ADN02 = {
                 sqlTable = 'SELECT * FROM (' + sqlTable + ') row'
                 angular.forEach(conf.parentChild[adnId], id => {
                     const colName = sql_app.autoSql.colName(id)
-                    const sqlCol = sql_app.autoSql.createAdnSql(id)
-                    console.log(sqlCol, 1)
+                        , sqlCol = sql_app.autoSql.createAdnSql(id)
+                    // console.log(sqlCol, 1)
                     selectColumnLJ += '\n LEFT JOIN (' + sqlCol + ') '
                         + colName + ' ON ' + colName + '_parent=row_id '
                     selectColumnName += ', ' + sql_app.autoSql.colNames(sqlCol, colName)

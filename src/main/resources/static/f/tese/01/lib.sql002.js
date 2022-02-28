@@ -131,7 +131,7 @@ class RouteProviderConfig {
         angular.forEach(singlePage, (v, k) => {
             if (v.controller) {
                 if (!v.controllerAs) v.controllerAs = 'ctrl'
-                console.log(k)
+                // console.log(k)
                 $routeProvider.when("/" + k, v)
             }
         })
