@@ -8,7 +8,7 @@ sql_app.group.gp_ADN03 = {
         sql_app.INSERT_doc = so => {
             if (!so.doc_id) so.doc_id = ':nextDbId1'
             var vars = '', vals = ''
-            angular.forEach(['doc_id', 'parent', 'reference', 'reference2', 'doctype'], function (k) {
+            angular.forEach(['doc_id', 'parent', 'reference', 'reference2', 'doctype'], k => {
                 var v = so[k]
                 if (v) {
                     if (vars.length > 0) { vars += ', '; vals += ', ' }

@@ -12,6 +12,25 @@ sql_app.autoSQL_AdnCRUD = {
     u: 'UPDATE :table_name SET value = :value WHERE :table_name_id=:doc_id ',
     uDoc: 'UPDATE doc SET :filedName = :value WHERE doc_id=:doc_id ',
     d: 'DELETE FROM doc WHERE doc_id = :doc_id ',
+    buildSql: adnId => {
+        let sql = ''
+        const adnEl = conf.eMap[adnId]
+            , colName = adnEl.r_value_22 || adnEl.rr_value_22
+            , colSimpleType = adnEl.doctype || adnEl.r_doctype || 22
+            , contentTableName = sql_app.doctype_content_table_name[colSimpleType]
+            , cellValue = singlePage.session.selectedRow[colName + '_' + colSimpleType]
+            , cellId = singlePage.session.selectedRow[colName + '_id']
+        console.log(adnId, colName, colSimpleType, cellValue, cellId)
+        if (cellId) {
+            sql = sql_app.autoSQL_AdnCRUD.u
+                .replaceAll(':table_name', contentTableName)
+                .replace(':value', "'" + cellValue + "'")
+                .replace(':doc_id', cellId)
+            console.log(sql)
+        } else {
+            console.log('insert')
+        }
+    },
 }
 
 sql_app.doctype_content_table_name = {
@@ -185,7 +204,19 @@ class InitPageController extends AbstractController {
 
     editRow = () => singlePage.session.CRUD = singlePage.session.CRUD != 'U' ? 'U' : ''
     saveEditRow = () => {
+        const patternId = singlePage.session.sql.split('_')[1] * 1
+            , patternEl = conf.eMap[patternId]
         console.log(singlePage.session.selectedRow)
+        let sql = sql_app.autoSQL_AdnCRUD.buildSql(patternId)
+        angular.forEach(conf.parentChild[patternId]
+            , adnId => sql += (sql.length > 0 ? ';\n\ ' : '')
+                + sql_app.autoSQL_AdnCRUD.buildSql(adnId))
+    }
+
+    saveEditRow01 = () => {
+        const patternId = singlePage.session.sql.split('_')[1] * 1
+            , patternEl = conf.eMap[patternId]
+        console.log(singlePage.session.selectedRow, patternId, patternEl)
         let sql = ''
         angular.forEach(singlePage.session.selectedRow, (value, key) => {
             if (key.split('_')[1] != 'id') {
@@ -193,7 +224,7 @@ class InitPageController extends AbstractController {
                     , cellTypeNumber = key.split('_')[1]
                     , cellId = singlePage.session.selectedRow[cellName + '_id']
                     , contentTableName = sql_app.doctype_content_table_name[cellTypeNumber]
-                console.log(key, cellId, cellName, cellId, contentTableName)
+                console.log(key, cellId, cellName, cellId, contentTableName, value, key)
 
                 if (cellId) {
                     sql += sql.length > 0 ? ';\n\ ' : ''
@@ -203,11 +234,13 @@ class InitPageController extends AbstractController {
                         .replace(':doc_id', cellId)
                     console.log(sql)
                 } else if (value) {
-                    console.log('insert')
+                    console.log('insert ', key, value, 11)
+
                 }
             }
         })
     }
+
     clickRow = row => {
         singlePage.session.selectedRow = row
         const rowMeta = conf.eMap[singlePage.session.sql.split('_')[1]]
