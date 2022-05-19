@@ -169,5 +169,6 @@ class RWDataFactory {
     // https://metanit.com/web/angular/3.3.php
 
 }
-
+console.log(123, "RWDataFactory")
+console.log(RWDataFactory)
 app.factory("dataFactory", RWDataFactory)

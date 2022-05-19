@@ -58,8 +58,7 @@ public class Db1Rest {
 
 	@GetMapping("/r/docbodyjson/{doc_id}")
 	public @ResponseBody Map<String, Object> getDocbodyjson(@PathVariable Long doc_id) {
-		Map<String, Object> map = executeSqlBlock.getDocbodyjson(doc_id);
-		return map;
+		return executeSqlBlock.getDocbodyjson(doc_id);
 	}
 
 	@GetMapping("/r/html/{id}")

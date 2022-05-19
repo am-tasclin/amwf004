@@ -108,11 +108,10 @@ singlePage.UrlOnOff = (s, p) => singlePage.Url().includes(s)
 const urlMap = {}
 singlePage.UrlMap = () => {
     // if (Object.keys(urlMap).length === 0)
-    singlePage.Url().split('/').forEach
-        (v => {
-            if (v)
-                urlMap[v.split('_')[0]] = v.replace(v.split('_')[0] + '_', '')
-        })
+    singlePage.Url().split('/').forEach(v => {
+        if (v)
+            urlMap[v.split('_')[0]] = v.replace(v.split('_')[0] + '_', '')
+    })
     return urlMap
 }
 

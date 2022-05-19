@@ -108,8 +108,8 @@ singlePage['tp'] = {
     controller: 'TherapyProcessController',
 }
 singlePage['pl'] = {
-    templateUrl: '/f/tese/01/sql.html',
     controller: 'PatientListController',
+    templateUrl: '/f/tese/01/sql.html',
 }
 
 // app.controller("PlanDefinitionController", PlanDefinitionController)
@@ -164,20 +164,25 @@ class TherapyProcessController extends AbstractController {
         console.log('TherapyProcessController')
     }
 }
+
 class PatientListController extends AbstractController {
     constructor(dataFactory) {
         super()
         conf.sqlKeyName = 'Patient_family_name'
         console.log(conf.sqlKeyName)
         let ctrl = this
-        dataFactory.httpGetSql({ sql: readSql2R(conf.sqlKeyName) })
+            , sql = readSql2R(conf.sqlKeyName
+            ) + ' AND p.parent=373426'
+        console.log(sql)
+        dataFactory.httpGetSql({ sql: sql })
             .then(dataSqlRequest => ctrl.data = dataSqlRequest)
     }
-    clickPatient = (r) => {
-        conf.patient = r
-    }
+
+    clickPatient = r => conf.patient = r
+
     // sql_app = sql_app
 }
+
 sql_app.Patient_family_name.sqlHtml = {
     patient_id: '<a data-ng-click="ctrl.clickPatient(r)" href="#!/hy_{{r.patient_id}}"> {{r[k]}} </a>',
 }

@@ -244,7 +244,7 @@ const toDel = {
         // console.log(rowSql)
         return rowSql
     },
-    createTableSql: (param) => {
+    createTableSql: param => {
         console.log(param)
         let tableSql = sql_app.autoSql.createRowSql(param)
         const rowPatternEl = conf.eMap[conf.parentChild[param.parent][0]]
@@ -263,7 +263,7 @@ const toDel = {
             .replace('doc d ', 'doc d ' + selectColumnLJ)
         return tableSql
     },
-    create: (param) => {
+    create: param => {
         console.log(param)
         let createTable = conf.eMap[conf.eMap[param.parent].reference2]
         let virtualTableName = createTable.value_22

@@ -26,10 +26,14 @@ sql_app.autoSQL_AdnCRUD = {
                 .replaceAll(':table_name', contentTableName)
                 .replace(':value', "'" + cellValue + "'")
                 .replace(':doc_id', cellId)
-            console.log(sql)
         } else {
             console.log('insert')
+            const so = { parent: adnEl.parent, reference: adnEl.reference }
+            sql = sql_app.INSERT_doc(so)
+            // sql += sql_app.autoSQL_AdnCRUD.c
+            console.log(sql)
         }
+        return sql
     },
 }
 
@@ -216,6 +220,7 @@ class InitPageController extends AbstractController {
     saveEditRow01 = () => {
         const patternId = singlePage.session.sql.split('_')[1] * 1
             , patternEl = conf.eMap[patternId]
+        singlePage.session.nextDbId = 1
         console.log(singlePage.session.selectedRow, patternId, patternEl)
         let sql = ''
         angular.forEach(singlePage.session.selectedRow, (value, key) => {
@@ -448,4 +453,29 @@ let ValueSet_1 = {
 conf.doctype_fa = {
     14: 'far fa-folder',
     17: 'far fa-file',
+}
+
+let xx = {
+    "update_id": 463166687,
+    "message": {
+        "message_id": 256, "from": {
+            "id": '{ your - user - id}',
+            "is_bot": false,
+            "first_name": "Simon",
+            "last_name": "Scholz",
+            "language_code": "en-US"
+        },
+        "chat": {
+            "id": '{ your - chat - id }',
+            "first_name": "Simon",
+            "last_name": "Scholz",
+            "type": "private"
+        },
+        "date": 1519229850,
+        "text": "/now Hamburg",
+        "entities": [{
+            "offset": 0, "length": 4,
+            "type": "bot_command"
+        }]
+    }
 }
