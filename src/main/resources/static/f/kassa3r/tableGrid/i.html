@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html data-ng-controller="InitPageController as ctrl" lang="uk-UA">
+<meta charset="utf-8" />
+<title>jast002, modules</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="/webjars/font-awesome/6.1.0/css/all.min.css">
+
+<link rel="stylesheet" href="/f/css/w3.css">
+<link rel="stylesheet" href="/f/css/am.css">
+<link rel="shortcut icon" href="/f/img/algoritmed.ico" type="image/x-icon">
+<script src="/webjars/angular/1.8.2/angular.min.js" type="application/javascript"></script>
+<script src="/webjars/angular-i18n/1.8.2/angular-locale_uk-ua.js" type="application/javascript"></script>
+<script src="/webjars/angular-sanitize/1.8.2/angular-sanitize.min.js" type="application/javascript"></script>
+<script src="/webjars/angular-route/1.8.2/angular-route.min.js" type="application/javascript"></script>
+<script src="/webjars/angular-resource/1.8.2/angular-resource.min.js" type="application/javascript"></script>
+<script src="/f/js/algoritmed.AngularJS.lib01.js"></script>
+<script src="i.js"></script>
+
+<body class="w3-container am-max-width-1">
+    tableGrid
+    <hr>
+    
+    -- складний заголовок --
+    <table>
+        <thead>
+            <tr>
+                <th data-ng-attr-rowspan="{{col.rowspan}}" data-ng-attr-colspan="{{col.colspan}}"
+                    data-ng-repeat="col in ctrl.conf.tableGrid.thead[0]" class="w3-border">
+                    {{col.text}}
+                </th>
+            </tr>
+            <tr>
+                <th data-ng-repeat="col in ctrl.conf.tableGrid.thead[1]" class="w3-border">
+                    {{col.text}}
+                </th>
+            </tr>
+        </thead>
+    </table>
+    -- складний заголовок END--
+    <table>
+        <thead>
+            <tr>
+                <th data-ng-repeat="col in ctrl.conf.tableGrid.tableColumn" class="w3-border">
+                    {{col.columnname}}
+                    {{col.rcolumnname?'↸':''}}
+                    {{col.rcolumnname}}
+                </th>
+            </tr>
+        </thead>
+    </table>
+    -- test --
+    <table>
+        <thead>
+            <tr>
+                <th rowspan="2" colspan="1" class="w3-border">a1</th>
+                <th colspan="2" class="w3-border">a23</th>
+            </tr>
+            <tr>
+                <th>b2</th>
+                <th>b3</th>
+            </tr>
+        </thead>
+    </table>
+</body>
+
+</html>
