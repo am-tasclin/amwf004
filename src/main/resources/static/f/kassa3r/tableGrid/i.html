@@ -20,48 +20,61 @@
 <body class="w3-container am-max-width-1">
     tableGrid
     <hr>
-    
-    -- складний заголовок --
-    <table>
-        <thead>
-            <tr>
-                <th data-ng-attr-rowspan="{{col.rowspan}}" data-ng-attr-colspan="{{col.colspan}}"
-                    data-ng-repeat="col in ctrl.conf.tableGrid.thead[0]" class="w3-border">
-                    {{col.text}}
-                </th>
-            </tr>
-            <tr>
-                <th data-ng-repeat="col in ctrl.conf.tableGrid.thead[1]" class="w3-border">
-                    {{col.text}}
-                </th>
-            </tr>
-        </thead>
-    </table>
-    -- складний заголовок END--
-    <table>
-        <thead>
-            <tr>
-                <th data-ng-repeat="col in ctrl.conf.tableGrid.tableColumn" class="w3-border">
-                    {{col.columnname}}
-                    {{col.rcolumnname?'↸':''}}
-                    {{col.rcolumnname}}
-                </th>
-            </tr>
-        </thead>
-    </table>
-    -- test --
-    <table>
-        <thead>
-            <tr>
-                <th rowspan="2" colspan="1" class="w3-border">a1</th>
-                <th colspan="2" class="w3-border">a23</th>
-            </tr>
-            <tr>
-                <th>b2</th>
-                <th>b3</th>
-            </tr>
-        </thead>
-    </table>
+    <div class="w3-row">
+        <div class="w3-twothird">
+            -- складний заголовок --
+            <table>
+                <thead>
+                    <tr>
+                        <th data-ng-attr-rowspan="{{col.rowspan}}" data-ng-attr-colspan="{{col.colspan}}"
+                            data-ng-repeat="col in ctrl.conf.tableGrid.thead[0]" class="w3-border">
+                            {{col.text}}
+                        </th>
+                    </tr>
+                    <tr>
+                        <th data-ng-repeat="col in ctrl.conf.tableGrid.thead[1]" class="w3-border">
+                            {{col.text}}
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+            -- складний заголовок END--
+            <table>
+                <thead>
+                    <tr>
+                        <th data-ng-repeat="col in ctrl.conf.tableGrid.tableColumn" class="w3-border">
+                            {{col.columnname}}
+                            {{col.rcolumnname?'↸':''}}
+                            {{col.rcolumnname}}
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+            -- test --
+            <table>
+                <thead>
+                    <tr>
+                        <th rowspan="2" colspan="1" class="w3-border">a1</th>
+                        <th colspan="2" class="w3-border">a23</th>
+                    </tr>
+                    <tr>
+                        <th>b2</th>
+                        <th>b3</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div class="w3-third">
+            conf.tableGrid.thead
+            <pre class="w3-small w3-border">
+{{ctrl.stringifyJSON(ctrl.conf.tableGrid.thead)}}
+            </pre>
+            conf.tableGrid.groupColumn
+            <pre class="w3-small w3-border">
+{{ctrl.stringifyJSON(ctrl.conf.tableGrid.groupColumn)}}
+            </pre>
+        </div>
+    </div>
 </body>
 
 </html>

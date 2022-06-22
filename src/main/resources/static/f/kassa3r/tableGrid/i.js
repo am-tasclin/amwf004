@@ -14,6 +14,9 @@ class InitPageController extends AbstractController {
             this.dataFactory.readSql(sql_app.tableGroup2.sql, r => initGroup2Column(r))
         })
     }
+
+    stringifyJSON = jn => JSON.stringify(jn, null, ' ')
+
 }; app.controller('InitPageController', InitPageController)
 
 const initGroup2Column = r => {
