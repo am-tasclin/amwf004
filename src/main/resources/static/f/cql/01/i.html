@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html data-ng-controller="InitPageController as ctrl" lang="uk-UA">
+<meta charset="utf-8" />
+<title>CQL01</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="/webjars/font-awesome/6.1.0/css/all.min.css">
+
+<link rel="stylesheet" href="/f/css/w3.css">
+<link rel="stylesheet" href="/f/css/am.css">
+<link rel="shortcut icon" href="/f/img/algoritmed.ico" type="image/x-icon">
+<script src="/webjars/angular/1.8.2/angular.min.js" type="application/javascript"></script>
+<script src="/webjars/angular-i18n/1.8.2/angular-locale_uk-ua.js" type="application/javascript"></script>
+<script src="/webjars/angular-sanitize/1.8.2/angular-sanitize.min.js" type="application/javascript"></script>
+<script src="/webjars/angular-route/1.8.2/angular-route.min.js" type="application/javascript"></script>
+<script src="/webjars/angular-resource/1.8.2/angular-resource.min.js" type="application/javascript"></script>
+<script src="/f/js/algoritmed.AngularJS.lib01.js"></script>
+<script src="i.js"></script>
+
+<body class="w3-container am-max-width-1">
+    <div class="w3-border-bottom">
+        <a href="/" class="w3-btn w3-border w3-padding-small w3-small">↑</a>
+        <img src="/f/img/algoritmed-logo.webp" width="75px;" />
+        <span class="am-b w3-small"> CQL01</span>:
+    </div>
+    <div class="w3-row">
+        <div class="w3-twothird">
+            <div data-ng-include="'table01.html'"></div>
+        </div>
+        <div class="w3-third w3-border-left">
+            <div class="w3-small am-b w3-border-bottom">
+                CQL command
+            </div>
+
+            <div data-ng-repeat="sqlApp in ctrl.getSqlApp('keys')()" data-ng-if="ctrl.getSqlApp(sqlApp).name"
+                data-ng-click="ctrl.exeSql(sqlApp)" class="w3-hover-shadow">
+                {{ctrl.getSqlApp(sqlApp).name}}
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
