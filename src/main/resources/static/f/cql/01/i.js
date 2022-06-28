@@ -4,7 +4,6 @@ class InitPageController extends AbstractController {
     constructor(dataFactory) {
         super(dataFactory)
         console.log(conf)
-
     }
     clickRow = row => {
         conf.clickRow = row
