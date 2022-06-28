@@ -2,19 +2,18 @@
     <span class="w3-small am-b" data-ng-if="ctrl.conf.sqlAppKey">
         {{ctrl.conf.sqlAppKey}}:</span>&nbsp;
     {{ctrl.getSqlApp(ctrl.conf.sqlAppKey).name}}
-    <table >
+    <table>
         <thead>
             <tr>
-                <th class="w3-border w3-tiny" data-ng-repeat="(k,v) in ctrl.conf.table01[0]">
+                <th class="w3-hover-shadow w3-border w3-tiny" data-ng-repeat="(k,v) in ctrl.conf.table01[0]">
                     {{k}}
                 </th>
             </tr>
         </thead>
         <tbody>
-            <tr
-            class="w3-hover-shadow"
-            data-ng-repeat="row in ctrl.conf.table01">
-                <td class="w3-border-left" data-ng-repeat="(k,v) in row">
+            <tr class="w3-hover-shadow" data-ng-repeat="row in ctrl.conf.table01" data-ng-click="ctrl.clickRow(row)"
+                data-ng-class="{'w3-light-gray':ctrl.conf.clickRow.doc_id==row.doc_id}">
+                <td class="w3-border-right" data-ng-repeat="(k,v) in row">
                     {{v}}
                 </td>
             </tr>

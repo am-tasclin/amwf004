@@ -6,6 +6,10 @@ class InitPageController extends AbstractController {
         console.log(conf)
 
     }
+    clickRow = row => {
+        conf.clickRow = row
+        console.log(row)
+    }
     exeSql = sqlAppKey => {
         conf.sqlAppKey = sqlAppKey
         console.log(sqlAppKey)

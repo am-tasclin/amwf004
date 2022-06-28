@@ -33,7 +33,8 @@
             </div>
 
             <div data-ng-repeat="sqlApp in ctrl.getSqlApp('keys')()" data-ng-if="ctrl.getSqlApp(sqlApp).name"
-                data-ng-click="ctrl.exeSql(sqlApp)" class="w3-hover-shadow">
+                data-ng-class="{'w3-border':ctrl.conf.sqlAppKey==sqlApp}" data-ng-click="ctrl.exeSql(sqlApp)"
+                class="w3-hover-shadow">
                 {{ctrl.getSqlApp(sqlApp).name}}
             </div>
         </div>
