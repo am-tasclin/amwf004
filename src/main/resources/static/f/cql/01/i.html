@@ -19,16 +19,22 @@
 
 <body class="w3-container am-max-width-1">
     <div class="w3-border-bottom">
-        <a href="/" class="w3-btn w3-border w3-padding-small w3-small">↑</a>
+        <a href="/" class="w3-btn w3-border1 w3-padding-small w3-small">
+            <img style="display: flex;" src="/f/css/homeIcon.svg">
+        </a>
         <img src="/f/img/algoritmed-logo.webp" width="75px;" />
-        <span class="am-b w3-small"> CQL01</span>:
+        <span class="am-b w3-small">CQL01</span>:
+
     </div>
     <div class="w3-row">
         <div class="w3-twothird">
             <div data-ng-include="'table01.html'"></div>
+            <pre class="w3-tiny w3-border-top" data-ng-if="ctrl.conf.sqlAppKey=='patternForSQL'">
+{{ctrl.conf.buildSqlInsert()}}
+            </pre>
         </div>
         <div class="w3-third w3-border-left">
-            <div class="w3-small am-b w3-border-bottom">
+            <div style="margin-bottom: 3px;" class="w3-small am-b w3-border-bottom">
                 CQL command
             </div>
 
