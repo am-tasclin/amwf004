@@ -24,18 +24,27 @@
         </a>
         <img src="/f/img/algoritmed-logo.webp" width="75px;" />
         <span class="am-b w3-small">CQL01</span>:
-        <button class="w3-btn w3-padding-small" data-ng-click="ctrl.conf.buildSQL1()">buildSQL1</button>
-        <button class="w3-btn w3-padding-small" data-ng-click="ctrl.conf.buildSQL2()">buildSQL2</button>
     </div>
+
     <div class="w3-row">
         <div class="w3-twothird">
-            <div data-ng-include="'table01.html'"></div>
-            <div class="w3-border-top" data-ng-if="ctrl.conf.sqlInsert">&nbsp;<img src="/f/css/sq9.svg" width="15">
-                <button class="w3-btn w3-padding-small" data-ng-click="ctrl.saveSqlInsert1()">saveSqlInsert1</button>
-                <pre class="w3-tiny ">
-{{ctrl.conf.sqlInsert}}
-                </pre>
+            <img style="margin-left: 8px;" src="/f/css/sq9.svg" width="15">
+            <img data-ng-click="ctrl.conf.sqlInsert=null" style="margin-right: 7px; margin-top: 3px;"
+                src="/f/css/sq9g.svg" width="21" class="w3-right">
+            <button class="fa-solid fa-marker w3-btn w3-padding-small"
+                data-ng-click="ctrl.getSqlApp(ctrl.conf.sqlAppKey).buildSQL()"
+                data-ng-class="{'w3-disabled':!ctrl.getSqlApp(ctrl.conf.sqlAppKey).buildSQL}">
+                <span class="w3-tiny">write sql</span>
+            </button>
+            <button class="fa-solid fa-floppy-disk w3-btn w3-padding-small" data-ng-click="ctrl.saveSqlInsert1()"
+                data-ng-class="{'w3-disabled':ctrl.getSqlApp(ctrl.conf.sqlAppKey).noSave || !ctrl.conf.sqlInsert}">
+                <span class="w3-tiny">save db</span>
+            </button>
+            <div class="w3-border-left w3-border-top" data-ng-if="ctrl.conf.sqlInsert">
+                <pre class="w3-tiny " style="padding-left: 6px;">
+{{ctrl.conf.sqlInsert}}</pre>
             </div>
+            <div data-ng-include="'table01.html'"></div>
         </div>
         <div class="w3-third w3-border-left">
             <div style="margin-bottom: 3px;" class="w3-small am-b w3-border-bottom">

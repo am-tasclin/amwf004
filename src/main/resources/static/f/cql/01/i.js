@@ -9,7 +9,7 @@ conf.buildSQL2 = () => {
 conf.buildSQL1 = (table, parentId) => {
     if (!table) table = conf.table01
     console.log(123, table)
-    let sqlInsert = 'INSERT INTO doc (:vr ) VALUES (:vl ); \n\ ', i = 1
+    let sqlInsert = 'INSERT INTO doc (:vr ) VALUES (:vl ); ', i = 1
     conf.sqlInsert = ''
     ar.forEach(table, row => {
         let vr = 'doc_id', vl = ':nextDbId' + i
@@ -21,6 +21,7 @@ conf.buildSQL1 = (table, parentId) => {
         if (row.reference) {
             vr += ', reference'; vl += ', ' + row.reference
         }
+        if(conf.sqlInsert) conf.sqlInsert +='\n\ ' 
         conf.sqlInsert += sqlInsert.replace(':vr ', vr).replace(':vl ', vl)
         i++
     })
@@ -36,7 +37,7 @@ class InitPageController extends AbstractController {
     saveSqlInsert1 = () => {
         let sql = conf.sqlInsert
         console.log(123, sql)
-        this.dataFactory.writeSql(sql, r =>{
+        this.dataFactory.writeSql(sql, r => {
             console.log(123, r)
         })
     }
@@ -75,6 +76,7 @@ sql_app.readTask = {
     WHERE d.parent = 374559 \n\
     AND d2.parent = d.doc_id \n\
     ORDER BY d.doc_id',
+    buildSQL: conf.buildSQL2,
     initDataFromSql: (r, dataFactory) => {
         conf.ioVar = {}
         ar.forEach(r.list, row => {
@@ -97,6 +99,8 @@ sql_app.readTask = {
 }
 sql_app.patternForSQL = {
     name: 'Pattern for SQL transformation',
+    buildSQL: conf.buildSQL1,
+    noSave: true,
     initSql: docId => {
         if (!docId) docId = 374523
         let sql = sql_app.patternForSQL.sql
@@ -104,8 +108,8 @@ sql_app.patternForSQL = {
         return sql
     },
     sql: 'SELECT x.* FROM ( \n\
-        SELECT CASE WHEN doc_id=:var.docId THEN 1 ELSE 2 END s, d.* FROM doc d WHERE :var.docId in (doc_id,parent) \n\
-        ) x ORDER BY x.s',
+        SELECT CASE WHEN doc_id=:var.docId THEN 1 ELSE 2 END l, d.* FROM doc d WHERE :var.docId in (doc_id,parent) \n\
+        ) x ORDER BY x.l',
 }
 sql_app.p1q5 = {
     name: 'Завдання і їх виконання',
