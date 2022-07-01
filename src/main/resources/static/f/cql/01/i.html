@@ -24,14 +24,18 @@
         </a>
         <img src="/f/img/algoritmed-logo.webp" width="75px;" />
         <span class="am-b w3-small">CQL01</span>:
-
+        <button class="w3-btn w3-padding-small" data-ng-click="ctrl.conf.buildSQL1()">buildSQL1</button>
+        <button class="w3-btn w3-padding-small" data-ng-click="ctrl.conf.buildSQL2()">buildSQL2</button>
     </div>
     <div class="w3-row">
         <div class="w3-twothird">
             <div data-ng-include="'table01.html'"></div>
-            <pre class="w3-tiny w3-border-top" data-ng-if="ctrl.conf.sqlAppKey=='patternForSQL'">
-{{ctrl.conf.buildSqlInsert()}}
-            </pre>
+            <div class="w3-border-top" data-ng-if="ctrl.conf.sqlInsert">&nbsp;<img src="/f/css/sq9.svg" width="15">
+                <button class="w3-btn w3-padding-small" data-ng-click="ctrl.saveSqlInsert1()">saveSqlInsert1</button>
+                <pre class="w3-tiny ">
+{{ctrl.conf.sqlInsert}}
+                </pre>
+            </div>
         </div>
         <div class="w3-third w3-border-left">
             <div style="margin-bottom: 3px;" class="w3-small am-b w3-border-bottom">

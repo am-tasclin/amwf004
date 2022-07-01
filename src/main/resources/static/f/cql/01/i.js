@@ -1,49 +1,61 @@
 'use strict'
 
 let pageLogic = {}
-pageLogic.isTaskWithAD = () => conf.clickRow.ad_name && conf.clickRow.basedon
-pageLogic.taskWithAD = () => {
-    console.log(conf.clickRow)
-}
 
-conf.buildSqlInsert = () => {
-    // if (!conf.sqlInsert) {
-    if (conf.sqlAppKey == 'patternForSQL') {
-        let sqlInsert = 'INSERT INTO doc (:vr ) VALUES (:vl ); \n\ ', i = 1
-        conf.sqlInsert = ''
-        ar.forEach(conf.table01, row => {
-            let vr = 'doc_id', vl = ':nextDbId' + i
-            if (i > 1) {
-                vr += ', parent'; vl += ', :nextDbId1'
-            }
-            if (row.reference) {
-                vr += ', reference'; vl += ', ' + row.reference
-            }
-            conf.sqlInsert += sqlInsert.replace(':vr ', vr).replace(':vl ', vl)
-            i++
-        })
-    }
+conf.buildSQL2 = () => {
+    console.log(123)
+    conf.buildSQL1(conf.table02, conf.ioVar.parentId)
+}
+conf.buildSQL1 = (table, parentId) => {
+    if (!table) table = conf.table01
+    console.log(123, table)
+    let sqlInsert = 'INSERT INTO doc (:vr ) VALUES (:vl ); \n\ ', i = 1
+    conf.sqlInsert = ''
+    ar.forEach(table, row => {
+        let vr = 'doc_id', vl = ':nextDbId' + i
+        if (i > 1) {
+            vr += ', parent'; vl += ', :nextDbId1'
+        } else if (parentId) {
+            vr += ', parent'; vl += ', ' + parentId
+        }
+        if (row.reference) {
+            vr += ', reference'; vl += ', ' + row.reference
+        }
+        conf.sqlInsert += sqlInsert.replace(':vr ', vr).replace(':vl ', vl)
+        i++
+    })
+    console.log(conf.sqlInsert)
     return conf.sqlInsert
 }
-
 
 class InitPageController extends AbstractController {
     constructor(dataFactory) {
         super(dataFactory)
         console.log(conf)
     }
+    saveSqlInsert1 = () => {
+        let sql = conf.sqlInsert
+        console.log(123, sql)
+        this.dataFactory.writeSql(sql, r =>{
+            console.log(123, r)
+        })
+    }
     clickRow = row => {
         console.log(row)
         conf.clickRow = row
-        pageLogic.isTaskWithAD() && pageLogic.taskWithAD()
     }
     exeSql = sqlAppKey => {
         conf.sqlAppKey = sqlAppKey
         delete conf.sqlInsert
-        console.log(sqlAppKey, ':', sql_app[sqlAppKey].sql)
-        this.dataFactory.readSql(sql_app[sqlAppKey].sql, r => {
+        delete conf.table02
+        let sqlApp = sql_app[sqlAppKey]
+        let sql = sqlApp.sql; if (sqlApp.initSql) sql = sqlApp.initSql()
+        console.log(sqlAppKey, ':', sql)
+        this.dataFactory.readSql(sql, r => {
             console.log(r)
             conf.table01 = r.list
+            sqlApp.initDataFromSql && sqlApp.initDataFromSql(r, this.dataFactory)
+            // sqlApp.readSql2 && sqlApp.readSql2(this.dataFactory)
         })
     }
     stringifyJSON = jn => JSON.stringify(jn, null, ' ')
@@ -51,10 +63,48 @@ class InitPageController extends AbstractController {
 }; app.controller('InitPageController', InitPageController)
 
 sql_app.keys = () => Object.keys(sql_app)
+sql_app.readTask = {
+    name: 'Read Task data input and output',
+    sql: 'SELECT d2.doc_id, sp.value parent, sr.value var_name, d2.reference r_id, sr2.value r2 \n\
+    , d2.reference2 val_id  \n\
+    FROM doc d \n\
+    LEFT JOIN string sp ON sp.string_id=d.reference \n\
+    , doc d2 \n\
+    LEFT JOIN string sr ON sr.string_id=d2.reference \n\
+    LEFT JOIN string sr2 ON sr2.string_id=d2.reference2 \n\
+    WHERE d.parent = 374559 \n\
+    AND d2.parent = d.doc_id \n\
+    ORDER BY d.doc_id',
+    initDataFromSql: (r, dataFactory) => {
+        conf.ioVar = {}
+        ar.forEach(r.list, row => {
+            conf.eMap[row.doc_id] = row
+            row.var_name && (conf.ioVar[row.var_name] = row.val_id)
+            if ('sql_INSERT' == row.var_name) {
+                console.log(1, conf.ioVar.sql_INSERT)
+                let sql = sql_app.patternForSQL.initSql(conf.ioVar.sql_INSERT)
+                console.log(2, sql)
+                dataFactory.readSql(sql, r2 => {
+                    console.log(r2)
+                    conf.table02 = r2.list
+                })
+            }
+        })
+    },
+    readSql2: dataFactory => {
+        console.log(123)
+    },
+}
 sql_app.patternForSQL = {
     name: 'Pattern for SQL transformation',
+    initSql: docId => {
+        if (!docId) docId = 374523
+        let sql = sql_app.patternForSQL.sql
+        sql = sql.replaceAll(':var.docId', docId)
+        return sql
+    },
     sql: 'SELECT x.* FROM ( \n\
-        SELECT CASE WHEN doc_id=374523 THEN 0 ELSE 1 END s, d.* FROM doc d WHERE 374523 in (doc_id,parent) \n\
+        SELECT CASE WHEN doc_id=:var.docId THEN 1 ELSE 2 END s, d.* FROM doc d WHERE :var.docId in (doc_id,parent) \n\
         ) x ORDER BY x.s',
 }
 sql_app.p1q5 = {
