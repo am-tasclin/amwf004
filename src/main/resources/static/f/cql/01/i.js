@@ -1,14 +1,32 @@
 'use strict'
+class InitPageController extends AbstractController {
+    constructor(dataFactory) { super(dataFactory) }
+    saveSqlInsert1 = () => {
+        let sql = conf.sqlInsert
+        console.log(123, sql)
+        this.dataFactory.writeSql(sql, r => {
+            console.log(123, r)
+        })
+    }
+    clickRow = row => conf.clickRow = row
+    exeSql = sqlAppKey => {
+        conf.sqlAppKey = sqlAppKey
+        delete conf.sqlInsert; delete conf.table02
+        let sqlApp = sql_app[sqlAppKey]
+        let sql = sqlApp.sql; if (sqlApp.initSql) sql = sqlApp.initSql()
+        console.log(sqlAppKey, ':', sql)
+        this.dataFactory.readSql(sql, r => {
+            console.log(r)
+            conf.table01 = r.list
+            sqlApp.initDataFromSql && sqlApp.initDataFromSql(r, this.dataFactory)
+        })
+    }
+    stringifyJSON = jn => JSON.stringify(jn, null, ' ')
+}; app.controller('InitPageController', InitPageController)
 
-let pageLogic = {}
-
-conf.buildSQL2 = () => {
-    console.log(123)
-    conf.buildSQL1(conf.table02, conf.ioVar.parentId)
-}
-conf.buildSQL1 = (table, parentId) => {
+conf.buildParamSqlInsert01 = () => conf.buildSqlInsert01(conf.table02, conf.ioVar.parentId)
+conf.buildSqlInsert01 = (table, parentId) => {
     if (!table) table = conf.table01
-    console.log(123, table)
     let sqlInsert = 'INSERT INTO doc (:vr ) VALUES (:vl ); ', i = 1
     conf.sqlInsert = ''
     ar.forEach(table, row => {
@@ -21,49 +39,12 @@ conf.buildSQL1 = (table, parentId) => {
         if (row.reference) {
             vr += ', reference'; vl += ', ' + row.reference
         }
-        if(conf.sqlInsert) conf.sqlInsert +='\n\ ' 
+        if (conf.sqlInsert) conf.sqlInsert += '\n\ '
         conf.sqlInsert += sqlInsert.replace(':vr ', vr).replace(':vl ', vl)
         i++
     })
-    console.log(conf.sqlInsert)
-    return conf.sqlInsert
 }
 
-class InitPageController extends AbstractController {
-    constructor(dataFactory) {
-        super(dataFactory)
-        console.log(conf)
-    }
-    saveSqlInsert1 = () => {
-        let sql = conf.sqlInsert
-        console.log(123, sql)
-        this.dataFactory.writeSql(sql, r => {
-            console.log(123, r)
-        })
-    }
-    clickRow = row => {
-        console.log(row)
-        conf.clickRow = row
-    }
-    exeSql = sqlAppKey => {
-        conf.sqlAppKey = sqlAppKey
-        delete conf.sqlInsert
-        delete conf.table02
-        let sqlApp = sql_app[sqlAppKey]
-        let sql = sqlApp.sql; if (sqlApp.initSql) sql = sqlApp.initSql()
-        console.log(sqlAppKey, ':', sql)
-        this.dataFactory.readSql(sql, r => {
-            console.log(r)
-            conf.table01 = r.list
-            sqlApp.initDataFromSql && sqlApp.initDataFromSql(r, this.dataFactory)
-            // sqlApp.readSql2 && sqlApp.readSql2(this.dataFactory)
-        })
-    }
-    stringifyJSON = jn => JSON.stringify(jn, null, ' ')
-
-}; app.controller('InitPageController', InitPageController)
-
-sql_app.keys = () => Object.keys(sql_app)
 sql_app.readTask = {
     name: 'Read Task data input and output',
     sql: 'SELECT d2.doc_id, sp.value parent, sr.value var_name, d2.reference r_id, sr2.value r2 \n\
@@ -76,7 +57,7 @@ sql_app.readTask = {
     WHERE d.parent = 374559 \n\
     AND d2.parent = d.doc_id \n\
     ORDER BY d.doc_id',
-    buildSQL: conf.buildSQL2,
+    buildSQL: conf.buildParamSqlInsert01,
     initDataFromSql: (r, dataFactory) => {
         conf.ioVar = {}
         ar.forEach(r.list, row => {
@@ -93,13 +74,10 @@ sql_app.readTask = {
             }
         })
     },
-    readSql2: dataFactory => {
-        console.log(123)
-    },
 }
 sql_app.patternForSQL = {
     name: 'Pattern for SQL transformation',
-    buildSQL: conf.buildSQL1,
+    buildSQL: conf.buildSqlInsert01,
     noSave: true,
     initSql: docId => {
         if (!docId) docId = 374523
@@ -130,7 +108,6 @@ sql_app.p1q4 = {
     LEFT JOIN string s2 on s2.string_id=parent \n\
     where 369861 in (reference,reference2)',
 }
-
 sql_app.p1q3 = {
     name: 'Імена функцій ActivityDefinition',
     sql: 'SELECT d.doc_id, s.value ad_text, sr.value rtype, d.reference r FROM doc d \n\
@@ -160,3 +137,4 @@ sql_app.p1q2 = {
     AND d1.doc_id = d2.parent \n\
     AND d3.doc_id = d2.reference2',
 }
+sql_app.keys = () => Object.keys(sql_app)
