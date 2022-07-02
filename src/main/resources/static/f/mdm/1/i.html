@@ -4,7 +4,6 @@
 <head>
     <meta charset="utf-8" />
     <link rel="shortcut icon" href="/f/img/algoritmed.ico" type="image/x-icon">
-    <!--link rel="stylesheet" href="/webjars/font-awesome/5.15.2/css/all.min.css"-->
     <link rel="stylesheet" href="/webjars/font-awesome/6.1.0/css/all.min.css">
     <link rel="stylesheet" href="/f/css/w3.css">
     <link rel="stylesheet" href="/f/css/am.css">
@@ -23,30 +22,26 @@
 
 <body class="w3-container">
     <div class="w3-border-bottom am-max-width-1">
-        <a href="/" class="w3-btn w3-border w3-padding-small w3-small">↑</a>
+        <a href="/" class="w3-btn w3-border1 w3-padding-small w3-small">
+            <img style="display: flex;" src="/f/css/homeIcon.svg">
+        </a>
         <img src="/f/img/algoritmed-logo.webp" width="75px;" />
-        
+
         <span class="w3-dropdown-hover">
             <a class="w3-btn w3-padding-small w3-border w3-small" href="#!/tree">
                 <i class="fas fa-project-diagram"></i>
             </a>
             <div class="w3-dropdown-content w3-leftbar w3-border w3-container">
-                <div>
-                    <div class="w3-hover-shadow" data-ng-click="menu_tree=menu_tree=='leftViewType'?'':'leftViewType'">
-                        тип: <span class="w3-leftbar w3-container" data-ng-if="menu_tree=='leftViewType'">|
-                            <span class="w3-hover-shadow" data-ng-repeat="t in ['nrValType','objKeyVal'] ">
-                                {{t}}|
-                            </span>
-                        </span>
-                    </div>
-                </div>
-                <p class="w3-hover-shadow">
-                    a2
-                </p>
-                <a class="w3-tiny"
+                &nbsp;
+                <a class="w3-small "
                     href="#!/tree_{{ctrl.singlePage.session.tree.l.id.join('_')}},{{ctrl.singlePage.session.tree.r.id.join('_')}}">
-                    tree_{{ctrl.singlePage.session.tree.l.id.join('_')}},{{ctrl.singlePage.session.tree.r.id.join('_')}}
+                    <div class="w3-hover-shadow">
+                        tree_{{ctrl.singlePage.session.tree.l.id.join('_')}},{{ctrl.singlePage.session.tree.r.id.join('_')}}
+                    </div>
                 </a>
+                <p class="w3-hover-shadow">
+                    item_2
+                </p>
             </div>
         </span>
         <a class="w3-btn w3-padding-small w3-border w3-small" href="#!/sql_SelectADN">
@@ -70,7 +65,11 @@
     <div class="w3-border-bottom am-max-width-1 am-inner-scroll">
         <span class="w3-small">Моделювання даних і їх структур з кодом автоматичного SQL</span>
         <span class="w3-small"> {{ctrl.date | date:'medium'}} </span>
+        <span class="w3-right">
+            <a href="https://www.compart.com/en/unicode/U+232A" class="am-0u"> 〉 </a>
+        </span>
         <div class="ng-view"></div>
+
     </div>
 </body>
 
