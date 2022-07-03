@@ -1,7 +1,14 @@
 'use strict'
 singlePage.index_template = 'spBody.html'
-class InitPageController extends AbstractController {
-    constructor(dataFactory) { super(dataFactory) }
+class Abstract02Controller extends AbstractController {
+    constructor(dataFactory, pageLogic) {
+        super(dataFactory)
+        this.pl = pageLogic
+        urlMap = {}
+    }
+}
+class InitPageController extends Abstract02Controller {
+    constructor(dataFactory, pageLogic) { super(dataFactory, pageLogic) }
     saveSqlInsert1 = () => {
         let sql = conf.sqlInsert
         console.log(123, sql)
@@ -10,20 +17,49 @@ class InitPageController extends AbstractController {
         })
     }
     clickRow = row => conf.clickRow = row
-    exeSql = sqlAppKey => {
-        conf.sqlAppKey = sqlAppKey
+    exeSql = sqlAppKey => this.pl.exeSql()
+    // exeSql = sqlAppKey => pageLogic.exeSql(sqlAppKey, this.dataFactory)
+    stringifyJSON = jn => JSON.stringify(jn, null, ' ')
+}; app.controller('InitPageController', InitPageController)
+
+const pageLogic11 = {}
+pageLogic11.exeSql = (sqlAppKey, dataFactory) => {
+    conf.sqlAppKey = sqlAppKey
+    delete conf.sqlInsert; delete conf.table02
+    let sqlApp = sql_app[sqlAppKey]
+    let sql = sqlApp.sql; if (sqlApp.initSql) sql = sqlApp.initSql()
+    console.log(sqlAppKey, ':', sql)
+    dataFactory.readSql(sql, r => {
+        console.log(r)
+        conf.table01 = r.list
+        sqlApp.initDataFromSql && sqlApp.initDataFromSql(r, dataFactory)
+    })
+}
+
+class PageLogicFactory extends PageLogic0Factory {
+    constructor(dataFactory) { super(dataFactory) }
+    exeSql = () => {
         delete conf.sqlInsert; delete conf.table02
-        let sqlApp = sql_app[sqlAppKey]
+        let sqlApp = sql_app[conf.sqlAppKey]
         let sql = sqlApp.sql; if (sqlApp.initSql) sql = sqlApp.initSql()
-        console.log(sqlAppKey, ':', sql)
+        console.log(conf.sqlAppKey, ':', sql)
         this.dataFactory.readSql(sql, r => {
             console.log(r)
             conf.table01 = r.list
             sqlApp.initDataFromSql && sqlApp.initDataFromSql(r, this.dataFactory)
         })
     }
-    stringifyJSON = jn => JSON.stringify(jn, null, ' ')
-}; app.controller('InitPageController', InitPageController)
+}; app.factory('pageLogic', PageLogicFactory)
+
+
+class SqlController extends Abstract02Controller {
+    constructor(dataFactory, pageLogic) {
+        super(dataFactory, pageLogic)
+        conf.sqlAppKey = singlePage.UrlMap().sql
+        // pageLogic.exeSql()
+        pageLogic.exeSql()
+    }
+}; route01Controller(SqlController, ['sql_:sqlName'])
 
 conf.buildParamSqlInsert01 = () => conf.buildSqlInsert01(conf.table02, conf.ioVar.parentId)
 conf.buildSqlInsert01 = (table, parentId) => {
@@ -66,7 +102,7 @@ sql_app.readTask = {
             conf.eMap[row.doc_id] = row
             row.var_name && (conf.ioVar[row.var_name] = row.val_id)
             if ('sql_INSERT' == row.var_name) {
-                console.log(1, conf.ioVar.sql_INSERT)
+                console.log(conf.ioVar)
                 let sql = sql_app[sql_app.readTask.sql2name].initSql(conf.ioVar.sql_INSERT)
                 console.log(2, sql)
                 dataFactory.readSql(sql, r2 => {

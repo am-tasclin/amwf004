@@ -1,5 +1,5 @@
 /**
- * @license Algoritmed.AngularJS v0.1.01
+ * @license Algoritmed.AngularJS v0.1.02
  * (c) 2021-2022 Algoritmed Ltd. http://algoritmed.com
  * License: Apache-2.0 license 
  */
@@ -11,10 +11,13 @@ conf.eMap = {}
 var app = angular.module("app", ['ngRoute', 'ngResource', 'ngSanitize'])
 angular.element(() => angular.bootstrap(document, ['app']))
 
+class PageLogic0Factory {
+    constructor(dataFactory) { this.dataFactory = dataFactory }
+    getSqlApp = name => sql_app[name]
+    conf = conf; session = session
+}
 class AbstractController {
     constructor(dataFactory) { this.dataFactory = dataFactory }
-    conf = conf; session = session
-    getSqlApp = name => sql_app[name]
 }
 
 class RWDataFactory {
@@ -48,6 +51,23 @@ class RWDataFactory {
     writeSql = (sql, fn) => this.httpPostSql({ sql: sql }).then(fn)
 }; app.factory('dataFactory', RWDataFactory)
 
+
+let urlMap = {}
+singlePage.Url = () => window.location.href.split('#!')[1]
+singlePage.UrlMap = () => {
+    if (Object.keys(urlMap).length === 0) singlePage.Url().split('/').forEach(v => {
+        if (v) urlMap[v.split('_')[0]] = v.replace(v.split('_')[0] + '_', '')
+    })
+    return urlMap
+}
+
+const route01Controller = (controllerClass, pseudoRestList, templateUrl) => {
+    const controllerName = controllerClass.toString().split(' ')[1]
+    app.controller(controllerName, controllerClass)
+    ar.forEach(pseudoRestList, pseidoRest => singlePage[pseidoRest] = {
+        controller: controllerName, templateUrl: (templateUrl || singlePage.index_template),
+    })
+}
 class RouteProviderConfig {
     constructor($routeProvider) {
         console.log('RouteProviderConfig', Object.keys(singlePage))

@@ -1,28 +1,27 @@
 <div>
-
     <table data-ng-repeat="tableName in ['table01', 'table02']">
         <caption data-ng-if="'table01'==tableName" class="w3-small" style="text-align: right;">
-            <span class="w3-small am-b" data-ng-if="ctrl.conf.sqlAppKey">
-                {{ctrl.conf.sqlAppKey}}:</span>&nbsp;
-            {{ctrl.getSqlApp(ctrl.conf.sqlAppKey).name}}
+            <span class="w3-small am-b" data-ng-if="cr.pl.conf.sqlAppKey">
+                {{cr.pl.conf.sqlAppKey}}:</span>&nbsp;
+            {{cr.pl.getSqlApp(cr.pl.conf.sqlAppKey).name}}
         </caption>
         <caption data-ng-if="'table02'==tableName 
-        && ctrl.getSqlApp(ctrl.conf.sqlAppKey).sql2name
+        && cr.pl.getSqlApp(cr.pl.conf.sqlAppKey).sql2name
         " class="w3-small" style="text-align: right;">
-        <span class="w3-small am-b" data-ng-if="ctrl.conf.sqlAppKey">
-            {{ctrl.getSqlApp(ctrl.conf.sqlAppKey).sql2name}}:</span>&nbsp;
-            {{ctrl.getSqlApp(ctrl.getSqlApp(ctrl.conf.sqlAppKey).sql2name).name}}
+        <span class="w3-small am-b" data-ng-if="cr.pl.conf.sqlAppKey">
+            {{cr.pl.getSqlApp(cr.pl.conf.sqlAppKey).sql2name}}:</span>&nbsp;
+            {{cr.pl.getSqlApp(cr.pl.getSqlApp(cr.pl.conf.sqlAppKey).sql2name).name}}
         </caption>
         <thead>
             <tr>
-                <th class=" w3-hover-shadow w3-border w3-tiny" data-ng-repeat="(k,v) in ctrl.conf[tableName][0]">
+                <th class=" w3-hover-shadow w3-border w3-tiny" data-ng-repeat="(k,v) in cr.pl.conf[tableName][0]">
                     {{k}}
                 </th>
             </tr>
         </thead>
         <tbody>
-            <tr class="w3-hover-shadow" data-ng-repeat="row in ctrl.conf[tableName]" data-ng-click="ctrl.clickRow(row)"
-                data-ng-class="{'w3-light-gray':ctrl.conf.clickRow.doc_id==row.doc_id}">
+            <tr class="w3-hover-shadow" data-ng-repeat="row in cr.pl.conf[tableName]" data-ng-click="cr.clickRow(row)"
+                data-ng-class="{'w3-light-gray':cr.pl.conf.clickRow.doc_id==row.doc_id}">
                 <td class="w3-border-right" data-ng-repeat="(k,v) in row">
                     {{v}}
                 </td>
