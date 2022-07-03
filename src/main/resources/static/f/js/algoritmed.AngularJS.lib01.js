@@ -1,5 +1,5 @@
 /**
- * @license Algoritmed.AngularJS v0.1.02
+ * @license Algoritmed.AngularJS v0.1.021
  * (c) 2021-2022 Algoritmed Ltd. http://algoritmed.com
  * License: Apache-2.0 license 
  */
@@ -11,16 +11,15 @@ conf.eMap = {}
 var app = angular.module("app", ['ngRoute', 'ngResource', 'ngSanitize'])
 angular.element(() => angular.bootstrap(document, ['app']))
 
+class AbstractController { constructor(dataFactory) { this.dataFactory = dataFactory } }
+
 class PageLogic0Factory {
     constructor(dataFactory) { this.dataFactory = dataFactory }
     getSqlApp = name => sql_app[name]
     conf = conf; session = session
 }
-class AbstractController {
-    constructor(dataFactory) { this.dataFactory = dataFactory }
-}
 
-class RWDataFactory {
+class RWData0Factory {
     constructor($http, $q) { this.$http = $http; this.$q = $q }
     urlSql = '/r/url_sql_read_db1'
     sqlRowLimit = 50
@@ -49,7 +48,7 @@ class RWDataFactory {
 
     readSql = (sql, fn) => this.httpGetSql({ sql: sql }).then(fn)
     writeSql = (sql, fn) => this.httpPostSql({ sql: sql }).then(fn)
-}; app.factory('dataFactory', RWDataFactory)
+}//; app.factory('dataFactory', RWDataFactory)
 
 
 let urlMap = {}
@@ -76,6 +75,6 @@ class RouteProviderConfig {
         if (singlePage.index_template)
             $routeProvider.otherwise({ templateUrl: singlePage.index_template })
         else
-            $routeProvider.otherwise({ template: "<h1>?</h1><p>Hi API</p>" })
+            $routeProvider.otherwise({ template: "<h1>?</h1><p>Hey You, API</p>" })
     }
 }; app.config(RouteProviderConfig)

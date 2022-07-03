@@ -1,5 +1,23 @@
 'use strict'
 singlePage.index_template = 'spBody.html'
+class RWDataFactory extends RWData0Factory {
+    constructor($http, $q) { super($http, $q) }
+    exeSql = () => {
+        delete conf.sqlInsert; delete conf.table02
+        let sqlApp = sql_app[conf.sqlAppKey]
+        let sql = sqlApp.sql; if (sqlApp.initSql) sql = sqlApp.initSql()
+        console.log(conf.sqlAppKey, ':', sql)
+        this.readSql(sql, r => {
+            console.log(r)
+            conf.table01 = r.list
+            sqlApp.initDataFromSql && sqlApp.initDataFromSql(r, this)
+        })
+    }
+}; app.factory('dataFactory', RWDataFactory)
+class PageLogicFactory extends PageLogic0Factory {
+    constructor(dataFactory) { super(dataFactory) }
+}; app.factory('pageLogic', PageLogicFactory)
+
 class Abstract02Controller extends AbstractController {
     constructor(dataFactory, pageLogic) {
         super(dataFactory)
@@ -7,6 +25,7 @@ class Abstract02Controller extends AbstractController {
         urlMap = {}
     }
 }
+
 class InitPageController extends Abstract02Controller {
     constructor(dataFactory, pageLogic) { super(dataFactory, pageLogic) }
     saveSqlInsert1 = () => {
@@ -17,47 +36,14 @@ class InitPageController extends Abstract02Controller {
         })
     }
     clickRow = row => conf.clickRow = row
-    exeSql = sqlAppKey => this.pl.exeSql()
-    // exeSql = sqlAppKey => pageLogic.exeSql(sqlAppKey, this.dataFactory)
     stringifyJSON = jn => JSON.stringify(jn, null, ' ')
 }; app.controller('InitPageController', InitPageController)
-
-const pageLogic11 = {}
-pageLogic11.exeSql = (sqlAppKey, dataFactory) => {
-    conf.sqlAppKey = sqlAppKey
-    delete conf.sqlInsert; delete conf.table02
-    let sqlApp = sql_app[sqlAppKey]
-    let sql = sqlApp.sql; if (sqlApp.initSql) sql = sqlApp.initSql()
-    console.log(sqlAppKey, ':', sql)
-    dataFactory.readSql(sql, r => {
-        console.log(r)
-        conf.table01 = r.list
-        sqlApp.initDataFromSql && sqlApp.initDataFromSql(r, dataFactory)
-    })
-}
-
-class PageLogicFactory extends PageLogic0Factory {
-    constructor(dataFactory) { super(dataFactory) }
-    exeSql = () => {
-        delete conf.sqlInsert; delete conf.table02
-        let sqlApp = sql_app[conf.sqlAppKey]
-        let sql = sqlApp.sql; if (sqlApp.initSql) sql = sqlApp.initSql()
-        console.log(conf.sqlAppKey, ':', sql)
-        this.dataFactory.readSql(sql, r => {
-            console.log(r)
-            conf.table01 = r.list
-            sqlApp.initDataFromSql && sqlApp.initDataFromSql(r, this.dataFactory)
-        })
-    }
-}; app.factory('pageLogic', PageLogicFactory)
-
 
 class SqlController extends Abstract02Controller {
     constructor(dataFactory, pageLogic) {
         super(dataFactory, pageLogic)
         conf.sqlAppKey = singlePage.UrlMap().sql
-        // pageLogic.exeSql()
-        pageLogic.exeSql()
+        dataFactory.exeSql()
     }
 }; route01Controller(SqlController, ['sql_:sqlName'])
 
