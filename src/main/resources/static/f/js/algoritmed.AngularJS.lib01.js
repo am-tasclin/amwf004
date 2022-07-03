@@ -64,8 +64,7 @@ const route01Controller = (controllerClass, pseudoRestList, templateUrl) => {
     const controllerName = controllerClass.toString().split(' ')[1]
     app.controller(controllerName, controllerClass)
     ar.forEach(pseudoRestList, pseidoRest => singlePage[pseidoRest] = {
-        controller: controllerName, templateUrl: (templateUrl || singlePage.index_template),
-    })
+        controller: controllerName, templateUrl: (templateUrl || singlePage.index_template), })
 }
 class RouteProviderConfig {
     constructor($routeProvider) {

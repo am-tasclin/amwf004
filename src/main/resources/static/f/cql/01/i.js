@@ -14,15 +14,19 @@ class RWDataFactory extends RWData0Factory {
         })
     }
 }; app.factory('dataFactory', RWDataFactory)
+
 class PageLogicFactory extends PageLogic0Factory {
-    constructor(dataFactory) { super(dataFactory) }
+    constructor(dataFactory) {
+        super(dataFactory)
+        dataFactory.sqlRowLimit = 10
+    }
 }; app.factory('pageLogic', PageLogicFactory)
 
 class Abstract02Controller extends AbstractController {
     constructor(dataFactory, pageLogic) {
         super(dataFactory)
         this.pl = pageLogic
-        urlMap = {}
+        urlMap = {}; singlePage.UrlMap()
     }
 }
 
@@ -38,6 +42,20 @@ class InitPageController extends Abstract02Controller {
     clickRow = row => conf.clickRow = row
     stringifyJSON = jn => JSON.stringify(jn, null, ' ')
 }; app.controller('InitPageController', InitPageController)
+
+const initSessionTree = urlTree => {
+    urlTree && (session.tree = { 'l': { id: [] }, 'r': { id: [] } })
+    ar.forEach(urlTree.split(','), (t, tk) => ar.forEach(t.split('_')
+        , (v, k) => session.tree[!tk ? 'l' : 'r'].id[k] = 1 * v))
+}
+
+class TreeController extends Abstract02Controller {
+    constructor(dataFactory, pageLogic) {
+        super(dataFactory, pageLogic)
+        initSessionTree(urlMap.tree)
+        console.log(session)
+    }
+}; route01Controller(TreeController, ['tree', 'tree_:lId', 'tree_:lId,:rId',])
 
 class SqlController extends Abstract02Controller {
     constructor(dataFactory, pageLogic) {
@@ -160,5 +178,27 @@ sql_app.p1q2 = {
     WHERE d1.reference2 = 367553 \n\
     AND d1.doc_id = d2.parent \n\
     AND d3.doc_id = d2.reference2',
+}
+sql_app.SelectADN = {
+    name: 'Зчитати абстрактий вузел - TeSe',
+    sql: 'SELECT d.*, dr.doctype r_doctype, s.value value_22, su.value value_u_22, f.value value_24 \n\
+    , ts.value value_25, srr.value rr_value_22 \n\
+    , sr.value r_value_22, dr2.doctype r2_doctype \n\
+    , sr2.value r2_value_22, o.sort \n\
+    FROM tese.doc d \n\
+     LEFT JOIN string s ON s.string_id=d.doc_id \n\
+     LEFT JOIN string_u su ON su.string_u_id=d.doc_id \n\
+     LEFT JOIN double f ON f.double_id=d.doc_id \n\
+     LEFT JOIN timestamp ts ON ts.timestamp_id=d.doc_id \n\
+     LEFT JOIN doc dr ON dr.doc_id=d.reference \n\
+     LEFT JOIN string sr ON sr.string_id=d.reference \n\
+     LEFT JOIN string srr ON srr.string_id=dr.reference \n\
+     LEFT JOIN doc dr2 ON dr2.doc_id=d.reference2 \n\
+     LEFT JOIN string sr2 ON sr2.string_id=d.reference2 \n\
+     LEFT JOIN sort o ON sort_id=d.doc_id \n\
+     ',
+    oderBy: 'sort',
+    rowId: 'doc_id',
+    whereDocAlias: 'd',
 }
 sql_app.keys = () => Object.keys(sql_app)

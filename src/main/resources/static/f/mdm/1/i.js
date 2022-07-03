@@ -269,7 +269,6 @@ class InitPageController extends AbstractController {
         this.add_sql_app = add_sql_app
     }
 
-
     exeSql = () => {
         let sql = buildSqlWithKeyValue(singlePage.session.sql)
         // console.log(sql)
