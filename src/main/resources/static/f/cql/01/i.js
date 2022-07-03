@@ -1,4 +1,5 @@
 'use strict'
+singlePage.index_template = 'spBody.html'
 class InitPageController extends AbstractController {
     constructor(dataFactory) { super(dataFactory) }
     saveSqlInsert1 = () => {
@@ -58,6 +59,7 @@ sql_app.readTask = {
     AND d2.parent = d.doc_id \n\
     ORDER BY d.doc_id',
     buildSQL: conf.buildParamSqlInsert01,
+    sql2name: 'patternForSQL',
     initDataFromSql: (r, dataFactory) => {
         conf.ioVar = {}
         ar.forEach(r.list, row => {
@@ -65,7 +67,7 @@ sql_app.readTask = {
             row.var_name && (conf.ioVar[row.var_name] = row.val_id)
             if ('sql_INSERT' == row.var_name) {
                 console.log(1, conf.ioVar.sql_INSERT)
-                let sql = sql_app.patternForSQL.initSql(conf.ioVar.sql_INSERT)
+                let sql = sql_app[sql_app.readTask.sql2name].initSql(conf.ioVar.sql_INSERT)
                 console.log(2, sql)
                 dataFactory.readSql(sql, r2 => {
                     console.log(r2)

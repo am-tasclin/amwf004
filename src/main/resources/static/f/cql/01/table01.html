@@ -1,8 +1,18 @@
 <div>
-    <span class="w3-small am-b" data-ng-if="ctrl.conf.sqlAppKey">
-        {{ctrl.conf.sqlAppKey}}:</span>&nbsp;
-    {{ctrl.getSqlApp(ctrl.conf.sqlAppKey).name}}
+
     <table data-ng-repeat="tableName in ['table01', 'table02']">
+        <caption data-ng-if="'table01'==tableName" class="w3-small" style="text-align: right;">
+            <span class="w3-small am-b" data-ng-if="ctrl.conf.sqlAppKey">
+                {{ctrl.conf.sqlAppKey}}:</span>&nbsp;
+            {{ctrl.getSqlApp(ctrl.conf.sqlAppKey).name}}
+        </caption>
+        <caption data-ng-if="'table02'==tableName 
+        && ctrl.getSqlApp(ctrl.conf.sqlAppKey).sql2name
+        " class="w3-small" style="text-align: right;">
+        <span class="w3-small am-b" data-ng-if="ctrl.conf.sqlAppKey">
+            {{ctrl.getSqlApp(ctrl.conf.sqlAppKey).sql2name}}:</span>&nbsp;
+            {{ctrl.getSqlApp(ctrl.getSqlApp(ctrl.conf.sqlAppKey).sql2name).name}}
+        </caption>
         <thead>
             <tr>
                 <th class=" w3-hover-shadow w3-border w3-tiny" data-ng-repeat="(k,v) in ctrl.conf[tableName][0]">

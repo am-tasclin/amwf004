@@ -1,5 +1,5 @@
 /**
- * @license Algoritmed.AngularJS v0.1
+ * @license Algoritmed.AngularJS v0.1.01
  * (c) 2021-2022 Algoritmed Ltd. http://algoritmed.com
  * License: Apache-2.0 license 
  */
@@ -47,3 +47,15 @@ class RWDataFactory {
     readSql = (sql, fn) => this.httpGetSql({ sql: sql }).then(fn)
     writeSql = (sql, fn) => this.httpPostSql({ sql: sql }).then(fn)
 }; app.factory('dataFactory', RWDataFactory)
+
+class RouteProviderConfig {
+    constructor($routeProvider) {
+        console.log('RouteProviderConfig', Object.keys(singlePage))
+        angular.forEach(singlePage, (v, k) => (
+            v.controller && $routeProvider.when("/" + k, v)))
+        if (singlePage.index_template)
+            $routeProvider.otherwise({ templateUrl: singlePage.index_template })
+        else
+            $routeProvider.otherwise({ template: "<h1>?</h1><p>Hi API</p>" })
+    }
+}; app.config(RouteProviderConfig)

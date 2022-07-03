@@ -1,0 +1,39 @@
+<div class="w3-row">
+    <div class="w3-twothird">
+        <img style="margin-left: 8px;" src="/f/css/sq9.svg" width="15" class="w3-hover-shadow">
+        <img data-ng-click="ctrl.conf.sqlInsert=null" style="margin-right: 7px; margin-top: 3px;" src="/f/css/sq9g.svg"
+            width="21" class="w3-right">
+        <button class="fa-solid fa-marker w3-btn w3-padding-small"
+            data-ng-click="ctrl.getSqlApp(ctrl.conf.sqlAppKey).buildSQL()"
+            data-ng-class="{'w3-disabled':!ctrl.getSqlApp(ctrl.conf.sqlAppKey).buildSQL}">
+            <span class="w3-tiny">write sql</span>
+        </button>
+        〉
+        <button class="fas fa-database w3-btn w3-padding-small" data-ng-click="ctrl.saveSqlInsert1()"
+            data-ng-class="{'w3-disabled':ctrl.getSqlApp(ctrl.conf.sqlAppKey).noSave || !ctrl.conf.sqlInsert}">
+            <span class="w3-tiny">save db</span>
+        </button>
+        <div class="w3-border-left w3-border-top" data-ng-if="ctrl.conf.sqlInsert">
+            <pre class="w3-tiny " style="padding-left: 6px;">
+{{ctrl.conf.sqlInsert}}</pre>
+        </div>
+        <div data-ng-include="'table01.html'"></div>
+    </div>
+    <div class="w3-third w3-border-left">
+        <div style="margin-bottom: 3px;" class="w3-small am-b w3-border-bottom">
+            CQL command
+            <span class="w3-right">
+                <a href="https://www.compart.com/en/unicode/U+232A" class="am-0u"> 〉 </a>
+            </span>
+        </div>
+
+        <div data-ng-repeat="sqlApp in ctrl.getSqlApp('keys')()" data-ng-if="ctrl.getSqlApp(sqlApp).name"
+            data-ng-class="{'w3-border':ctrl.conf.sqlAppKey==sqlApp}" data-ng-click="ctrl.exeSql(sqlApp)"
+            class="w3-hover-shadow">
+            {{ctrl.getSqlApp(sqlApp).name}}
+        </div>
+    </div>
+</div>
+<div class="w3-border-top">
+    <i class="fas fa-project-diagram w3-hover-shadow w3-btn w3-padding-small"></i>
+</div>
