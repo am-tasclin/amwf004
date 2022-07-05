@@ -15,11 +15,26 @@ class RWDataFactory extends RWData0Factory {
     }
 }; app.factory('dataFactory', RWDataFactory)
 
+
+session.tree = { 'l': { id: [] }, 'r': { id: [] } }
+conf.tree = { eMap: {} }
+conf.treeFn = {}
+conf.treeFn.url = () => session.tree.l.id.join('_') + ',' + session.tree.r.id.join('_')
+conf.treeFn.urlGo = () => window.location.href = '#!/tree_' + conf.treeFn.url()
+
+const lFn = {}
+lFn.parent = (ids, id) => ids.includes(conf.tree.eMap[id].parent) && lFn.minus(ids, ids.indexOf(id)) ||
+    (ids[ids.indexOf(id)] = conf.tree.eMap[id].parent)
+lFn.minus = (ids, p) => ids.splice(p, 1)
+
 class PageLogicFactory extends PageLogic0Factory {
     constructor(dataFactory) {
         super(dataFactory)
-        dataFactory.sqlRowLimit = 10
+        dataFactory.sqlRowLimit = 20
     }
+    treeItemDown = (adnId, lr) => lFn.parent(session.tree[lr].id, adnId) && conf.treeFn.urlGo()
+    selectADN = (adnId, lr) => addRemoveListItem(
+        getSetList(session.tree[lr], 'openIds'), 1 * adnId)
 }; app.factory('pageLogic', PageLogicFactory)
 
 class Abstract02Controller extends AbstractController {
@@ -43,19 +58,43 @@ class InitPageController extends Abstract02Controller {
     stringifyJSON = jn => JSON.stringify(jn, null, ' ')
 }; app.controller('InitPageController', InitPageController)
 
-const initSessionTree = urlTree => {
-    urlTree && (session.tree = { 'l': { id: [] }, 'r': { id: [] } })
-    ar.forEach(urlTree.split(','), (t, tk) => ar.forEach(t.split('_')
-        , (v, k) => session.tree[!tk ? 'l' : 'r'].id[k] = 1 * v))
-}
+
+class ChildrenController extends Abstract02Controller {
+    constructor(dataFactory, pageLogic) {
+        super(dataFactory, pageLogic)
+        let lr = urlMap.children.split('_')[1],
+            adnId = 1 * urlMap.children.split('_')[0]
+        let sql = buildSqlWithKeyValue('SelectADN', 'parent', adnId)
+        !conf.parentChild[adnId] && dataFactory.readSql(sql, r => ar.forEach(r.list, adn => {
+            conf.tree.eMap[adn.doc_id] = adn
+            addNewListItem(getSetList(conf.parentChild, adnId), adn.doc_id)
+        }))
+        addRemoveListItem(getSetList(session.tree[lr], 'openIds'), adnId)
+    }
+}; route01Controller(ChildrenController, ['children_:lId',])
+
+const getSetList = (o, n) => o[n] || (o[n] = [])
+const addRemoveListItem = (l, i) => !l.includes(i) ? l.push(i) : l.splice(l.indexOf(i), 1)
+const addNewListItem = (l, i) => !l.includes(i) ? l.push(i) : null
 
 class TreeController extends Abstract02Controller {
     constructor(dataFactory, pageLogic) {
         super(dataFactory, pageLogic)
         initSessionTree(urlMap.tree)
         console.log(session)
+        ar.forEach(session.tree, (aLR, lr) => ar.forEach(aLR.id, id => {
+            if (!conf.tree.eMap[id]) {
+                let sql = buildSqlWithKeyValue('SelectADN', 'doc_id', id)
+                dataFactory.readSql(sql, r => conf.tree.eMap[id] = r.list[0])
+            }
+        }))
     }
 }; route01Controller(TreeController, ['tree', 'tree_:lId', 'tree_:lId,:rId',])
+
+const initSessionTree = urlTree => {
+    ar.forEach(urlTree.split(','), (t, tk) => ar.forEach(t.split('_')
+        , (v, k) => session.tree[!tk ? 'l' : 'r'].id[k] = 1 * v))
+}
 
 class SqlController extends Abstract02Controller {
     constructor(dataFactory, pageLogic) {
@@ -185,7 +224,7 @@ sql_app.SelectADN = {
     , ts.value value_25, srr.value rr_value_22 \n\
     , sr.value r_value_22, dr2.doctype r2_doctype \n\
     , sr2.value r2_value_22, o.sort \n\
-    FROM tese.doc d \n\
+    FROM doc d \n\
      LEFT JOIN string s ON s.string_id=d.doc_id \n\
      LEFT JOIN string_u su ON su.string_u_id=d.doc_id \n\
      LEFT JOIN double f ON f.double_id=d.doc_id \n\

@@ -40,8 +40,11 @@
 <div class="w3-border-top">
     <i class="fas fa-project-diagram w3-hover-shadow w3-btn w3-padding-small"></i>
     <div class="w3-row">
-        <div class="w3-half">p1</div>
-        <div class="w3-half w3-border-left">p2</div>
-
+        <div class="w3-half" style="height: 60vh; overflow: auto;" data-ng-repeat="lr in ['l','r']"
+            data-ng-class="{'w3-topbar':lr==ctrl.singlePage.session.selectedLR}">
+            <div data-ng-include="'treeADN.html'"
+                data-ng-repeat="(k,adnId) in cr.pl.session.tree[lr].id">
+            </div>
+        </div>
     </div>
 </div>

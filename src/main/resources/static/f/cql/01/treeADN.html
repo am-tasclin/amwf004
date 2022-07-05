@@ -1,0 +1,40 @@
+<div data-ng-mouseover="cr.mouseover_item=adnId">
+    <span class="w3-dropdown-hover w3-white">
+        <span class="w3-tiny" title="{{cr.pl.conf.tree.eMap[adnId].doctype}}">
+            {{adnId}}
+        </span>
+        <div class="w3-dropdown-content w3-border" data-ng-include="'node_content_menu.html'"></div>
+    </span>
+    <span data-ng-click="cr.pl.selectADN(adnId, lr)">
+        <a class="w3-hover-shadow am-0u" href="#!/children_{{adnId}}_{{lr}}">
+            {{
+            cr.pl.conf.tree.eMap[adnId].doc_id
+            && (cr.pl.conf.tree.eMap[adnId].value_22
+            ||cr.pl.conf.tree.eMap[adnId].reference
+            ||cr.pl.conf.tree.eMap[adnId].value_u_22) ? '':'--?--'
+            }}{{cr.pl.conf.tree.eMap[adnId].value_22
+            ||cr.pl.conf.tree.eMap[adnId].value_u_22
+            ||cr.pl.conf.tree.eMap[adnId].value_24
+            }}{{cr.pl.conf.tree.eMap[adnId].doctype==37?'[]':''
+            }}{{cr.pl.conf.tree.eMap[adnId].value_25|date:'shortDate'}}{{cr.pl.conf.tree.eMap[adnId].value_25&&','
+            }}{{cr.pl.conf.tree.eMap[adnId].value_25|date:'shortTime'}}
+            <span class="w3-tiny" title="r:{{cr.pl.conf.tree.eMap[adnId].reference
+                }}" data-ng-if="cr.pl.conf.tree.eMap[adnId]
+                .rr_value_22">{{cr.pl.conf.tree.eMap[adnId].rr_value_22}}::{{
+                cr.pl.conf.tree.eMap[adnId].r_doctype == 37?'[]':''
+                }}</span><span class="w3-tiny" title="r:{{cr.pl.conf.tree.eMap[adnId].reference
+                    }}" data-ng-if="cr.pl.conf.tree.eMap[adnId]
+                    .r_value_22">{{cr.pl.conf.tree.eMap[adnId].r_value_22}}:{{
+                cr.pl.conf.tree.eMap[adnId].r_doctype == 37?'[]':''}} </span>
+            <span class="w3-small am-i" title="r2:{{cr.pl.conf.tree.eMap[adnId].reference2
+                            }}" data-ng-if="cr.pl.conf.tree.eMap[adnId]
+                            .r2_value_22">{{cr.pl.conf.tree.eMap[adnId].r2_value_22}}</span>
+        </a>
+    </span>
+    <span data-ng-if="cr.mouseover_item==adnId" class="w3-right" data-ng-include="'/f/cql/01/adnRmenu.html'"></span>
+</div>
+<div class="w3-border-left w3-container" data-ng-if="cr.pl.session.tree[lr]
+        .openIds.includes(adnId) && cr.pl.conf.parentChild[adnId]">
+    <div data-ng-repeat="adnId in cr.pl.conf.parentChild[adnId]" data-ng-include="'treeADN.html'">
+    </div>
+</div>

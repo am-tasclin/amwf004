@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html data-ng-controller="InitPageController as cr" lang="uk-UA">
 <meta charset="utf-8" />
-<title>CQL01</title>
+<title>CQL01 {{cr.pl.singlePage.Url().substr(1)}}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <link rel="stylesheet" href="/webjars/font-awesome/6.1.0/css/all.min.css">
@@ -23,9 +23,19 @@
             <img style="display: flex;" src="/f/css/homeIcon.svg">
         </a>
         <img src="/f/img/algoritmed-logo.webp" width="75px;" />
-        <a href="#!/init_abc" class="w3-btn w3-padding-small w3-small">
-            <i class="fas fa-redo fa-flip-horizontal"></i>
-        </a>
+        <span class="w3-dropdown-hover">
+            <a href="#!/init_abc" class="w3-btn w3-padding-small w3-small">
+                <i class="fas fa-redo fa-flip-horizontal"></i>
+            </a>
+            <div class="w3-dropdown-content w3-border">
+                <div title="Меню:"> ☰ </div>
+                <a class="am-0u" href="#!/tree_{{cr.pl.conf.treeFn.url()}}">
+                    <div class="w3-hover-shadow"> ⟳ вузли:
+                        <span class="w3-tiny"> {{cr.pl.conf.treeFn.url()}} </span>
+                    </div>
+                </a>
+            </div>
+        </span>
         <span class="am-b w3-small">CQL01</span>:
     </div>
     <div class="ng-view"></div>
