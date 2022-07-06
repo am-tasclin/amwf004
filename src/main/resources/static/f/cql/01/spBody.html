@@ -3,8 +3,8 @@
         <img style="margin-left: 8px;" src="/f/css/sq9.svg" width="15" class="w3-hover-shadow">
         <img data-ng-click="cr.pl.conf.sqlInsert=null" style="margin-right: 7px; margin-top: 3px;" src="/f/css/sq9g.svg"
             width="21" class="w3-right">
-        <span class="w3-small" style="opacity: 0.5;">
-            sql
+        <span class="w3-tiny am-i" style="opacity: 0.5;">
+            mbCQL-SQL
         </span>
         <button class="fa-solid fa-marker w3-btn w3-padding-small"
             data-ng-click="cr.pl.getSqlApp(cr.pl.conf.sqlAppKey).buildSQL()"
@@ -38,12 +38,25 @@
     </div>
 </div>
 <div class="w3-border-top">
-    <i class="fas fa-project-diagram w3-hover-shadow w3-btn w3-padding-small"></i>
+    <i class="fa-solid fa-shapes w3-btn w3-padding-small"></i>
+    k:
+    <div class="w3-dropdown-click">
+        <input class="w3-border" data-ng-focus="cr.pl.openDialog='seekList'" data-ng-blur="cr.pl.openDialog=null">
+        <div data-ng-class="{'w3-show':cr.pl.openDialog=='seekList'}" class="w3-dropdown-content w3-border">
+            a2
+        </div>
+    </div>
+</div>
+<div class="w3-border-top">
+    <i class="fas fa-project-diagram w3-btn w3-padding-small"></i>
+    <span data-ng-if="cr.pl.conf.treeFn.url().length>1" class="w3-right w3-opacity w3-tiny am-b">
+        <a href="/f/mdm/1/i.html#!/tree_{{cr.pl.conf.treeFn.url()}}">
+            M&D-M</a> <sub> MCrDB </sub>
+    </span>
     <div class="w3-row">
         <div class="w3-half" style="height: 60vh; overflow: auto;" data-ng-repeat="lr in ['l','r']"
             data-ng-class="{'w3-topbar':lr==ctrl.singlePage.session.selectedLR}">
-            <div data-ng-include="'treeADN.html'"
-                data-ng-repeat="(k,adnId) in cr.pl.session.tree[lr].id">
+            <div data-ng-include="'treeADN.html'" data-ng-repeat="(k,adnId) in cr.pl.session.tree[lr].id">
             </div>
         </div>
     </div>

@@ -15,7 +15,6 @@ class RWDataFactory extends RWData0Factory {
     }
 }; app.factory('dataFactory', RWDataFactory)
 
-
 session.tree = { 'l': { id: [] }, 'r': { id: [] } }
 conf.tree = { eMap: {} }
 conf.treeFn = {}

@@ -1,7 +1,8 @@
 <div data-ng-mouseover="cr.mouseover_item=adnId">
     <span class="w3-dropdown-hover w3-white">
-        <span class="w3-tiny" title="{{cr.pl.conf.tree.eMap[adnId].doctype}}">
-            {{adnId}}
+        <span class="w3-tiny" title="{{cr.pl.conf.tree.eMap[adnId].doctype}} {{cr.pl.conf.tree.eMap[adnId].reference
+        }}:{{cr.pl.conf.tree.eMap[adnId].reference2}} (r:r2)">
+            {{adnId}}.
         </span>
         <div class="w3-dropdown-content w3-border" data-ng-include="'node_content_menu.html'"></div>
     </span>
