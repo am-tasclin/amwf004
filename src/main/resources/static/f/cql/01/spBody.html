@@ -39,13 +39,7 @@
 </div>
 <div class="w3-border-top">
     <i class="fa-solid fa-shapes w3-btn w3-padding-small"></i>
-    k:
-    <div class="w3-dropdown-click">
-        <input class="w3-border" data-ng-focus="cr.pl.openDialog='seekList'" data-ng-blur="cr.pl.openDialog=null">
-        <div data-ng-class="{'w3-show':cr.pl.openDialog=='seekList'}" class="w3-dropdown-content w3-border">
-            a2
-        </div>
-    </div>
+    <span data-ng-include="'seekUpdate.html'"></span>
 </div>
 <div class="w3-border-top">
     <i class="fas fa-project-diagram w3-btn w3-padding-small"></i>
@@ -54,10 +48,19 @@
             M&D-M</a> <sub> MCrDB </sub>
     </span>
     <div class="w3-row">
-        <div class="w3-half" style="height: 60vh; overflow: auto;" data-ng-repeat="lr in ['l','r']"
+        <div class="w3-half" s1tyle="height: 60vh; overflow: auto;" data-ng-repeat="lr in ['l','r']"
             data-ng-class="{'w3-topbar':lr==ctrl.singlePage.session.selectedLR}">
             <div data-ng-include="'treeADN.html'" data-ng-repeat="(k,adnId) in cr.pl.session.tree[lr].id">
             </div>
         </div>
     </div>
+</div>
+<div class="w3-border-top">
+    <!--
+        <i class="fa-solid fa-cubes-stacked w3-btn w3-padding-small"></i>
+    -->
+    🧊
+    <span class="w3-dropdown-hover w3-white">a1
+        <div class="w3-dropdown-content w3-border">a2</div>
+    </span>
 </div>

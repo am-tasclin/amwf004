@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html data-ng-controller="InitPageController as cr" lang="uk-UA">
 <meta charset="utf-8" />
-<title>CQL01 {{cr.pl.singlePage.Url().substr(1)}}</title>
+<title>CQL.{{cr.pl.singlePage.Url().substr(1)}}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <link rel="stylesheet" href="/webjars/font-awesome/6.1.0/css/all.min.css">
@@ -17,7 +17,7 @@
 <script src="/f/js/algoritmed.AngularJS.lib01.js"></script>
 <script src="i.js"></script>
 
-<body class="w3-container am-max-width-1">
+<body class="w3-container am-max-width-1" data-ng-mousedown="cr.pl.mouseClick($event)">
     <div class="w3-border-bottom">
         <a href="/" class="w3-btn w3-border1 w3-padding-small w3-small">
             <img style="display: flex;" src="/f/css/homeIcon.svg">

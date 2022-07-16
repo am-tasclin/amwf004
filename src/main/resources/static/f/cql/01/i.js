@@ -31,6 +31,13 @@ class PageLogicFactory extends PageLogic0Factory {
         super(dataFactory)
         dataFactory.sqlRowLimit = 20
     }
+    mouseClick = $event => this.openDialog = null
+    seekDo = $event => {
+        if (13 == $event.keyCode) {
+            console.log($event)
+        }
+        console.log($event)
+    }
     treeItemDown = (adnId, lr) => lFn.parent(session.tree[lr].id, adnId) && conf.treeFn.urlGo()
     selectADN = (adnId, lr) => addRemoveListItem(
         getSetList(session.tree[lr], 'openIds'), 1 * adnId)
@@ -56,7 +63,6 @@ class InitPageController extends Abstract02Controller {
     clickRow = row => conf.clickRow = row
     stringifyJSON = jn => JSON.stringify(jn, null, ' ')
 }; app.controller('InitPageController', InitPageController)
-
 
 class ChildrenController extends Abstract02Controller {
     constructor(dataFactory, pageLogic) {
@@ -90,10 +96,8 @@ class TreeController extends Abstract02Controller {
     }
 }; route01Controller(TreeController, ['tree', 'tree_:lId', 'tree_:lId,:rId',])
 
-const initSessionTree = urlTree => {
-    ar.forEach(urlTree.split(','), (t, tk) => ar.forEach(t.split('_')
-        , (v, k) => session.tree[!tk ? 'l' : 'r'].id[k] = 1 * v))
-}
+const initSessionTree = urlTree => ar.forEach(urlTree.split(','), (t, tk) => ar.forEach(t.split('_')
+    , (v, k) => session.tree[!tk ? 'l' : 'r'].id[k] = 1 * v))
 
 class SqlController extends Abstract02Controller {
     constructor(dataFactory, pageLogic) {
@@ -103,8 +107,10 @@ class SqlController extends Abstract02Controller {
     }
 }; route01Controller(SqlController, ['sql_:sqlName'])
 
-conf.buildParamSqlInsert01 = () => conf.buildSqlInsert01(conf.table02, conf.ioVar.parentId)
-conf.buildSqlInsert01 = (table, parentId) => {
+conf.buildParamSqlInsert01 = () => sql_app.buildSqlInsert01(conf.table02, conf.ioVar.parentId)
+sql_app.keys = () => Object.keys(sql_app)
+
+sql_app.buildSqlInsert01 = (table, parentId) => {
     if (!table) table = conf.table01
     let sqlInsert = 'INSERT INTO doc (:vr ) VALUES (:vl ); ', i = 1
     conf.sqlInsert = ''
@@ -143,7 +149,7 @@ sql_app.readTask = {
         ar.forEach(r.list, row => {
             conf.eMap[row.doc_id] = row
             row.var_name && (conf.ioVar[row.var_name] = row.val_id)
-            if ('sql_INSERT' == row.var_name) {
+            if ('sql_app_forINSERT' == row.var_name) {
                 console.log(conf.ioVar)
                 let sql = sql_app[sql_app.readTask.sql2name].initSql(conf.ioVar.sql_INSERT)
                 console.log(2, sql)
@@ -157,7 +163,7 @@ sql_app.readTask = {
 }
 sql_app.patternForSQL = {
     name: 'Pattern for SQL transformation',
-    buildSQL: conf.buildSqlInsert01,
+    buildSQL: sql_app.buildSqlInsert01,
     noSave: true,
     initSql: docId => {
         if (!docId) docId = 374523
@@ -170,7 +176,7 @@ sql_app.patternForSQL = {
         ) x ORDER BY x.l',
 }
 sql_app.p1q5 = {
-    name: 'Завдання і їх виконання',
+    name: '✓ Завдання і їх виконання',
     sql: 'SELECT d.doc_id, s.value note_task, sic.value ad_name, bo.reference2 basedOn FROM doc d \n\
     LEFT JOIN string s ON s.string_id=d.doc_id \n\
     LEFT JOIN doc bo  \n\
@@ -180,20 +186,19 @@ sql_app.p1q5 = {
     ON ic.reference=371927 AND ic.parent=d.doc_id \n\
     WHERE d.reference=374562',
 }
-sql_app.p1q4 = {
-    name: 'Task resource - Завдання',
-    sql: 'SELECT s2.value task_parent, s1.value task_resource \n\
-    , doc_id, reference r, reference2 r2 FROM doc d  \n\
-    LEFT JOIN string s1 on s1.string_id=doc_id \n\
-    LEFT JOIN string s2 on s2.string_id=parent \n\
-    where 369861 in (reference,reference2)',
-}
+
+const docIdMenu = '<a href="#!/wiki005Rest/{{r[k]}}">{{r[k]}}</a>'
+
 sql_app.p1q3 = {
     name: 'Імена функцій ActivityDefinition',
     sql: 'SELECT d.doc_id, s.value ad_text, sr.value rtype, d.reference r FROM doc d \n\
     LEFT JOIN string s ON s.string_id=d.doc_id \n\
     LEFT JOIN string sr ON sr.string_id=d.reference \n\
     WHERE d.reference in (373500,371999)',
+    sqlHtml: {
+        doc_id: '<a href="#!/wiki005Rest/{{r[k]}}">{{r[k]}}</a>',
+        dId: docIdMenu,
+    },
 }
 sql_app.p1q1 = {
     name: 'Взаємодії',
@@ -239,4 +244,11 @@ sql_app.SelectADN = {
     rowId: 'doc_id',
     whereDocAlias: 'd',
 }
-sql_app.keys = () => Object.keys(sql_app)
+sql_app.p1q4 = {
+    name: 'Task resource - Завдання',
+    sql: 'SELECT s2.value task_parent, s1.value task_resource \n\
+    , doc_id, reference r, reference2 r2 FROM doc d  \n\
+    LEFT JOIN string s1 on s1.string_id=doc_id \n\
+    LEFT JOIN string s2 on s2.string_id=parent \n\
+    where 369861 in (reference,reference2)',
+}

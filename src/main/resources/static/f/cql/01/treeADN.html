@@ -2,8 +2,7 @@
     <span class="w3-dropdown-hover w3-white">
         <span class="w3-tiny" title="{{cr.pl.conf.tree.eMap[adnId].doctype}} {{cr.pl.conf.tree.eMap[adnId].reference
         }}:{{cr.pl.conf.tree.eMap[adnId].reference2}} (r:r2)">
-            {{adnId}}.
-        </span>
+            {{adnId}}</span>
         <div class="w3-dropdown-content w3-border" data-ng-include="'node_content_menu.html'"></div>
     </span>
     <span data-ng-click="cr.pl.selectADN(adnId, lr)">
@@ -31,6 +30,13 @@
                             }}" data-ng-if="cr.pl.conf.tree.eMap[adnId]
                             .r2_value_22">{{cr.pl.conf.tree.eMap[adnId].r2_value_22}}</span>
         </a>
+        <span class="w3-tiny">
+            <span class="w3-dropdown-hover w3-white">{{cr.pl.conf.tree.eMap[adnId].reference}}
+                <div class="w3-dropdown-content w3-medium w3-border">r:</div>
+            </span>:<span class="w3-dropdown-hover w3-white">{{cr.pl.conf.tree.eMap[adnId].reference2}}
+                <div class="w3-dropdown-content w3-medium w3-border">r2:</div>
+            </span>
+        </span>
     </span>
     <span data-ng-if="cr.mouseover_item==adnId" class="w3-right" data-ng-include="'/f/cql/01/adnRmenu.html'"></span>
 </div>
