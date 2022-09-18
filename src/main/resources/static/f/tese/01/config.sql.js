@@ -8,6 +8,26 @@ sql_app.FHIRs_Group = {
     WHERE d.parent=373337',
     noShow: ['reference2', 'doctype'],
 }
+sql_app.FHIR_UseDataValueSet = {
+    name: 'Використання ValueSet: Ресурси і Атрибути',
+    sql: 'SELECT srn.value srn_name, rn.reference2 r2, s srna_name, s1 s1rna_name, rn.doc_id rn_id, x.* \n\
+    FROM (:sql_app.FHIR_DataValueSet ) x, doc rn \n\
+    LEFT JOIN string srn ON srn.string_id=rn.reference2 \n\
+    LEFT JOIN (SELECT s.value s, s1.value s1, d.* FROM doc d \n\
+    LEFT JOIN string s ON s.string_id=d.doc_id \n\
+    LEFT JOIN string s1 ON s1.string_id=d.reference \n\
+    ) srna ON srna.doc_id=rn.reference \n\
+    WHERE rn.parent=datavs_id',
+}
+sql_app.FHIR_DataValueSet = {
+    name: 'Використання ValueSet: Імена',
+    sql: 'SELECT s.value title, d2.doc_id datavs_id , d.* FROM doc d, doc d2, string s \n\
+    where d.reference= 372045 \n\
+    and d2.reference2= d.doc_id \n\
+    and d2.parent= d.parent \n\
+    and d2.reference= 369358 \n\
+    and d.doc_id=  s.string_id',
+}
 sql_app.FHIR_PlanDefinition = {
     name: 'Означення плана',
     sql: 'SELECT value, d.doc_id plandefinition_id \n\
@@ -67,7 +87,7 @@ WHERE t.definitionCanonical_id=a.definitionCanonical_id ',
         // console.log(sql_app.action_task_1)
         dataFactory.httpGetSql({ sql: sql }
         ).then(dataSqlRequest => {
-            if(dataSqlRequest.list[0]){
+            if (dataSqlRequest.list[0]) {
                 console.log(dataSqlRequest.list[0])
                 if (!sql_app.action_task_1.sqlCmdMap)
                     sql_app.action_task_1.sqlCmdMap = {}
@@ -119,7 +139,7 @@ sql_app.ActivityDefinition_title_name = {
 }
 sql_app.eReceptOfEMR = {
     name: 'еРецепти від лікарських призначень',
-    sql:'SELECT rx.*, emr.mrencounter_id, emr.mr_emr_id, emr.patient_id \n\
+    sql: 'SELECT rx.*, emr.mrencounter_id, emr.mr_emr_id, emr.patient_id \n\
     FROM (:sql_app.encounter_MedicationRequest_sc_doseQuantityTimingPeriod ) emr \n\
     , (:sql_app.eRecept ) rx \n\
     WHERE rx.recept_basedon_id=emr.mr_emr_id',
@@ -143,7 +163,7 @@ sql_app.encounter_MedicationRequest_sc_doseQuantityTimingPeriod = {
 }
 sql_app.MedicationRequest_sc_doseQuantityTimingPeriod = {
     name: 'Призначення ліків доза кількість хронометраж період',
-    rowId:'medicationrequest_id',
+    rowId: 'medicationrequest_id',
     sql: 'SELECT x.*, dqtp.*, esd.*, di.* FROM (:sql_app.MedicationRequest_sc ) x \n\
     LEFT JOIN (SELECT di_c.parent di_c_p, di.reference di_r, di.reference2 di_r2 \n\
     FROM doc di_c, doc di WHERE di_c.reference=369984 AND di.parent=di_c.doc_id \n\
