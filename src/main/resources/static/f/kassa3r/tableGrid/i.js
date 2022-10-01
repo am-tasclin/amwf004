@@ -7,7 +7,7 @@ class InitPageController extends AbstractController {
         this.dataFactory.readSql(sql_app.tableColumn.sql, r => {
             conf.tableGrid = { tableColumn: r.list }
             if (r.list.length) {
-                this.conf.tableGrid.eMap = {}
+                conf.tableGrid.eMap = {}
                 ar.forEach(conf.tableGrid.tableColumn
                     , row => sql_app.init_eMap(row, 'tableColumn', conf.tableGrid))
             }

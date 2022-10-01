@@ -34,7 +34,9 @@ public class DbCommon {
 		return val;
 	}
 	public List<Map<String, Object>> qForList(String sql, Map<String, Object> map) {
+		// logger.info("37 sql = \n" +sql);
 		List<Map<String, Object>> list = dbParamJdbcTemplate.queryForList(sql, map);
+		// logger.info("39 list = \n" +list);
 		return list;
 	}
 

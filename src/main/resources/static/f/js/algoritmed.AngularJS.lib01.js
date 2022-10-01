@@ -48,7 +48,7 @@ class RWData0Factory {
 
     readSql = (sql, fn) => this.httpGetSql({ sql: sql }).then(fn)
     writeSql = (sql, fn) => this.httpPostSql({ sql: sql }).then(fn)
-}//; app.factory('dataFactory', RWDataFactory)
+}; app.factory('dataFactory', RWData0Factory)
 
 
 let urlMap = {}

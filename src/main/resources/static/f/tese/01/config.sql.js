@@ -8,6 +8,11 @@ sql_app.FHIRs_Group = {
     WHERE d.parent=373337',
     noShow: ['reference2', 'doctype'],
 }
+sql_app.Test_BigInt = {
+    name: 'Перевірити зчитування великих цілих чисел',
+    sql:'SELECT * FROM integer \n\
+    where integer_id>=375667',
+}
 sql_app.FHIR_UseDataValueSet = {
     name: 'Використання ValueSet: Ресурси і Атрибути',
     sql: 'SELECT srn.value srn_name, rn.reference2 r2, s srna_name, s1 s1rna_name, rn.doc_id rn_id, x.* \n\

@@ -156,7 +156,8 @@ class AmEmrLink extends AmAttDirection {
 class RWDataFactory {
     constructor($http, $q) { this.$http = $http; this.$q = $q }
     urlSql = '/r/url_sql_read_db1'
-    sqlRowLimit = 50
+    sqlRowLimit = 100
+    // sqlRowLimit = 50
 
     httpPostSql = params => {
         let deferred = this.$q.defer()
