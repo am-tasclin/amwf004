@@ -33,14 +33,35 @@
     </div>
     <div class="w3-row">
         <div class="w3-quarter">
-            <div class="w3-small am-b"> {{cr.pl.getSqlApp('DomainResource01').name}} </div>
+            <div class="w3-small am-b">
+                <span class="am-n"> {{cr.pl.session.DomainResource.length}} </span>
+                {{cr.pl.getSqlApp('DomainResource01').name}}
+            </div>
             <div class="w3-hover-shadow" data-ng-repeat="item in cr.pl.session.DomainResource ">
-                <span class="w3-tiny"> {{item.doc_id}} </span>
+                <span class="w3-tiny">{{item.doc_id}}</span>
                 {{item.value}}
             </div>
         </div>
-        <div class="w3-quarter">q2</div>
-        <div class="w3-quarter">q3</div>
+        <div class="w3-quarter">
+            <div class="w3-small am-b">
+                <span class="am-n"> {{cr.pl.session.BackboneElement.length}} </span>
+                {{cr.pl.getSqlApp('BackboneElement01').name}}
+            </div>
+            <div class="w3-hover-shadow" data-ng-repeat="item in cr.pl.session.BackboneElement ">
+                <span class="w3-tiny">{{item.doc_id}}</span>
+                {{item.ps}}.{{item.v}}
+            </div>
+        </div>
+        <div class="w3-quarter">
+            <div class="w3-small am-b">
+                <span class="am-n"> {{cr.pl.session.BackboneElement02.length}} </span>
+                {{cr.pl.getSqlApp('BackboneElement02').name}}
+            </div>
+            <div class="w3-hover-shadow" data-ng-repeat="item in cr.pl.session.BackboneElement02 ">
+                <span class="w3-tiny">{{item.doc_id}}</span>
+                {{item.ps}}.{{item.v}}
+            </div>
+        </div>
         <div class="w3-quarter">q4</div>
     </div>
 </body>

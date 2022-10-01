@@ -1,20 +1,4 @@
 'use strict'
-app.config(RouteProviderConfig)
-class PageLogicFactory extends PageLogic0Factory {
-    constructor(dataFactory) {
-        super(dataFactory)
-        console.log(123)
-        dataFactory.sqlRowLimit = 200
-        this.dataFactory.readSql(
-            sql_app.DomainResource01.sql,
-            r => {
-                console.log(r)
-                this.session.DomainResource = r.list
-            }
-        )
-    }
-}; app.factory('pageLogic', PageLogicFactory)
-
 class InitPageController extends AbstractController {
     constructor(dataFactory, pageLogic) {
         super(dataFactory)
@@ -22,6 +6,36 @@ class InitPageController extends AbstractController {
     }
 }; app.controller('InitPageController', InitPageController)
 
+class PageLogicFactory extends PageLogic0Factory {
+    constructor(dataFactory) {
+        super(dataFactory)
+        dataFactory.sqlRowLimit = 200
+        this.dataFactory.readSql(sql_app.DomainResource01.sql
+            , r => this.session.DomainResource = r.list)
+        this.dataFactory.readSql(sql_app.BackboneElement01.sql
+            , r => this.session.BackboneElement = r.list)
+        this.dataFactory.readSql(sql_app.BackboneElement02.sql
+            , r => this.session.BackboneElement02 = r.list)
+    }        
+}; app.factory('pageLogic', PageLogicFactory)    
+
+sql_app.BackboneElement02 = {
+    name: 'BackboneElement імена що повторюються',
+    sql: 'SELECT ps.value ps, n v, d.* FROM doc d \n\
+    left join string ps on ps.string_id=d.parent , \n\
+    ( SELECT doc_id, value n FROM doc, string where string_id=doc_id AND parent = 375830 \n\
+    ) aat \n\
+    WHERE d.reference=aat.doc_id',
+}
+sql_app.BackboneElement01 = {
+    name: 'BackboneElement',
+    sql: 'SELECT ps.value ps, s.value v, d.* FROM doc d \n\
+    LEFT JOIN string s ON s.string_id=d.doc_id \n\
+    LEFT JOIN string ps ON ps.string_id=d.parent \n\
+    WHERE d.reference= 369784 \n\
+    AND d.parent != 375830 \n\
+    ORDER BY ps.value, s.value',
+}
 
 sql_app.DomainResource01 = {
     name: 'DomainResource',
