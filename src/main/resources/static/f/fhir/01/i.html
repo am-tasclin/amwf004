@@ -13,12 +13,6 @@
     <script src="/webjars/angular-route/1.8.2/angular-route.min.js" type="application/javascript"></script>
     <script src="/webjars/angular-resource/1.8.2/angular-resource.min.js" type="application/javascript"></script>
     <script src="/webjars/angular-sanitize/1.8.2/angular-sanitize.min.js" type="application/javascript"></script>
-    <!--
-    <script src="/f/kassa2r/lib-init.js" type="application/javascript"></script>
-    <script src="/f/tese/01/lib.sql002.js" type="application/javascript"></script>
-    <script src="/f/tese/02/config.sql.js" type="application/javascript"></script>
--->
-
     <script src="/f/js/algoritmed.AngularJS.lib01.js"></script>
     <script src="i.js" type="application/javascript"></script>
 </head>
@@ -29,27 +23,28 @@
             <img style="display: flex;" src="/f/css/homeIcon.svg">
         </a>
         <img src="/f/img/algoritmed-logo.webp" width="75px;" />
-        FHIR Conceptualization
+        FHIR Implementation: Conceptualization
     </div>
     <div class="w3-row">
         <div class="w3-quarter">
+            <div class="w3-border-bottom">
+                <div class="w3-small am-b">
+                    <span class="am-n"> {{cr.pl.session.MetadataResource01.length}} </span>
+                    {{cr.pl.getSqlApp('MetadataResource01').name}}
+                </div>
+                <div class="w3-hover-shadow" data-ng-repeat="item in cr.pl.session.MetadataResource01 ">
+                    <span class="w3-tiny">{{item.doc_id}}</span>
+                    {{item.v}}
+                    {{item.srv}}
+                </div>
+            </div>
             <div class="w3-small am-b">
-                <span class="am-n"> {{cr.pl.session.DomainResource.length}} </span>
+                <span class="am-n"> {{cr.pl.session.DomainResource01.length}} </span>
                 {{cr.pl.getSqlApp('DomainResource01').name}}
             </div>
-            <div class="w3-hover-shadow" data-ng-repeat="item in cr.pl.session.DomainResource ">
+            <div class="w3-hover-shadow" data-ng-repeat="item in cr.pl.session.DomainResource01 ">
                 <span class="w3-tiny">{{item.doc_id}}</span>
                 {{item.value}}
-            </div>
-        </div>
-        <div class="w3-quarter">
-            <div class="w3-small am-b">
-                <span class="am-n"> {{cr.pl.session.BackboneElement.length}} </span>
-                {{cr.pl.getSqlApp('BackboneElement01').name}}
-            </div>
-            <div class="w3-hover-shadow" data-ng-repeat="item in cr.pl.session.BackboneElement ">
-                <span class="w3-tiny">{{item.doc_id}}</span>
-                {{item.ps}}.{{item.v}}
             </div>
         </div>
         <div class="w3-quarter">
@@ -57,12 +52,60 @@
                 <span class="am-n"> {{cr.pl.session.BackboneElement02.length}} </span>
                 {{cr.pl.getSqlApp('BackboneElement02').name}}
             </div>
-            <div class="w3-hover-shadow" data-ng-repeat="item in cr.pl.session.BackboneElement02 ">
-                <span class="w3-tiny">{{item.doc_id}}</span>
-                {{item.ps}}.{{item.v}}
+            <div class="w3-hover-shadow" data-ng-repeat="item in cr.pl.session.BackboneElement02 "
+                data-ng-class="{'w3-border-bottom':cr.pl.session.BackboneElement02[$index+1].reference!=item.reference}">
+                <span class="w3-tiny">{{item.doc_id}}</span><span class="w3-tiny"
+                    data-ng-if="cr.pl.session.BackboneElement02[$index-1].reference!=item.reference">:{{item.reference}}
+                </span>
+                <span data-ng-class="{'w3-tiny':cr.pl.conf.containNumer(item.pps)}">{{item.pps}}</span>.<br
+                    data-ng-if="cr.pl.conf.containNumer(item.pps)" />{{item.ps}}.{{item.v}}
             </div>
         </div>
-        <div class="w3-quarter">q4</div>
+        <div class="w3-quarter">
+            <div class="w3-border-bottom" data-ng-repeat="itemName in ['Event01'] ">
+                <div class="w3-small am-b">
+                    <span class="am-n"> {{cr.pl.session.BackboneElement01.length}} </span>
+                    {{cr.pl.getSqlApp('BackboneElement01').name}}
+                </div>
+                <div class="w3-hover-shadow" data-ng-repeat="item in cr.pl.session.BackboneElement01 ">
+                    <span class="w3-tiny">{{item.doc_id}}</span>
+                    {{item.ps}}.{{item.v}}
+                </div>
+            </div>
+            <div class="w3-border-bottom" data-ng-repeat="itemName in ['Request01'] ">
+                <div class="w3-small am-b">
+                    <span class="am-n"> {{cr.pl.session[itemName].length}} </span>
+                    {{cr.pl.getSqlApp(itemName).name}}
+                </div>
+                <div class="w3-hover-shadow" data-ng-repeat="item in cr.pl.session[itemName] ">
+                    <span class="w3-tiny">{{item.doc_id}}</span>
+                    {{item.v}}<span class="w3-tiny">::{{item.srv}} </span>
+                </div>
+            </div>
+        </div>
+        <div class="w3-quarter">
+
+            <div class="w3-border-bottom">
+                <div class="w3-small am-b">
+                    <span class="am-n"> {{cr.pl.session.Definition01.length}} </span>
+                    {{cr.pl.getSqlApp('Definition01').name}}
+                </div>
+                <div class="w3-hover-shadow" data-ng-repeat="item in cr.pl.session.Definition01 ">
+                    <span class="w3-tiny">{{item.doc_id}}</span>
+                    {{item.v}}<span class="w3-tiny">::{{item.srv}} </span>
+                </div>
+            </div>
+            <div class="w3-border-bottom" data-ng-repeat="itemName in ['Event01'] ">
+                <div class="w3-small am-b">
+                    <span class="am-n"> {{cr.pl.session[itemName].length}} </span>
+                    {{cr.pl.getSqlApp(itemName).name}}
+                </div>
+                <div class="w3-hover-shadow" data-ng-repeat="item in cr.pl.session[itemName] ">
+                    <span class="w3-tiny">{{item.doc_id}}</span>
+                    {{item.v}}<span class="w3-tiny">::{{item.srv}} </span>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 

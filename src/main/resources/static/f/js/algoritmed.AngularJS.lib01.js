@@ -14,7 +14,9 @@ angular.element(() => angular.bootstrap(document, ['app']))
 class AbstractController { constructor(dataFactory) { this.dataFactory = dataFactory } }
 
 class PageLogic0Factory {
-    constructor(dataFactory) { this.dataFactory = dataFactory }
+    constructor(dataFactory) { 
+        //this.dataFactory = dataFactory 
+    }
     getSqlApp = name => sql_app[name]
     conf = conf; session = session; singlePage= singlePage
 }
