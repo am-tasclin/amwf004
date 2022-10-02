@@ -25,9 +25,19 @@
         <img src="/f/img/algoritmed-logo.webp" width="75px;" />
         FHIR Implementation: Conceptualization
     </div>
+    <div class="w3-border-bottom">
+        <div data-ng-repeat="listName in ['reList','patternList']">
+            {{cr.pl.session.sumListLength(cr.pl.session[listName], 0)}} =
+            <span data-ng-repeat=" e in cr.pl.session[listName]">{{$index>0?' +
+                ':''}}{{cr.pl.session[e].length}}</span>,
+            <span class="w3-tiny" data-ng-repeat=" e in cr.pl.session[listName]">{{$index>0?' + ':''}}{{e}}</span>
+        </div>
+    </div>
     <div class="w3-row">
         <div class="w3-quarter">
             <div class="w3-border-bottom">
+                <a class="w3-right" href="https://build.fhir.org/metadataresource.html#2.1.26.8">2.1.26.8 Resource
+                    MetadataResource</a>
                 <div class="w3-small am-b">
                     <span class="am-n"> {{cr.pl.session.MetadataResource01.length}} </span>
                     {{cr.pl.getSqlApp('MetadataResource01').name}}
@@ -38,6 +48,20 @@
                     {{item.srv}}
                 </div>
             </div>
+            <div class="w3-border-bottom" data-ng-repeat="itemName in ['CanonicalResource01'] ">
+                <a class="w3-right" href="https://build.fhir.org/canonicalresource.html">2.1.26.7 Resource
+                    CanonicalResource</a>
+                <div class="w3-small am-b">
+                    <span class="am-n"> {{cr.pl.session[itemName].length}} </span>
+                    {{cr.pl.getSqlApp(itemName).name}}
+                </div>
+                <div class="w3-hover-shadow" data-ng-repeat="item in cr.pl.session[itemName] ">
+                    <span class="w3-tiny">{{item.doc_id}}</span>
+                    {{item.v}}
+                </div>
+            </div>
+
+            <a class="w3-right" href="https://build.fhir.org/domainresource.html">2.1.26.6 DomainResource Resource</a>
             <div class="w3-small am-b">
                 <span class="am-n"> {{cr.pl.session.DomainResource01.length}} </span>
                 {{cr.pl.getSqlApp('DomainResource01').name}}
@@ -62,6 +86,7 @@
             </div>
         </div>
         <div class="w3-quarter">
+            <a class="w3-right" href="https://build.fhir.org/types.html#BackboneElement">2.1.26.0.3 BackboneElement</a>
             <div class="w3-border-bottom" data-ng-repeat="itemName in ['Event01'] ">
                 <div class="w3-small am-b">
                     <span class="am-n"> {{cr.pl.session.BackboneElement01.length}} </span>
@@ -73,6 +98,7 @@
                 </div>
             </div>
             <div class="w3-border-bottom" data-ng-repeat="itemName in ['Request01'] ">
+                <a class="w3-right" href="https://build.fhir.org/request.html">12.4 Pattern Request</a>
                 <div class="w3-small am-b">
                     <span class="am-n"> {{cr.pl.session[itemName].length}} </span>
                     {{cr.pl.getSqlApp(itemName).name}}
@@ -84,8 +110,13 @@
             </div>
         </div>
         <div class="w3-quarter">
-
+            <div class="w3-border-bottom w3-topbar">
+                <a href="https://build.fhir.org/workflow.html#list">
+                    <h6>12.9.1.1 Workflow resources</h6>
+                </a>
+            </div>
             <div class="w3-border-bottom">
+                <a class="w3-right" href="https://build.fhir.org/definition.html">12.3 Pattern Definition</a>
                 <div class="w3-small am-b">
                     <span class="am-n"> {{cr.pl.session.Definition01.length}} </span>
                     {{cr.pl.getSqlApp('Definition01').name}}
@@ -96,6 +127,22 @@
                 </div>
             </div>
             <div class="w3-border-bottom" data-ng-repeat="itemName in ['Event01'] ">
+                <a class="w3-right" href="https://build.fhir.org/event.html">12.5 Pattern Event</a>
+                <div class="w3-small am-b">
+                    <span class="am-n"> {{cr.pl.session[itemName].length}} </span>
+                    {{cr.pl.getSqlApp(itemName).name}}
+                </div>
+                <div class="w3-hover-shadow" data-ng-repeat="item in cr.pl.session[itemName] ">
+                    <span class="w3-tiny">{{item.doc_id}}</span>
+                    {{item.v}}<span class="w3-tiny">::{{item.srv}} </span>
+                </div>
+            </div>
+            <div class="w3-border-bottom w3-topbar">
+                <a href="https://build.fhir.org/types.html">
+                    <h6>2.1.26.0 FHIR Type Framework</h6>
+                </a>
+            </div>
+            <div class="w3-border-bottom" data-ng-repeat="itemName in ['Element01'] ">
                 <div class="w3-small am-b">
                     <span class="am-n"> {{cr.pl.session[itemName].length}} </span>
                     {{cr.pl.getSqlApp(itemName).name}}
@@ -107,6 +154,7 @@
             </div>
         </div>
     </div>
+    <p>&nbsp;</p>
 </body>
 
 </html>

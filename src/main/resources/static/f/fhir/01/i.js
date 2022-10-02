@@ -8,14 +8,22 @@ class InitPageController extends AbstractController {
 
 conf.containNumer = str => /\d/.test(str)
 const readSql = 'DomainResource01 BackboneElement01 BackboneElement02 \n\
-MetadataResource01 Definition01 Event01 Request01'.split(/\s+/)
+Element01 CanonicalResource01 MetadataResource01 Definition01 Event01 Request01'.split(/\s+/)
+
+session.reList = 'MetadataResource01 CanonicalResource01 DomainResource01 BackboneElement01 BackboneElement02 Element01'.split(/\s+/)
+session.patternList = 'Definition01 Event01 Request01'.split(/\s+/)
+
+session.sumListLength = (array, sum) => {
+    ar.forEach(array, listName => sum += session[listName] ? session[listName].length : 0)
+    return sum
+}
 
 class PageLogicFactory extends PageLogic0Factory {
     constructor(dataFactory) {
         super(dataFactory)
         dataFactory.sqlRowLimit = 200
 
-        ar.forEach([4], e => console
+        ar.forEach([3], e => console
             .log(readSql[e], '\n', sql_app[readSql[e]].sql))
 
         ar.forEach(readSql, n => dataFactory.readSql(sql_app[n].sql
@@ -44,6 +52,15 @@ sql_app.BackboneElement01 = {
     AND d.parent != 375830 \n\
     ORDER BY ps.value, s.value',
 }
+sql_app.Element01 = {
+    name: 'Element',
+    sql: 'SELECT s.value v, sr.value srv, d.* FROM doc d \n\
+    LEFT JOIN string s ON s.string_id=d.doc_id \n\
+    LEFT JOIN string sr ON sr.string_id=d.reference \n\
+    WHERE   369787 in (d.reference, d.reference2) \n\
+    ORDER BY s.value',
+}
+
 sql_app.MetadataResource01 = {
     name: 'MetadataResource',
     sql: 'SELECT value v, d.* FROM doc d \n\
@@ -75,6 +92,16 @@ sql_app.Definition01 = {
     WHERE d.reference2 = 369778 \n\
     ORDER BY s.value',
 }
+
+sql_app.CanonicalResource01 = {
+    name: 'CanonicalResource',
+    sql: 'SELECT s.value v, sr.value srv, d.* FROM doc d \n\
+    LEFT JOIN string s ON s.string_id=d.doc_id \n\
+    LEFT JOIN string sr ON sr.string_id=d.reference \n\
+    WHERE   369791 in (d.reference, d.reference2) \n\
+    ORDER BY s.value',
+}
+
 sql_app.DomainResource01 = {
     name: 'DomainResource',
     sql: 'SELECT * FROM doc \n\
@@ -82,3 +109,5 @@ sql_app.DomainResource01 = {
     WHERE reference= 369789 \n\
     ORDER BY value',
 }
+
+
