@@ -23,7 +23,7 @@
             <img style="display: flex;" src="/f/css/homeIcon.svg">
         </a>
         <img src="/f/img/algoritmed-logo.webp" width="75px;" />
-        FHIR Implementation: Conceptualization
+        FHIR Implementation: Classes, Conceptualization
     </div>
     <div class="w3-border-bottom">
         <div data-ng-repeat="listName in ['reList','patternList']">
@@ -51,6 +51,16 @@
             <div class="w3-border-bottom" data-ng-repeat="itemName in ['CanonicalResource01'] ">
                 <a class="w3-right" href="https://build.fhir.org/canonicalresource.html">2.1.26.7 Resource
                     CanonicalResource</a>
+                <div class="w3-small am-b">
+                    <span class="am-n"> {{cr.pl.session[itemName].length}} </span>
+                    {{cr.pl.getSqlApp(itemName).name}}
+                </div>
+                <div class="w3-hover-shadow" data-ng-repeat="item in cr.pl.session[itemName] ">
+                    <span class="w3-tiny">{{item.doc_id}}</span>
+                    {{item.v}}
+                </div>
+            </div>
+            <div class="w3-border-bottom" data-ng-repeat="itemName in ['Resource01'] ">
                 <div class="w3-small am-b">
                     <span class="am-n"> {{cr.pl.session[itemName].length}} </span>
                     {{cr.pl.getSqlApp(itemName).name}}
