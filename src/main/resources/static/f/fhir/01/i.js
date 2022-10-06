@@ -8,10 +8,11 @@ class InitPageController extends AbstractController {
 
 conf.containNumer = str => /\d/.test(str)
 const readSql = 'DomainResource01 BackboneElement01 BackboneElement02 \n\
-Element01 Resource01 CanonicalResource01 MetadataResource01 Definition01 Event01 Request01'.split(/\s+/)
+Element01 Resource01 CanonicalResource01 MetadataResource01 \n\
+Logical01 Definition01 Event01 Request01'.split(/\s+/)
 
 session.reList = 'MetadataResource01 CanonicalResource01 Resource01 DomainResource01 BackboneElement02 BackboneElement01 Element01'.split(/\s+/)
-session.patternList = 'Definition01 Event01 Request01'.split(/\s+/)
+session.patternList = 'Logical01 Definition01 Event01 Request01'.split(/\s+/)
 
 session.sumListLength = (arrayListNames, sum) => {
     ar.forEach(arrayListNames, listName => sum += session[listName] ? session[listName].length : 0)
@@ -63,6 +64,13 @@ sql_app.Element01 = {
     ORDER BY s.value',
 }
 
+sql_app.Logical01 = {
+    name: 'Logical',
+    sql: 'SELECT value v, d.* FROM doc d \n\
+    LEFT JOIN string ON string_id=d.doc_id \n\
+    WHERE d.reference = 369796 \n\
+    ORDER BY value',
+}
 sql_app.MetadataResource01 = {
     name: 'MetadataResource',
     sql: 'SELECT value v, d.* FROM doc d \n\

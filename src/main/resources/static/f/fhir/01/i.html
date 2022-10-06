@@ -118,8 +118,34 @@
                     {{item.v}}<span class="w3-tiny">::{{item.srv}} </span>
                 </div>
             </div>
+            <div class="w3-border-bottom w3-topbar">
+                <a href="https://build.fhir.org/types.html">
+                    <h6>2.1.26.0 FHIR Type Framework</h6>
+                </a>
+            </div>
+            <div class="w3-border-bottom" data-ng-repeat="itemName in ['Element01'] ">
+                <div class="w3-small am-b">
+                    <span class="am-n"> {{cr.pl.session[itemName].length}} </span>
+                    {{cr.pl.getSqlApp(itemName).name}}
+                </div>
+                <div class="w3-hover-shadow" data-ng-repeat="item in cr.pl.session[itemName] ">
+                    <span class="w3-tiny">{{item.doc_id}}</span>
+                    {{item.v}}<span class="w3-tiny">::{{item.srv}} </span>
+                </div>
+            </div>
         </div>
         <div class="w3-quarter">
+            <div class="w3-border-bottom" data-ng-repeat="itemName in ['Logical01'] ">
+                <div class="w3-small am-b">
+                    <span class="am-n"> {{cr.pl.session[itemName].length}} </span>
+                    {{cr.pl.getSqlApp(itemName).name}}
+                </div>
+                <div class="w3-hover-shadow" data-ng-repeat="item in cr.pl.session[itemName] ">
+                    <span class="w3-tiny">{{item.doc_id}}</span>
+                    {{item.v}}
+                    {{item.srv}}
+                </div>
+            </div>
             <div class="w3-border-bottom w3-topbar">
                 <a href="https://build.fhir.org/workflow.html#list">
                     <h6>12.9.1.1 Workflow resources</h6>
@@ -147,22 +173,10 @@
                     {{item.v}}<span class="w3-tiny">::{{item.srv}} </span>
                 </div>
             </div>
-            <div class="w3-border-bottom w3-topbar">
-                <a href="https://build.fhir.org/types.html">
-                    <h6>2.1.26.0 FHIR Type Framework</h6>
-                </a>
-            </div>
-            <div class="w3-border-bottom" data-ng-repeat="itemName in ['Element01'] ">
-                <div class="w3-small am-b">
-                    <span class="am-n"> {{cr.pl.session[itemName].length}} </span>
-                    {{cr.pl.getSqlApp(itemName).name}}
-                </div>
-                <div class="w3-hover-shadow" data-ng-repeat="item in cr.pl.session[itemName] ">
-                    <span class="w3-tiny">{{item.doc_id}}</span>
-                    {{item.v}}<span class="w3-tiny">::{{item.srv}} </span>
-                </div>
-            </div>
+            
+            
         </div>
+    </div>
     </div>
     <p>&nbsp;</p>
 </body>

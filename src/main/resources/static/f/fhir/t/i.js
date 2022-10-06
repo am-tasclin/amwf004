@@ -17,9 +17,9 @@ class PageLogicFactory extends PageLogic0Factory {
         dataFactory.readSql(sql_app.ValueSetTitle.sql, r => session.ValueSetTitle = r.list
             && ar.forEach(r.list, item => session.eMap[item.doc_id] = item))
 
+        dataFactory.readSql(replaceSql(sql_app.UseValueSet.sql), r => session.UseValueSet = r.list)
+
         console.log(replaceSql(sql_app.UseValueSet.sql))
-        dataFactory.readSql(replaceSql(sql_app.UseValueSet.sql)
-            , r => session.UseValueSet = r.list)
 
     }
 }; app.factory('pageLogic', PageLogicFactory)
@@ -37,12 +37,14 @@ sql_app.UseValueSet = {
     WHERE vs.doc_id=p.reference2 \n\
     AND p.doc_id=d.parent',
 }
+
 sql_app.ValueSetTitle = {
     name: 'ValueSet.title',
     sql: 'SELECT s.value title, d.* FROM doc d \n\
     LEFT JOIN string s ON s.string_id=d.doc_id \n\
     WHERE d.reference = 372045',
 }
+
 sql_app.CodeSystemTitle = {
     name: 'CodeSystem.title',
     sql: 'SELECT s.value title, d.* FROM doc d \n\
