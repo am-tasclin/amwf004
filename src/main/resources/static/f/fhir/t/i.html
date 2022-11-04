@@ -26,27 +26,31 @@
         FHIR Terminology viewer
     </div>
     <div class="w3-border-bottom">
-        〉
+        〉 type:key:value →
+        <span class="w3-small">
+            <span data-ng-repeat="itemName in ['CodeSystemTitle']">
+                {{cr.pl.session[itemName].length}}</span>:<span
+                data-ng-repeat="itemName in ['ValueSetTitle']">{{cr.pl.session[itemName].length}}</span>:<span
+                data-ng-repeat="itemName in ['UseValueSet']">{{cr.pl.session[itemName].length}}</span>
+        </span>
     </div>
     <div class="w3-row">
-        <div class="w3-half">
-            <div class="w3-border-bottom" data-ng-repeat="itemName in ['UseValueSet'] ">
+        <div class="w3-quarter">
+            <div class="w3-border-bottom" data-ng-repeat="itemName in ['CodeSystemTitle'] ">
                 <div class="w3-small am-b">
-                    <span class="am-n w3-medium"> {{cr.pl.session[itemName].length}} </span>
+                    <span class="am-n w3-medium"> {{cr.pl.session[itemName].length}}::type </span>
                     {{cr.pl.getSqlApp(itemName).name}}
                 </div>
                 <div class="w3-hover-shadow" data-ng-repeat="item in cr.pl.session[itemName] ">
                     <span class="w3-tiny">{{item.doc_id}}</span>
-                    {{item.c}}{{item.c_id==item.parent?'.':'..'}}{{item.sr?item.sr:item.srr}} 
-                    <span class="w3-tiny">{{item.vs_id}}:{{cr.pl.session.eMap[item.vs_id].title}} </span>
-                    <span class="w3-small"></span>
+                    <span class="w3-small"> {{item.title}} </span>
                 </div>
             </div>
         </div>
         <div class="w3-quarter">
             <div class="w3-border-bottom" data-ng-repeat="itemName in ['ValueSetTitle'] ">
                 <div class="w3-small am-b">
-                    <span class="am-n w3-medium"> {{cr.pl.session[itemName].length}} </span>
+                    <span class="am-n w3-medium"> {{cr.pl.session[itemName].length}}::key </span>
                     {{cr.pl.getSqlApp(itemName).name}}
                 </div>
                 <div class="w3-hover-shadow" data-ng-repeat="item in cr.pl.session[itemName] ">
@@ -55,15 +59,17 @@
                 </div>
             </div>
         </div>
-        <div class="w3-quarter">
-            <div class="w3-border-bottom" data-ng-repeat="itemName in ['CodeSystemTitle'] ">
+        <div class="w3-half">
+            <div class="w3-border-bottom" data-ng-repeat="itemName in ['UseValueSet'] ">
                 <div class="w3-small am-b">
-                    <span class="am-n w3-medium"> {{cr.pl.session[itemName].length}} </span>
+                    <span class="am-n w3-medium"> {{cr.pl.session[itemName].length}}::value </span>
                     {{cr.pl.getSqlApp(itemName).name}}
                 </div>
                 <div class="w3-hover-shadow" data-ng-repeat="item in cr.pl.session[itemName] ">
                     <span class="w3-tiny">{{item.doc_id}}</span>
-                    <span class="w3-small"> {{item.title}} </span>
+                    {{item.c}}{{item.c_id==item.parent?'.':'..'}}{{item.sr?item.sr:item.srr}}
+                    <span class="w3-tiny">{{item.vs_id}}:{{cr.pl.session.eMap[item.vs_id].title}} </span>
+                    <span class="w3-small"></span>
                 </div>
             </div>
         </div>

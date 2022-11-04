@@ -23,11 +23,12 @@
             <img style="display: flex;" src="/f/css/homeIcon.svg">
         </a>
         <img src="/f/img/algoritmed-logo.webp" width="75px;" />
-        FHIR Implementation: Classes, Conceptualization
+        FHIR_Concept⁙Implementation
     </div>
     <div class="w3-border-bottom">
         <div data-ng-repeat="listName in ['reList','patternList']">
-            {{cr.pl.session.sumListLength(cr.pl.session[listName], 0)}} =
+            {{cr.pl.session.sumListLength(cr.pl.session[listName], 0)}}<span data-ng-if="listName=='reList'"
+                class="w3-tiny">::type::Conceptual</span> =
             <span data-ng-repeat=" e in cr.pl.session[listName]">{{$index>0?' +
                 ':''}}{{cr.pl.session[e].length}}</span>,
             <span class="w3-tiny" data-ng-repeat=" e in cr.pl.session[listName]">{{$index>0?' + ':''}}{{e}}</span>
@@ -173,8 +174,8 @@
                     {{item.v}}<span class="w3-tiny">::{{item.srv}} </span>
                 </div>
             </div>
-            
-            
+
+
         </div>
     </div>
     </div>
