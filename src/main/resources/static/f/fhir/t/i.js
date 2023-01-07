@@ -20,7 +20,6 @@ class PageLogicFactory extends PageLogic0Factory {
         dataFactory.readSql(replaceSql(sql_app.UseValueSet.sql), r => session.UseValueSet = r.list)
 
         console.log(replaceSql(sql_app.UseValueSet.sql))
-
     }
 }; app.factory('pageLogic', PageLogicFactory)
 

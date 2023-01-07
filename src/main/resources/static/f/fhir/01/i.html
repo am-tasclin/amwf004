@@ -24,6 +24,19 @@
         </a>
         <img src="/f/img/algoritmed-logo.webp" width="75px;" />
         FHIR_Concept⁙Implementation
+        <div class="w3-right">
+            <span data-ng-class="{'w3-border-left':cr.pl.menu}" data-ng-click="cr.pl.menu=null">
+                ☰:
+            </span>
+            <span class="w3-hover-shadow" data-ng-click="cr.pl.menu=menuItem"
+                data-ng-repeat="menuItem in ['dec','info']"
+                data-ng-class="{'w3-bottombar':cr.pl.menu==menuItem, 'w3-border-top':cr.pl.menu!=menuItem, }">
+                {{menuItem}}
+            </span>
+        </div>
+        <div data-ng-if="cr.pl.menu=='info'" class="w3-border-top">
+            ☰ <button class="w3-btn" data-ng-click="cr.pl.show_am002l()">show_am002l</button>
+        </div>
     </div>
     <div class="w3-border-bottom">
         <div data-ng-repeat="listName in ['reList','patternList']">
