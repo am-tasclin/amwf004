@@ -29,10 +29,11 @@ class PageLogicFactory extends PageLogic0Factory {
 
         ar.forEach(readSql, n => dataFactory.readSql(sql_app[n].sql
             , r => session[n] = r.list))
-    }
 
-    show_am002l = () => {
-        console.log(123, sql_app2)
+        this.show_am002l = () => {
+            console.log(1123, sql_app2, dataFactory)
+        }
+
     }
 
 }; app.factory('pageLogic', PageLogicFactory)
