@@ -25,19 +25,27 @@
         <img src="/f/img/algoritmed-logo.webp" width="75px;" />
         FHIR_Concept⁙Implementation
         <div class="w3-right w3-small">
-            <span data-ng-class="{'w3-border-left':cr.pl.menu}" data-ng-click="cr.pl.menu=null">
+            <span data-ng-class="{'w3-border-left':cr.pl.men.u}" data-ng-click="cr.pl.men.u=null">
                 ☰:
             </span>
-            <span class="w3-hover-shadow" data-ng-click="cr.pl.menu=menuItem"
+            <span class="w3-hover-shadow" data-ng-click="cr.pl.men.u=menuItem"
                 data-ng-repeat="menuItem in ['DEC','Info']"
-                data-ng-class="{'w3-bottombar':cr.pl.menu==menuItem, 'w3-border-top':cr.pl.menu!=menuItem, }">
+                data-ng-class="{'w3-bottombar':cr.pl.men.u==menuItem, 'w3-border-top':cr.pl.men.u!=menuItem, }">
                 {{menuItem}}
             </span>
         </div>
-        <div data-ng-if="cr.pl.menu=='Info'" class="w3-border-top w3-border-right">
+        <div data-ng-if="cr.pl.men.u=='Info'" class="w3-border-top w3-border-right">
             ☰ <span class="w3-small">
                 <button class="w3-btn w3-padding-small" data-ng-click="cr.pl.show_am002l()">show_am002l</button>
             </span>
+            <div data-ng-if="cr.pl.men.Info" data-ng-repeat="rule in cr.pl.men.Info.list" class="w3-border-top">
+                <div data-ng-repeat="ifItem in rule.ifs_list">
+                    ℞: if-якщо({{ifItem.addresses_code}} )
+                    <span class="w3-small">
+                        {{rule.goal_note_anotation_text}}
+                    </span>
+                </div>
+            </div>
         </div>
     </div>
     <div class="w3-right w3-small">

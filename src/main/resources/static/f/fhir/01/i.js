@@ -19,9 +19,13 @@ session.sumListLength = (arrayListNames, sum) => {
     return sum
 }
 
+const men = {}
+men.u = 'Info'
+
 class PageLogicFactory extends PageLogic0Factory {
     constructor(dataFactory) {
         super(dataFactory)
+        this.men = men
         dataFactory.sqlRowLimit = 200
 
         ar.forEach([4], e => console
@@ -31,15 +35,35 @@ class PageLogicFactory extends PageLogic0Factory {
             , r => session[n] = r.list))
 
         this.show_am002l = () => {
-            console.log(1123, sql_app2, dataFactory)
+            console.log(1123, sql_app2)
+            men.Info = {}
+            dataFactory.readSql(sql_app2.goal01.sql, r1 => {
+                men.Info.list = r1.list
+                let sql = sql_app2.goal01.ifs.sqll + ' AND parent = ' + r1.list[0].doc_id
+                // console.log(sql_app2.goal01.name, r1.list[0].doc_id, sql)
+                dataFactory.readSql(sql, r2 => ar.forEach(r1.list, r1Item => {
+                    r1Item.ifs_list = r2.list
+                    console.log(r1Item.doc_id, r2.list[0])
+                }))
+            })
         }
-
+        this.show_am002l()
     }
 
 }; app.factory('pageLogic', PageLogicFactory)
 
 const sql_app2 = {}
-sql_app2.sql01 = {}
+sql_app2.goal01 = {
+    name: 'if view',
+    ifs: {
+        sqll: 'SELECT s1.value  addresses_code , d1.* FROM doc d1 \n\
+        LEFT JOIN string s1 ON s1.string_id=d1.reference2 \n\
+        WHERE d1.reference=373031'
+    },
+    sql: 'SELECT s1.value goal_note_anotation_text, d1.* FROM doc d1 \n\
+    LEFT JOIN string s1 ON s1.string_id=d1.doc_id \n\
+      WHERE d1.reference =376418',
+}
 
 sql_app.BackboneElement02 = {
     name: 'BackboneElement в атрибутах, що повторюються',
