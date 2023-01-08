@@ -407,7 +407,6 @@ class RWADNDataFactory extends RWADN01DataFactory {
     readSqlTable = sql => this.readSql(sql
         , responceData => conf.sqlTableData = responceData.list)
 
-
     //ADN - Abstract Data Node
     getReadADN = docId => {
         const deferred = this.$q.defer()
