@@ -37,15 +37,13 @@ class PageLogicFactory extends PageLogic0Factory {
         this.show_am002l = () => {
             console.log(1123, sql_app2)
             men.Info = {}
+            // let sql_ifsQuantity = sql_app2.goal01.ifsQuantity.sql + sql_parent
+            // console.log(sql_ifsQuantity)
             dataFactory.readSql(sql_app2.goal01.sql, r1 => {
                 men.Info.list = r1.list
                 let sql_parent = ' AND d1.parent = ' + r1.list[0].doc_id
-                // let sql_ifsQuantity = sql_app2.goal01.ifsQuantity.sql + sql_parent
-                // console.log(sql_ifsQuantity)
-                dataFactory.readSql(sql_app2.goal01.ifsQuantity.sql + sql_parent, r2 => ar.forEach(r1.list, r1Item => {
-                    r1Item.ifsQuantity_list = r2.list
-                    console.log(r1Item.doc_id, r2.list[0])
-                }))
+                dataFactory.readSql(sql_app2.goal01.ifsQuantity.sql + sql_parent, r2 => ar.forEach(r1.list
+                    , r1Item => r1Item.ifsQuantity_list = r2.list))
                 dataFactory.readSql(sql_app2.goal01.ifs.sql + sql_parent, r2 => ar.forEach(r1.list
                     , r1Item => r1Item.ifs_list = r2.list))
             })
