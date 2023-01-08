@@ -39,9 +39,21 @@
                 <button class="w3-btn w3-padding-small" data-ng-click="cr.pl.show_am002l()">show_am002l</button>
             </span>
             <div data-ng-if="cr.pl.men.Info" data-ng-repeat="rule in cr.pl.men.Info.list" class="w3-border-top">
-                <div data-ng-repeat="ifItem in rule.ifs_list">
-                    ℞: if-якщо({{ifItem.addresses_code}} )
-                    <span class="w3-small">
+                <div>
+                    ℞:
+                    <span data-ng-repeat="ifItem in rule.ifs_list">
+                        <sub>if</sub> якщо( {{ifItem.addresses_code}}:{{ifItem.addresses_display}}
+                    </span>
+                    <span data-ng-repeat="ifItem in rule.ifsQuantity_list">
+                        {{ifItem.quantity_comparator}}
+                        {{ifItem.detailquantity_value}}
+                        <span class="w3-tiny">
+                            {{ifItem.measure_code}}:{{ifItem.measure_display}}
+                        </span>
+                    </span>
+                    ) то {
+                    }
+                    <span class="w3-tiny">
                         {{rule.goal_note_anotation_text}}
                     </span>
                 </div>

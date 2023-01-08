@@ -39,12 +39,15 @@ class PageLogicFactory extends PageLogic0Factory {
             men.Info = {}
             dataFactory.readSql(sql_app2.goal01.sql, r1 => {
                 men.Info.list = r1.list
-                let sql = sql_app2.goal01.ifs.sqll + ' AND parent = ' + r1.list[0].doc_id
-                // console.log(sql_app2.goal01.name, r1.list[0].doc_id, sql)
-                dataFactory.readSql(sql, r2 => ar.forEach(r1.list, r1Item => {
-                    r1Item.ifs_list = r2.list
+                let sql_parent = ' AND d1.parent = ' + r1.list[0].doc_id
+                // let sql_ifsQuantity = sql_app2.goal01.ifsQuantity.sql + sql_parent
+                // console.log(sql_ifsQuantity)
+                dataFactory.readSql(sql_app2.goal01.ifsQuantity.sql + sql_parent, r2 => ar.forEach(r1.list, r1Item => {
+                    r1Item.ifsQuantity_list = r2.list
                     console.log(r1Item.doc_id, r2.list[0])
                 }))
+                dataFactory.readSql(sql_app2.goal01.ifs.sql + sql_parent, r2 => ar.forEach(r1.list
+                    , r1Item => r1Item.ifs_list = r2.list))
             })
         }
         this.show_am002l()
@@ -55,10 +58,22 @@ class PageLogicFactory extends PageLogic0Factory {
 const sql_app2 = {}
 sql_app2.goal01 = {
     name: 'if view',
-    ifs: {
-        sqll: 'SELECT s1.value  addresses_code , d1.* FROM doc d1 \n\
+    ifsQuantity: {
+        sql: 'SELECT s2r2.value quantity_comparator, s2.value detailQuantity_value, s1.value measure_code, s3.value measure_display, d3.* FROM doc d1 \n\
         LEFT JOIN string s1 ON s1.string_id=d1.reference2 \n\
-        WHERE d1.reference=373031'
+        LEFT JOIN doc d3 ON d3.parent=d1.reference2 AND d3.reference=373547 \n\
+        LEFT JOIN string s3 ON s3.string_id=d3.doc_id \n\
+        , doc d2 \n\
+        LEFT JOIN string s2 ON s2.string_id=d2.doc_id \n\
+        LEFT JOIN string s2r2 ON s2r2.string_id=d2.reference2 \n\
+        where d1.reference=372951 AND d2.reference=373010 AND d2.parent=d1.doc_id',
+    },
+    ifs: {
+        sql: 'SELECT s1.value  addresses_code , s2.value  addresses_display, d2.* FROM doc d1 \n\
+        LEFT JOIN string s1 ON s1.string_id=d1.reference2 \n\
+        LEFT JOIN doc d2 ON d2.parent=d1.reference2 AND d2.reference=373547 \n\
+        LEFT JOIN string s2 ON s2.string_id=d2.doc_id \n\
+        WHERE d1.reference=373031 '
     },
     sql: 'SELECT s1.value goal_note_anotation_text, d1.* FROM doc d1 \n\
     LEFT JOIN string s1 ON s1.string_id=d1.doc_id \n\
