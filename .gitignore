@@ -82,3 +82,7 @@ src/main/resources/static/f/img/bg01.png
 src/main/resources/static/f/fhir/01/.i.js.swp
 src/main/resources/static/f/fhir/01/.i.js.swp
 src/main/resources/static/f/fhir/t/.i.js.swp
+gradlew
+gradlew.bat
+gradle/wrapper/gradle-wrapper.jar
+gradle/wrapper/gradle-wrapper.properties
