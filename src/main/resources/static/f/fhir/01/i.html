@@ -38,10 +38,14 @@
             ☰ <span class="w3-small">
                 <button class="w3-btn w3-padding-small" data-ng-click="cr.pl.show_am002l()">show_am002l</button>
             </span>
+            <div>
+                <span class="w3-right">⚕⚖: ℞♩</span>
+            </div>
+
             <div data-ng-if="cr.pl.men.Info" data-ng-repeat="rule in cr.pl.men.Info.list" class="w3-border-top">
                 <div>
                     <span class="w3-tiny">{{rule.doc_id}}</span>
-                    ℞:
+                    <span title="rule:{{rule.doc_id}}">⟠:</span>
                     <span data-ng-repeat="ifItem in rule.ifs_list">
                         <sub>if</sub> якщо( {{ifItem.addresses_code}}:{{ifItem.addresses_display}}
                     </span>
@@ -53,6 +57,22 @@
                         </span>
                     </span>
                     ) то {
+                    <div data-ng-if="cr.pl.men.Info" data-ng-repeat="careplan in cr.pl.men.Info.carePlan.list"
+                        class="w3-border-top w3-container">
+                        <span class="w3-tiny">{{careplan.doc_id}}</span>
+                        <span title="CarePlan:{{careplan.doc_id}}"> 📓: </span>
+                        <span data-ng-repeat="carePlan_activity in cr.pl.men.Info.carePlan_activity.list">
+                            <span class="w3-tiny"> {{carePlan_activity.doc_id}} </span>
+                            {{carePlan_activity.mr_medication}}
+                            <span
+                                data-ng-if="carePlan_activity.doc_id == dosageInstruction_doseQuantity.plannedactivityreference_id"
+                                data-ng-repeat="dosageInstruction_doseQuantity in cr.pl.men.Info.dosageInstruction_doseQuantity.list">
+                                {{dosageInstruction_doseQuantity.qy_value}}
+                                {{dosageInstruction_doseQuantity.qy_code}}
+                            </span>
+                        </span>
+                        <span class="w3-tiny"> {{careplan.careplan_title}} </span>
+                    </div>
                     }
                     <span class="w3-tiny">
                         {{rule.goal_note_anotation_text}}

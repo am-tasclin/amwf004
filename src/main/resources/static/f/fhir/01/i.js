@@ -35,16 +35,27 @@ class PageLogicFactory extends PageLogic0Factory {
             , r => session[n] = r.list))
 
         this.show_am002l = () => {
-            console.log(1123, sql_app2)
-            men.Info = {}
+            console.log(1123, sql_app)
+            men.Info = { carePlan: {} }
             // let sql_ifsQuantity = sql_app2.goal01.ifsQuantity.sql + sql_parent
-            // console.log(sql_ifsQuantity)
-            dataFactory.readSql(sql_app2.goal01.sql, r1 => {
+            console.log(sql_app.goal01.carePlan.sql)
+            dataFactory.readSql(sql_app.goal01.carePlan.sql, r1 => {
+                men.Info.carePlan.list = r1.list
+                let sql_add_AND = ' AND d1id = ' + r1.list[0].doc_id
+                    , sql = replaceSql(sql_app.carePlan_activity.sql)
+                    , sql3 = replaceSql(sql_app.carePlan_activity_mr_dosageInstruction_doseQuantity001.sql)
+                dataFactory.readSql(sql + sql_add_AND
+                    , r2 => men.Info.carePlan_activity = { list: r2.list })
+                dataFactory.readSql(sql3 + sql_add_AND
+                    , r2 => men.Info.dosageInstruction_doseQuantity = { list: r2.list })
+            })
+            dataFactory.readSql(sql_app.goal01.sql, r1 => {
                 men.Info.list = r1.list
-                let sql_parent = ' AND d1.parent = ' + r1.list[0].doc_id
-                dataFactory.readSql(sql_app2.goal01.ifsQuantity.sql + sql_parent
+                let sql_add_AND = ' AND d1.parent = ' + r1.list[0].doc_id
+                console.log(sql_add_AND)
+                dataFactory.readSql(sql_app.goal01.ifsQuantity.sql + sql_add_AND
                     , r2 => ar.forEach(r1.list, r1Item => r1Item.ifsQuantity_list = r2.list))
-                dataFactory.readSql(sql_app2.goal01.ifs.sql + sql_parent
+                dataFactory.readSql(sql_app.goal01.ifs.sql + sql_add_AND
                     , r2 => ar.forEach(r1.list, r1Item => r1Item.ifs_list = r2.list))
             })
         }
@@ -53,9 +64,66 @@ class PageLogicFactory extends PageLogic0Factory {
 
 }; app.factory('pageLogic', PageLogicFactory)
 
-const sql_app2 = {}
-sql_app2.goal01 = {
+// const sql_app2 = {}
+
+sql_app.doseQuantity = {
+    sql: 'SELECT s1.value qy_value, s2.value qy_code, d2.* FROM doc d1 \n\
+    LEFT JOIN string s1 ON s1.string_id=d1.doc_id \n\
+    LEFT JOIN doc d2 ON d2.parent=d1.doc_id AND d2.reference=368641 \n\
+    LEFT JOIN string s2 ON s2.string_id=d2.reference2 \n\
+    WHERE d1.reference=368637 ',
+}
+
+sql_app.carePlan_activity001 = {
+    sql: 'SELECT d1.parent d1id, d2.* FROM doc d1 \n\
+    LEFT JOIN doc d2 ON d2.parent=d1.doc_id AND d2.reference=368794 \n\
+    WHERE d1.reference=368789 ', 
+    // 368789=CarePlan.activity, 
+    // 368794=CarePlan.activity.plannedActivityReference
+}
+
+sql_app.madicationRequest_medication_dosageInstruction001 = {
+    sql:'SELECT d2.doc_id d2id, d1.* FROM (:sql_app.madicationRequest_medication001 ) d1 \n\
+    LEFT JOIN doc d2 ON d2.parent=d1.doc_id AND d2.reference=369984 \n\
+    WHERE TRUE ',
+    // 369984=MedicationRequest.dose.dosageInstruction
+}
+
+sql_app.madicationRequest_medication001 = {
+    sql: 'SELECT d1.* FROM doc d1 WHERE d1.reference=371469',
+    // 371469=MedicationRequest.medication
+}
+
+sql_app.madicationRequest001 = {
+    sql: 'SELECT s1.value mr_medication, d1.* \n\
+    FROM (:sql_app.madicationRequest_medication001 ) d1 \n\
+    LEFT JOIN string s1 ON s1.string_id=reference2 \n\
+    WHERE TRUE ',
+}
+
+sql_app.carePlan_activity_mr_dosageInstruction_doseQuantity001 = {
+    sql:'SELECT d1.d1id, d1.doc_id plannedActivityReference_id, d4.* FROM (:sql_app.carePlan_activity ) d1 \n\
+    LEFT JOIN (:sql_app.madicationRequest_medication_dosageInstruction001 ) d2 ON d2.doc_id=d1.reference2 \n\
+    LEFT JOIN doc d3 ON d3.parent=d2.d2id AND d3.reference=369975 \n\
+    LEFT JOIN (:sql_app.doseQuantity ) d4 ON d4.parent=d3.reference2 \n\
+    WHERE TRUE ',
+    // 369975 = Dosage.doseAndRate.dose.doseQuantity
+}
+
+sql_app.carePlan_activity = {
+    sql: 'SELECT d3.mr_medication, d2.* FROM (:sql_app.carePlan_activity001 ) d2 \n\
+    LEFT JOIN (:sql_app.madicationRequest001 ) d3 ON d2.reference2=d3.doc_id \n\
+    WHERE TRUE ',
+}
+
+sql_app.goal01 = {
     name: 'if view',
+    carePlan: {
+        sql: 'SELECT s1.value careplan_title, d1.* FROM doc d1 \n\
+        LEFT JOIN string s1 ON s1.string_id=d1.doc_id \n\
+        WHERE d1.reference=372080 \n\
+        AND d1.parent=376395 ',
+    },
     ifsQuantity: {
         sql: 'SELECT s2r2.value quantity_comparator, s2.value detailQuantity_value, s1.value measure_code, s3.value measure_display, d3.* FROM doc d1 \n\
         LEFT JOIN string s1 ON s1.string_id=d1.reference2 \n\
@@ -64,7 +132,7 @@ sql_app2.goal01 = {
         , doc d2 \n\
         LEFT JOIN string s2 ON s2.string_id=d2.doc_id \n\
         LEFT JOIN string s2r2 ON s2r2.string_id=d2.reference2 \n\
-        where d1.reference=372951 AND d2.reference=373010 AND d2.parent=d1.doc_id',
+        WHERE d1.reference=372951 AND d2.reference=373010 AND d2.parent=d1.doc_id',
     },
     ifs: {
         sql: 'SELECT s1.value  addresses_code , s2.value  addresses_display, d2.* FROM doc d1 \n\

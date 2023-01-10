@@ -112,11 +112,13 @@ const replaceSql = sql => {
         sql = sql.replace(':var_sql_app.' + sql_varName, sql_varVal)
     }
 
-    while (sql.includes(':sql_app.')) {
-        let sql_name = sql.split(':sql_app.')[1].split(' ')[0]
+    // let sql_app = ':sql_app'
+    let sql_app = ':sql_app.'
+    while (sql.includes(sql_app)) {
+        let sql_name = sql.split(sql_app)[1].split(' ')[0]
         // console.log(sql_name)
         let sql_inner = readSql2R(sql_name)
-        sql = sql.replace(':sql_app.' + sql_name, sql_inner)
+        sql = sql.replace(sql_app + sql_name, sql_inner)
     }
     return '' + sql
 }
