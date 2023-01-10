@@ -121,14 +121,45 @@ class AdnContent_menu { //left in MDM
             el.valueToEdit = el.r_doctype ? el['value_' + el.r_doctype] : el.value_22
         }
     }
-
+    
 }
+
+const r1r2Use = {}
+r1r2Use.isN = () => !isNaN(r1r2Use.r1r2*1)
 
 class InitPageController extends AbstractController {
     constructor(dataFactory, $timeout) {
         super(); this.dataFactory = dataFactory; this.$timeout = $timeout;
+        this.r1r2Use = r1r2Use
         this.date = new Date()
         this.content_menu = new AdnContent_menu(dataFactory)
+    }
+
+    seekr12Go = () => {
+        let sql = 'SELECT * FROM doc WHERE reference=:r1 :andor reference2=:r2 \n\
+        ORDER BY parent DESC'.replace(':r1', this.r1r2Use.r1)
+            .replace(':r2', this.r1r2Use.r2)
+            .replace(':andor', this.r1r2Use.r1 == this.r1r2Use.r2 ? 'OR' : 'AND')
+        if (isNaN(this.r1r2Use.r1r2)) {
+            console.log(this.r1r2Use.r1r2)
+            sql = "SELECT * FROM string,doc WHERE doc_id=string_id AND LOWER(value) \n\
+            LIKE LOWER('\%"+ this.r1r2Use.r1r2 + "%') "
+            console.log(sql, this.r1r2Use, isNaN(this.r1r2Use.r1r2), "'\%" + this.r1r2Use.r1r2 + "%' ")
+        }
+        this.dataFactory.readSql(sql, r => this.r1r2Use.list = r.list)
+    }
+    seekr12 = $event => {
+        if ('Enter' == $event.code) {
+            console.log(this.r1r2Use)
+            this.seekr12Go()
+        }
+    }
+    seekr1r2 = $event => {
+        if ('Enter' == $event.code) {
+            this.r1r2Use.r1 = this.r1r2Use.r2 = this.r1r2Use.r1r2
+            console.log(this.r1r2Use)
+            this.seekr12Go()
+        }
     }
 
     sqlNames = () => Object.keys(sql_app)

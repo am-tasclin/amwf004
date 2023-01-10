@@ -40,6 +40,7 @@
             </span>
             <div data-ng-if="cr.pl.men.Info" data-ng-repeat="rule in cr.pl.men.Info.list" class="w3-border-top">
                 <div>
+                    <span class="w3-tiny">{{rule.doc_id}}</span>
                     ℞:
                     <span data-ng-repeat="ifItem in rule.ifs_list">
                         <sub>if</sub> якщо( {{ifItem.addresses_code}}:{{ifItem.addresses_display}}

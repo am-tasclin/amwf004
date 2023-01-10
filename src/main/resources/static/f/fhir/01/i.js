@@ -42,10 +42,10 @@ class PageLogicFactory extends PageLogic0Factory {
             dataFactory.readSql(sql_app2.goal01.sql, r1 => {
                 men.Info.list = r1.list
                 let sql_parent = ' AND d1.parent = ' + r1.list[0].doc_id
-                dataFactory.readSql(sql_app2.goal01.ifsQuantity.sql + sql_parent, r2 => ar.forEach(r1.list
-                    , r1Item => r1Item.ifsQuantity_list = r2.list))
-                dataFactory.readSql(sql_app2.goal01.ifs.sql + sql_parent, r2 => ar.forEach(r1.list
-                    , r1Item => r1Item.ifs_list = r2.list))
+                dataFactory.readSql(sql_app2.goal01.ifsQuantity.sql + sql_parent
+                    , r2 => ar.forEach(r1.list, r1Item => r1Item.ifsQuantity_list = r2.list))
+                dataFactory.readSql(sql_app2.goal01.ifs.sql + sql_parent
+                    , r2 => ar.forEach(r1.list, r1Item => r1Item.ifs_list = r2.list))
             })
         }
         this.show_am002l()
